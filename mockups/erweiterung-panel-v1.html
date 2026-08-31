@@ -226,10 +226,12 @@ section{margin:0 0 42px}
   --linie:#2b3945;--linie-fein:#233039;--blau:#8ab6dd;--blau-hell:#a8cbe9;--blau-hauch:#182838;
   --ocker:#dda85e;--ocker-hauch:#2c2317;--gruen:#6dc79b;--gruen-hauch:#152a20;--warn:#e0a763;--warn-hauch:#2d2317;
   --rot:#e79b9b;--rot-hauch:#2e1b1b;--lila:#b3a8e6;--lila-hauch:#221f33;
-  background:var(--grund);color:var(--tinte);padding:18px;border-radius:14px;border:1px solid #2b3945}
+  background:var(--grund);color:var(--tinte);padding:18px;border-radius:14px;border:1px solid #2b3945;width:max-content;max-width:100%}
 .dunkel .knopf.haupt,.dunkel .knopf.stopp{color:#0e151b}
 .dunkel .aufnahmeband{color:#0e151b}
 .gegenueber{display:grid;grid-template-columns:repeat(auto-fit,minmax(372px,1fr));gap:22px;align-items:start}
+.gegenueber > figure{overflow-x:auto;padding-bottom:4px}
+@media (max-width:560px){.panel,.panel.breit{width:100%;min-width:0}.opt-raster{grid-template-columns:1fr}.opt-nav{display:flex;flex-wrap:wrap;border-right:0;border-bottom:1px solid var(--linie-fein)}}
 
 /* Panel in einer breiten Sidebar */
 .panel.breit{width:520px}
@@ -831,7 +833,7 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--linie);font-s
           <p>Das API-Token erstellen Sie in der Anwendung unter Nutzer-Menü → Erweiterungs-Zugänge (Online-Modus).</p>
           <div class="opt-feld"><label>Serveradresse</label><div class="eingabe">https://buero.example.de</div></div>
           <div class="opt-feld"><label>API-Token</label><div class="eingabe">••••••••••••••••••••  ·  gültig bis 31.12.2026</div></div>
-          <div class="knopfreihe" style="max-width:420px"><span class="knopf haupt">Speichern &amp; verbinden</span><span class="knopf">Seiten-Zugriff erlauben</span></div>
+          <div class="knopfreihe" style="max-width:470px"><span class="knopf haupt">Speichern &amp; verbinden</span><span class="knopf">Seiten-Zugriff erlauben</span></div>
         </div>
         <div class="opt-block">
           <h4>Angelernte Formulare</h4>
@@ -929,7 +931,7 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--linie);font-s
   <div class="entschieden">
     <dl>
       <dt>Training</dt><dd>Schalter in der Kopfzeile, nicht im Schub — mit sichtbarem Aufzeichnungsband (Zustand 6).</dd>
-      <dt>Fallliste</dt><dd>Klarnamen erst nach „Wählen" (Zustand 2). Der Startzustand zeigt stattdessen, ob Zugang, Seitenrecht und Fassung stimmen.</dd>
+      <dt>Fall-Liste</dt><dd>Klarnamen erst nach „Wählen" (Zustand 2) — davor steht nur die Zahl der offenen Fälle.</dd>
       <dt>Farbe Büro</dt><dd>Ocker bleibt. Rot ist für echte Warnungen reserviert — unsichere Zuordnung, fehlende Pflichtfelder, Submit-Halt.</dd>
       <dt>Optionsseite</dt><dd>Kommt mit in denselben Entwurf (Abschnitt 05) — Panel und Einstellungen bekommen dieselbe Bauform.</dd>
       <dt>Breite</dt><dd>Eine Spalte, die mitwächst (Abschnitt 03). Kein zweites Layout für breite Sidebars.</dd>
