@@ -1,8 +1,21 @@
 # syntax=docker/dockerfile:1
 
-# Die Laufzeitbasis ist bewusst auf dieselbe geprüfte Node-Fassung wie der
-# bisherige Server festgelegt. Aktualisierungen erfolgen als eigene Änderung.
-FROM node:24.18.0-bookworm-slim@sha256:6f7b03f7c2c8e2e784dcf9295400527b9b1270fd37b7e9a7285cf83b6951452d
+# Native Abhängigkeiten wie better-sqlite3 werden in einer eigenen Baustufe
+# für die jeweilige Zielarchitektur kompiliert. Node 22 entspricht der bereits
+# im Projekt eingesetzten Container-Laufzeit und wird von better-sqlite3 11.x
+# unterstützt.
+FROM node:22-bookworm-slim AS dependencies
+
+WORKDIR /app/server
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends python3 make g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY server/package.json server/package-lock.json ./
+RUN npm ci --omit=dev && npm cache clean --force
+
+FROM node:22-bookworm-slim AS runtime
 
 LABEL org.opencontainers.image.title="Betreuungsbüro"
 LABEL org.opencontainers.image.description="Server und Web-App für rechtliche Betreuungen"
@@ -18,9 +31,9 @@ RUN apt-get update \
        coreutils findutils tar gzip grep sed gawk \
     && rm -rf /var/lib/apt/lists/*
 
-# Abhängigkeiten werden anhand des Lockfiles reproduzierbar installiert.
-COPY server/package.json server/package-lock.json ./
-RUN npm ci --omit=dev && npm cache clean --force
+# Nur die fertigen Produktionsabhängigkeiten werden in das Laufzeit-Image
+# übernommen; Python und Compiler bleiben in der Baustufe zurück.
+COPY --from=dependencies /app/server/node_modules ./node_modules
 
 # Das Registry-Image enthält alles, was zum Start erforderlich ist. Der
 # Zielserver braucht daher weder den Quellcode noch einen outputs-Ordner.
