@@ -5,8 +5,14 @@ Schriftgut, Kommunikation, Finanzen und Datenschutzdokumentation in einer Oberfl
 
 Rechtliche Betreuung ist Aktenarbeit unter Fristendruck: Für jede betreute Person laufen
 Behördenanträge, Vermögenssorge, Berichte an das Gericht, Post, Termine und
-Dokumentationspflichten nebeneinander. Betreuungsbüro führt diese Arbeitsbereiche in einer
-gemeinsamen Fallakte zusammen.
+Dokumentationspflichten nebeneinander. Betreuungsbüro bringt diese Arbeitsbereiche in einer
+gemeinsamen Fallakte zusammen – einmal erfasst, überall verfügbar. Der Kern der Arbeit liegt aber
+bei den Menschen: Selbstbestimmung sichern, Handlungsfähigkeit Schritt für Schritt zurückgeben,
+einen Antrag gemeinsam durchgehen statt ihn still zu erledigen, erklären, wie ein Bescheid zu
+lesen ist, und so lange begleiten, bis es allein gelingt. Diese Hilfe zur Selbsthilfe braucht vor
+allem Zeit und einen freien Kopf. Genau dafür ist Betreuungsbüro gedacht: Die Verwaltung von
+Fällen und Büro läuft verlässlich im Hintergrund mit, damit im Vordergrund Raum für das Gespräch
+und die Begleitung bleibt.
 
 Die Anwendung wird auf der eigenen Infrastruktur betrieben. Falldaten werden grundsätzlich
 auf dem eigenen Server gespeichert; externe Dienste wie Mail, Kalender, Banking oder KI werden
