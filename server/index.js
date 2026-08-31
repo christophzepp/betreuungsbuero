@@ -1,3 +1,10 @@
+// Betreuungsbuero - Bueroanwendung fuer rechtliche Betreuungen
+// Copyright (C) 2026 derzerpoo
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Dieses Programm ist freie Software unter der GNU Affero General Public License v3 oder
+// spaeter; es kommt OHNE JEDE GEWAEHRLEISTUNG. Einzelheiten in LICENSE und
+// docs/lizenzen/NOTICE.md.
+//
 // Express-App-Einstieg: dient die bestehende Single-File-HTML-App UND die neue API vom
 // selben Origin aus (kein CORS noetig - siehe Plan, Abschnitt "Neue Projektstruktur").
 
