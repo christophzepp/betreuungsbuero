@@ -72,6 +72,7 @@ section{margin:0 0 42px}
 .befund .titel{font-weight:600;margin:6px 0 3px}
 .befund p{margin:0;font-size:13.5px;color:var(--tinte-leise);line-height:1.5}
 
+.blaetterhinweis{margin:-4px 0 8px;font-family:"IBM Plex Mono",monospace;letter-spacing:.05em}
 .galerie{display:flex;gap:22px;overflow-x:auto;padding:6px 2px 20px;scroll-snap-type:x proximity}
 .galerie::-webkit-scrollbar{height:9px}
 .galerie::-webkit-scrollbar-thumb{background:var(--linie);border-radius:9px}
@@ -164,6 +165,11 @@ section{margin:0 0 42px}
 .hinweisleiste.lila{background:var(--lila-hauch);color:var(--lila)}
 .hinweisleiste.grau{background:var(--flaeche-2);color:var(--tinte-leise)}
 .hinweisleiste b{font-weight:700}
+.verdeckt .zeile{display:flex;align-items:center;gap:10px;padding:10px 10px;border-bottom:1px solid var(--linie-fein)}
+.verdeckt .zeile:last-child{border-bottom:none}
+.verdeckt .riegel{height:9px;border-radius:5px;background:var(--flaeche-2);border:1px solid var(--linie-fein)}
+.verdeckt .riegel.az{height:8px;opacity:.65}
+.verdeckt .wann{margin-left:auto;font-size:11px;color:var(--tinte-leise);font-family:"IBM Plex Mono",monospace}
 
 .p-fuss{border-top:1px solid var(--linie-fein);background:var(--flaeche-2);padding:10px 13px}
 .knopfreihe{display:flex;gap:8px;align-items:center}
@@ -231,7 +237,6 @@ section{margin:0 0 42px}
 .dunkel .aufnahmeband{color:#0e151b}
 .gegenueber{display:grid;grid-template-columns:repeat(auto-fit,minmax(372px,1fr));gap:22px;align-items:start}
 .gegenueber > figure{overflow-x:auto;padding-bottom:4px}
-@media (max-width:560px){.panel,.panel.breit{width:100%;min-width:0}.opt-raster{grid-template-columns:1fr}.opt-nav{display:flex;flex-wrap:wrap;border-right:0;border-bottom:1px solid var(--linie-fein)}}
 
 /* Panel in einer breiten Sidebar */
 .panel.breit{width:520px}
@@ -247,6 +252,7 @@ section{margin:0 0 42px}
 .opt-raster{display:grid;grid-template-columns:200px 1fr;min-height:420px}
 .opt-nav{border-right:1px solid var(--linie-fein);background:var(--flaeche-2);padding:10px 0}
 .opt-nav a{display:block;padding:8px 18px;font-size:13.5px;color:var(--tinte-leise);text-decoration:none;border-left:3px solid transparent}
+.opt-nav .nav-titel{display:block;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--tinte-leise);padding:0 14px 8px}
 .opt-nav a.an{color:var(--blau);font-weight:700;background:var(--blau-hauch);border-left-color:var(--blau)}
 .opt-inhalt{padding:18px 20px;display:flex;flex-direction:column;gap:16px}
 .opt-block h4{margin:0 0 4px;font-family:"Source Sans 3",sans-serif;font-size:14.5px;font-weight:700}
@@ -263,6 +269,7 @@ section{margin:0 0 42px}
 
 footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--linie);font-size:13px;color:var(--tinte-leise)}
 @media (max-width:760px){.blatt{padding:30px 16px 60px}.stand,.panel{width:min(372px,86vw)}}
+@media (max-width:560px){.panel,.panel.breit{width:100%;min-width:0}.opt-raster{grid-template-columns:1fr}.opt-nav{display:flex;flex-wrap:wrap;border-right:0;border-bottom:1px solid var(--linie-fein)}}
 </style>
 
 <div class="blatt">
@@ -272,7 +279,7 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--linie);font-s
   <p class="these">Das Seitenpanel ist heute eine Sammlung von Kästen. Es soll ein Arbeitsweg werden: ein Fall, eine Seite, eine Prüfliste, ein Knopf — und alles Übrige aus dem Weg.</p>
   <div class="meta">
     <span>Entwurf 3 · 31.08.2026</span>
-    <span>Panelbreite 372 px</span>
+    <span>Panelbreite 372 px, mitwachsend</span>
     <span>Grundlage: Fassung 0.4.9</span>
     <span>Noch nichts gebaut</span>
   </div>
@@ -280,7 +287,7 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--linie);font-s
 
 <section>
   <div class="abschnittskopf"><span class="nummer">01</span><h2>Was heute im Weg steht</h2></div>
-  <p class="klein leise" style="margin-top:-6px">Am ausgeklappten Panel der Fassung 0.4.9 gemessen, nicht geschätzt.</p>
+  <p class="klein leise" style="margin-top:-6px">Am ausgeklappten Panel der Fassung 0.4.9 gemessen, nicht geschätzt. Die Gegenrechnung für den Entwurf steht am Ende von Abschnitt 02.</p>
   <div class="befunde">
     <div class="befund">
       <div class="zahl">200 px</div><div class="titel">für drei Knöpfe</div>
@@ -291,7 +298,7 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--linie);font-s
       <p>Prüfliste, Upload, Dokumentation, Kopierwerte, Portale, Dateien … alle im selben Kastenformat, alle gleich laut. Das Wichtigste sieht aus wie das Nebensächlichste.</p>
     </div>
     <div class="befund">
-      <div class="zahl">1 724 px</div><div class="titel">Gesamthöhe</div>
+      <div class="zahl">1.724 px</div><div class="titel">Gesamthöhe</div>
       <p>So lang wird die Spalte, wenn alles sichtbar ist — gut das Doppelte eines Panelfensters. Gearbeitet wird per Scrollen statt per Blick.</p>
     </div>
     <div class="befund">
@@ -304,6 +311,7 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--linie);font-s
 <section>
   <div class="abschnittskopf"><span class="nummer">02</span><h2>Der Arbeitsweg</h2></div>
   <p>Ganz links das heutige Panel im selben Maßstab, rechts daneben der Vorschlag Zustand für Zustand. Dieselben Funktionen, andere Ordnung.</p>
+  <p class="klein leise blaetterhinweis">8 Zustände · seitlich blättern →</p>
 
   <div class="galerie">
 
@@ -367,6 +375,14 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--linie);font-s
           <div class="hinweisleiste blau">
             <span>ℹ</span><div>Diese Seite kennt das Büro bereits: <b>jobcenter.digital</b> — Profil „Weiterbewilligung" liegt vor.</div>
           </div>
+          <div class="gruppe neutral">
+            <div class="kopfzeile">Zuletzt bearbeitet <span class="anzahl">3</span></div>
+            <div class="verdeckt">
+              <div class="zeile"><span class="riegel" style="width:124px"></span><span class="riegel az" style="width:70px"></span><span class="wann">gestern</span></div>
+              <div class="zeile"><span class="riegel" style="width:104px"></span><span class="riegel az" style="width:70px"></span><span class="wann">Montag</span></div>
+              <div class="zeile"><span class="riegel" style="width:132px"></span><span class="riegel az" style="width:70px"></span><span class="wann">letzte Woche</span></div>
+            </div>
+          </div>
           <div class="hinweisleiste grau">
             <span>🔒</span><div>Namen betreuter Personen erscheinen erst, wenn Sie „Wählen" antippen — das Panel steht offen neben fremden Webseiten.</div>
           </div>
@@ -376,7 +392,7 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--linie);font-s
           <div class="nie">Abgesendet wird nie automatisch.</div>
         </div>
       </div>
-      <p class="warum">Deine Entscheidung: schlank. Kein Zustandsbericht über Zugang und Fassung — der meldet sich von selbst, wenn etwas nicht stimmt (Abschnitt 03).</p>
+      <p class="warum">Deine Entscheidung: schlank. Kein Zustandsbericht über Zugang und Fassung — der meldet sich von selbst, wenn etwas nicht stimmt (Abschnitt 06). Nach jedem Browserstart steht das Panel wieder hier: der gewählte Fall wird beim Schließen vergessen.</p>
     </figure>
 
     <figure class="stand">
@@ -628,6 +644,26 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--linie);font-s
     </figure>
 
   </div>
+
+  <p class="klein leise" style="margin:14px 0 8px">Dieselben vier Maße wie in Abschnitt 01 — diesmal am Zustand „Prüfliste" dieses Entwurfs gemessen, nicht geschätzt.</p>
+  <div class="befunde">
+    <div class="befund">
+      <div class="zahl">211 px</div><div class="titel">fester Kopf</div>
+      <p>Statt 200 px Knöpfe: Fall, Aktenzeichen, erkannte Seite und die vier Schritte. Der Platz sagt jetzt, <em>wo man ist</em>, statt drei Knöpfe anzubieten.</p>
+    </div>
+    <div class="befund">
+      <div class="zahl">4</div><div class="titel">Schritte statt 9 Abschnitte</div>
+      <p>Fall → Seite → Prüfen → Ausfüllen. Sieben der neun bisherigen Abschnitte liegen im Schub; keiner ist gestrichen.</p>
+    </div>
+    <div class="befund">
+      <div class="zahl">405 px</div><div class="titel">für die Prüfliste</div>
+      <p>Von 720 px Fensterhöhe bleiben nach Kopf und Fußleiste 407 px — und die gehören ganz dem eigentlichen Werkzeug. Der Inhalt darin ist 1.031 px lang und scrollt <em>innen</em>.</p>
+    </div>
+    <div class="befund">
+      <div class="zahl">immer</div><div class="titel">Zustand sichtbar</div>
+      <p>Fall, Seite, Schritt und der Ausfüllknopf mit seiner Zahl bleiben stehen — auch beim Scrollen. Nichts davon muss man sich zusammenreimen.</p>
+    </div>
+  </div>
 </section>
 
 <section>
@@ -812,7 +848,7 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--linie);font-s
 
 <section>
   <div class="abschnittskopf"><span class="nummer">05</span><h2>Die Optionsseite</h2></div>
-  <p>Sie öffnet sich als eigener Tab und hat heute fünf Abschnitte über- und untereinander. Als volle Seite darf sie sich anders verhalten als das Panel: links die Bereiche, rechts der Inhalt — dieselben Bausteine, dieselben Farben.</p>
+  <p>Sie öffnet sich als eigener Tab und hat heute fünf Abschnitte über- und untereinander. Als volle Seite darf sie sich anders verhalten als das Panel: links eine Sprungleiste, die mitwandert, rechts der Inhalt am Stück — dieselben Bausteine, dieselben Farben.</p>
   <div class="optseite">
     <div class="opt-kopf">
       <span class="titel">Formular-Assistent — Einstellungen</span>
@@ -821,11 +857,12 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--linie);font-s
     </div>
     <div class="opt-raster">
       <nav class="opt-nav">
+        <span class="nav-titel">Springen zu</span>
         <a class="an">Server &amp; Zugang</a>
         <a>Lokale Fälle</a>
-        <a>Sicherung</a>
         <a>Angelernte Formulare</a>
         <a>Ausfüllprotokolle</a>
+        <a>Sicherung</a>
       </nav>
       <div class="opt-inhalt">
         <div class="opt-block">
@@ -834,6 +871,13 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--linie);font-s
           <div class="opt-feld"><label>Serveradresse</label><div class="eingabe">https://buero.example.de</div></div>
           <div class="opt-feld"><label>API-Token</label><div class="eingabe">••••••••••••••••••••  ·  gültig bis 31.12.2026</div></div>
           <div class="knopfreihe" style="max-width:470px"><span class="knopf haupt">Speichern &amp; verbinden</span><span class="knopf">Seiten-Zugriff erlauben</span></div>
+        </div>
+        <div class="opt-block">
+          <h4>Lokale Fälle</h4>
+          <p>Für den Außendienst: eine aus der Anwendung ausgegebene Falldatei wird hier geladen. Das Panel arbeitet dann ohne Server — dieselbe Prüfliste, dieselbe Sperre gegen das Absenden.</p>
+          <div class="opt-tabelle">
+            <div class="opt-zeile"><div><div class="z-name">aussendienst-2026-08-31.json</div><div class="z-muster">3 Fälle  ·  geladen heute 08:14  ·  verfällt in 6 Tagen</div></div><span class="chip">nur lokal</span><span class="chip">entfernen</span></div>
+          </div>
         </div>
         <div class="opt-block">
           <h4>Angelernte Formulare</h4>
@@ -845,6 +889,16 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--linie);font-s
           </div>
         </div>
         <div class="opt-block">
+          <h4>Ausfüllprotokolle</h4>
+          <p>Jedes Ausfüllen wird als Eintrag in die <b>Falldokumentation</b> geschrieben — dort gehört es hin, neben den Rest der Fallhistorie. Hier liegen nur die letzten Läufe dieses Rechners zur Fehlersuche.</p>
+          <div class="opt-tabelle">
+            <div class="opt-zeile"><div><div class="z-name">Bastuck · Weiterbewilligung, Seite 2</div><div class="z-muster">heute 14:12  ·  11 Felder  ·  2 Vorschläge abgelehnt</div></div><span class="chip gruen">im Fall abgelegt</span><span class="chip">ansehen</span></div>
+            <div class="opt-zeile"><div><div class="z-name">Nowak · Rundfunkbeitrag</div><div class="z-muster">gestern 09:40  ·  6 Felder</div></div><span class="chip gruen">im Fall abgelegt</span><span class="chip">ansehen</span></div>
+            <div class="opt-zeile"><div><div class="z-name">— ohne Fall, lokale Datei</div><div class="z-muster">27.08.  ·  4 Felder  ·  nur auf diesem Rechner</div></div><span class="chip">nur lokal</span><span class="chip">ansehen</span></div>
+          </div>
+          <p class="klein leise" style="margin:8px 0 0">„Ansehen" springt in die Falldokumentation der Hauptanwendung. Die Liste hier wird nach 20 Einträgen gekürzt.</p>
+        </div>
+        <div class="opt-block">
           <h4>Sicherung</h4>
           <p>Sichert Einstellungen (<b>ohne</b> Token), lokale Fälle, lokale Profile und die Protokollhistorie als JSON.</p>
           <div class="knopfreihe" style="max-width:520px"><span class="knopf">Sicherung schreiben</span><span class="knopf">Sicherung einlesen</span><span class="knopf" style="color:var(--rot);border-color:color-mix(in srgb,var(--rot) 40%,transparent)">Alle Daten löschen</span></div>
@@ -852,7 +906,7 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--linie);font-s
       </div>
     </div>
   </div>
-  <p class="klein leise" style="margin-top:12px">Was sich ändert: Die fünf Abschnitte stehen nicht mehr untereinander, sondern nebeneinander erreichbar. Die angelernten Formulare bekommen eine echte Tabelle mit URL-Muster und Feldzahl statt einer Klappliste. „Alle Daten löschen" bleibt sichtbar, trägt aber als einziges Rot.</p>
+  <p class="klein leise" style="margin-top:12px">Was sich ändert: Die fünf Abschnitte stehen nicht mehr untereinander, sondern nebeneinander erreichbar. Die angelernten Formulare bekommen eine echte Tabelle mit URL-Muster und Feldzahl statt einer Klappliste. „Alle Daten löschen" bleibt sichtbar, trägt aber als einziges Rot. Die Ausfüllprotokolle liegen am Fall, nicht in den Einstellungen — hier steht nur der lokale Rest zur Fehlersuche.</p>
 </section>
 
 <section>
@@ -878,7 +932,7 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--linie);font-s
           <div class="p-marke"><span class="wort">Formular-Assistent</span><span class="p-status"><span class="punkt"></span>Büro</span></div>
         </div>
         <div style="padding:0 13px 13px">
-          <div class="hinweisleiste"><span>◌</span><div><b>Kein Formular erkannt.</b> Diese Seite kennt das Büro noch nicht. <u>Training starten</u> · <u>KI-Vorschläge holen</u></div></div>
+          <div class="hinweisleiste"><span>?</span><div><b>Kein Formular erkannt.</b> Diese Seite kennt das Büro noch nicht. <u>Training starten</u> · <u>KI-Vorschläge holen</u></div></div>
         </div>
       </div>
       <p class="warum">Die häufigste Sackgasse bekommt zwei konkrete Fortsetzungen statt einer leeren Prüfliste.</p>
@@ -911,6 +965,9 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--linie);font-s
         <li><b>Feste Fußleiste.</b><span class="dazu">Der Ausfüllknopf trägt die Zahl und ist immer erreichbar, ohne zu scrollen.</span></li>
         <li><b>Werkzeugschub.</b><span class="dazu">Upload, Kopierwerte, Portale, Dateien, KI, Site-Profil und Einstellungen liegen hinter „⋯".</span></li>
         <li><b>Eine Störungsstelle.</b><span class="dazu">Immer nur eine Meldung, immer an derselben Stelle, immer mit Ausweg im Text.</span></li>
+        <li><b>Mitwachsende Breite.</b><span class="dazu">Der gewonnene Platz geht an die Werte, nicht an eine zweite Spalte (Abschnitt 03).</span></li>
+        <li><b>Zwei Farbsätze.</b><span class="dazu">Hell und dunkel, dieselbe Bauform — die Erweiterung folgt endlich dem Fenster (Abschnitt 04).</span></li>
+        <li><b>Optionsseite mit Bereichsspalte.</b><span class="dazu">Fünf Bereiche nebeneinander erreichbar; angelernte Formulare als Tabelle statt Klappliste (Abschnitt 05).</span></li>
       </ul>
     </div>
     <div class="liste">
@@ -937,16 +994,23 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--linie);font-s
       <dt>Breite</dt><dd>Eine Spalte, die mitwächst (Abschnitt 03). Kein zweites Layout für breite Sidebars.</dd>
       <dt>Dunkelmodus</dt><dd>Wird gleich mitgebaut (Abschnitt 04) — die Farben entstehen beim Umbau ohnehin neu.</dd>
       <dt>Startzustand</dt><dd>Schlank: nur „Fall wählen" und der Seitenhinweis. Zugang und Fassung melden sich, wenn etwas fehlt.</dd>
-      <dt>Vorgehen</dt><dd>Erst der Entwurf, dann der Code. Dies ist Entwurf 3.</dd>
+      <dt>Ausfüllprotokolle</dt><dd>Werden in die Falldokumentation geschrieben. Die Optionsseite führt nur die letzten Läufe dieses Rechners zur Fehlersuche (Abschnitt 05).</dd>
+      <dt>Trainingsspur</dt><dd>Die Formulartabelle bleibt schmal: Name, URL-Muster, Feldzahl, Reichweite. Wer wann trainiert hat, steht im Verarbeitungs-Log, nicht hier.</dd>
+      <dt>Sitzung</dt><dd>Der gewählte Fall wird beim Schließen des Browsers vergessen — ein Klick am Morgen, dafür steht kein Klarname da, wenn jemand anders den Rechner aufklappt.</dd>
+      <dt>Vorgehen</dt><dd>Erst der Entwurf, dann der Code. Dies ist Entwurf 3 — <b>gebaut wird vorerst nicht</b>; das Blatt liegt als Vorlage bereit.</dd>
     </dl>
   </div>
   <div class="offen">
-    <p style="margin:0 0 4px"><b>Offen ist damit nur noch das Kleingedruckte:</b></p>
+    <p style="margin:0 0 4px"><b>Offen ist nichts mehr. Wenn gebaut wird, in dieser Reihenfolge:</b></p>
     <ol>
-      <li><b>Ausfüllprotokolle</b> stehen in der Optionsseite als eigener Bereich. Sollen sie dort bleiben — oder gehören sie in die Falldokumentation der Hauptanwendung, wo der Rest der Fallhistorie liegt?</li>
-      <li><b>Angelernte Formulare</b> zeigt der Entwurf als Tabelle mit URL-Muster und Feldzahl. Brauchst du dort auch, <em>wer</em> zuletzt trainiert hat und wann — oder ist das Ballast?</li>
-      <li><b>Sitzung der Fallwahl:</b> Soll der gewählte Fall über einen Browserneustart hinaus stehen bleiben, oder beim Schließen vergessen werden (sicherer, aber jeden Morgen ein Klick mehr)?</li>
+      <li><b>Gerüst</b> — Kontextkopf, Schrittleiste, feste Fußleiste. Danach sieht das Panel schon neu aus, ohne dass eine Funktion angefasst wurde.</li>
+      <li><b>Prüfliste</b> — Gruppierung nach unsicher / Person / Büro, Konfidenz als Balken, Auswahl je Zeile.</li>
+      <li><b>Schub</b> — die sieben selteneren Abschnitte wandern hinter „⋯", Training wird zum Schalter oben.</li>
+      <li><b>Störungsstelle</b> — eine Meldung an einer Stelle statt gestapelter Banner.</li>
+      <li><b>Farben</b> — Merkmalssätze hell und dunkel, dazu die mitwachsende Breite.</li>
+      <li><b>Optionsseite</b> — Bereichsspalte, Formulartabelle, Protokolle an den Fall gehängt.</li>
     </ol>
+    <p class="klein leise" style="margin:10px 0 0">Jede Etappe für sich lauffähig: Nach 1 und 2 ist die Erweiterung schon benutzbar neu, auch wenn 3 bis 6 noch fehlen.</p>
   </div>
 </section>
 
