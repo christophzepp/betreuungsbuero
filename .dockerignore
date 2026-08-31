@@ -27,6 +27,7 @@ server/backups
 server/_backups
 server/_restore-rollback
 server/extension-artifacts
+server/tools/pdf-overlay/vorlagen/render
 *.sqlite
 *.sqlite3
 *.sqlite3-wal
