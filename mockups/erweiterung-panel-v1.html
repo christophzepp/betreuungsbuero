@@ -235,6 +235,22 @@ section{margin:0 0 42px}
   background:var(--grund);color:var(--tinte);padding:18px;border-radius:14px;border:1px solid #2b3945;width:max-content;max-width:100%}
 .dunkel .knopf.haupt,.dunkel .knopf.stopp{color:#0e151b}
 .dunkel .aufnahmeband{color:#0e151b}
+.dunkel .aufnahmeband .blink{background:#0e151b}
+.hell{--grund:#eef1f4; --flaeche:#ffffff; --flaeche-2:#f6f8fa;
+  --tinte:#16232e; --tinte-leise:#5d7185;
+  --linie:#d5dee6; --linie-fein:#e6ecf1;
+  --blau:#1f4e78; --blau-hell:#2e6da4; --blau-hauch:#e8f0f7;
+  --ocker:#8a5210; --ocker-hauch:#faf0e0;
+  --gruen:#1a6f47; --gruen-hauch:#e4f2ea;
+  --warn:#a4530a; --warn-hauch:#fdf0df;
+  --rot:#a03434; --rot-hauch:#fbeaea;
+  --lila:#5b4a9c; --lila-hauch:#eeecf9;
+  --schatten:0 1px 2px rgba(22,35,46,.06), 0 8px 24px rgba(22,35,46,.08);
+  --schatten-tief:0 2px 6px rgba(22,35,46,.10), 0 18px 44px rgba(22,35,46,.14);
+  color:var(--tinte)}
+.hell .knopf.haupt,.hell .knopf.stopp{color:#fff}
+.hell .aufnahmeband{color:#fff}
+.hell .aufnahmeband .blink{background:#fff}
 .gegenueber{display:grid;grid-template-columns:repeat(auto-fit,minmax(372px,1fr));gap:22px;align-items:start}
 .gegenueber > figure{overflow-x:auto;padding-bottom:4px}
 
@@ -317,7 +333,7 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--linie);font-s
 
     <figure class="stand">
       <figcaption><span class="schritt">HEUTE</span><span class="name">Fassung 0.4.9</span></figcaption>
-      <div class="panel ohnefuss" style="overflow:hidden">
+      <div class="panel ohnefuss hell" style="overflow:hidden">
         <div class="p-kopf" style="background:var(--blau);border-bottom:none">
           <div class="p-marke"><span class="wort" style="color:#dbe8f3">Formular-Assistent</span><span style="color:#dbe8f3;font-size:11px">…</span></div>
           <div style="display:flex;gap:6px">
@@ -347,7 +363,7 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--linie);font-s
           <div style="text-align:center;font-size:11px;color:var(--tinte-leise)">… und drei weitere Kästen</div>
         </div>
       </div>
-      <p class="warum">Alles sichtbar, nichts gewichtet. Die Prüfliste — das eigentliche Werkzeug — liegt zwischen Site-Profil und Upload-Helfer.</p>
+      <p class="warum">Alles sichtbar, nichts gewichtet. Die Prüfliste — das eigentliche Werkzeug — liegt zwischen Site-Profil und Upload-Helfer. Dieses eine Bild bleibt immer hell: die Fassung 0.4.9 kennt keinen Dunkelmodus.</p>
     </figure>
 
     <figure class="stand">
@@ -758,11 +774,11 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--linie);font-s
 
 <section>
   <div class="abschnittskopf"><span class="nummer">04</span><h2>Dunkelmodus</h2></div>
-  <p>Die Erweiterung hat heute keinen — die Hauptanwendung schon. Beim Umbau werden die Farben ohnehin als Merkmale neu angelegt; ein zweiter Satz für dunkel kostet dann fast nichts. Links, wie dieses Blatt es gerade zeigt, rechts fest dunkel.</p>
+  <p>Die Erweiterung hat heute keinen — die Hauptanwendung schon. Beim Umbau werden die Farben ohnehin als Merkmale neu angelegt; ein zweiter Satz für dunkel kostet dann fast nichts. Beide Seiten stehen hier fest — links hell, rechts dunkel —, damit der Vergleich auch dann trägt, wenn dieses Blatt gerade andersherum steht.</p>
   <div class="gegenueber">
     <figure class="stand" style="width:auto">
       <figcaption><span class="schritt">HELL</span><span class="name">wie bisher</span></figcaption>
-      <div class="panel kurz">        <div class="p-kopf">
+      <div class="panel kurz hell">        <div class="p-kopf">
           <div class="p-marke">
             <span class="wort">Formular-Assistent</span>
             <span class="symbol" title="Training">⦿</span>
