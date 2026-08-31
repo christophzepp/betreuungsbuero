@@ -4,7 +4,7 @@
 // die Pruefliste ausgefuellt, NICHTS je automatisch abgesendet.
 /* global BX, BxaApi, BxaMatcher, BxaPdf, bxaBuildDictionary, bxaBuildActiveContactDictionary, bxaDictionaryIndex, bxaNorm */
 
-const EXT_VERSION = (BX.runtime.getManifest && BX.runtime.getManifest().version) || '0.4.9';
+const EXT_VERSION = (BX.runtime.getManifest && BX.runtime.getManifest().version) || '0.5.0';
 const SUPPORTED_API_LEVEL = 1;
 // Harte Submit-Sperre (Agent + Aktions-Buttons): Muster verbindlicher Klicks.
 const SUBMIT_RX = /(absenden|abschicken|senden|übermitteln|uebermitteln|beantragen|verbindlich|kostenpflichtig|bestätigen|bestaetigen|abgeben|einreichen|submit)/i;
@@ -52,12 +52,11 @@ async function refreshConnection() {
     }
     const check = await BxaApi.tokenCheck();
     P.user = check.user; P.perms = check.permissions; P.serverOk = true;
-    conn.textContent = '✓ ' + (check.user.displayName || check.user.username);
-    conn.className = 'conn ok';
+    conn.innerHTML = '<span class="punkt"></span>' + esc(check.user.displayName || check.user.username);
+    conn.title = 'Mit dem Büro verbunden';
   } catch (e) {
     P.user = null; P.perms = null;
-    conn.textContent = 'offline';
-    conn.className = 'conn err';
+    conn.innerHTML = '<span class="punkt rot"></span>getrennt';
     conn.title = String(e.message || e);
   }
   P.aiAvailable = !!(P.serverOk && P.handshake?.features?.ai && hasExtPermission('viewCases') && hasExtPermission('useAi'));
@@ -69,9 +68,6 @@ async function refreshConnection() {
   $('secAgent').classList.toggle('hidden', !P.agentAvailable && !P.agent.running);
   const kiInfo = $('secKiInfo');
   if (kiInfo) kiInfo.classList.toggle('hidden', P.aiAvailable || P.agentAvailable);
-  const kgT = $('kgText'), kgA = $('kgAgent');
-  if (kgT) kgT.disabled = !P.aiAvailable;
-  if (kgA) kgA.disabled = !P.agentAvailable;
   if (typeof renderAiFileAttach === 'function') renderAiFileAttach(); // KI-Doku-Auswahl braucht features
 }
 function hasExtPermission(key) {
@@ -85,7 +81,8 @@ function cmpVer(a, b) {
 
 async function loadCases() {
   const sel = $('caseSelect');
-  const stored = await BX.storage.local.get(['localCases', 'selectedCaseId']);
+  const stored = await BX.storage.local.get(['localCases']);
+  Object.assign(stored, await sitzungLesen('selectedCaseId'));
   const rawLocalCases = Array.isArray(stored.localCases) ? stored.localCases : [];
   let localCasesChanged = false;
   P.localCases = rawLocalCases.map((entry) => {
@@ -108,9 +105,12 @@ async function loadCases() {
   if (oldLocalIndex && P.localCases[Number(oldLocalIndex[1])]) selectedCaseId = 'loc:' + P.localCases[Number(oldLocalIndex[1])].id;
   if (selectedCaseId && [...sel.options].some(o => o.value === selectedCaseId)) {
     sel.value = selectedCaseId;
-    if (selectedCaseId !== stored.selectedCaseId) await BX.storage.local.set({ selectedCaseId });
+    if (selectedCaseId !== stored.selectedCaseId) await sitzungSchreiben({ selectedCaseId });
     await onCaseChosen();
   }
+  // Der Startzustand zeigt die Zahl der erreichbaren Faelle - die steht erst jetzt fest.
+  updateEmptyState();
+  if (document.body.dataset.ansicht === 'fallwahl') renderFallListe($('fallSuche').value);
 }
 
 function newLocalCaseId() {
@@ -122,10 +122,10 @@ async function onCaseChosen() {
   const v = $('caseSelect').value;
   const loadSeq = ++caseLoadSeq;
   resetCaseBoundState();
-  await BX.storage.local.set({ selectedCaseId: v });
+  await sitzungSchreiben({ selectedCaseId: v });
   if (loadSeq !== caseLoadSeq) return;
   if (!v) {
-    $('caseInfo').textContent = '';
+    aktualisiereKontext();
     renderCopyList('');
     populateAiFieldSelect();
     updateEmptyState();
@@ -159,7 +159,7 @@ async function onCaseChosen() {
     P.baseDict = bxaBuildDictionary(P.filldata);
     P.activeContact = '';
     rebuildDict();
-    $('caseInfo').textContent = P.caseLabel + ' – ' + P.dict.length + ' Datenwerte verfügbar' + (P.sourceMode === 'local' ? ' (lokaler Fall)' : '');
+    aktualisiereKontext();
     populateAiFieldSelect();
     populateContactSelect();
     renderCopyList('');
@@ -167,7 +167,7 @@ async function onCaseChosen() {
   } catch (e) {
     if (loadSeq !== caseLoadSeq) return;
     resetCaseBoundState();
-    $('caseInfo').textContent = '';
+    aktualisiereKontext();
     toast('Falldaten: ' + e.message);
   }
   updateEmptyState();
@@ -211,6 +211,13 @@ function resetCaseBoundState() {
   const trainIntro = $('secTrainIntro'); if (trainIntro) trainIntro.classList.remove('hidden');
   const reviewCount = $('reviewCount'); if (reviewCount) reviewCount.textContent = '';
   const fillCount = $('fillCount'); if (fillCount) fillCount.textContent = '0';
+  const kopfZeile = $('reviewHead'); if (kopfZeile) kopfZeile.classList.add('hidden');
+  const seitenZeile = $('pSeite'); if (seitenZeile) seitenZeile.classList.add('hidden');
+  const wirt = $('pageHost'); if (wirt) wirt.textContent = '';
+  const pChip = $('profileChip'); if (pChip) { pChip.textContent = ''; pChip.classList.add('hidden'); }
+  const band = $('aufnahmeband'); if (band) band.classList.add('hidden');
+  const trainSymbol = $('btnTrainingToggle'); if (trainSymbol) trainSymbol.classList.remove('an');
+  if (typeof aktualisiereKontext === 'function') aktualisiereKontext();
   if ($('fileList')) renderFileList();
   if ($('aiFileAttach')) renderAiFileAttach();
 }
@@ -443,6 +450,19 @@ function updateEmptyState() {
   if (scanSec) scanSec.classList.toggle('hidden', !has);
   const filesSec = $('secFiles');
   if (filesSec) filesSec.classList.toggle('hidden', !has);
+  // Der Startzustand zeigt, DASS Faelle da sind - die Namen erst nach dem Waehlen.
+  const zahl = $('introCaseCount');
+  const sel = $('caseSelect');
+  if (zahl && sel) {
+    const anzahl = [...sel.options].filter(o => o.value).length;
+    zahl.textContent = anzahl ? String(anzahl) : '–';
+    const verdeckt = $('introVerdeckt');
+    if (verdeckt) {
+      [...verdeckt.children].forEach((zeile, i) => zeile.classList.toggle('hidden', i >= Math.max(1, Math.min(3, anzahl))));
+      verdeckt.classList.toggle('hidden', !anzahl);
+    }
+  }
+  if (typeof aktualisiereKontext === 'function') aktualisiereKontext();
 }
 
 async function ensureContent(tabId) {
@@ -554,6 +574,7 @@ async function doScan() {
       bar.querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => runProfileAction(Number(btn.dataset.ai))));
     }
     renderReview();
+    aktualisiereSeitenzeile();
     renderPageChips();
     $('btnTrainAi').classList.toggle('hidden', !P.aiAvailable);
     await refreshUploadHelper();
@@ -663,33 +684,78 @@ function collapseRadioGroups(proposals) {
   return out;
 }
 
+function reviewGruppen() {
+  /* Reihenfolge ist Absicht: zuerst, was ein Auge braucht, danach nach Zugehoerigkeit.
+     Vorher stand alles in einer Liste, in der die unsichere Zuordnung genauso aussah wie die
+     sichere - die Verwechslung "betreute Person <-> Betreuer" war farblich nicht zu sehen. */
+  const gruppen = [
+    { schluessel: 'unsicher', klasse: 'unsicher', titel: '\u26a0 Bitte ansehen', eintraege: [] },
+    { schluessel: 'person', klasse: 'person', titel: 'Betreute Person', eintraege: [] },
+    { schluessel: 'buero', klasse: 'buero', titel: 'Betreuer & B\u00fcro', eintraege: [] },
+    { schluessel: 'rest', klasse: 'neutral', titel: 'Weitere Felder', eintraege: [] }
+  ];
+  const nach = Object.fromEntries(gruppen.map(g => [g.schluessel, g]));
+  P.proposals.forEach((p, i) => {
+    const eintrag = { p, i };
+    if (p.confidence < 0.6) nach.unsicher.eintraege.push(eintrag);
+    else if (p.group === 'betreute_person') nach.person.eintraege.push(eintrag);
+    else if (p.group === 'betreuer_buero') nach.buero.eintraege.push(eintrag);
+    else nach.rest.eintraege.push(eintrag);
+  });
+  return gruppen.filter(g => g.eintraege.length);
+}
+
+function herkunftChip(p) {
+  if (p.confidence < 0.6) return { klasse: 'warn', text: 'unsicher' };
+  const text = p.source === 'ki' ? 'KI' : p.source === 'profil' ? 'Profil' : 'Heuristik';
+  if (p.source === 'ki') return { klasse: 'lila', text };
+  if (p.source === 'profil') return { klasse: p.group === 'betreuer_buero' ? 'ocker' : 'blau', text };
+  return { klasse: '', text };
+}
+
 function renderReview() {
   const list = $('reviewList');
   $('secReview').classList.remove('hidden');
-  $('reviewCount').textContent = P.proposals.length ? '(' + P.proposals.length + ')' : '';
-  if (!P.proposals.length) { list.innerHTML = '<div class="rev"><span></span><span class="hint">Keine automatischen Zuordnungen gefunden. Nutzen Sie Training oder KI-Vorschläge.</span></div>'; updateFillCount(); return; }
-  list.innerHTML = P.proposals.map((p, i) => `
-    <label class="rev ${p.checked ? '' : 'off'}">
-      <input type="checkbox" data-i="${i}" ${p.checked ? 'checked' : ''} ${P.readOnly ? 'disabled' : ''}>
-      <span>
-        <span class="fl">${esc(p.fieldLabel)}</span>
-        <div class="kv">← ${esc(p.keyLabel)}: <b>${esc(String(p.value).slice(0, 80))}</b></div>
-        <div class="meta">
-          <span class="badge ${esc(p.source)}">${p.source === 'ki' ? 'KI' : p.source === 'profil' ? 'Profil' : 'Heuristik'}</span>
-          <span class="badge g-${esc(p.group)}">${p.group === 'betreuer_buero' ? 'Betreuer/Büro' : p.group === 'betreute_person' ? 'betreute Person' : esc(p.group)}</span>
-          <span class="badge ${p.confidence < 0.6 ? 'conf-low' : ''}">Konfidenz ${(p.confidence * 100).toFixed(0)}%</span>
-        </div>
-      </span>
-    </label>`).join('');
+  $('reviewHead').classList.remove('hidden');
+  $('reviewCount').textContent = P.proposals.length ? P.proposals.length + ' Zuordnungen' : '';
+  if (!P.proposals.length) {
+    list.innerHTML = '<div class="hinweisleiste grau"><span class="zeichen">?</span><div><b>Keine Zuordnung gefunden.</b> '
+      + 'Diese Seite kennt das B\u00fcro noch nicht \u2014 \u00fcber das Trainings-Symbol oben anlernen'
+      + (P.aiAvailable ? ' oder KI-Vorschl\u00e4ge holen' : '') + '.</div></div>';
+    updateFillCount();
+    return;
+  }
+  list.innerHTML = reviewGruppen().map(g => `
+    <div class="gruppe ${g.klasse}">
+      <div class="kopfzeile">${g.titel} <span class="anzahl">${g.eintraege.length}</span></div>
+      ${g.eintraege.map(({ p, i }) => {
+        const chip = herkunftChip(p);
+        const breite = Math.max(6, Math.min(100, Math.round((p.confidence || 0) * 100)));
+        return `<label class="feld ${p.checked ? '' : 'aus'}">
+          <input type="checkbox" class="haken" data-i="${i}" ${p.checked ? 'checked' : ''} ${P.readOnly ? 'disabled' : ''}>
+          <span>
+            <span class="beschriftung">${esc(p.fieldLabel)}</span>
+            <span class="wert">\u2190 ${esc(p.keyLabel)}: <b>${esc(String(p.value).slice(0, 80))}</b></span>
+          </span>
+          <span class="rechts">
+            <span class="chip ${chip.klasse}">${esc(chip.text)}</span>
+            <span class="balken ${p.confidence < 0.6 ? 'mittel' : ''}" title="Konfidenz ${(p.confidence * 100).toFixed(0)}%"><i style="width:${breite}%"></i></span>
+          </span>
+        </label>`;
+      }).join('')}
+    </div>`).join('');
   list.querySelectorAll('input[type=checkbox]').forEach(cb => cb.addEventListener('change', () => {
     P.proposals[Number(cb.dataset.i)].checked = cb.checked;
-    cb.closest('.rev').classList.toggle('off', !cb.checked);
+    cb.closest('.feld').classList.toggle('aus', !cb.checked);
     updateFillCount();
   }));
   updateFillCount();
 }
 function updateFillCount() {
-  $('fillCount').textContent = String(P.proposals.filter(p => p.checked).length);
+  const offen = P.proposals.filter(p => p.checked).length;
+  $('fillCount').textContent = String(offen);
+  aktualisiereHauptknopf();
+  aktualisiereSchritte();
 }
 
 async function doFill() {
@@ -756,6 +822,8 @@ function renderProtocol() {
   $('secProtocol').classList.remove('hidden');
   $('protocolInfo').textContent = `${P.protocol.fields.length} Feld(er) dokumentiert – ${P.protocol.title || P.protocol.url}`;
   $('btnDoku').classList.toggle('hidden', !(P.serverOk && P.sourceMode === 'server' && P.caseId && P.perms && (P.perms.editCases || P.user?.isAdmin)));
+  aktualisiereSchritte();
+  aktualisiereHauptknopf();
 }
 
 async function protocolPdfBytes() {
@@ -900,7 +968,7 @@ function renderPortals() {
     const details = !open ? '' : `<div class="portal-details">
       ${r.pats.length ? `<div class="hint">URL: ${esc(r.pats.join(' · '))}</div>` : ''}
       ${note ? `<div class="hint">${esc(note)}</div>` : ''}
-      ${n ? `<div class="portal-chips">${(r.m.fields || []).slice(0, 40).map(f => `<span class="badge">${esc(f.fieldLabel || f.key)}</span>`).join('')}${n > 40 ? `<span class="hint">… +${n - 40}</span>` : ''}</div>` : '<div class="hint">noch keine Felder trainiert</div>'}
+      ${n ? `<div class="portal-chips">${(r.m.fields || []).slice(0, 40).map(f => `<span class="chip">${esc(f.fieldLabel || f.key)}</span>`).join('')}${n > 40 ? `<span class="hint">… +${n - 40}</span>` : ''}</div>` : '<div class="hint">noch keine Felder trainiert</div>'}
       ${acts ? `<div class="hint">Aktionen: ${(r.m.actions || []).map(a => esc(a.type || a.label || '')).join(', ')}</div>` : ''}
     </div>`;
     return `<div class="portal-row${open ? ' open' : ''}">
@@ -976,13 +1044,18 @@ async function matchProfiles() {
   const all = [...P.profiles.map(p => ({ ...p, _scope: 'server' })), ...P.localProfiles.map(p => ({ ...p, _scope: 'lokal' }))];
   P.matchedProfile = all.find(p => (p.mapping?.urlPatterns || p.urlPatterns || []).some(pat => urlMatchesPattern(url, pat))) || null;
   $('secProfile').classList.toggle('hidden', !P.matchedProfile && !P.training.active);
+  const chip = $('profileChip');
+  if (chip) {
+    chip.classList.toggle('hidden', !P.matchedProfile);
+    if (P.matchedProfile) { chip.textContent = 'Profil'; chip.className = 'chip blau'; }
+  }
   if (P.matchedProfile) {
     // Formular-Statistik + "veraltet"-Warnung (Feature v0.2.0 #11).
     const st = P.matchedProfile.stats;
     let extra = '';
     if (st && st.applyCount) extra = ` · ${st.applyCount}× angewendet`;
     $('profileInfo').innerHTML = `Profil „${esc(P.matchedProfile.name)}" verfügbar (${esc(P.matchedProfile._scope)})${extra}.`
-      + (st && st.stale ? ` <span class="badge conf-low">⚠ möglicherweise veraltet – neu trainieren?</span>` : '');
+      + (st && st.stale ? ` <span class="chip warn">⚠ möglicherweise veraltet – neu trainieren?</span>` : '');
     $('btnApplyProfile').classList.remove('hidden');
     $('btnDeleteProfile').classList.remove('hidden');
   } else {
@@ -1094,6 +1167,7 @@ async function startTraining() {
     $('secProfile').classList.remove('hidden');
     $('btnTrainAi').classList.toggle('hidden', !P.aiAvailable);
     renderTrainList();
+    trainingBandZeigen(true);
     toast('Training aktiv: Feld/Button auf der Seite anklicken.');
   } catch (e) { toast(String(e.message || e)); }
 }
@@ -1201,6 +1275,24 @@ async function stopTraining() {
   const intro = $('secTrainIntro');
   if (intro) intro.classList.remove('hidden');
   $('trainPending').classList.add('hidden');
+  trainingBandZeigen(false);
+}
+
+// Das Band steht ueber allem, solange aufgezeichnet wird - und das Symbol im Kopf leuchtet mit.
+// Ohne diesen sichtbaren Unterschied war "Training laeuft" nur an einem offenen Reiter zu erkennen.
+function trainingBandZeigen(an) {
+  const band = $('aufnahmeband');
+  if (band) {
+    band.classList.toggle('hidden', !an);
+    // Das Band steht ueber allem - auch ueber Schub und Trainingsflaeche. Ohne diese Hoehe
+    // schoeben sich die Flaechen darueber und die Aufzeichnung waere unsichtbar.
+    document.body.style.setProperty('--band', an ? band.offsetHeight + 'px' : '0px');
+  }
+  const symbol = $('btnTrainingToggle');
+  if (symbol) {
+    symbol.classList.toggle('an', !!an);
+    symbol.title = an ? 'Training läuft — Aufzeichnung öffnen' : 'Training: Felder dieser Seite anlernen';
+  }
 }
 
 // ===== KI: Feldzuordnung + Freitext-Chat (Phase E4) =====
@@ -1440,11 +1532,164 @@ function agentConfirm(answer) {
   if (P.agent.confirmResolve) { P.agent.confirmResolve(answer); P.agent.confirmResolve = null; }
 }
 
+// ===== Ansichten, Kontextkopf, Schrittleiste (Umbau 31.08.2026) =====
+// Vier Flaechen statt drei Reitern: der Assistent traegt den Arbeitsweg, alles Seltene liegt im
+// Schub, Training und Fallwahl sind eigene Flaechen. Der Kopf sagt immer, WO man ist.
+
+function zeigeAnsicht(name) {
+  const flaechen = { schub: 'schub', fallwahl: 'fallwahl', training: 'trainingFlaeche' };
+  for (const [ansicht, id] of Object.entries(flaechen)) {
+    const el = $(id);
+    if (el) el.classList.toggle('hidden', ansicht !== name);
+  }
+  document.body.dataset.ansicht = name;
+  if (name === 'training') {
+    const zeile = $('trainKontext');
+    if (zeile) {
+      let host = '';
+      try { host = P.pageInfo?.url ? new URL(P.pageInfo.url).hostname.replace(/^www\./, '') : ''; } catch (_e) { /* ohne Host */ }
+      zeile.textContent = [P.caseLabel, host].filter(Boolean).join(' · ');
+    }
+  }
+  if (name === 'fallwahl') {
+    renderFallListe($('fallSuche') ? $('fallSuche').value : '');
+    try { $('fallSuche').focus(); } catch (_e) { /* Komfort */ }
+  }
+}
+
+function initialenVon(label) {
+  const teile = String(label || '').replace(/[,;].*$/, '').trim().split(/\s+/).filter(Boolean);
+  if (!teile.length) return '?';
+  const nach = String(label || '').includes(',') ? String(label).split(',')[0].trim() : teile[teile.length - 1];
+  const vor = String(label || '').includes(',') ? (String(label).split(',')[1] || '').trim() : teile[0];
+  const a = (vor || '').charAt(0), b = (nach || '').charAt(0);
+  return ((a + b) || teile[0].charAt(0)).toUpperCase();
+}
+
+function aktualisiereKontext() {
+  const hatFall = !!P.caseLabel;
+  $('caseInitials').textContent = hatFall ? initialenVon(P.caseLabel) : '?';
+  $('caseName').textContent = hatFall ? P.caseLabel : 'Kein Fall gewählt';
+  const az = P.filldata?.case?.fileNumber || '';
+  $('caseInfo').textContent = hatFall
+    ? (az ? az : P.dict.length + ' Datenwerte') + (P.sourceMode === 'local' ? ' · lokaler Fall' : '')
+    : 'ohne Fall wird nichts gelesen';
+  $('caseSwapLabel').textContent = hatFall ? 'wechseln' : 'Wählen';
+  aktualisiereSchritte();
+  aktualisiereHauptknopf();
+}
+
+function aktualisiereSchritte() {
+  const hatFall = !!P.dict.length;
+  const hatSeite = !!P.descriptors.length;
+  const gefuellt = !!(P.protocol && sameProtocolPage());
+  const jetzt = !hatFall ? 1 : !hatSeite ? 2 : !gefuellt ? 3 : 4;
+  document.querySelectorAll('#pSchritte .p-schritt').forEach((el, idx) => {
+    const nr = idx + 1;
+    const fertig = nr < jetzt || (nr === 4 && gefuellt);
+    el.classList.toggle('fertig', fertig);
+    el.classList.toggle('jetzt', nr === jetzt && !fertig);
+    const kreis = el.querySelector('.kreis');
+    if (kreis) kreis.textContent = fertig ? '\u2713' : String(nr);
+  });
+}
+
+// Der Hauptknopf traegt immer den naechsten Schritt - vorher hiess er stur "Ausfuellen (0)",
+// auch wenn noch gar nichts gescannt war.
+function aktualisiereHauptknopf() {
+  const knopf = $('btnFill');
+  if (!knopf) return;
+  const offen = P.proposals.filter(p => p.checked).length;
+  let modus, text;
+  if (!P.dict.length) { modus = 'fall'; text = 'Fall wählen'; }
+  else if (!P.descriptors.length) { modus = 'scan'; text = 'Formular scannen'; }
+  else if (offen) { modus = 'fuellen'; text = 'Werte ausfüllen'; }
+  else if (P.protocol && sameProtocolPage()) { modus = 'weiter'; text = 'Nächste Seite scannen'; }
+  else { modus = 'scan'; text = 'Erneut scannen'; }
+  knopf.dataset.modus = modus;
+  $('fillLabel').textContent = text;
+  $('fillZahl').classList.toggle('hidden', modus !== 'fuellen');
+  knopf.disabled = P.readOnly && modus === 'fuellen';
+  const auswahl = $('btnAuswahl');
+  if (auswahl) auswahl.classList.toggle('hidden', !P.proposals.length);
+}
+
+async function hauptknopfGeklickt() {
+  const modus = $('btnFill').dataset.modus || 'fuellen';
+  if (modus === 'fall') { zeigeAnsicht('fallwahl'); return; }
+  if (modus === 'scan' || modus === 'weiter') { await doScan(); return; }
+  await doFill();
+}
+
+// Seitenzeile: Domain + erkannte Felder. Steht erst, wenn wirklich gescannt wurde.
+function aktualisiereSeitenzeile() {
+  const zeile = $('pSeite');
+  if (!zeile) return;
+  const url = P.pageInfo?.url || '';
+  if (!url || !P.descriptors.length) { zeile.classList.add('hidden'); return; }
+  let host = url;
+  try { host = new URL(url).hostname.replace(/^www\./, ''); } catch (_e) { /* rohe URL zeigen */ }
+  $('pageHost').textContent = host;
+  zeile.classList.remove('hidden');
+}
+
+// Fallwahl: die einzige Stelle, an der Klarnamen stehen. Gespeist aus dem (verborgenen) select,
+// damit loadCases unveraendert die Wahrheit ueber Server- und Lokalfaelle liefert.
+function renderFallListe(filter) {
+  const liste = $('fallListe');
+  const sel = $('caseSelect');
+  if (!liste || !sel) return;
+  const suche = String(filter || '').trim().toLowerCase();
+  const zeilen = [];
+  for (const opt of sel.options) {
+    if (!opt.value) continue;
+    const bereich = opt.parentElement && opt.parentElement.tagName === 'OPTGROUP' ? opt.parentElement.label : '';
+    if (suche && !(opt.textContent + ' ' + bereich).toLowerCase().includes(suche)) continue;
+    zeilen.push({ wert: opt.value, label: opt.textContent, bereich });
+  }
+  if (!zeilen.length) {
+    liste.innerHTML = '<p class="hint" style="padding:14px">'
+      + (sel.options.length > 1 ? 'Kein Fall passt zur Suche.' : 'Keine Fälle verfügbar. Server-Verbindung prüfen oder in den Einstellungen einen lokalen Fall laden.')
+      + '</p>';
+    return;
+  }
+  liste.innerHTML = zeilen.map(z => `
+    <button class="fallzeile ${z.wert === sel.value ? 'an' : ''}" data-wert="${esc(z.wert)}">
+      <span class="initialen">${esc(initialenVon(z.label))}</span>
+      <span class="wer"><b>${esc(z.label)}</b><span>${esc(z.bereich || '')}</span></span>
+      <span class="chip oeffnen">öffnen</span>
+    </button>`).join('');
+  liste.querySelectorAll('.fallzeile').forEach(btn => btn.addEventListener('click', async () => {
+    sel.value = btn.dataset.wert;
+    zeigeAnsicht('assistent');
+    await onCaseChosen();
+  }));
+}
+
+// Sitzungsspeicher: der gewaehlte Fall ueberlebt bewusst KEINEN Browserneustart (Entscheidung
+// 31.08.2026) - das Panel steht offen neben fremden Webseiten. storage.session wird beim
+// Schliessen des Browsers geleert; fehlt sie, wird gar nicht gemerkt.
+async function sitzungLesen(schluessel) {
+  try { if (BX.storage.session) return await BX.storage.session.get([schluessel]); } catch (_e) { /* ohne Gedaechtnis */ }
+  return {};
+}
+async function sitzungSchreiben(objekt) {
+  try { if (BX.storage.session) await BX.storage.session.set(objekt); } catch (_e) { /* ohne Gedaechtnis */ }
+}
+
 // ===== Wiring =====
 
 document.addEventListener('DOMContentLoaded', async () => {
+  // Farbmodus: System, oder was in den Einstellungen gewaehlt wurde.
+  try {
+    const t = await BX.storage.local.get(['theme']);
+    if (t && (t.theme === 'dark' || t.theme === 'light')) document.documentElement.dataset.theme = t.theme;
+  } catch (_e) { /* System bleibt */ }
+
   $('lnkOptions').addEventListener('click', (e) => { e.preventDefault(); BX.runtime.openOptionsPage(); });
-  $('btnReloadCases').addEventListener('click', async () => { await refreshConnection(); await loadCases(); });
+  $('btnReloadCases').addEventListener('click', async () => {
+    await refreshConnection(); await loadCases(); renderFallListe($('fallSuche').value);
+  });
   // Berechtigung SYNCHRON im Klick anfordern (Firefox verwirft die User-Geste nach einem await).
   // Deckt via https://*/* + http://*/* jeden spaeteren permissions.contains-Check ab.
   $('btnGrantSites').addEventListener('click', async () => {
@@ -1454,6 +1699,32 @@ document.addEventListener('DOMContentLoaded', async () => {
       refreshGrantBanner().catch(() => {});
     } catch (e) { toast('Fehler: ' + (e.message || e)); }
   });
+
+  // ===== Flaechen: Fallwahl, Werkzeugschub, Training =====
+  $('btnFallwahlOeffnen').addEventListener('click', () => zeigeAnsicht('fallwahl'));
+  $('btnFallwahlZu').addEventListener('click', () => zeigeAnsicht('assistent'));
+  $('fallSuche').addEventListener('input', (e) => renderFallListe(e.target.value));
+  $('btnSchub').addEventListener('click', () => zeigeAnsicht(document.body.dataset.ansicht === 'schub' ? 'assistent' : 'schub'));
+  $('btnSchubZu').addEventListener('click', () => zeigeAnsicht('assistent'));
+  $('btnTrainingToggle').addEventListener('click', () => zeigeAnsicht('training'));
+  $('btnTrainingZu').addEventListener('click', () => zeigeAnsicht('assistent'));
+  // Escape schliesst immer nur die oberste Flaeche.
+  document.addEventListener('keydown', (ev) => {
+    if (ev.key !== 'Escape') return;
+    if (document.body.dataset.ansicht && document.body.dataset.ansicht !== 'assistent') {
+      ev.preventDefault(); zeigeAnsicht('assistent');
+    }
+  });
+  // Auto-Wechsel beim Element-Pick im Training (onPicked ruft das).
+  window.__showPanelTab = (name) => zeigeAnsicht(name === 'training' ? 'training' : 'assistent');
+  // Laufender Agent darf nie unsichtbar haengen (Audit 2026-07-18): vor jeder Pflicht-
+  // Bestaetigung den Schub oeffnen und die Agent-Karte aufklappen.
+  window.__agentEnsureVisible = () => {
+    $('secAgent').classList.remove('hidden');
+    openToolCard('secAgent');
+    zeigeAnsicht('schub');
+  };
+
   $('caseSelect').addEventListener('change', onCaseChosen);
   $('contactSelect').addEventListener('change', onContactChosen);
   $('copySearch').addEventListener('input', (e) => renderCopyList(e.target.value));
@@ -1469,29 +1740,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderFileList();
   $('btnTrainAi').addEventListener('click', aiTrainWholeForm);
   $('btnRescanPage').addEventListener('click', () => { $('pageChangeBanner').classList.add('hidden'); doScan(); });
-  // ===== Panel-Tabs (Umbau 2026-07-18): Assistent | KI | Training. =====
-  // KI-Hilfe und Agent sind ein eigener Tab (kein Popover mehr); die Aktionsleiste traegt nur
-  // noch die drei Kernaktionen Scannen/Ausfuellen/Protokoll-PDF.
-  function showTab(name) {
-    document.body.dataset.tab = name;
-    document.querySelectorAll('#panelTabs button').forEach(b => b.classList.toggle('active', b.dataset.pt === name));
-    try { BX.storage.local.set({ panelTab: name }); } catch (_e) { /* Merken optional */ }
-  }
-  window.__showPanelTab = showTab; // fuer Auto-Wechsel beim Element-Pick im Training
-  document.querySelectorAll('#panelTabs button').forEach(b => b.addEventListener('click', () => showTab(b.dataset.pt)));
-  // Gemerkten Tab + Karten-Zustaende VOR dem ersten showTab lesen (Audit 2026-07-18): showTab
-  // persistiert selbst und wuerde den gespeicherten Wert sonst zuerst ueberschreiben.
-  let startPanelTab = 'assistent';
+
+  // Werkzeug-Karten im Schub: per Klick auf die Ueberschrift auf-/zuklappbar, Zustand gemerkt.
   let toolOpen = {};
   try {
-    const s2 = await BX.storage.local.get(['panelTab', 'toolCards']);
-    if (s2 && ['training', 'assistent', 'ki'].includes(s2.panelTab)) startPanelTab = s2.panelTab;
+    const s2 = await BX.storage.local.get(['toolCards']);
     if (s2 && s2.toolCards && typeof s2.toolCards === 'object') toolOpen = s2.toolCards;
   } catch (_e) { /* Standard bleibt */ }
-  showTab(startPanelTab);
-  // Werkzeug-Karten (Kopieren/Dateien/Formulare) per Klick auf die Ueberschrift auf-/zuklappbar,
-  // Standard ZU (Nutzerwunsch 2026-07-18) - der Assistent zeigt im Kern nur
-  // Fall -> Scannen -> Pruefliste -> Ausfuellen. Zustand wird gemerkt (storage.local toolCards).
   const TOOL_CARDS = { secCopy: 'copy', secFiles: 'files', secPortals: 'portals', secAi: 'ai', secAgent: 'agent' };
   for (const [secId, cardKey] of Object.entries(TOOL_CARDS)) {
     const sec = $(secId);
@@ -1505,49 +1760,24 @@ document.addEventListener('DOMContentLoaded', async () => {
       try { BX.storage.local.set({ toolCards: toolOpen }); } catch (_e) { /* Merken optional */ }
     });
   }
-  // Schnellaktion "Karte oeffnen": aufklappen, Zustand merken, ins Bild holen.
-  const openToolCard = (secId) => {
+  function openToolCard(secId) {
     const sec = $(secId);
     if (!sec) return;
     sec.classList.remove('closed');
     const k = TOOL_CARDS[secId];
     if (k) { toolOpen[k] = true; try { BX.storage.local.set({ toolCards: toolOpen }); } catch (_e) { /* Merken optional */ } }
     try { sec.scrollIntoView({ block: 'nearest' }); } catch (_e) { /* Komfort */ }
-  };
-  // Laufender Agent darf nie unsichtbar haengen (Audit 2026-07-18): vor jeder Pflicht-
-  // Bestaetigung zurueck in den KI-Tab und die Agent-Karte aufklappen.
-  window.__agentEnsureVisible = () => {
-    $('secAgent').classList.remove('hidden');
-    openToolCard('secAgent');
-    if (document.body.dataset.tab !== 'ki') showTab('ki');
-  };
-  const kgText = $('kgText');
-  if (kgText) kgText.addEventListener('click', () => {
-    if (!P.aiAvailable) { toast('KI ist nicht verfügbar (Server/KI-Zugang prüfen).'); return; }
-    openToolCard('secAi');
-    try { $('aiChatPrompt').focus(); } catch (_e) { /* */ }
-  });
-  const kgAgent = $('kgAgent');
-  if (kgAgent) kgAgent.addEventListener('click', () => {
-    if (!P.agentAvailable) { toast('Der KI-Agent ist nicht verfügbar (Server/KI-Zugang prüfen).'); return; }
-    openToolCard('secAgent');
-    try { $('agentGoal').focus(); } catch (_e) { /* */ }
-  });
+  }
+
   const tgStart = $('tgStart');
   if (tgStart) tgStart.addEventListener('click', startTraining);
-  $('agScan').addEventListener('click', doScan);
-  $('agFill').addEventListener('click', () => {
-    if (!P.proposals || !P.proposals.length) { toast('Bitte zuerst „Scannen" – die Prüfliste ist noch leer.'); return; }
-    doFill();
+  // Fussleiste: EIN Hauptknopf, der den naechsten Schritt traegt.
+  $('btnFill').addEventListener('click', hauptknopfGeklickt);
+  $('btnAuswahl').addEventListener('click', () => {
+    const alle = P.proposals.length && P.proposals.every(p => p.checked);
+    $('chkAll').checked = !alle;
+    $('chkAll').dispatchEvent(new Event('change'));
   });
-  $('agPdf').addEventListener('click', () => {
-    if (!P.protocol) { toast('Noch kein Ausfüllprotokoll vorhanden – zuerst ein Formular ausfüllen.'); return; }
-    downloadProtocolPdf();
-  });
-  // Training beenden fuehrt zurueck zum Assistent-Tab
-  const _origStopBtn = $('btnTrainStop');
-  if (_origStopBtn) _origStopBtn.addEventListener('click', () => showTab('assistent'));
-  $('btnFill').addEventListener('click', doFill);
   $('btnClearHl').addEventListener('click', async () => { try { await send({ type: 'BXA_CLEAR_HIGHLIGHTS' }); } catch (_e) { /* */ } });
   $('chkAll').addEventListener('change', (e) => { P.proposals.forEach(p => { p.checked = e.target.checked; }); renderReview(); });
   // collapseRadioGroups auch hier (Pruefbericht 2026-07-17): ohne die Zusammenfassung entstanden nach
@@ -1556,7 +1786,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   $('contextMode').addEventListener('change', () => { if (P.descriptors.length) { P.proposals = collapseRadioGroups(BxaMatcher.match(P.descriptors, P.dict, $('contextMode').value)); P.proposals.forEach(p => { p.checked = p.confidence >= 0.6; }); renderReview(); } });
   $('btnApplyProfile').addEventListener('click', applyProfile);
   $('btnDeleteProfile').addEventListener('click', deleteProfile);
+  // Training beenden fuehrt zurueck zum Assistenten.
   $('btnTrainStop').addEventListener('click', stopTraining);
+  $('btnTrainStop').addEventListener('click', () => zeigeAnsicht('assistent'));
   $('btnTrainSave').addEventListener('click', saveTraining);
   $('btnTrainAssignAction').addEventListener('click', assignAction);
   $('trainKeySearch').addEventListener('input', (e) => renderKeyList(e.target.value));
@@ -1587,9 +1819,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       // Seiten-Chip-Navigation: Zielseite fertig geladen → automatisch neu erkennen.
       if (P.pendingChipUrl && tab.url === P.pendingChipUrl) { P.pendingChipUrl = ''; doScan(); return; }
       if (tab.url === P.currentScanUrl) return;
-      // BEKANNTE Seite (z. B. „Zurück" im Formular): vorher blieb das Panel hier einfach stehen
-      // (kein Banner, alte Prüfliste). Jetzt automatisch neu erkennen – die gemerkten Häkchen
-      // dieser Seite kommen über restorePageDecisions zurück (Nutzerwunsch 2026-07-17).
+      // BEKANNTE Seite (z. B. „Zurück" im Formular): automatisch neu erkennen – die gemerkten
+      // Häkchen dieser Seite kommen über restorePageDecisions zurück (Nutzerwunsch 2026-07-17).
       if (P.scannedUrls.has(tab.url)) { doScan(); return; }
       $('pageChangeBanner').classList.remove('hidden');
     });
@@ -1605,6 +1836,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   refreshGrantBanner().catch(() => {});
   updateEmptyState();
+  aktualisiereKontext();
   await refreshConnection();
   await loadCases();
   // Portale schon beim PANEL-START anzeigen (Bugfix 2026-07-17): matchProfiles laeuft sonst erst

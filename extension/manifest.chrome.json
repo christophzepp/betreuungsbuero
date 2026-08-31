@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Betreuungsbüro Formular-Assistent",
-  "version": "0.4.9",
+  "version": "0.5.0",
   "description": "Füllt Behörden-Webformulare mit Falldaten aus dem Betreuungsbüro-Dokumentenassistenten (Fallauswahl, Prüfliste, niemals automatisches Absenden).",
   "minimum_chrome_version": "116",
   "background": { "service_worker": "background-chrome.js" },

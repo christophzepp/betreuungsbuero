@@ -28,7 +28,7 @@ function handshakePayload() {
   return {
     apiLevel: EXT_API_LEVEL,
     minExtensionVersion: EXT_MIN_VERSION,
-    serverAppVersion: '1.59.00',
+    serverAppVersion: '0.7',
     features: { siteProfiles: true, ai, agent: ai }
   };
 }

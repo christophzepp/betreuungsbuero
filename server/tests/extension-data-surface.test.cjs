@@ -108,11 +108,20 @@ test('Extension-Dokumentrouten verwenden zentrale Fallakte mit Berechtigung und 
   assert.match(source, /source: 'legacy'/);
 });
 
-test('Versionsnummer 0.4.9 ist in allen Paketquellen synchron', () => {
-  const files = ['manifest.chrome.json', 'manifest.firefox.json', 'package.json', 'package-lock.json'];
-  for (const file of files) {
+test('Die Versionsnummer der Erweiterung ist in allen Paketquellen synchron', () => {
+  // Bis zum Umbau auf 0.5.0 (31.08.2026) stand hier die Zahl selbst - jeder Versionssprung
+  // machte den Pruefstand rot, ohne dass etwas kaputt war. Gepinnt wird jetzt die EINIGKEIT:
+  // package.json ist die Wahrheit, die beiden Manifeste und die Sperrdatei muessen folgen.
+  const paket = JSON.parse(fs.readFileSync(path.join(extensionDir, 'package.json'), 'utf8')).version;
+  assert.match(paket, /^\d+\.\d+\.\d+$/, 'package.json traegt keine Fassung im Format x.y.z');
+  for (const file of ['manifest.chrome.json', 'manifest.firefox.json', 'package-lock.json']) {
     const json = JSON.parse(fs.readFileSync(path.join(extensionDir, file), 'utf8'));
-    assert.equal(json.version, '0.4.9', file);
-    if (file === 'package-lock.json') assert.equal(json.packages[''].version, '0.4.9');
+    assert.equal(json.version, paket, file);
+    if (file === 'package-lock.json') assert.equal(json.packages[''].version, paket);
   }
+  // Der Notnagel im Panel greift, wenn getManifest() fehlt - er darf nicht zurueckbleiben.
+  const panel = fs.readFileSync(path.join(extensionDir, 'src/panel/panel.js'), 'utf8');
+  const notnagel = /getManifest\(\)\.version\) \|\| '([^']+)'/.exec(panel);
+  assert.ok(notnagel, 'Notnagel in panel.js fehlt');
+  assert.equal(notnagel[1], paket, 'panel.js meldet ohne Manifest eine andere Fassung');
 });

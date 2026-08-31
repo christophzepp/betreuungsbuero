@@ -8,6 +8,34 @@ Build-Kette (klassische Scripts, kein Bundler).
 abgesendet – verbindlich wirkende Klicks (absenden/beantragen/kostenpflichtig …) verlangen
 IMMER eine ausdrückliche Einzelbestätigung, auch im KI-Agent-Modus.
 
+## Aufbau des Panels (Umbau 31.08.2026)
+
+Das Panel ist ein Arbeitsweg, keine Sammlung von Kästen. Von oben nach unten:
+
+- **Kontextkopf** – Fall (Name + Aktenzeichen) und erkannte Seite. Sagt jederzeit, *wo* man ist.
+  Rechts oben das Trainings-Symbol, daneben der Verbindungspunkt.
+- **Schrittleiste** – Fall → Seite → Prüfen → Ausfüllen. Ersetzt den früheren Textkasten „So geht's".
+- **Eine Meldestelle** – direkt darunter. Es ist immer nur *eine* Meldung sichtbar (Rangfolge:
+  veraltete Fassung → fehlender Seiten-Zugriff → Seite gewechselt → offene Pflichtfelder);
+  gestapelte Banner kann es baulich nicht mehr geben.
+- **Prüfliste** (scrollt) – gruppiert nach „Bitte ansehen" (Konfidenz < 0,6), „Betreute Person"
+  (blau) und „Betreuer & Büro" (ocker). Je Zeile: Haken, Feldname, Herkunft mit Wert, Herkunfts-Chip
+  und Konfidenzbalken.
+- **Feste Fußleiste** – ein Hauptknopf, der den nächsten Schritt trägt („Fall wählen" →
+  „Formular scannen" → „Werte ausfüllen (N)" → „Nächste Seite scannen"), dazu „Auswahl" und „⋯".
+  Darunter immer: *Abgesendet wird nie automatisch.*
+
+Drei Flächen legen sich bei Bedarf darüber: der **Werkzeugschub** („⋯": Datenkontext, Upload,
+Kopierwerte, Portale, Dateien, KI-Hilfe, KI-Agent, Einstellungen), die **Fallwahl** und das
+**Training**. Läuft eine Aufzeichnung, steht ein lila Band über allem.
+
+Zwei Farbsätze (hell/dunkel) folgen dem System; in den Einstellungen unter „Darstellung" lässt
+sich das festlegen. Die Breite wächst mit – eine Spalte, kein zweites Layout.
+
+**Der gewählte Fall wird beim Schließen des Browsers vergessen** (`storage.session`): Das Panel
+steht offen neben fremden Webseiten, dort soll nach einem Neustart kein Klarname stehen. Im
+Startzustand zeigt es nur, *dass* Fälle erreichbar sind – die Namen erst nach „Wählen".
+
 ## Funktionen
 
 - **Fallauswahl**: Fälle vom Server (API-Token) oder lokal importierte Datensicherung.json.

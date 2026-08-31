@@ -290,17 +290,25 @@ function spPaint() {
   const ao = $('spAllOpen'), ac = $('spAllClose');
   if (ao) ao.addEventListener('click', () => { spVisible().forEach(p => SPOpen.add(p.id)); spPaint(); });
   if (ac) ac.addEventListener('click', () => { SPOpen.clear(); spPaint(); });
-  const tabs = $('optTabs');
-  if (tabs) {
-    const show = (name) => {
-      tabs.querySelectorAll('button[data-tab]').forEach(b => b.classList.toggle('active', b.getAttribute('data-tab') === name));
-      document.querySelectorAll('section[data-opttab]').forEach(s => s.classList.toggle('active', s.getAttribute('data-opttab') === name));
-      try { BX.storage.local.set({ optTab: name }); } catch (_e) { /* Merken ist optional */ }
-    };
-    tabs.querySelectorAll('button[data-tab]').forEach(b => b.addEventListener('click', () => show(b.getAttribute('data-tab'))));
-    // zuletzt aktiven Tab wiederherstellen - nur wenn es ihn (noch) gibt, sonst blendete ein
-    // unbekannter Wert ALLE Sektionen aus (Audit 2026-07-18).
-    try { BX.storage.local.get(['optTab']).then(s => { if (s && s.optTab && tabs.querySelector('button[data-tab="' + cssEsc(s.optTab) + '"]')) show(s.optTab); }); } catch (_e) { /* Standard-Tab bleibt */ }
+  // Sprungleiste statt Reitern (Umbau 31.08.2026): alle Bereiche stehen am Stueck untereinander,
+  // links markiert die Leiste, wo man gerade ist. Vorher versteckte ein unbekannter gemerkter
+  // Reiterwert schlimmstenfalls ALLE Abschnitte (Audit 2026-07-18) - das kann jetzt nicht mehr sein.
+  const nav = $('optNav');
+  if (nav) {
+    const marken = [...nav.querySelectorAll('a[data-ziel]')];
+    const setzeAn = (id) => marken.forEach(a => a.classList.toggle('an', a.dataset.ziel === id));
+    marken.forEach(a => a.addEventListener('click', () => setzeAn(a.dataset.ziel)));
+    if (typeof IntersectionObserver === 'function') {
+      const sichtbar = new Set();
+      const beobachter = new IntersectionObserver((eintraege) => {
+        for (const e of eintraege) {
+          if (e.isIntersecting) sichtbar.add(e.target.id); else sichtbar.delete(e.target.id);
+        }
+        const erster = marken.map(a => a.dataset.ziel).find(id => sichtbar.has(id));
+        if (erster) setzeAn(erster);
+      }, { rootMargin: '-10% 0px -70% 0px' });
+      marken.forEach(a => { const el = document.getElementById(a.dataset.ziel); if (el) beobachter.observe(el); });
+    }
   }
 })();
 
@@ -342,10 +350,30 @@ async function spDelete(id) {
   catch (e) { toast('Löschen: ' + String(e.message || e)); }
 }
 
+// Farbmodus: 'system' laesst prefers-color-scheme entscheiden, sonst wird fest gestellt.
+function themaAnwenden(wert) {
+  if (wert === 'dark' || wert === 'light') document.documentElement.dataset.theme = wert;
+  else delete document.documentElement.dataset.theme;
+}
+
 async function init() {
-  const s = await BX.storage.local.get(['serverUrl', 'apiToken']);
+  const s = await BX.storage.local.get(['serverUrl', 'apiToken', 'theme']);
   $('serverUrl').value = s.serverUrl || '';
   $('apiToken').value = s.apiToken || '';
+  const thema = (s.theme === 'dark' || s.theme === 'light') ? s.theme : 'system';
+  $('themeSelect').value = thema;
+  themaAnwenden(thema);
+  try {
+    const v = BX.runtime.getManifest && BX.runtime.getManifest().version;
+    if (v) $('extVersion').textContent = 'Fassung ' + v;
+  } catch (_e) { /* Fassung ist Beiwerk */ }
+  try {
+    await BxaApi.handshake();
+    const check = await BxaApi.tokenCheck();
+    $('optConn').innerHTML = '<span class="punkt"></span>' + esc(check.user?.displayName || check.user?.username || 'verbunden');
+  } catch (_e) {
+    $('optConn').innerHTML = '<span class="punkt rot"></span>nicht verbunden';
+  }
   // Jeder Renderer einzeln abgesichert (Audit 2026-07-18): EIN defekter Datensatz darf nicht
   // den restlichen Seitenaufbau abbrechen (sonst blieb z. B. der Formulare-Tab dauerhaft leer).
   try { await renderLocalCases(); } catch (e) { console.error('Lokale Fälle:', e); }
@@ -362,5 +390,10 @@ document.addEventListener('DOMContentLoaded', () => {
   $('backupFile').addEventListener('change', (e) => { if (e.target.files[0]) backupImport(e.target.files[0]); e.target.value = ''; });
   $('btnWipe').addEventListener('click', wipeAll);
   $('btnReloadProfiles').addEventListener('click', renderSiteProfiles);
+  $('themeSelect').addEventListener('change', async (e) => {
+    const wert = e.target.value;
+    themaAnwenden(wert);
+    try { await BX.storage.local.set({ theme: wert === 'system' ? '' : wert }); } catch (_err) { toast('Farbmodus konnte nicht gespeichert werden.'); }
+  });
   init();
 });

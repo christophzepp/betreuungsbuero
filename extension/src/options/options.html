@@ -5,85 +5,106 @@
 <title>Formular-Assistent – Einstellungen</title>
 <link rel="stylesheet" href="../panel/panel.css">
 <style>
-  body { max-width: 720px; margin: 0 auto; }
-  header { border-radius: 0 0 10px 10px; }
-  .sp-card { border: 1px solid #d7dee6; border-radius: 8px; padding: 10px 11px; margin-bottom: 9px; background: #fff; }
+  /* Nur was die Optionsseite zusaetzlich braucht - Farben und Bausteine kommen aus panel.css. */
+  .sp-card { border: 1px solid var(--linie); border-radius: 9px; padding: 11px; margin-bottom: 9px; background: var(--flaeche); }
   .sp-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
-  .sp-name { flex: 1; font-weight: 700; padding: 5px 8px; border: 1px solid #cdd7e0; border-radius: 6px; }
-  .sp-pats { width: 100%; font-family: ui-monospace, Menlo, monospace; font-size: 12px; padding: 5px 8px; border: 1px solid #cdd7e0; border-radius: 6px; box-sizing: border-box; resize: vertical; }
+  .sp-name { flex: 1; font-weight: 700; padding: 6px 9px; border: 1px solid var(--linie); border-radius: 7px; background: var(--flaeche); color: var(--tinte); }
+  .sp-pats { width: 100%; font-family: ui-monospace, Menlo, monospace; font-size: 12px; padding: 6px 9px; border: 1px solid var(--linie); border-radius: 7px; box-sizing: border-box; resize: vertical; background: var(--flaeche); color: var(--tinte); }
   .sp-fields { display: flex; flex-wrap: wrap; gap: 5px; margin: 7px 0; }
-  .sp-chip { display: flex; align-items: center; gap: 4px; background: #eef3f8; border: 1px solid #dbe6ef; border-radius: 6px; padding: 2px 3px 2px 7px; }
-  .sp-chip code { font-size: 11px; color: #294b63; }
-  .sp-x { border: none; background: #e6bcbc; color: #7a1f1f; border-radius: 4px; width: 17px; height: 17px; line-height: 1; cursor: pointer; }
-  .sp-stale { color: #8f2b23; background: #fdecea; border: 1px solid #d9a09a; border-radius: 6px; padding: 1px 6px; font-size: 11px; white-space: nowrap; }
-  .opt-tabs { display: flex; gap: 4px; flex-wrap: wrap; margin: 12px 0 4px; border-bottom: 2px solid #d7dee6; }
-  .opt-tabs button { border: 1px solid #d7dee6; border-bottom: none; background: #eef3f8; border-radius: 8px 8px 0 0; padding: 7px 13px; cursor: pointer; font-size: 13px; color: #3c556b; }
-  .opt-tabs button.active { background: #fff; font-weight: 700; color: #16324a; position: relative; top: 2px; border-bottom: 2px solid #fff; }
-  section[data-opttab] { display: none; }
-  section[data-opttab].active { display: block; }
-  .sp-scroll { max-height: 520px; overflow-y: auto; padding-right: 3px; }
-  .sp-head .sp-toggle { border: none; background: none; cursor: pointer; font-size: 14px; padding: 2px 4px; color: #5b6b7a; }
+  .sp-chip { display: flex; align-items: center; gap: 4px; background: var(--flaeche-2); border: 1px solid var(--linie); border-radius: 6px; padding: 2px 3px 2px 7px; }
+  .sp-chip code { font-size: 11px; color: var(--tinte-leise); }
+  .sp-x { border: none; background: var(--rot-hauch); color: var(--rot); border-radius: 4px; width: 17px; height: 17px; line-height: 1; cursor: pointer; }
+  .sp-stale { color: var(--warn); background: var(--warn-hauch); border: 1px solid color-mix(in srgb, var(--warn) 40%, transparent); border-radius: 6px; padding: 1px 6px; font-size: 11px; white-space: nowrap; }
+  .sp-head .sp-toggle { border: none; background: none; cursor: pointer; font-size: 14px; padding: 2px 4px; color: var(--tinte-leise); }
 </style>
 </head>
 <body>
-<header><h1>Formular-Assistent – Einstellungen</h1><div></div></header>
+<div class="optseite">
 
-<div class="opt-tabs" id="optTabs">
-  <button data-tab="server" class="active">Server &amp; Zugang</button>
-  <button data-tab="faelle">Lokale Fälle</button>
-  <button data-tab="backup">Backup</button>
-  <button data-tab="formulare">Angelernte Formulare</button>
-  <button data-tab="protokolle">Ausfüllprotokolle</button>
+<div class="opt-kopf">
+  <span class="titel">Formular-Assistent — Einstellungen</span>
+  <span class="chip" id="extVersion">Fassung –</span>
+  <span class="p-status" id="optConn"><span class="punkt grau"></span>Verbindung ungeprüft</span>
 </div>
 
-<section data-opttab="server" class="active">
-  <h2>Server &amp; Zugang</h2>
-  <p class="hint">Die Erweiterung verbindet sich mit dem Betreuungsbüro-Server. Das API-Token erstellen Sie in der Anwendung unter <b>Nutzer-Menü → Erweiterungs-Zugänge</b> (Online-Modus).</p>
-  <div class="row"><input id="serverUrl" type="text" placeholder="Server-URL, z. B. http://localhost:8935"></div>
-  <div class="row"><input id="apiToken" type="text" placeholder="API-Token (wird nur lokal in dieser Erweiterung gespeichert)"></div>
-  <div class="row">
-    <button id="btnSave" class="primary">Speichern &amp; verbinden</button>
-    <button id="btnGrant" class="light" title="Host-Zugriff für die Server-URL erteilen">Server-Zugriff erlauben</button>
-  </div>
-  <div id="connResult" class="hint"></div>
-</section>
+<div class="opt-raster">
 
-<section data-opttab="faelle">
-  <h2>Lokale Fälle (ohne Server)</h2>
-  <p class="hint">Für den Lokal-Modus der Anwendung: Importieren Sie eine <b>Datensicherung.json</b> eines Falls. Die Daten liegen dann NUR in dieser Erweiterung (storage.local dieses Browsers) – Löschen jederzeit möglich.</p>
-  <div class="row">
-    <input type="file" id="localCaseFile" accept=".json,application/json">
-  </div>
-  <div id="localCasesList" class="trainlist"></div>
-</section>
+  <nav class="opt-nav" id="optNav">
+    <span class="nav-titel">Springen zu</span>
+    <a href="#optServer" data-ziel="optServer" class="an">Server &amp; Zugang</a>
+    <a href="#optFaelle" data-ziel="optFaelle">Lokale Fälle</a>
+    <a href="#optFormulare" data-ziel="optFormulare">Angelernte Formulare</a>
+    <a href="#optProtokolle" data-ziel="optProtokolle">Ausfüllprotokolle</a>
+    <a href="#optDarstellung" data-ziel="optDarstellung">Darstellung</a>
+    <a href="#optSicherung" data-ziel="optSicherung">Sicherung</a>
+  </nav>
 
-<section data-opttab="backup">
-  <h2>Backup der Erweiterungs-Daten</h2>
-  <p class="hint">Exportiert Einstellungen (OHNE API-Token), lokale Fälle, lokale Site-Profile, den Profil-Cache und die Ausfüllprotokoll-Historie als JSON – z. B. für einen Rechnerwechsel oder zur Sicherung.</p>
-  <div class="row wrap">
-    <button id="btnBackupExport" class="light">Backup exportieren (JSON)</button>
-    <input type="file" id="backupFile" accept=".json,application/json" class="hidden">
-    <button id="btnBackupImport" class="light">Backup importieren</button>
-    <button id="btnWipe" class="danger-ghost">Alle Erweiterungs-Daten löschen</button>
-  </div>
-</section>
+  <div class="opt-inhalt">
 
-<section data-opttab="formulare">
-  <h2>Angelernte Formulare (Online-Formulare)</h2>
-  <p class="hint">Büroweit trainierte Formular-Zuordnungen (Feld ↔ Datenschlüssel), gemeinsam mit dem Server verwaltet. Ansehen, umbenennen, URL-Muster anpassen, einzelne Felder entfernen oder ganz löschen. <b>Verschobene Felder neu erfassen</b> geht über „Training" im Side Panel auf der Live-Seite.</p>
-  <div class="row wrap">
-    <button id="btnReloadProfiles" class="light">Aktualisieren</button>
-    <input id="spFilter" type="text" placeholder="Formular suchen (Name oder URL) …" style="flex:1;min-width:180px">
-    <button id="spAllOpen" class="icon" title="alle aufklappen">⊞</button>
-    <button id="spAllClose" class="icon" title="alle zuklappen">⊟</button>
-  </div>
-  <div id="siteProfilesList" class="trainlist sp-scroll"></div>
-</section>
+    <div class="opt-block" id="optServer">
+      <h3>Server &amp; Zugang</h3>
+      <p class="hint">Die Erweiterung verbindet sich mit dem Betreuungsbüro-Server. Das API-Token erstellen Sie in der Anwendung unter <b>Nutzer-Menü → Erweiterungs-Zugänge</b> (Online-Modus).</p>
+      <div class="row"><input id="serverUrl" type="text" placeholder="Server-URL, z. B. http://localhost:8935"></div>
+      <div class="row"><input id="apiToken" type="text" placeholder="API-Token (wird nur lokal in dieser Erweiterung gespeichert)"></div>
+      <div class="row wrap">
+        <button id="btnSave" class="primary">Speichern &amp; verbinden</button>
+        <button id="btnGrant" class="light" title="Host-Zugriff für die Server-URL erteilen">Server-Zugriff erlauben</button>
+      </div>
+      <div id="connResult" class="hint"></div>
+    </div>
 
-<section data-opttab="protokolle">
-  <h2>Ausfüllprotokolle</h2>
-  <div id="protocolList" class="trainlist"></div>
-</section>
+    <div class="opt-block" id="optFaelle">
+      <h3>Lokale Fälle (ohne Server)</h3>
+      <p class="hint">Für den Lokal-Modus der Anwendung: Importieren Sie eine <b>Datensicherung.json</b> eines Falls. Die Daten liegen dann NUR in dieser Erweiterung (storage.local dieses Browsers) – Löschen jederzeit möglich.</p>
+      <div class="row"><input type="file" id="localCaseFile" accept=".json,application/json"></div>
+      <div id="localCasesList" class="trainlist"></div>
+    </div>
+
+    <div class="opt-block" id="optFormulare">
+      <h3>Angelernte Formulare</h3>
+      <p class="hint">Büroweit trainierte Formular-Zuordnungen (Feld ↔ Datenschlüssel), gemeinsam mit dem Server verwaltet. Ansehen, umbenennen, URL-Muster anpassen, einzelne Felder entfernen oder ganz löschen. <b>Verschobene Felder neu erfassen</b> geht über „Training" im Panel auf der Live-Seite.</p>
+      <div class="row wrap">
+        <button id="btnReloadProfiles" class="light">Aktualisieren</button>
+        <input id="spFilter" type="search" placeholder="Formular suchen (Name oder URL) …" style="flex:1;min-width:180px">
+        <button id="spAllOpen" class="icon" title="alle aufklappen">⊞</button>
+        <button id="spAllClose" class="icon" title="alle zuklappen">⊟</button>
+      </div>
+      <div id="siteProfilesList" class="trainlist"></div>
+    </div>
+
+    <div class="opt-block" id="optProtokolle">
+      <h3>Ausfüllprotokolle</h3>
+      <p class="hint">Jedes Ausfüllen wird als Eintrag in die <b>Falldokumentation</b> geschrieben – dort gehört es hin, neben den Rest der Fallhistorie. Hier liegen nur die letzten Läufe dieses Rechners zur Fehlersuche.</p>
+      <div id="protocolList" class="trainlist"></div>
+    </div>
+
+    <div class="opt-block" id="optDarstellung">
+      <h3>Darstellung</h3>
+      <p class="hint">Das Panel folgt standardmäßig der Einstellung Ihres Systems. Hier lässt sich das festlegen.</p>
+      <div class="row small">
+        <label for="themeSelect">Farbmodus:</label>
+        <select id="themeSelect" style="max-width:260px">
+          <option value="system">System folgen</option>
+          <option value="light">immer hell</option>
+          <option value="dark">immer dunkel</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="opt-block" id="optSicherung">
+      <h3>Sicherung</h3>
+      <p class="hint">Sichert Einstellungen (<b>ohne</b> API-Token), lokale Fälle, lokale Site-Profile, den Profil-Cache und die Ausfüllprotokoll-Historie als JSON – z. B. für einen Rechnerwechsel.</p>
+      <div class="row wrap">
+        <button id="btnBackupExport" class="light">Sicherung schreiben (JSON)</button>
+        <input type="file" id="backupFile" accept=".json,application/json" class="hidden">
+        <button id="btnBackupImport" class="light">Sicherung einlesen</button>
+        <button id="btnWipe" class="danger-ghost">Alle Erweiterungs-Daten löschen</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
 
 <div id="toast" class="toast hidden"></div>
 
