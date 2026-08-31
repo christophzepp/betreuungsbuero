@@ -61,7 +61,23 @@ Das Volume `betreuungsbuero-backups` ist auf dem Mac-Testserver nur eine
 dauerhafte lokale Kopie. Vor dem produktiven Serverbetrieb wird es durch ein
 explizites externes Sicherungsziel ergänzt.
 
-## Ältere Deployment-Dateien
+## Reverse Proxy, Tunnel und große Übertragungen
 
-Der Ordner `deploy/stack` beschreibt noch den früheren lokalen Build-Ablauf.
-Für neue Installationen ist die Compose-Datei im Repository-Stamm maßgeblich.
+Läuft die Anwendung hinter Cloudflare oder einem anderen Reverse Proxy, können
+dort Größen- und Zeitlimits gelten. Große Gesamtimporte, Außendienst-Rückspielungen
+und serverseitig erzeugte Gesamtsicherungen deshalb im Büro-LAN direkt über
+`http://<server-ip>:8935` ausführen.
+
+Läuft der Tunnel selbst als Container, werden Anwendung und Tunnel an ein
+gemeinsames externes Docker-Netz angeschlossen. Das interne Tunnelziel lautet dann
+`http://betreuungsbuero:8935`; ein auf dem Host laufender Tunnel verwendet
+`http://localhost:8935`.
+
+## Nach der Erstinstallation
+
+- Im Adminbereich den Recovery-Schlüssel einrichten. Erst damit können vollständige
+  verschlüsselte Wiederherstellungsabbilder entstehen.
+- Zusätzlich zu den lokalen Docker-Volumes ein ausdrückliches externes
+  Sicherungsziel auf USB, NAS oder einem getrennten Server einrichten.
+- Große Sicherungen regelmäßig testweise auf einer getrennten Installation
+  wiederherstellen.

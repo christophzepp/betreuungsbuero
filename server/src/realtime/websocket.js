@@ -192,7 +192,7 @@ function createRealtimeServer(httpServer) {
 
   /* Herzschlag (Befund 30.08.2026): Der Fall-WebSocket war der EINZIGE Kanal ohne Keepalive -
      das Postfach-SSE hat laengst einen 30-s-Takt (mailbox-watch.js). Hinter dem Cloudflare
-     Tunnel (deploy/stack) wird eine leerlaufende Verbindung nach ~100 s stumm abgeraeumt:
+     Tunnel bzw. Reverse Proxy wird eine leerlaufende Verbindung nach ~100 s stumm abgeraeumt:
      beide Seiten behalten readyState OPEN, close feuert nie, der Client verbindet nie neu.
      Der Ping-Verkehr haelt den Tunnel offen; bleibt das Browser-Pong zweimal aus, raeumt
      terminate() den toten Socket ab (close feuert, Raum/Praesenz werden sauber). Intervall
