@@ -205,6 +205,17 @@ section{margin:0 0 42px}
 .protokoll .zeile.gestoppt{background:var(--rot-hauch);color:var(--rot);font-weight:600}
 
 /* Störungsmuster */
+.baukasten{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.teil{background:var(--flaeche);border:1px solid var(--linie);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.teil .probe{background:var(--flaeche-2);border:1px solid var(--linie-fein);border-radius:9px;padding:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.teil .probe.blank{background:var(--flaeche);padding:0;border:none}
+.teil .name{font-weight:700;font-size:13.5px}
+.teil .name code{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:500;color:var(--tinte-leise);margin-left:6px}
+.teil p{margin:0;font-size:12.5px;line-height:1.5;color:var(--tinte-leise);max-width:none}
+.farbregel{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px 18px;margin-top:14px;
+  background:var(--flaeche);border:1px solid var(--linie);border-radius:12px;padding:14px 16px}
+.farbregel .zeile{display:flex;align-items:baseline;gap:9px;font-size:12.5px;line-height:1.5}
+.farbregel .tupfen{width:12px;height:12px;border-radius:4px;flex:none;position:relative;top:2px}
 .stoerungen{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:14px}
 .stoerung{background:var(--flaeche);border:1px solid var(--linie);border-radius:12px;padding:14px}
 .stoerung .fall{font-size:12px;color:var(--tinte-leise);margin-bottom:9px;font-family:"IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.04em}
@@ -248,9 +259,9 @@ section{margin:0 0 42px}
   --schatten:0 1px 2px rgba(22,35,46,.06), 0 8px 24px rgba(22,35,46,.08);
   --schatten-tief:0 2px 6px rgba(22,35,46,.10), 0 18px 44px rgba(22,35,46,.14);
   color:var(--tinte)}
-.hell .knopf.haupt,.hell .knopf.stopp{color:#fff}
-.hell .aufnahmeband{color:#fff}
-.hell .aufnahmeband .blink{background:#fff}
+:root:root .hell .knopf.haupt,:root:root .hell .knopf.stopp{color:#fff}
+:root:root .hell .aufnahmeband{color:#fff}
+:root:root .hell .aufnahmeband .blink{background:#fff}
 .gegenueber{display:grid;grid-template-columns:repeat(auto-fit,minmax(372px,1fr));gap:22px;align-items:start}
 .gegenueber > figure{overflow-x:auto;padding-bottom:4px}
 
@@ -1000,7 +1011,108 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--linie);font-s
 </section>
 
 <section>
-  <div class="abschnittskopf"><span class="nummer">08</span><h2>Entschieden und noch offen</h2></div>
+  <div class="abschnittskopf"><span class="nummer">08</span><h2>Der Baukasten</h2></div>
+  <p>Alle sieben Zustände, die Optionsseite und die Störungsbilder bestehen aus denselben acht Teilen. Wer später baut, braucht nur diese — und die Regel, welche Farbe wofür steht.</p>
+  <div class="baukasten">
+
+    <div class="teil">
+      <div class="probe blank">
+        <div class="p-schritte" style="width:100%;border-radius:8px;border:1px solid var(--linie-fein)">
+          <span class="p-schritt fertig"><span class="kreis">✓</span>Fall</span>
+          <span class="p-schritt fertig"><span class="kreis">✓</span>Seite</span>
+          <span class="p-schritt jetzt"><span class="kreis">3</span>Prüfen</span>
+          <span class="p-schritt"><span class="kreis">4</span>Ausfüllen</span>
+        </div>
+      </div>
+      <div class="name">Schrittleiste<code>.p-schritte</code></div>
+      <p>Sitzt unter dem Kopf und beantwortet „wo bin ich?". Grün = erledigt, blau = jetzt, grau = kommt noch. Ersetzt den Textkasten „So geht's".</p>
+    </div>
+
+    <div class="teil">
+      <div class="probe blank">
+        <div class="gruppe unsicher" style="width:100%">
+          <div class="kopfzeile">⚠ Bitte ansehen <span class="anzahl">2</span></div>
+          <div class="feld"><span class="haken leer"></span><div><div class="beschriftung">Name des Kontoinhabers</div><div class="wert">← person.iban-inhaber: <b>F. J. Bastuck</b></div></div><div><span class="chip warn">unsicher</span><div class="balken mittel"><i style="width:45%"></i></div></div></div>
+        </div>
+      </div>
+      <div class="name">Gruppe + Feldzeile<code>.gruppe / .feld</code></div>
+      <p>Die Kopfzeile trägt Farbe und Anzahl, darunter je Feld: Haken, Beschriftung, Herkunft mit Wert, Chip, Balken. Fünf Angaben in zwei Zeilen — ohne Tabelle.</p>
+    </div>
+
+    <div class="teil">
+      <div class="probe">
+        <span class="chip blau">Profil</span>
+        <span class="chip ocker">Profil</span>
+        <span class="chip">Heuristik</span>
+        <span class="chip warn">unsicher</span>
+        <span class="chip gruen">gefüllt</span>
+        <span class="chip">kein Wert</span>
+      </div>
+      <div class="name">Chip<code>.chip</code></div>
+      <p>Sagt, <em>woher</em> ein Wert kommt: aus dem Profil der betreuten Person (blau) oder des Büros (ocker), aus der Namensheuristik (grau) — oder dass keiner da ist.</p>
+    </div>
+
+    <div class="teil">
+      <div class="probe">
+        <span style="display:flex;align-items:center;gap:7px;font-size:12px"><span class="balken" style="margin-top:0"><i style="width:100%"></i></span>sicher</span>
+        <span style="display:flex;align-items:center;gap:7px;font-size:12px"><span class="balken" style="margin-top:0"><i style="width:82%"></i></span>wahrscheinlich</span>
+        <span style="display:flex;align-items:center;gap:7px;font-size:12px"><span class="balken mittel" style="margin-top:0"><i style="width:45%"></i></span>unsicher</span>
+      </div>
+      <div class="name">Konfidenzbalken<code>.balken</code></div>
+      <p>Länge = wie sicher die Zuordnung ist, Farbe = ob sie ohne Blick durchgehen darf. Bleibt bewusst ein Balken: eine Prozentzahl täuscht Genauigkeit vor, die es nicht gibt.</p>
+    </div>
+
+    <div class="teil">
+      <div class="probe blank">
+        <div style="display:flex;flex-direction:column;gap:7px;width:100%">
+          <div class="hinweisleiste blau"><span>ℹ</span><div>Diese Seite kennt das Büro bereits.</div></div>
+          <div class="hinweisleiste rot"><span>⚠</span><div><b>Kein Zugang zum Büro.</b> <u>Zugang prüfen</u></div></div>
+        </div>
+      </div>
+      <div class="name">Hinweisleiste<code>.hinweisleiste</code></div>
+      <p>Die <em>eine</em> Meldestelle, immer direkt unter dem Kopf. Der Ausweg steht im Text, nicht in einem eigenen Knopf. Nie zwei übereinander.</p>
+    </div>
+
+    <div class="teil">
+      <div class="probe blank">
+        <div class="knopfreihe" style="width:100%"><span class="knopf haupt">11 Werte ausfüllen</span><span class="knopf schmal">Auswahl</span><span class="knopf schmal">⋯</span></div>
+      </div>
+      <div class="name">Fußleiste<code>.knopfreihe</code></div>
+      <p>Steht fest am unteren Rand, scrollt nie weg. Der Hauptknopf trägt die Zahl, „⋯" öffnet den Werkzeugschub. Darunter immer: „Abgesendet wird nie automatisch."</p>
+    </div>
+
+    <div class="teil">
+      <div class="probe blank">
+        <div class="aufnahmeband" style="border-radius:8px"><span class="blink"></span>Aufzeichnung läuft — Klicks auf der Seite werden angelernt</div>
+      </div>
+      <div class="name">Aufnahmeband<code>.aufnahmeband</code></div>
+      <p>Nur während des Trainings, ganz oben, über allem. Solange es steht, wird angelernt statt ausgefüllt — das darf man nicht übersehen können.</p>
+    </div>
+
+    <div class="teil">
+      <div class="probe">
+        <span class="p-status" style="font-size:12px"><span class="punkt"></span>Büro</span>
+        <span class="p-status" style="font-size:12px"><span class="punkt rot"></span>getrennt</span>
+        <span class="chip">nur lokal</span>
+      </div>
+      <div class="name">Zustandspunkt<code>.punkt</code></div>
+      <p>Rechts in der Kopfzeile, klein: verbunden, getrennt, oder aus einer lokalen Datei. Mehr Zustandsbericht braucht der Startzustand nicht — der Rest meldet sich als Hinweisleiste.</p>
+    </div>
+
+  </div>
+
+  <div class="farbregel">
+    <div class="zeile"><span class="tupfen" style="background:var(--blau)"></span><span><b>Blau</b> — betreute Person, und der Weg vorwärts</span></div>
+    <div class="zeile"><span class="tupfen" style="background:var(--ocker)"></span><span><b>Ocker</b> — Betreuer und Büro</span></div>
+    <div class="zeile"><span class="tupfen" style="background:var(--gruen)"></span><span><b>Grün</b> — erledigt, sicher, geschrieben</span></div>
+    <div class="zeile"><span class="tupfen" style="background:var(--warn)"></span><span><b>Warnocker</b> — bitte ansehen, aber kein Fehler</span></div>
+    <div class="zeile"><span class="tupfen" style="background:var(--rot)"></span><span><b>Rot</b> — nur echte Sperren: kein Zugang, Absenden gestoppt</span></div>
+    <div class="zeile"><span class="tupfen" style="background:var(--lila)"></span><span><b>Lila</b> — Training und KI-Agent, also „nicht der Normalbetrieb"</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="abschnittskopf"><span class="nummer">09</span><h2>Entschieden und noch offen</h2></div>
   <div class="entschieden">
     <dl>
       <dt>Training</dt><dd>Schalter in der Kopfzeile, nicht im Schub — mit sichtbarem Aufzeichnungsband (Zustand 6).</dd>
@@ -1026,7 +1138,7 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--linie);font-s
       <li><b>Farben</b> — Merkmalssätze hell und dunkel, dazu die mitwachsende Breite.</li>
       <li><b>Optionsseite</b> — Bereichsspalte, Formulartabelle, Protokolle an den Fall gehängt.</li>
     </ol>
-    <p class="klein leise" style="margin:10px 0 0">Jede Etappe für sich lauffähig: Nach 1 und 2 ist die Erweiterung schon benutzbar neu, auch wenn 3 bis 6 noch fehlen.</p>
+    <p class="klein leise" style="margin:10px 0 0">Jede Etappe für sich lauffähig: Nach 1 und 2 ist die Erweiterung schon benutzbar neu, auch wenn 3 bis 6 noch fehlen. Die acht Teile, aus denen alles besteht, stehen in Abschnitt 08.</p>
   </div>
 </section>
 
