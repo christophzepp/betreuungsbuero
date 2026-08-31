@@ -12,8 +12,8 @@
     "create-admin": "node tools/admin/create-admin.js"
   },
   "dependencies": {
-    "@cantoo/pdf-lib": "^2.8.2",
-    "bcrypt": "^5.1.1",
+    "@cantoo/pdf-lib": "2.8.2",
+    "bcrypt": "^6.0.0",
     "better-sqlite3": "^11.3.0",
     "dotenv": "^16.6.1",
     "express": "^4.19.2",

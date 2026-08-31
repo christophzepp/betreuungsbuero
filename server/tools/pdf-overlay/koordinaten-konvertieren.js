@@ -12,7 +12,7 @@ const path = require('path');
 const vm = require('vm');
 const { PDFDocument } = require('pdf-lib');
 
-const HTML = '/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html';
+const HTML = path.resolve(__dirname, '../../../outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html');
 const reportId = process.argv[2];
 const elementId = process.argv[3];
 /* Optionale Anhebung in pt: Formulare mit Beschriftung UNTER der Schreiblinie (Familienkasse

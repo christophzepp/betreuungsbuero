@@ -7,10 +7,11 @@
    Aufruf: node audit-mapping.js */
 'use strict';
 const fs = require('fs');
+const path = require('path');
 const readline = require('readline');
 const { PDFDocument } = require('pdf-lib');
 
-const HTML = '/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html';
+const HTML = path.resolve(__dirname, '../../../outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html');
 
 (async () => {
   /* Einmaliger Zeilenscan: V159-Zeile + alle Vorlagen-Zeilen (Base64 NICHT alle im Speicher halten,

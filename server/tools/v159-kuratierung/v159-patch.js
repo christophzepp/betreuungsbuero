@@ -6,7 +6,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const HTML = '/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html';
+const HTML = path.resolve(__dirname, '../../../outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html');
 const SCRATCH = __dirname;
 const ANWENDEN = process.argv.includes('--anwenden');
 

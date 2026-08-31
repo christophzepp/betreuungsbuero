@@ -20,7 +20,7 @@ const crypto = require('crypto');
 const { execFileSync } = require('child_process');
 const { PDFDocument } = require('pdf-lib');
 
-const HTML = '/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html';
+const HTML = path.resolve(__dirname, '../../../outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html');
 const [reportId, neuePfad] = [process.argv[2], process.argv[3]];
 const ANWENDEN = process.argv.includes('--anwenden');
 const TROTZDEM = process.argv.includes('--trotzdem');

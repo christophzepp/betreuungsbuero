@@ -189,22 +189,23 @@ erzeugen und in `.env` eintragen:
 openssl rand -hex 32
 ```
 
-Für den Beta-Kanal bleibt in `.env` dieses Image eingestellt:
-
-```dotenv
-APP_IMAGE=ghcr.io/derzerpoo/betreuungsbuero-beta:beta
-```
-
-Für eine freigegebene Version wird stattdessen das Stable-Image verwendet:
+Für eine freigegebene Version wird dieses Stable-Image verwendet:
 
 ```dotenv
 APP_IMAGE=ghcr.io/derzerpoo/betreuungsbuero:stable
 ```
 
-### 3. Privates Container-Image abrufen
+Für den privaten Beta-Kanal kann stattdessen das Vorab-Image eingestellt werden:
 
-Solange das Paket privat ist, muss Docker einmalig mit einem dafür berechtigten GitHub-Token an
-der GitHub Container Registry angemeldet werden:
+```dotenv
+APP_IMAGE=ghcr.io/derzerpoo/betreuungsbuero-beta:beta
+```
+
+### 3. Container-Image abrufen
+
+Das Stable-Image öffentlicher Releases kann ohne Anmeldung abgerufen werden. Nur für den
+privaten Beta-Kanal muss Docker einmalig mit einem dafür berechtigten GitHub-Token an der
+GitHub Container Registry angemeldet werden:
 
 ```bash
 docker login ghcr.io

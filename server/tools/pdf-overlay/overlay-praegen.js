@@ -20,7 +20,7 @@ const fs = require('fs');
 const path = require('path');
 const { PDFDocument, StandardFonts, rgb } = require('pdf-lib');
 
-const HTML = '/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html';
+const HTML = path.resolve(__dirname, '../../../outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html');
 const reportId = process.argv[2];
 const ANWENDEN = process.argv.includes('--anwenden');
 if (!reportId) { console.error('Aufruf: node overlay-praegen.js <reportId> [--anwenden]'); process.exit(1); }
