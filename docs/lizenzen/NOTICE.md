@@ -14,7 +14,7 @@ Die Veröffentlichung erfolgt in der Hoffnung, dass es nützlich sein wird, aber
 MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK. Einzelheiten in der
 GNU Affero General Public License.
 
-Der vollständige Lizenztext liegt in [`LICENSE`](LICENSE) bei; er ist außerdem
+Der vollständige Lizenztext liegt in [`LICENSE`](../../LICENSE) bei; er ist außerdem
 unter <https://www.gnu.org/licenses/agpl-3.0.html> abrufbar.
 
 SPDX-License-Identifier: `AGPL-3.0-or-later`

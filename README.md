@@ -287,8 +287,9 @@ Copyright (C) 2026 derzerpoo — **GNU Affero General Public License v3 oder sp�
 Selbst hosten, prüfen und verändern ist ausdrücklich erlaubt. Wer die Software Dritten über ein
 Netzwerk zugänglich macht, muss ihnen den Quelltext der betriebenen Fassung anbieten (§ 13
 AGPL). Für eine Nutzung unter anderen Bedingungen ist eine kommerzielle Lizenz möglich —
-Einzelheiten in [`NOTICE.md`](NOTICE.md).
+Einzelheiten in [`NOTICE.md`](docs/lizenzen/NOTICE.md).
 
 **Nicht von der Lizenz erfasst:** die amtlichen Vordrucke unter
-`server/tools/pdf-overlay/vorlagen/` (Herkunft in [`VORDRUCKE.md`](VORDRUCKE.md)) und die
-Software Dritter ([`THIRD-PARTY.md`](THIRD-PARTY.md)).
+`server/tools/pdf-overlay/vorlagen/` (Herkunft in
+[`VORDRUCKE.md`](docs/lizenzen/VORDRUCKE.md)) und die Software Dritter
+([`THIRD-PARTY.md`](docs/lizenzen/THIRD-PARTY.md)).
