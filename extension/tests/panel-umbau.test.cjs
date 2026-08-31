@@ -1,6 +1,6 @@
 'use strict';
 
-/* Umbau des Seitenpanels nach dem Entwurf vom 31.08.2026.
+/* Strukturvertrag des Seitenpanels.
 
    Vorher: drei Reiter (Assistent | KI | Training), eine Kachelreihe von 200 px Hoehe, neun
    gleich laute Abschnitte untereinander, gestapelte Banner und eine flache Pruefliste, in der
