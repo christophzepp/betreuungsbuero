@@ -20,6 +20,7 @@
  * laufen gegen eine Handvoll Zeilen - Korrektheit schlaegt hier Mikrooptimierung.
  */
 const db = require('../../database/index');
+const { isDemoCaseId, isDemoCaseLabel } = require('../demo/data-identities');
 
 const eigeneStmt = db.prepare('SELECT id FROM cases WHERE owner_user_id IS NULL OR owner_user_id = ?');
 const freigabenStmt = db.prepare('SELECT case_id, level FROM case_access WHERE user_id = ?');
@@ -34,13 +35,18 @@ function sichtbareFaelle(session) {
   if (!session || !session.userId) return new Set();
   if (session.isAdmin || session.canViewAllCases) return null;
   const ids = new Set();
-  for (const r of eigeneStmt.all(session.userId)) ids.add(String(r.id));
-  for (const r of freigabenStmt.all(session.userId)) ids.add(String(r.case_id));
+  for (const r of eigeneStmt.all(session.userId)) {
+    if (!isDemoCaseId(r.id)) ids.add(String(r.id));
+  }
+  for (const r of freigabenStmt.all(session.userId)) {
+    if (!isDemoCaseId(r.case_id)) ids.add(String(r.case_id));
+  }
   return ids;
 }
 
 function darfSehen(session, caseId) {
   if (!session || !session.userId) return false;
+  if (isDemoCaseId(caseId)) return false;
   if (session.isAdmin || session.canViewAllCases) return true;
   const id = String(caseId || '');
   if (!id) return true;                       /* kein Fallbezug = Bueroorganisation */
@@ -57,6 +63,7 @@ function darfSehen(session, caseId) {
    Routen wie bisher selbst - beides muss zutreffen. */
 function darfBearbeiten(session, caseId) {
   if (!session || !session.userId) return false;
+  if (isDemoCaseId(caseId)) return false;
   // „Alle Fallakten sehen“ ist ausdrücklich nur ein Leserecht. Ohne diese
   // Trennung würde die Kombination viewAllCases + editCases fremde Akten
   // trotz fehlender Eigentümer-/Write-Freigabe beschreibbar machen.
@@ -97,8 +104,9 @@ function requireFallBearbeiten(feld = 'id') {
    (leeres Feld) gelten als Bueroorganisation und bleiben erhalten. */
 function nurSichtbare(session, rows, feld = 'case_id') {
   const erlaubt = sichtbareFaelle(session);
-  if (erlaubt === null) return rows;
-  return rows.filter((r) => {
+  const ohneDemo = rows.filter((r) => !isDemoCaseId(r && r[feld]));
+  if (erlaubt === null) return ohneDemo;
+  return ohneDemo.filter((r) => {
     const id = String((r && r[feld]) || '');
     return !id || erlaubt.has(id);
   });
@@ -112,6 +120,15 @@ function nurSichtbare(session, rows, feld = 'case_id') {
 function fallZuordnung(caseId, caseLabel) {
   const explicit = String(caseId || '').trim();
   const label = String(caseLabel || '').trim();
+  if (isDemoCaseId(explicit) || isDemoCaseLabel(label)) {
+    return {
+      caseId: '',
+      caseLabel: label,
+      source: 'demo',
+      invalidId: true,
+      ambiguous: false
+    };
+  }
   if (explicit) {
     const row = fallMitLabelStmt.get(explicit);
     if (row) {
@@ -197,13 +214,18 @@ function sichtbareLabels(session) {
    "gehoert zu einem fremden Fall" zu unterscheiden. */
 function alleLabels() {
   const out = new Set();
-  for (const r of labelStmt.all()) { const l = String(r.label || '').trim().toLowerCase(); if (l) out.add(l); }
+  for (const r of labelStmt.all()) {
+    const l = String(r.label || '').trim().toLowerCase();
+    if (l && !isDemoCaseId(r.id) && !isDemoCaseLabel(l)) out.add(l);
+  }
   return out;
 }
 function nurSichtbareNachLabel(session, rows, feld = 'case_label') {
   const erlaubt = sichtbareFaelle(session);
-  if (erlaubt === null) return rows;
-  return rows.filter((r) => {
+  const ohneDemo = rows.filter((r) => !isDemoCaseId(r && r.case_id)
+    && !isDemoCaseLabel(r && r[feld]));
+  if (erlaubt === null) return ohneDemo;
+  return ohneDemo.filter((r) => {
     const assignment = fallZuordnung(r && r.case_id, r && r[feld]);
     if (assignment.ambiguous || assignment.invalidId) return false;
     // Nur ein wirklich unbekanntes/leeres Label ist Büroorganisation.

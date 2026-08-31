@@ -129,6 +129,7 @@ const darfSchluesselSchreiben = schrankeFuer(SCHREIB_SCHRANKEN, requireEditCases
 
 const getStmt = db.prepare('SELECT data_json, updated_at FROM office_json WHERE key = ?');
 const { sichtbareFaelle, darfSehen, darfBearbeiten } = require('../cases/case-visibility');
+const { isDemoCaseId } = require('../demo/data-identities');
 
 /* Fallbezogene Sichtbarkeit (2026-07-26): einige buroweite Bloecke fuehren Eintraege je Fall
    (kontaktmonitor: entries[].caseId). Beim Ausliefern werden fremde Faelle entfernt. Der
@@ -179,10 +180,10 @@ function fallEintraegeFiltern(key, roh, session) {
     if (!daten || !Array.isArray(daten.entries)) return roh;
     if (key === 'case_intakes') return JSON.stringify(caseIntakesFiltern(daten, session));
     const erlaubt = sichtbareFaelle(session);
-    if (erlaubt === null) return roh;
     daten.entries = daten.entries.filter((e) => {
       const id = String((e && e.caseId) || '');
-      return !id || erlaubt.has(id);
+      if (isDemoCaseId(id)) return false;
+      return erlaubt === null || !id || erlaubt.has(id);
     });
     return JSON.stringify(daten);
   } catch (_e) { return roh; }

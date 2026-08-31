@@ -183,14 +183,60 @@ test('Chat-Trennung: Demo sieht nur Demo, echt sieht nur echt - auch bei der Tei
   assert.strictEqual(msg.status, 201, 'Demo-Nachrichten müssen gespeichert werden');
 });
 
+test('Online-Modus: die fünf festen Vorführ-Fälle bleiben selbst für Admins unsichtbar', () => {
+  const { DEMO_CASES } = require('../src/modules/demo/data-identities');
+  const { nurSichtbare, darfSehen, fallZuordnung } = require('../src/modules/cases/case-visibility');
+  const demo = DEMO_CASES[0];
+  db.prepare(`INSERT INTO cases (id,label,file_number,created_by,stammdaten_json,stammdaten_updated_by)
+    VALUES (?,?,?,?,?,?)`).run(demo.id, demo.label, 'Demo', 1, '{}', 1);
+  db.prepare(`INSERT INTO cases (id,label,file_number,created_by,stammdaten_json,stammdaten_updated_by)
+    VALUES (?,?,?,?,?,?)`).run('echter-fall', 'Beispiel, Echt', 'E 1', 1, '{}', 1);
+  try {
+    const sichtbar = nurSichtbare({ userId: 1, isAdmin: true }, [
+      { case_id: demo.id }, { case_id: 'echter-fall' }
+    ]);
+    assert.deepStrictEqual(sichtbar.map((row) => row.case_id), ['echter-fall'],
+      'Der zentrale Online-Filter trennt echte und Vorführ-Fälle nicht sauber');
+    assert.strictEqual(darfSehen({ userId: 1, isAdmin: true }, demo.id), false,
+      'Ein Online-Admin kann einen Vorführ-Fall direkt laden');
+    assert.strictEqual(fallZuordnung(demo.id, demo.label).invalidId, true,
+      'Kalender/Aufgaben könnten einen Vorführ-Fall im Online-Modus noch zuordnen');
+  } finally {
+    db.prepare('DELETE FROM cases WHERE id IN (?, ?)').run(demo.id, 'echter-fall');
+  }
+});
+
 test('Vorführpaket: vollständig, bebildert und restlos verfremdet', { timeout: 120000 }, () => {
-  const { bauePaket } = require('../tools/demo-faelle/paket');
-  const paket = bauePaket();
+  const { bauePaket, DEMO_FOTO_DATEIEN } = require('../tools/demo-faelle/paket');
+  /* Exakt die Container-Konstellation nachstellen: Dort sind die speziellen
+     Pfadvariablen absolut gesetzt. Der Paketbau muss sie für seine Kindprozesse
+     überschreiben und darf die bereits geöffnete Online-/Test-DB nicht anfassen. */
+  const alt = {
+    DB_PATH: process.env.DB_PATH,
+    DATA_DIR: process.env.DATA_DIR,
+    DOCUMENTS_DATA_ROOT: process.env.DOCUMENTS_DATA_ROOT
+  };
+  process.env.DB_PATH = path.join(TEMP, 'database', 'betreuungsbuero.sqlite3');
+  process.env.DATA_DIR = path.join(TEMP, 'data');
+  process.env.DOCUMENTS_DATA_ROOT = path.join(TEMP, 'data');
+  const vorher = db.prepare('SELECT COUNT(*) AS n FROM cases').get().n;
+  let paket;
+  try {
+    paket = bauePaket();
+  } finally {
+    for (const [key, value] of Object.entries(alt)) {
+      if (value === undefined) delete process.env[key]; else process.env[key] = value;
+    }
+  }
+  const nachher = db.prepare('SELECT COUNT(*) AS n FROM cases').get().n;
+  assert.strictEqual(nachher, vorher,
+    'Der Demo-Paketbau hat die Online-Datenbank mit Vorführ-Fällen verändert');
   assert.strictEqual(paket.faelle.length, 5, 'Es müssen genau fünf Fälle im Paket sein');
   const labels = paket.faelle.map((f) => f.label).sort();
   assert.deepStrictEqual(labels, ['Auerbach, Margarete', 'Kilic, Emre', 'Nowak, Halina', 'Rothenberg, Dieter', 'Weidmann, Jonas'],
     'Die fünf Demofälle stimmen nicht');
   for (const f of paket.faelle) {
+    assert.ok(DEMO_FOTO_DATEIEN[f.label], `${f.label}: Keine feste Passfoto-Zuordnung`);
     assert.ok(String(f.state.caseData.person.photo || '').startsWith('data:image/jpeg;base64,'),
       `${f.label}: Das Passfoto fehlt oder hat das falsche Format`);
     assert.ok(f.state.caseData.person.photo.length > 10000, `${f.label}: Das Passfoto ist verdächtig klein`);

@@ -490,6 +490,19 @@ function schreibeKontaktmonitor(eintraege) {
   `).run(JSON.stringify(daten));
 }
 
+function entferneDemoKontaktmonitor() {
+  const row = db.prepare("SELECT data_json FROM office_json WHERE key='kontaktmonitor'").get();
+  if (!row) return;
+  let daten;
+  try { daten = JSON.parse(row.data_json || '{}'); } catch (_e) { return; }
+  if (!daten || !Array.isArray(daten.entries)) return;
+  const demoIds = new Set(DEMO_IDS.map(String));
+  const entries = daten.entries.filter((entry) => !demoIds.has(String((entry && entry.caseId) || '')));
+  if (entries.length === daten.entries.length) return;
+  db.prepare(`UPDATE office_json SET data_json = ?, updated_at = datetime('now') WHERE key='kontaktmonitor'`)
+    .run(JSON.stringify({ ...daten, entries }));
+}
+
 /* ------------------------------------------------------------------ Ablauf */
 
 async function main() {
@@ -498,6 +511,7 @@ async function main() {
 
   if (entfernen) {
     for (const id of DEMO_IDS) entferneFall(id);
+    entferneDemoKontaktmonitor();
     console.log(`${DEMO_IDS.length} Demonstrationsfaelle entfernt.`);
     return;
   }

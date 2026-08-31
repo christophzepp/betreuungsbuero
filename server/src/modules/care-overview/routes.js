@@ -8,6 +8,7 @@
 
 const express = require('express');
 const { sichtbareFaelle } = require('../cases/case-visibility');
+const { isDemoCaseId } = require('../demo/data-identities');
 const db = require('../../database/index');
 const { requireAuth, requireViewCases, requireEditCases } = require('../../middleware/authentication');
 
@@ -72,6 +73,7 @@ router.get('/', requireViewCases, (req, res) => {
      Klarnamen aller Betreuten. */
   const erlaubt = sichtbareFaelle(req.session);
   const rows = listCasesStmt.all()
+    .filter((c) => !isDemoCaseId(c.id))
     .filter((c) => !!c.archived === !!scope)
     .filter((c) => erlaubt === null || erlaubt.has(String(c.id)));
   const items = rows.map((row) => extractOverviewRow(row, getEntryStmt.get(row.id, periodStart)));
@@ -81,6 +83,7 @@ router.get('/', requireViewCases, (req, res) => {
 router.get('/history', requireViewCases, (req, res) => {
   const erlaubt = sichtbareFaelle(req.session);
   const entries = listHistoryStmt.all()
+    .filter((entry) => !isDemoCaseId(entry.case_id))
     .filter((entry) => erlaubt === null || erlaubt.has(String(entry.case_id)))
     .map((entry) => ({
       caseId: entry.case_id,

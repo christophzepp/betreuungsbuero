@@ -16,6 +16,7 @@ const {
 } = require('../../middleware/authentication');
 const { logAction } = require('../../middleware/audit');
 const { sichtbareFaelle, darfSehen, darfBearbeiten } = require('./case-visibility');
+const { isDemoCaseId } = require('../demo/data-identities');
 const pfadSicher = require('../../shared/safe-path');
 const mail = require('../mail/service');
 const { schuetzePdfAnlagen, kennwortMailInhalt } = require('../mail/pdf-kennwort');
@@ -364,7 +365,7 @@ router.param('id', (req, res, next, id) => {
    Fall-Sichtrecht bekam sie trotzdem vollstaendig. */
 router.get('/', requireViewCases, (req, res) => {
   const erlaubt = sichtbareFaelle(req.session);
-  const alle = listCasesStmt.all();
+  const alle = listCasesStmt.all().filter((c) => !isDemoCaseId(c.id));
   const sichtbar = erlaubt === null ? alle : alle.filter((c) => erlaubt.has(String(c.id)));
   res.json({ cases: sichtbar.map(publicCase) });
 });

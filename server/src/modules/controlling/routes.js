@@ -31,6 +31,7 @@
 
 const express = require('express');
 const { sichtbareFaelle } = require('../cases/case-visibility');
+const { isDemoCaseId } = require('../demo/data-identities');
 const db = require('../../database/index');
 const { requireAuth, requireViewControlling, hasPermission } = require('../../middleware/authentication');
 
@@ -197,7 +198,9 @@ router.get('/', requireViewControlling, (req, res) => {
      Aufruf darf keine leere Auswertung erzeugen, die wie "keine Faelle" aussieht. */
   const scope = ['active', 'archived', 'all'].includes(gewuenscht) ? gewuenscht : 'active';
 
-  const imScope = listCasesStmt.all().filter((row) => imBereich(row, scope));
+  const imScope = listCasesStmt.all()
+    .filter((row) => !isDemoCaseId(row.id))
+    .filter((row) => imBereich(row, scope));
   const erlaubt = sichtbareFaelle(req.session);
   const sichtbar = erlaubt === null ? imScope : imScope.filter((row) => erlaubt.has(String(row.id)));
   const antraege = antragProfile();

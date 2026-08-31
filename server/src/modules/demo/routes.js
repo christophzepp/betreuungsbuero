@@ -158,11 +158,16 @@ function quellenStand() {
   let neuste = 0;
   try {
     const dir = path.dirname(PAKET_SKRIPT);
-    for (const datei of fs.readdirSync(dir)) {
-      if (!datei.endsWith('.js') && !datei.endsWith('.json')) continue;
-      const st = fs.statSync(path.join(dir, datei));
-      if (st.mtimeMs > neuste) neuste = st.mtimeMs;
-    }
+    const pruefe = (ordner) => {
+      for (const eintrag of fs.readdirSync(ordner, { withFileTypes: true })) {
+        const voll = path.join(ordner, eintrag.name);
+        if (eintrag.isDirectory()) { pruefe(voll); continue; }
+        if (!/\.(?:js|json|jpe?g|png)$/i.test(eintrag.name)) continue;
+        const st = fs.statSync(voll);
+        if (st.mtimeMs > neuste) neuste = st.mtimeMs;
+      }
+    };
+    pruefe(dir);
   } catch (_e) { /* nicht lesbar -> wie bisher cachen */ }
   return neuste;
 }

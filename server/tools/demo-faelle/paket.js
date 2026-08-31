@@ -15,8 +15,10 @@
    erwischt, statt vieler einzelner Feldkorrekturen:
        Betreuungsbüro Mustermensch · Max Mustermensch
        Musterstraße 1 · 12345 Musterstadt
-   Passfotos: tools/demo-faelle/fotos/<Vorname>_<Nachname>.jpg → person.photo
-   (JPEG-DataURL, wie __caseFotoSet sie speichert). */
+   Passfotos: Die fünf festen Zuordnungen in DEMO_FOTO_DATEIEN werden als
+   JPEG-DataURL in person.photo geschrieben (wie __caseFotoSet sie speichert).
+   Fehlt eine Datei, bricht der Paketbau ab: Eine Vorführung ohne die fest
+   zugehörigen Portraits darf nicht unbemerkt ausgeliefert werden. */
 
 const fs = require('node:fs');
 const os = require('node:os');
@@ -26,6 +28,13 @@ const Database = require('better-sqlite3');
 
 const SERVER_ROOT = path.resolve(__dirname, '..', '..');
 const FOTO_ORDNER = path.join(__dirname, 'fotos');
+const DEMO_FOTO_DATEIEN = Object.freeze({
+  'Auerbach, Margarete': 'Margarete_Auerbach.jpg',
+  'Kilic, Emre': 'Emre_Kilic.jpg',
+  'Nowak, Halina': 'Halina_Nowak.jpg',
+  'Rothenberg, Dieter': 'Dieter_Rothenberg.jpg',
+  'Weidmann, Jonas': 'Jonas_Weidmann.jpg'
+});
 
 const MUSTER_BUERO = {
   companyName: 'Betreuungsbüro Mustermensch',
@@ -220,7 +229,7 @@ function deDatum(wert) {
 
 function fotoDataUrl(datei) {
   const voll = path.join(FOTO_ORDNER, datei);
-  if (!fs.existsSync(voll)) return '';
+  if (!fs.existsSync(voll)) throw new Error(`Fest verdrahtetes Demo-Passfoto fehlt: ${datei}`);
   return 'data:image/jpeg;base64,' + fs.readFileSync(voll).toString('base64');
 }
 
@@ -237,7 +246,27 @@ function bauePaket() {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'bb-demo-paket-'));
   const exportZiel = path.join(tmp, 'export');
   try {
-    const env = Object.assign({}, process.env, { RUNTIME_ROOT: tmp });
+    /* Im Produktionscontainer sind DB_PATH, DOCUMENTS_DATA_ROOT und weitere Pfade
+       ABSOLUT gesetzt. Nur RUNTIME_ROOT zu überschreiben reicht deshalb nicht: Die
+       spezielleren Variablen gewinnen in config/paths.js und seed.js schreibt dann
+       die fünf Vorführ-Fälle in die echte Online-Datenbank. Der nachfolgende Export
+       findet mehr als fünf Fälle, der Demo-Endpunkt antwortet mit 500 und die
+       Vorführ-Fälle erscheinen gleichzeitig im Online-Modus.
+
+       Alle schreibbaren Pfade des Paketbaus werden daher ausdrücklich unter denselben
+       Wegwerf-Ordner gezwungen. OUTPUTS_DIR/SP_PLUGIN_DIR bleiben unverändert, weil
+       sie nur lesend auf Programmdateien zeigen. */
+    const env = Object.assign({}, process.env, {
+      RUNTIME_ROOT: tmp,
+      DB_PATH: path.join(tmp, 'database', 'betreuungsbuero.sqlite3'),
+      DATA_DIR: path.join(tmp, 'data'),
+      DOCUMENTS_DATA_ROOT: path.join(tmp, 'data'),
+      EXTENSION_ARTIFACTS_DIR: path.join(tmp, 'extension-artifacts'),
+      RUNTIME_SECRETS_DIR: path.join(tmp, 'secrets'),
+      DOCUMENT_RECOVERY_KEY_FILE: path.join(tmp, 'secrets', 'document-recovery-key'),
+      TOTAL_BACKUP_DESTINATION: path.join(tmp, 'backups'),
+      RUNTIME_ARTIFACT_RESTORE_STATE_DIR: path.join(tmp, 'restore-rollback')
+    });
     const opts = { cwd: SERVER_ROOT, env, stdio: 'pipe' };
     execFileSync(process.execPath, [path.join('tools', 'admin', 'create-admin.js'),
       '--username', 'paketbau', '--password', 'Wegwerf-Paketbau-0000!', '--admin', '--local', '--online'], opts);
@@ -249,11 +278,12 @@ function bauePaket() {
     for (const datei of fs.readdirSync(exportZiel).filter((f) => f.endsWith('.json')).sort()) {
       const inhalt = JSON.parse(fs.readFileSync(path.join(exportZiel, datei), 'utf8'));
       const person = (inhalt.caseData && inhalt.caseData.person) || {};
-      const fotoName = `${person.firstName || ''}_${person.lastName || ''}.jpg`.replace(/\s+/g, '_');
-      const foto = fotoDataUrl(fotoName);
-      if (foto) inhalt.caseData.person.photo = foto;
+      const label = `${person.lastName || '?'}, ${person.firstName || '?'}`;
+      const fotoName = DEMO_FOTO_DATEIEN[label];
+      if (!fotoName) throw new Error(`Keine feste Demo-Passfoto-Zuordnung für ${label}`);
+      inhalt.caseData.person.photo = fotoDataUrl(fotoName);
       faelle.push({
-        label: `${person.lastName || '?'}, ${person.firstName || '?'}`,
+        label,
         fileNumber: (inhalt.caseData.care && inhalt.caseData.care.fileNumber) || '',
         state: inhalt
       });
@@ -488,7 +518,7 @@ function bauePaket() {
   }
 }
 
-module.exports = { bauePaket, MUSTER_BUERO, VERFREMDUNG, strukturVerfremden };
+module.exports = { bauePaket, MUSTER_BUERO, VERFREMDUNG, strukturVerfremden, DEMO_FOTO_DATEIEN };
 
 if (require.main === module) {
   /* --json: reines Paket auf stdout - so baut der Server das Paket in einem KINDPROZESS
