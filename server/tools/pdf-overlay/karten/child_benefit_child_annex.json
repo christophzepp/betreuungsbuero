@@ -1,0 +1,1039 @@
+{
+ "elementId": "tpl_kgan",
+ "reportId": "child_benefit_child_annex",
+ "einheit": "px",
+ "bildBreite": 1240,
+ "seitenBreitePt": 595.28,
+ "seitenHoehePt": 841.89,
+ "hinweis": "Automatisch konvertiert aus OFFICIAL_COORDINATE_MAPS.child_benefit_child_annex (koordinaten-konvertieren.js); Sichtpruefung über Probe-Render erforderlich.",
+ "felder": {
+  "kgan_applicant_name": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 8.2,
+   "x": 127,
+   "y": 106,
+   "width": 437,
+   "height": 32
+  },
+  "kgan_kindergeld_number": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 8.2,
+   "x": 127,
+   "y": 166,
+   "width": 437,
+   "height": 32
+  },
+  "kgan_application_date": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 8.4,
+   "x": 642,
+   "y": 328,
+   "width": 183,
+   "height": 32,
+   "transform": "date"
+  },
+  "kgan_sequence_number": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 8.4,
+   "x": 250,
+   "y": 391,
+   "width": 115,
+   "height": 32
+  },
+  "kgan_child_tax_id": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 9.5,
+   "x": 127,
+   "y": 576,
+   "width": 437,
+   "height": 30,
+   "transform": "digits"
+  },
+  "kgan_child_last_name": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 8.3,
+   "x": 127,
+   "y": 649,
+   "width": 625,
+   "height": 32
+  },
+  "kgan_child_title": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 8.3,
+   "x": 771,
+   "y": 649,
+   "width": 354,
+   "height": 32
+  },
+  "kgan_child_first_name": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 8.3,
+   "x": 127,
+   "y": 718,
+   "width": 625,
+   "height": 32
+  },
+  "kgan_child_birth_name": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 8.3,
+   "x": 771,
+   "y": 718,
+   "width": 354,
+   "height": 32
+  },
+  "kgan_child_birth_date": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 8.2,
+   "x": 127,
+   "y": 787,
+   "width": 146,
+   "height": 32,
+   "transform": "date"
+  },
+  "kgan_child_birth_place": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 8.2,
+   "x": 285,
+   "y": 787,
+   "width": 365,
+   "height": 32
+  },
+  "kgan_child_gender": {
+   "page": 0,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "männlich": {
+     "x": 669,
+     "y": 677,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    },
+    "weiblich": {
+     "x": 704,
+     "y": 677,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    },
+    "divers": {
+     "x": 735,
+     "y": 677,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    },
+    "keine Angabe": {
+     "x": 760,
+     "y": 677,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    }
+   }
+  },
+  "kgan_child_nationality": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 8,
+   "x": 773,
+   "y": 787,
+   "width": 344,
+   "height": 31
+  },
+  "kgan_child_other_address": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 8,
+   "x": 127,
+   "y": 858,
+   "width": 1008,
+   "height": 46,
+   "multiline": true
+  },
+  "kgan_child_other_address_reason": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 7.8,
+   "x": 127,
+   "y": 940,
+   "width": 1008,
+   "height": 45,
+   "multiline": true
+  },
+  "kgan_other_person_last_name": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 7.8,
+   "x": 165,
+   "y": 1435,
+   "width": 406,
+   "height": 31
+  },
+  "kgan_other_person_first_name": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 7.8,
+   "x": 606,
+   "y": 1435,
+   "width": 302,
+   "height": 31
+  },
+  "kgan_other_person_birth_date": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 7.8,
+   "x": 1042,
+   "y": 1435,
+   "width": 135,
+   "height": 31,
+   "transform": "date"
+  },
+  "kgan_other_person_address": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 7.6,
+   "x": 165,
+   "y": 1505,
+   "width": 1012,
+   "height": 43,
+   "multiline": true
+  },
+  "kgan_other_person_nationality": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 7.7,
+   "x": 165,
+   "y": 1577,
+   "width": 406,
+   "height": 31
+  },
+  "kgan_other_person_notes": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 7.2,
+   "x": 606,
+   "y": 1578,
+   "width": 571,
+   "height": 42,
+   "multiline": true
+  },
+  "kgan_adult_period_from": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8,
+   "x": 923,
+   "y": 232,
+   "width": 128,
+   "height": 31,
+   "transform": "date"
+  },
+  "kgan_adult_period_to": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8,
+   "x": 1102,
+   "y": 232,
+   "width": 128,
+   "height": 31,
+   "transform": "date"
+  },
+  "kgan_adult_education_name": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 7.7,
+   "x": 204,
+   "y": 342,
+   "width": 646,
+   "height": 44,
+   "multiline": true
+  },
+  "kgan_degree": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 7.5,
+   "x": 200,
+   "y": 1224,
+   "width": 646,
+   "height": 43,
+   "multiline": true
+  },
+  "kgan_degree_end": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 7.6,
+   "x": 877,
+   "y": 1223,
+   "width": 167,
+   "height": 30,
+   "transform": "date"
+  },
+  "kgan_career_goal": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 7.6,
+   "x": 200,
+   "y": 1284,
+   "width": 987,
+   "height": 30
+  },
+  "kgan_employment_period": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 7.5,
+   "x": 877,
+   "y": 1417,
+   "width": 302,
+   "height": 30
+  },
+  "kgan_employer_1": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 7.3,
+   "x": 235,
+   "y": 1520,
+   "width": 948,
+   "height": 42,
+   "multiline": true
+  },
+  "kgan_employer_2": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 7.3,
+   "x": 235,
+   "y": 1624,
+   "width": 948,
+   "height": 42,
+   "multiline": true
+  },
+  "kgan_weekly_hours": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8,
+   "x": 877,
+   "y": 1662,
+   "width": 115,
+   "height": 31
+  },
+  "kgan_prior_recipient": {
+   "page": 2,
+   "typ": "text",
+   "groesse": 7.5,
+   "x": 165,
+   "y": 457,
+   "width": 587,
+   "height": 30
+  },
+  "kgan_prior_recipient_birth": {
+   "page": 2,
+   "typ": "text",
+   "groesse": 7.5,
+   "x": 779,
+   "y": 457,
+   "width": 156,
+   "height": 30,
+   "transform": "date"
+  },
+  "kgan_prior_period": {
+   "page": 2,
+   "typ": "text",
+   "groesse": 7.5,
+   "x": 937,
+   "y": 457,
+   "width": 240,
+   "height": 30
+  },
+  "kgan_prior_office": {
+   "page": 2,
+   "typ": "text",
+   "groesse": 7.3,
+   "x": 165,
+   "y": 512,
+   "width": 754,
+   "height": 42,
+   "multiline": true
+  },
+  "kgan_prior_number": {
+   "page": 2,
+   "typ": "text",
+   "groesse": 7.4,
+   "x": 937,
+   "y": 511,
+   "width": 240,
+   "height": 30
+  },
+  "kgan_public_person": {
+   "page": 2,
+   "typ": "text",
+   "groesse": 7.5,
+   "x": 165,
+   "y": 897,
+   "width": 729,
+   "height": 30
+  },
+  "kgan_public_person_birth": {
+   "page": 2,
+   "typ": "text",
+   "groesse": 7.5,
+   "x": 937,
+   "y": 897,
+   "width": 187,
+   "height": 30,
+   "transform": "date"
+  },
+  "kgan_foreign_recipient": {
+   "page": 2,
+   "typ": "text",
+   "groesse": 7.5,
+   "x": 165,
+   "y": 1194,
+   "width": 615,
+   "height": 30
+  },
+  "kgan_foreign_recipient_birth": {
+   "page": 2,
+   "typ": "text",
+   "groesse": 7.5,
+   "x": 937,
+   "y": 1194,
+   "width": 198,
+   "height": 30,
+   "transform": "date"
+  },
+  "kgan_foreign_benefit_type": {
+   "page": 2,
+   "typ": "text",
+   "groesse": 7.5,
+   "x": 165,
+   "y": 1251,
+   "width": 479,
+   "height": 30
+  },
+  "kgan_foreign_amount": {
+   "page": 2,
+   "typ": "text",
+   "groesse": 7.5,
+   "x": 750,
+   "y": 1251,
+   "width": 167,
+   "height": 30,
+   "transform": "money"
+  },
+  "kgan_foreign_period": {
+   "page": 2,
+   "typ": "text",
+   "groesse": 7.5,
+   "x": 937,
+   "y": 1251,
+   "width": 240,
+   "height": 30
+  },
+  "kgan_foreign_office": {
+   "page": 2,
+   "typ": "text",
+   "groesse": 7.2,
+   "x": 165,
+   "y": 1301,
+   "width": 750,
+   "height": 42,
+   "multiline": true
+  },
+  "kgan_foreign_reference": {
+   "page": 2,
+   "typ": "text",
+   "groesse": 7.4,
+   "x": 937,
+   "y": 1301,
+   "width": 240,
+   "height": 30
+  },
+  "kgan_work_person": {
+   "page": 3,
+   "typ": "text",
+   "groesse": 7.5,
+   "x": 165,
+   "y": 365,
+   "width": 729,
+   "height": 30
+  },
+  "kgan_work_period": {
+   "page": 3,
+   "typ": "text",
+   "groesse": 7.5,
+   "x": 937,
+   "y": 365,
+   "width": 240,
+   "height": 30
+  },
+  "kgan_work_employer": {
+   "page": 3,
+   "typ": "text",
+   "groesse": 7.3,
+   "x": 165,
+   "y": 420,
+   "width": 1012,
+   "height": 42,
+   "multiline": true
+  },
+  "kgan_work_employer_address": {
+   "page": 3,
+   "typ": "text",
+   "groesse": 7.3,
+   "x": 165,
+   "y": 474,
+   "width": 1012,
+   "height": 42,
+   "multiline": true
+  },
+  "kgan_work_country": {
+   "page": 3,
+   "typ": "text",
+   "groesse": 7.5,
+   "x": 165,
+   "y": 528,
+   "width": 1012,
+   "height": 30
+  },
+  "kgan_signature_date": {
+   "page": 3,
+   "typ": "text",
+   "groesse": 8.2,
+   "x": 123,
+   "y": 883,
+   "width": 240,
+   "height": 32,
+   "transform": "date"
+  },
+  "kgan_relation_applicant": {
+   "page": 0,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "leibliches Kind": {
+     "x": 515,
+     "y": 1152,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    },
+    "Adoptivkind": {
+     "x": 660,
+     "y": 1152,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    },
+    "Pflegekind": {
+     "x": 808,
+     "y": 1152,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    },
+    "Stiefkind": {
+     "x": 954,
+     "y": 1152,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    },
+    "Enkelkind": {
+     "x": 1102,
+     "y": 1152,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    }
+   }
+  },
+  "kgan_relation_partner": {
+   "page": 0,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "leibliches Kind": {
+     "x": 515,
+     "y": 1212,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    },
+    "Adoptivkind": {
+     "x": 660,
+     "y": 1212,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    },
+    "Pflegekind": {
+     "x": 808,
+     "y": 1212,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    },
+    "Stiefkind": {
+     "x": 954,
+     "y": 1212,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    },
+    "Enkelkind": {
+     "x": 1102,
+     "y": 1212,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    }
+   }
+  },
+  "kgan_relation_other": {
+   "page": 0,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "leibliches Kind": {
+     "x": 515,
+     "y": 1275,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    },
+    "Adoptivkind": {
+     "x": 660,
+     "y": 1275,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    },
+    "Pflegekind": {
+     "x": 808,
+     "y": 1275,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    },
+    "Stiefkind": {
+     "x": 954,
+     "y": 1275,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    },
+    "Enkelkind": {
+     "x": 1102,
+     "y": 1275,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    }
+   }
+  },
+  "kgan_adult_evidence": {
+   "page": 1,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "sind beigefügt": {
+     "x": 602,
+     "y": 173,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    },
+    "liegen bereits vor": {
+     "x": 769,
+     "y": 173,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    },
+    "werden nachgereicht": {
+     "x": 969,
+     "y": 173,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    }
+   }
+  },
+  "kgan_adult_status": {
+   "page": 1,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "Schul-, Hochschul- oder Berufsausbildung": {
+     "x": 183,
+     "y": 273,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    },
+    "sonstige Ausbildungsmaßnahme": {
+     "x": 183,
+     "y": 446,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    },
+    "Ausbildungsplatzmangel": {
+     "x": 183,
+     "y": 618,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    },
+    "Freiwilligendienst": {
+     "x": 183,
+     "y": 702,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    },
+    "Übergangszeit bis vier Monate": {
+     "x": 183,
+     "y": 945,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    },
+    "arbeitsuchend und ohne Beschäftigung": {
+     "x": 183,
+     "y": 1000,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    }
+   }
+  },
+  "kgan_completed_training": {
+   "page": 1,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "ja": {
+     "x": 883,
+     "y": 1148,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    },
+    "nein": {
+     "x": 1000,
+     "y": 1148,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    }
+   }
+  },
+  "kgan_employed": {
+   "page": 1,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "ja": {
+     "x": 883,
+     "y": 1316,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    },
+    "nein": {
+     "x": 1000,
+     "y": 1316,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    }
+   }
+  },
+  "kgan_employment_type": {
+   "page": 1,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "Minijob": {
+     "x": 217,
+     "y": 1397,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    },
+    "andere Erwerbstätigkeit": {
+     "x": 217,
+     "y": 1450,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    },
+    "weitere Erwerbstätigkeit": {
+     "x": 217,
+     "y": 1541,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    }
+   }
+  },
+  "kgan_disability": {
+   "page": 2,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "ja": {
+     "x": 952,
+     "y": 185,
+     "width": 25,
+     "height": 25,
+     "page": 2
+    },
+    "nein": {
+     "x": 1071,
+     "y": 185,
+     "width": 25,
+     "height": 25,
+     "page": 2
+    }
+   }
+  },
+  "kgan_prior_benefit": {
+   "page": 2,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "ja": {
+     "x": 181,
+     "y": 408,
+     "width": 25,
+     "height": 25,
+     "page": 2
+    },
+    "nein": {
+     "x": 619,
+     "y": 408,
+     "width": 25,
+     "height": 25,
+     "page": 2
+    }
+   }
+  },
+  "kgan_public_service": {
+   "page": 2,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "ja": {
+     "x": 181,
+     "y": 764,
+     "width": 25,
+     "height": 25,
+     "page": 2
+    },
+    "nein": {
+     "x": 619,
+     "y": 764,
+     "width": 25,
+     "height": 25,
+     "page": 2
+    }
+   }
+  },
+  "kgan_federal_institution": {
+   "page": 2,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "ja": {
+     "x": 952,
+     "y": 800,
+     "width": 25,
+     "height": 25,
+     "page": 2
+    },
+    "nein": {
+     "x": 1071,
+     "y": 800,
+     "width": 25,
+     "height": 25,
+     "page": 2
+    }
+   }
+  },
+  "kgan_ba_jobcenter": {
+   "page": 2,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "ja": {
+     "x": 952,
+     "y": 845,
+     "width": 25,
+     "height": 25,
+     "page": 2
+    },
+    "nein": {
+     "x": 1071,
+     "y": 845,
+     "width": 25,
+     "height": 25,
+     "page": 2
+    }
+   }
+  },
+  "kgan_foreign_benefit": {
+   "page": 2,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "ja": {
+     "x": 181,
+     "y": 1148,
+     "width": 25,
+     "height": 25,
+     "page": 2
+    },
+    "nein": {
+     "x": 619,
+     "y": 1148,
+     "width": 25,
+     "height": 25,
+     "page": 2
+    }
+   }
+  },
+  "kgan_work_abroad": {
+   "page": 3,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "ja": {
+     "x": 952,
+     "y": 189,
+     "width": 25,
+     "height": 25,
+     "page": 3
+    },
+    "nein": {
+     "x": 1071,
+     "y": 189,
+     "width": 25,
+     "height": 25,
+     "page": 3
+    }
+   }
+  },
+  "kgan_foreign_state_service": {
+   "page": 3,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "ja": {
+     "x": 952,
+     "y": 237,
+     "width": 25,
+     "height": 25,
+     "page": 3
+    },
+    "nein": {
+     "x": 1071,
+     "y": 237,
+     "width": 25,
+     "height": 25,
+     "page": 3
+    }
+   }
+  },
+  "kgan_seconded": {
+   "page": 3,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "ja": {
+     "x": 952,
+     "y": 285,
+     "width": 25,
+     "height": 25,
+     "page": 3
+    },
+    "nein": {
+     "x": 1071,
+     "y": 285,
+     "width": 25,
+     "height": 25,
+     "page": 3
+    }
+   }
+  }
+ },
+ "hinweise": [
+  "Comb-Prüfung 13.08.2026: Kind-Steuer-ID-Raster hat 3er-Gruppenlücken (33/22,5 px) — Comb würde driften; Feld bleibt Fließtext in der Kästchenzeile."
+ ]
+}

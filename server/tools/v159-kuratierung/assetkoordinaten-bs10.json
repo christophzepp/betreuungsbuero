@@ -1,0 +1,345 @@
+{
+  "hinweis": "Anker fuer v159CreateAssetInventoryPdf auf dem Vordruck BS 10 'Verzeichnis ueber das Vermoegen (§ 1835 BGB), Langfassung, gen. 01.2023'. y ist die UNTERKANTE des Feldes; der Erzeuger rechnet die Grundlinie als y + max(2,(height-9)/2) und die Schriftgroesse als height*0.48. x wird um 2 eingerueckt, width um 4 verkuerzt. 'clear' deckt einen vorgedruckten Musterwert vorher weiss ab.",
+  "Geschäfts-Nr": {
+    "page": 0,
+    "x": 108,
+    "y": 796.0,
+    "width": 196,
+    "height": 18
+  },
+  "der/des": {
+    "page": 0,
+    "x": 91,
+    "y": 778.5,
+    "width": 408,
+    "height": 18
+  },
+  " am": {
+    "page": 0,
+    "x": 108,
+    "y": 758.7,
+    "width": 206,
+    "height": 18
+  },
+  "Stichtag": {
+    "page": 0,
+    "x": 376,
+    "y": 727.8,
+    "width": 122,
+    "height": 18
+  },
+  "Bargeld": {
+    "page": 0,
+    "x": 246,
+    "y": 535.4,
+    "width": 202,
+    "height": 18
+  },
+  "EUR 1 a)": {
+    "page": 0,
+    "x": 463,
+    "y": 535.4,
+    "width": 56,
+    "height": 18
+  },
+  "bei 1": {
+    "page": 0,
+    "x": 91,
+    "y": 428.8,
+    "width": 356,
+    "height": 18
+  },
+  "EUR 1 b) 1": {
+    "page": 0,
+    "x": 463,
+    "y": 428.8,
+    "width": 56,
+    "height": 18
+  },
+  "bei 2": {
+    "page": 0,
+    "x": 91,
+    "y": 416.5,
+    "width": 356,
+    "height": 18
+  },
+  "EUR 1 b) 2": {
+    "page": 0,
+    "x": 463,
+    "y": 416.5,
+    "width": 56,
+    "height": 18
+  },
+  " 1": {
+    "page": 0,
+    "x": 91,
+    "y": 387.4,
+    "width": 178,
+    "height": 18
+  },
+  "bei 3": {
+    "page": 0,
+    "x": 294,
+    "y": 387.4,
+    "width": 152,
+    "height": 18
+  },
+  "EUR 1 c) 1": {
+    "page": 0,
+    "x": 463,
+    "y": 387.4,
+    "width": 56,
+    "height": 18
+  },
+  " 2": {
+    "page": 0,
+    "x": 91,
+    "y": 377.0,
+    "width": 178,
+    "height": 18
+  },
+  "bei 4": {
+    "page": 0,
+    "x": 294,
+    "y": 377.0,
+    "width": 152,
+    "height": 18
+  },
+  "EUR 1 c) 2": {
+    "page": 0,
+    "x": 463,
+    "y": 377.0,
+    "width": 56,
+    "height": 18
+  },
+  " Aktenfonds": {
+    "page": 0,
+    "x": 91,
+    "y": 326.0,
+    "width": 356,
+    "height": 18
+  },
+  "EUR 1d)": {
+    "page": 0,
+    "x": 463,
+    "y": 367.6,
+    "width": 56,
+    "height": 18
+  },
+  " Lebensversicherungen": {
+    "page": 0,
+    "x": 91,
+    "y": 240.0,
+    "width": 356,
+    "height": 18
+  },
+  "EUR 1e)": {
+    "page": 0,
+    "x": 463,
+    "y": 281.0,
+    "width": 56,
+    "height": 18
+  },
+  "Genossenschaftsanteile": {
+    "page": 0,
+    "x": 91,
+    "y": 170.0,
+    "width": 356,
+    "height": 18
+  },
+  "EUR 1f)": {
+    "page": 0,
+    "x": 463,
+    "y": 203.2,
+    "width": 56,
+    "height": 18
+  },
+  "sonstige Eintragungen": {
+    "page": 0,
+    "x": 91,
+    "y": 105.0,
+    "width": 356,
+    "height": 18
+  },
+  "EUR 1g)": {
+    "page": 0,
+    "x": 463,
+    "y": 122.5,
+    "width": 56,
+    "height": 18
+  },
+  "EUR 1": {
+    "page": 0,
+    "x": 469,
+    "y": 66.2,
+    "width": 62,
+    "height": 18,
+    "clear": true
+  },
+  "Summe Seite 1": {
+    "page": 1,
+    "x": 469,
+    "y": 787.0,
+    "width": 62,
+    "height": 18,
+    "clear": true
+  },
+  "Grundbes01": {
+    "page": 1,
+    "x": 56,
+    "y": 685.0,
+    "width": 470,
+    "height": 18
+  },
+  "Grundbes02": {
+    "page": 1,
+    "x": 56,
+    "y": 671.0,
+    "width": 470,
+    "height": 18
+  },
+  "Gb01_Euro": {
+    "page": 1,
+    "x": 116,
+    "y": 554.5,
+    "width": 110,
+    "height": 18
+  },
+  "Gb02_Euro": {
+    "page": 1,
+    "x": 116,
+    "y": 540.5,
+    "width": 110,
+    "height": 18
+  },
+  "Summe Seite 2": {
+    "page": 1,
+    "x": 469,
+    "y": 161.0,
+    "width": 62,
+    "height": 18,
+    "clear": true
+  },
+  " Geräte": {
+    "page": 2,
+    "x": 56,
+    "y": 540.0,
+    "width": 400,
+    "height": 18
+  },
+  "EUR 6)": {
+    "page": 2,
+    "x": 456,
+    "y": 594.2,
+    "width": 66,
+    "height": 18
+  },
+  " Vorräte": {
+    "page": 2,
+    "x": 56,
+    "y": 445.0,
+    "width": 400,
+    "height": 18
+  },
+  "EUR 7)": {
+    "page": 2,
+    "x": 456,
+    "y": 489.3,
+    "width": 66,
+    "height": 18
+  },
+  "Beteiligung an einer Gesamthand": {
+    "page": 2,
+    "x": 56,
+    "y": 338.0,
+    "width": 400,
+    "height": 18
+  },
+  "EUR 8)": {
+    "page": 2,
+    "x": 456,
+    "y": 390.1,
+    "width": 66,
+    "height": 18
+  },
+  "Erbrechtliche Ansprüche": {
+    "page": 2,
+    "x": 56,
+    "y": 240.0,
+    "width": 400,
+    "height": 18
+  },
+  "EUR 9)": {
+    "page": 2,
+    "x": 456,
+    "y": 282.4,
+    "width": 66,
+    "height": 18
+  },
+  "Vermögen gesamt": {
+    "page": 2,
+    "x": 469,
+    "y": 198.4,
+    "width": 62,
+    "height": 18,
+    "clear": true
+  },
+  " Reallasten": {
+    "page": 3,
+    "x": 56,
+    "y": 676.0,
+    "width": 400,
+    "height": 18
+  },
+  ")": {
+    "page": 3,
+    "x": 456,
+    "y": 676.0,
+    "width": 66,
+    "height": 18
+  },
+  "Sonstige Verpflichtungen": {
+    "page": 3,
+    "x": 56,
+    "y": 576.0,
+    "width": 400,
+    "height": 18
+  },
+  "Summe Schulden": {
+    "page": 3,
+    "x": 469,
+    "y": 532.9,
+    "width": 62,
+    "height": 18,
+    "clear": true
+  },
+  "mtl_eink_bet": {
+    "page": 3,
+    "x": 456,
+    "y": 494.8,
+    "width": 66,
+    "height": 18
+  },
+  "mtl_ausgaben_euro": {
+    "page": 4,
+    "x": 456,
+    "y": 761.2,
+    "width": 66,
+    "height": 18
+  },
+  "Ort": {
+    "page": 5,
+    "x": 196,
+    "y": 501.2,
+    "width": 140,
+    "height": 18
+  },
+  "Text1": {
+    "page": 5,
+    "x": 379,
+    "y": 501.2,
+    "width": 84,
+    "height": 18,
+    "clear": true
+  }
+}

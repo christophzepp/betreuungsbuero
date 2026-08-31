@@ -1,0 +1,15 @@
+{
+  "elementId": "tpl_v159_sgb9_initial_application",
+  "reportId": "sgb9_initial_application",
+  "einheit": "px",
+  "bildBreite": 1240,
+  "seitenBreitePt": 595.28,
+  "seitenHoehePt": 841.89,
+  "hinweis": "Erweiterungsvorschlag nach der Echtdaten-Weissung (regionen/sgb9_initial_application.regionen.json): Diese Schema-Felder erhalten durch das Weissen der eingedruckten Antworten einen freien Slot und koennen von der Hauptsitzung in karten/sgb9_initial_application.json uebernommen werden. reference -> geweisste Wertespalte der Vorgangsnummer-Zeile auf S.1 (dort steht kuenftig das Betreuer-/Behoerden-Aktenzeichen; das mitgeweisste 'Versand am' entfaellt). name -> Kasten 'Familienname' in 1.2 (S.2); pragmatisch fuer den vollen Namen, der Kasten 'Vornamen' auf S.3 bleibt leer. birth -> Kasten 'Geburtsdatum' (S.3), transform date. address -> Kasten 'Strasse' in 1.2 (S.3) als einzeilige Gesamtadresse; die Kaesten Hausnummer/PLZ/Ort bleiben leer (Schema liefert nur ein Adressfeld). Bewusst NICHT vorgeschlagen: benefit (freier Slot liegt unter dem Label 'Ich moechte keine spezielle Leistungsform auswaehlen' und wuerde ihm widersprechen; Anliegen gehoert weiter in needs), start (kein Formularfeld vorhanden), household (freie Kaesten in 1.8/1.9.1 sind spezifisch beschriftete Einzelfelder der Ehepartnerin), income/assets (freie Slots liegen unter 'keine Angaben machen'-Labels).",
+  "felder": {
+    "sgb9_initial_application_reference": { "page": 0, "x": 412, "y": 808, "width": 480, "height": 28, "typ": "text", "groesse": 9 },
+    "sgb9_initial_application_name":      { "page": 1, "x": 102, "y": 1452, "width": 1030, "height": 30, "typ": "text", "groesse": 9 },
+    "sgb9_initial_application_birth":     { "page": 2, "x": 102, "y": 246, "width": 360, "height": 30, "typ": "text", "groesse": 9, "transform": "date" },
+    "sgb9_initial_application_address":   { "page": 2, "x": 102, "y": 804, "width": 1030, "height": 30, "typ": "text", "groesse": 9 }
+  }
+}

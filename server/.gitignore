@@ -1,0 +1,8 @@
+node_modules/
+.DS_Store
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+.env
+_backups/
+_restore-rollback/

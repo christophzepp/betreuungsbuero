@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Formular-Assistent</title>
+<link rel="stylesheet" href="panel.css">
+</head>
+<body data-tab="assistent">
+<header>
+  <div class="hrow">
+    <h1>Formular-Assistent</h1>
+    <div id="connStatus" class="conn">…</div>
+  </div>
+  <div class="hrow">
+    <select id="caseSelect" title="Fall auswählen"><option value="">– Fall wählen –</option></select>
+    <button id="btnReloadCases" class="icon" title="Fälle neu laden">⟳</button>
+  </div>
+  <div id="caseInfo" class="hint"></div>
+</header>
+
+<div class="ptabs" id="panelTabs">
+  <button data-pt="assistent" class="active">Assistent</button>
+  <button data-pt="ki" title="KI-Texthilfe und KI-Agent">KI</button>
+  <button data-pt="training" title="Formularfelder dieser Seite anlernen">Training</button>
+</div>
+
+<div id="actionGrid" class="actiongrid" data-ptab="assistent">
+  <button id="agScan" title="Formular der aktuellen Seite erkennen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Scannen</span></button>
+  <button id="agFill" title="Angehakte Werte der Prüfliste in die Seite schreiben"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg><span>Ausfüllen</span></button>
+  <button id="agPdf" title="Ausfüllprotokoll als PDF sichern"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><span>Protokoll-PDF</span></button>
+</div>
+
+<div id="versionBanner" class="banner hidden"></div>
+<div id="grantBanner" class="banner hidden">
+  <div>Damit Formulare erkannt und ausgefüllt werden können, braucht die Erweiterung einmalig Zugriff auf Webseiten.</div>
+  <div class="row"><button id="btnGrantSites" class="light">Seiten-Zugriff erlauben</button></div>
+</div>
+<div id="pageChangeBanner" class="banner warn hidden" data-ptab="assistent">
+  <div>Die Seite hat sich geändert (neue Formularseite?).</div>
+  <div class="row"><button id="btnRescanPage" class="light">Neue Seite scannen</button></div>
+</div>
+
+<section id="secIntro" class="hidden" data-ptab="assistent">
+  <h2>So geht's</h2>
+  <ol class="introlist">
+    <li><b>Fall wählen</b> – oben in der Kopfzeile.</li>
+    <li><b>Formular öffnen</b> – über „Formulare &amp; Portale" unten oder direkt im Browser.</li>
+    <li><b>Scannen</b> – dann Prüfliste kontrollieren und „Ausfüllen".</li>
+  </ol>
+  <p class="hint">Abgesendet wird nie automatisch – das letzte Wort haben Sie.</p>
+</section>
+
+<section id="secScan" data-ptab="assistent">
+  <div id="scanInfo" class="hint"></div>
+  <div id="pageChips" class="pagechips hidden" title="Erkannte Formularseiten – Klick ruft die Seite auf und erkennt sie neu; getroffene Häkchen bleiben je Seite gemerkt"></div>
+  <details class="scanopts">
+    <summary>Optionen (Datenkontext, Kontakt)</summary>
+    <div class="row small">
+      <label>Formular fragt Daten von:</label>
+      <select id="contextMode">
+        <option value="auto">automatisch erkennen</option>
+        <option value="betreute_person">betreuter Person</option>
+        <option value="betreuer_buero">Betreuer/Büro</option>
+      </select>
+    </div>
+    <div class="row small hidden" id="rowContact">
+      <label title="Wählen Sie einen Kontakt des Falls, dessen Daten (Adresse, E-Mail, Telefon …) fürs Ausfüllen bereitstehen sollen.">Kontakt einsetzen:</label>
+      <select id="contactSelect"><option value="">– kein bestimmter Kontakt –</option></select>
+    </div>
+  </details>
+</section>
+
+<section id="secProfile" class="hidden" data-ptab="assistent">
+  <h2>Site-Profil</h2>
+  <div id="profileInfo" class="hint"></div>
+  <div class="row">
+    <button id="btnApplyProfile" class="light hidden">Profil anwenden</button>
+    <button id="btnDeleteProfile" class="danger-ghost hidden" title="Profil löschen">Löschen</button>
+  </div>
+  <div id="actionBar" class="actionbar"></div>
+</section>
+
+<section id="secReview" class="hidden" data-ptab="assistent">
+  <h2>Prüfliste <span id="reviewCount"></span></h2>
+  <div class="row small">
+    <button id="btnAiMap" class="light hidden">KI-Vorschläge</button>
+    <label class="checkline"><input type="checkbox" id="chkAll"> alle an/aus</label>
+  </div>
+  <div id="reviewList" class="reviewlist"></div>
+  <div class="row">
+    <button id="btnFill" class="primary">Ausfüllen (<span id="fillCount">0</span>)</button>
+    <button id="btnClearHl" class="light" title="Markierungen auf der Seite entfernen">Markierungen weg</button>
+  </div>
+  <div id="requiredWarn" class="banner warn hidden"></div>
+</section>
+
+<section id="secUpload" class="hidden" data-ptab="assistent">
+  <h2>Upload-Helfer</h2>
+  <p class="hint">Ein Dokument in ein Datei-Feld der Seite einsetzen – vom Server (Fall-Zwischenspeicher), vom Rechner (Sitzung) oder aus der dauerhaften Dokumentenablage. Das Absenden erfolgt weiterhin manuell durch Sie.</p>
+  <div id="uploadFotoRow" class="row small hidden">
+    <label>Passfoto:</label>
+    <img id="uploadFotoThumb" alt="Passfoto" style="width:34px;height:44px;object-fit:cover;border:1px solid #c9d6e2;border-radius:4px;background:#f4f8fb">
+    <button id="btnFotoDownload" class="light" type="button">Herunterladen</button>
+  </div>
+  <div class="row small">
+    <label>Datei-Feld:</label>
+    <select id="uploadFieldSelect"></select>
+  </div>
+  <div class="row small">
+    <label>Dokument:</label>
+    <select id="uploadDocSelect"></select>
+  </div>
+  <div class="row"><button id="btnUploadSet" class="light">Datei einsetzen</button></div>
+</section>
+
+<section id="secProtocol" class="hidden" data-ptab="assistent">
+  <h2>Dokumentation</h2>
+  <div id="protocolInfo" class="hint"></div>
+  <label class="checkline"><input type="checkbox" id="chkScreenshot"> Bildschirmfoto der Seite ins Protokoll-PDF aufnehmen</label>
+  <div class="row wrap">
+    <button id="btnPdf" class="light">Protokoll-PDF</button>
+    <button id="btnPrint" class="light" title="Browser-Druckdialog der Seite (dort „Als PDF sichern")">Seite drucken (PDF)</button>
+    <button id="btnDoku" class="primary hidden">In Falldokumentation übernehmen</button>
+  </div>
+</section>
+
+<section id="secCopy" class="hidden" data-ptab="assistent">
+  <h2>Werte zum Kopieren</h2>
+  <div class="tool-body">
+    <input id="copySearch" type="text" placeholder="Datenwert suchen (z. B. IBAN, Az) …">
+    <div id="copyList" class="keylist"></div>
+  </div>
+</section>
+
+<section id="secPortals" class="hidden" data-ptab="assistent">
+  <h2>Formulare &amp; Portale</h2>
+  <div class="tool-body">
+    <p class="hint">Büroweit trainierte Formulare und Portale, gebündelt nach Träger. „Öffnen" führt zur Formular- bzw. Login-Seite – die Anmeldung übernimmt Ihr Browser-Passwortmanager.</p>
+    <div id="portalList" class="portallist"></div>
+  </div>
+</section>
+
+<section id="secFiles" data-ptab="assistent">
+  <h2>Dateien &amp; Dokumentenablage</h2>
+  <div class="tool-body">
+    <p class="hint">Lokale Dateien laden – für Datei-Upload-Felder der Seite (Upload-Helfer, z. B. Anhänge in eBO/Simple Fax) und/oder als Information für die KI. Sitzungs-Dateien verschwinden beim Schließen; mit 📌 wandern sie dauerhaft in die Dokumentenablage der Erweiterung (z. B. Bestellungsurkunde, Betreuerausweis).</p>
+    <div class="row"><input type="file" id="filePicker" multiple></div>
+    <div id="fileList" class="filelist"></div>
+  </div>
+</section>
+
+<div id="kiGrid" class="actiongrid" data-ptab="ki">
+  <button id="kgText" title="KI-Text für ein Freitextfeld formulieren"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="13" x2="13" y2="13"/></svg><span>Text vorschlagen</span></button>
+  <button id="kgAgent" title="KI-Agent für mehrseitige Formulare"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg><span>KI-Agent</span></button>
+</div>
+
+<section id="secKiInfo" class="hidden" data-ptab="ki">
+  <h2>KI</h2>
+  <p class="hint">KI ist nicht verfügbar – bitte Server-Verbindung und KI-Zugang prüfen (Einstellungen).</p>
+</section>
+
+<section id="secAi" class="hidden" data-ptab="ki">
+  <h2>KI-Hilfe (Freitextfeld)</h2>
+  <div class="tool-body">
+  <div class="row small"><select id="aiFieldSelect"></select></div>
+  <textarea id="aiChatPrompt" rows="2" placeholder="Was soll formuliert werden? (z. B. Begründung für …)"></textarea>
+  <label class="checkline consent"><input type="checkbox" id="aiConsent"> Falldaten dürfen für DIESE Anfrage an die KI gesendet werden</label>
+  <div id="aiFileAttach" class="hidden">
+    <div class="hint">Dokumente an die KI mitsenden (Inhalt wird übertragen):</div>
+    <div id="aiFileList"></div>
+  </div>
+  <div class="row">
+    <button id="btnAiChat" class="light">Text vorschlagen</button>
+  </div>
+  <div id="aiChatResult" class="hidden">
+    <textarea id="aiChatText" rows="5"></textarea>
+    <div class="row"><button id="btnAiApply" class="primary">In Feld übernehmen</button></div>
+  </div>
+  </div>
+</section>
+
+<section id="secAgent" class="hidden" data-ptab="ki">
+  <h2>KI-Agent (mehrseitige Formulare)</h2>
+  <div class="tool-body">
+  <textarea id="agentGoal" rows="2" placeholder="Ziel, z. B.: Rentenantrag Schritt für Schritt ausfüllen"></textarea>
+  <label class="checkline consent"><input type="checkbox" id="agentAllowValues"> Falldaten-WERTE dürfen an die KI gesendet werden (sonst nur Feldnamen)</label>
+  <div class="row small">
+    <label>Max. Schritte</label>
+    <input id="agentMaxSteps" type="number" value="15" min="1" max="40" style="width:60px">
+  </div>
+  <div class="row">
+    <button id="btnAgentStart" class="primary">Agent starten</button>
+    <button id="btnAgentStop" class="danger-ghost hidden">Stopp</button>
+  </div>
+  <div id="agentConfirm" class="banner warn hidden">
+    <div id="agentConfirmText"></div>
+    <div class="row">
+      <button id="btnAgentConfirmYes" class="danger">Klick ausdrücklich erlauben</button>
+      <button id="btnAgentConfirmNo" class="light">Ablehnen</button>
+    </div>
+  </div>
+  <div id="agentLog" class="agentlog"></div>
+  </div>
+</section>
+
+<div id="trainGrid" class="actiongrid" data-ptab="training">
+  <button id="tgStart" title="Felder/Buttons der aktuellen Seite anlernen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg><span>Training starten</span></button>
+</div>
+
+<section id="secTrainIntro" data-ptab="training">
+  <h2>Training</h2>
+  <p class="hint">Das Training verknüpft die Felder eines Online-Formulars mit Ihren Falldaten. Es läuft gerade kein Training – Start über „Training starten" oben.</p>
+  <p class="hint">Voraussetzung: Ein Fall ist gewählt und der Browser-Tab mit dem Online-Formular ist aktiv.</p>
+</section>
+
+<section id="secTraining" class="hidden" data-ptab="training">
+  <h2>Training / Aufzeichnung</h2>
+  <p class="hint">Klicken Sie auf der Webseite ein Feld oder einen Button an, dann hier zuordnen.</p>
+  <div id="trainPending" class="hidden">
+    <div id="trainPickedLabel" class="picked"></div>
+    <div class="row small">
+      <label><input type="radio" name="trainKind" value="field" checked> Feld → Datenwert</label>
+      <label><input type="radio" name="trainKind" value="action"> Button → Aktion</label>
+    </div>
+    <div id="trainFieldAssign">
+      <input id="trainKeySearch" type="text" placeholder="Datenfeld suchen (z. B. Nachname, IBAN)…">
+      <div id="trainKeyList" class="keylist"></div>
+    </div>
+    <div id="trainActionAssign" class="hidden">
+      <select id="trainActionType">
+        <option value="weiter">Weiter / nächste Seite</option>
+        <option value="zurueck">Zurück</option>
+        <option value="klick">Klick (Element anklicken)</option>
+        <option value="abschnitt">Abschnitt/Tab öffnen</option>
+        <option value="haken">Häkchen setzen/entfernen</option>
+        <option value="upload">Datei-Upload öffnen</option>
+        <option value="hochladen">Hochladen bestätigen</option>
+        <option value="bearbeiten">Bearbeiten</option>
+        <option value="hinzufuegen">Hinzufügen</option>
+        <option value="speichern">Zwischenspeichern</option>
+        <option value="abbrechen">Abbrechen / Dialog schließen</option>
+        <option value="custom">Sonstige Aktion</option>
+      </select>
+      <button id="btnTrainAssignAction" class="light">Aktion zuordnen</button>
+    </div>
+  </div>
+  <div class="row small">
+    <button id="btnTrainAi" class="light hidden" title="Die KI ordnet alle erkennbaren Felder des Formulars automatisch Datenschlüsseln zu und übernimmt sie ins Training (nur Feldnamen werden übertragen, keine Werte).">Ganzes Formular per KI zuordnen</button>
+  </div>
+  <div id="trainList" class="trainlist"></div>
+  <div class="row">
+    <input id="trainProfileName" type="text" placeholder="Profil-Name (z. B. DRV Rentenantrag)">
+  </div>
+  <div class="row">
+    <button id="btnTrainSave" class="primary">Profil speichern</button>
+    <button id="btnTrainStop" class="light">Training beenden</button>
+  </div>
+</section>
+
+<footer>
+  <a href="#" id="lnkOptions">Einstellungen (Server, Token, lokale Fälle, Backup)</a>
+</footer>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="../common/browser-shim.js"></script>
+<script src="../common/api.js"></script>
+<script src="../common/synonyms.js"></script>
+<script src="../common/dictionary.js"></script>
+<script src="../common/matcher.js"></script>
+<script src="../common/pdf.js"></script>
+<script src="panel.js"></script>
+</body>
+</html>

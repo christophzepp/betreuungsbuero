@@ -1,0 +1,750 @@
+GESAMTSICHERUNG IM ONLINE-MODUS EINRICHTEN
+==========================================
+
+Der Zeitplan im Admin-Panel ist der einzige autoritative automatische Scheduler.
+launchd-/cron-Dateien sind nur noch historische manuelle Notfallvorlagen für eine
+vollständig gestoppte Anwendung und dürfen nicht parallel aktiviert werden.
+Das Projekt installiert nichts automatisch; jede Aktivierung einer Vorlage
+bleibt eine ausdrückliche administrative Handlung.
+
+Was der Lauf sichert
+--------------------
+
+  * eine mit SQLite ".backup" erzeugte, konsistente Datenbankkopie,
+  * den vollstaendigen runtime/data-Baum einschliesslich aller Modulablagen,
+  * die konfigurierte primaere Klarname-Wurzel "storageRoot" sowie die alten
+    Blob-/Legacy-Leseorte "baseDir" und "caseDirs",
+  * die aktuellen, portablen und mit dem Recovery-Key verschluesselten
+    Abbilder Sicherheit.json.enc und Zugangsdaten.json.enc,
+  * die ausgelieferte HTML-App, den exakten freigegebenen Server-Quellstand als
+    betrieb/server-quellcode.tar.gz, die verpflichtenden Dateien package.json,
+    package-lock.json, Dockerfile, docker-compose.yml, .dockerignore und
+    .env.example, den vollständigen Vorlagenbaum sowie hochgeladene
+    Browser-Erweiterungspakete,
+  * die aktive, ausdrücklich nichtgeheime Laufzeitkonfiguration im
+    Betriebsinventar; URLs mit Zugangsdaten oder Abfrageparametern werden
+    sicherheitshalber nicht im Klartext protokolliert,
+  * Pruefsummen, Pruefbericht, Rettungsskript und die Kurz-Anleitung.
+
+Ein Lauf kopiert niemals die Live-Dateien der SQLite-Datenbank mit cp. Das Skript
+kann auf ausdrueckliche Konfiguration eine begrenzte Generationenverwaltung
+anwenden. Ohne gesetzte Generationenzahlen wird nichts geloescht. Identische
+oder untergeordnete konfigurierte Wurzeln werden nur einmal physisch kopiert;
+ihre einzelnen Zuordnungen bleiben in verwaltung/WURZELN.tsv erhalten.
+Fehlt die erwartete ausgelieferte HTML-App oder ist die automatische Auswahl
+mehrdeutig, wird der Snapshot sichtbar UNVOLLSTAENDIG; fuer abweichende Namen
+ist --app-file ausdrücklich zu setzen.
+
+WICHTIG: .env, runtime/secrets, DOCUMENT_RECOVERY_KEY und ein restic-Passwort
+werden niemals in denselben Snapshot aufgenommen. Die beim Einrichten des
+Recovery-Keys einmal angebotene Kopie muss getrennt verwahrt werden.
+Das Admin-Panel zeigt zur Zuordnung nur eine zufällige Key-ID und deren
+Schlüsselgeneration. Der alte geheimnisbasierte Fingerprint bleibt ausschließlich
+für rückwärtskompatible Prüfwerkzeuge erhalten und soll nicht mehr als Kennung
+abgeschrieben werden. Importierte neue Schlüssel müssen 32 kryptografisch zufällige
+Byte als `drk1_` plus Base64URL (43 Zeichen) oder als Hex (64 Zeichen) enthalten.
+Das Server-Quellarchiv folgt einer festen Positivliste. data/, node_modules/,
+_backups/, Datenbank-/WAL-/SHM-Dateien, Logs und Passwortdateien sind dort
+ebenfalls ausgeschlossen. SHA-256 und Bytegroesse des Archivs stehen zusammen
+mit einer optionalen BETREUUNGSBUERO_BUILD_ID und einer ermittelbaren
+Git-Commit-ID in betrieb/BETRIEBSINVENTAR.txt.
+Fehlt auch nur eine verpflichtende Paket-/Containerdatei oder der Vorlagenbaum,
+bleibt der Snapshot sichtbar UNVOLLSTAENDIG. Der SHA-256 von .dockerignore und
+package-lock.json steht im Betriebsinventar; dadurch ist auch der beim
+Container-Neuaufbau wirksame Build-Kontext nachvollziehbar.
+
+
+1. PFADE FESTLEGEN UND MANUELL TESTEN
+------------------------------------
+
+Die vier Quellpfade muessen zur Installation passen. Das Ziel MUSS auf einem
+getrennten Datentraeger, NAS-Mount oder anderen Sicherungssystem liegen, zum Beispiel:
+
+  Projekt:  /ABSOLUTER/PFAD/ZUM/PROJEKT
+  Ziel:     /Volumes/EXTERNE-SICHERUNG/Betreuungsbuero
+
+Zielordner anlegen und einen echten manuellen Lauf starten:
+
+  "/ABSOLUTER/PFAD/ZUM/PROJEKT/server/tools/gesamt-backup.sh" \
+    --db "/ABSOLUTER/PFAD/ZUM/PROJEKT/runtime/database/betreuungsbuero.sqlite3" \
+    --data-dir "/ABSOLUTER/PFAD/ZUM/PROJEKT/runtime/data" \
+    --server-dir "/ABSOLUTER/PFAD/ZUM/PROJEKT/server" \
+    --destination "/Volumes/EXTERNE-SICHERUNG/Betreuungsbuero" \
+    --require-marker \
+    --consistency-retries 3 \
+    --retention-daily 14 --retention-monthly 12 --retention-yearly 10 \
+    --retention-diagnostic 6 \
+    --capacity-warning-percent 15 \
+    --label "manuelle-probe"
+
+Anschliessend im neuen Ordner "Gesamtsicherung_*" pruefen:
+
+  * STATUS.txt ist VOLLSTAENDIG,
+  * PRUEFBERICHT.txt meldet "PRAGMA integrity_check = ok",
+  * datenbank/betreuungsbuero.sqlite3 ist vorhanden,
+  * inhalt/server-data und MANIFEST.tsv sind vorhanden,
+  * betrieb/BETRIEBSINVENTAR.txt, betrieb/server-quellcode.tar.gz und die
+    ausgelieferte App vorhanden sind; SHA-256 und Bytegroesse des Quellarchivs
+    muessen im Betriebsinventar stehen,
+  * eine externe storageRoot sowie alte baseDir/caseDirs in
+    verwaltung/WURZELN.tsv aufgefuehrt sind,
+  * der Pruefbericht beide Pflicht-Materialisierungen mit Schema security/3
+    und credentials/3 ohne Fehler bestaetigt,
+  * NOTFALL-RETTUNG.sh und NOTFALL-WIEDERHERSTELLUNG.txt sind vorhanden.
+
+Rueckgabecode 2 bewahrt eine fachlich als UNVOLLSTAENDIG markierte Sicherung
+normalerweise absichtlich auf. Bei einer flüchtigen Quell-Dateisystem-Race oder
+einer fehlgeschlagenen abschließenden Manifestprüfung wird dagegen bewusst kein
+Snapshot-Erfolg veröffentlicht; der begrenzte Konsistenz-Retry beginnt mit einer
+frischen Arbeitsstufe. Andere Fehlercodes veroeffentlichen keinen bestätigten
+Snapshot. Das Ziel darf nicht innerhalb von runtime/data oder einer konfigurierten
+Dokumentwurzel liegen.
+Die Vorher-Signaturen aller physischen documents_config-Wurzeln werden bereits
+vor SQLite ".backup" gebildet. Auch Vorlagen, Erweiterungspakete, Serverquellen,
+Konfigurationsdateien und die HTML-App werden vor und nach ihrer Kopie geprüft.
+Damit gilt der Mischstandschutz ebenso für direkte Shell-/cron-Läufe ohne die
+Upload-Barriere des laufenden Servers.
+Der Wert bei --consistency-retries bezeichnet zusaetzliche Versuche: 0 bedeutet
+ein Lauf, 2 bedeuten hoechstens drei Laeufe. Jeder fehlgeschlagene Versuch bleibt
+nur dann als eindeutig unvollstaendiger Diagnosesnapshot sichtbar, wenn bereits
+ein manifestierbarer fachlicher Prüfstand vorliegt; reine Lese-Races verwerfen
+ihre Arbeitsstufe. Mit
+"--retention-diagnostic 6" bleiben davon hoechstens die sechs neuesten eindeutig
+eigenen Diagnosesnapshots erhalten; fremde Verzeichnisse werden nicht beruehrt.
+
+Fehlt beim ersten, noch leeren Bootstrap eine der beiden verschluesselten
+Pflichtdateien, zuerst im Admin-Panel den DOCUMENT_RECOVERY_KEY einrichten und
+die Abbilder aktualisieren lassen. Nur isolierte Fixture-Tests duerfen die
+deutlich protokollierte Option "--allow-missing-recovery-images" verwenden.
+Ein direkter Shell-/Notfalllauf muss außerdem denselben `ENCRYPTION_KEY` sicher
+in seiner Prozessumgebung erhalten wie die gestoppte Anwendung. Nur damit kann
+er aus der SQLite-Kopie die aktuelle portable Recovery-Quellrevision berechnen
+und beweisen, dass Sicherheit.json.enc und Zugangsdaten.json.enc wirklich zu
+genau diesem Datenbankstand gehören. Der Wert wird weder protokolliert noch
+gesichert; fehlt er oder passt er nicht, bleibt der Snapshot fail-closed
+UNVOLLSTAENDIG. Den Schlüssel niemals in plist, Crontab oder Kommandozeile
+schreiben, sondern nur über den vorhandenen geschützten Secret-/Dienstkontext
+bereitstellen. Der Admin-Zeitplan erbt diesen Kontext bereits vom Server.
+
+Vor dem ersten Lauf das Ziel im Adminbereich mit „Sicherungsziel initialisieren“
+bewusst einrichten. Nur dieser Vorgang erzeugt die vollständige Zielmarke
+".betreuungsbuero-backup-ziel" mit stabiler TARGET_ID. Weder der Runner noch
+das Shellskript erzeugen oder ergänzen eine fehlende oder leere Marke still.
+Die UUID wird an den Zeitplan gebunden. Ein anderer Datenträger am gleichen
+Mountpfad wird danach abgelehnt. Fehlt der Datenträger oder ist die Zielmarke
+leer beziehungsweise ungültig, wird keine interne Ersatzmappe angelegt und der
+Lauf scheitert mit dem Hinweis auf die Admin-Initialisierung.
+
+
+2A. macOS / launchd – NUR MANUELLER NOTFALLWEG
+-----------------------------------------------
+
+Vorlage:
+
+  server/tools/scheduler/de.betreuungsbuero.gesamt-backup.plist.example
+
+Nicht als zweiten Zeitplan laden. Für eine einmalige Ausführung bei gestoppter
+Anwendung kann eine Arbeitskopie außerhalb des Projekts erstellt werden. Darin
+ALLE Vorkommen ersetzen:
+
+  __PROJECT_ROOT__                 absoluter Projektpfad
+  __EXTERNAL_BACKUP_DESTINATION__  absolutes, getrenntes Sicherungsziel
+
+Danach die XML-Datei pruefen:
+
+  plutil -lint "/PFAD/ZUR/ARBEITSKOPIE.plist"
+
+Die Vorlage plant den Lauf taeglich um 02:15 Uhr. Erst nach dem erfolgreichen
+manuellen Test darf die gepruefte Arbeitskopie als Benutzer-LaunchAgent unter
+"~/Library/LaunchAgents/de.betreuungsbuero.gesamt-backup.plist" abgelegt und mit
+launchctl geladen werden. Die Projektvorlage selbst nicht laden.
+
+Wenn das externe Ziel beim Lauf nicht eingehangen ist, muss der Lauf sichtbar
+scheitern. Dafuer die Zielmarke nicht entfernen und niemals denselben Pfad still
+auf die interne Platte umleiten.
+
+
+2B. cron – NICHT PARALLEL AKTIVIEREN
+------------------------------------
+
+Vorlage:
+
+  server/tools/scheduler/crontab.gesamt-backup.example
+
+Die Vorlage ist nur noch eine Referenz für einen manuellen Lauf bei gestoppter
+Anwendung. Sie nicht in die Benutzer-Crontab übernehmen. Automatik wird
+ausschließlich im Admin-Panel eingerichtet.
+
+Die Beispielzeile nie unveraendert installieren: Ein noch vorhandener __...__-
+Platzhalter ist ein Konfigurationsfehler.
+
+
+3. ZEITPLAN IN DER OBERFLAECHE
+------------------------------
+
+Unter Admin -> Datei-Explorer -> Sicherung & Synchronisation steht als Zielart
+"Gesamtsicherung (Datenbank + alle Dateien + Rettung)" bereit. Dafuer gelten
+dieselben Regeln:
+
+  * nur taeglich, woechentlich oder monatlich,
+  * immer die gesamte Anwendung, keine Teilquelle,
+  * absoluter Zielpfad ausserhalb des Projekt-/Datenverzeichnisses,
+  * vorhandene Zielmarke ".betreuungsbuero-backup-ziel".
+
+Die Gesamtsicherung behandelt "storageRoot" als primaeren zentralen Baum.
+"baseDir" und "caseDirs" werden weiterhin zusaetzlich als moegliche Alt-/Bloborte
+gesichert. Ueberschneiden sich diese Wurzeln, enthaelt der Snapshot den Inhalt
+nur einmal und mehrere eindeutige Zuordnungen.
+
+Der letzte Erfolg oder Fehler bleibt am Zeitplan sichtbar. Ein unvollstaendiger
+Snapshot wird nicht verschwiegen, sondern als Fehler mit Verweis auf den
+Pruefbericht ausgewiesen.
+
+
+4. GENERATIONEN UND KAPAZITAET
+------------------------------
+
+Beispiel:
+
+  --retention-daily 14 --retention-monthly 12 --retention-yearly 10 \
+  --retention-diagnostic 6 \
+  --capacity-warning-bytes 10737418240 --capacity-warning-percent 15
+
+Die Aufbewahrung bildet die Vereinigungsmenge aus den neuesten Tages-, Monats-
+und Jahresgenerationen. Entfernt werden ausschliesslich regulaere Verzeichnisse,
+deren Name exakt "Gesamtsicherung_JJJJMMTT_HHMMSS..." entspricht und die sowohl
+STATUS.txt=VOLLSTAENDIG besitzen und unmittelbar vor Auswahl sowie Löschung
+vollständig gegen MANIFEST.tsv und MANIFEST.tsv.sha256 gelesen wurden. Jeder
+vorhandene reguläre ".offsite-pending"-Sidecar schützt seine Generation
+unabhängig davon, ob Offsite inzwischen deaktiviert oder das Profil gewechselt
+wurde. Alte offene Profile werden als
+"WARNUNG=OFFSITE_PENDING_FREMDPROFIL" sichtbar. Bei einem aktiven Profil muss
+".offsite-status" zusätzlich einen positiven Restic-Nachweis enthalten. Für
+Upload, Retry und Reconciliation muss dieser genau zum aktuellen Job und Profil
+gehören. Die lokale Retention akzeptiert dagegen auch ein historisches Profil,
+wenn der Status im Format 2 eindeutig und selbstkonsistent an denselben Job,
+stabilen Job-Tag, Ziel-ID, Snapshotnamen, Manifest-SHA und eine gültige
+Restic-Snapshot-ID gebunden ist. So macht ein legitimer Profilwechsel alte,
+bereits bestätigte lokale Generationen nicht unverlöschbar. Noch nicht
+erfolgreich offsite übertragene oder nicht eindeutig attestierte Snapshots sind
+geschützt. Fuer
+unvollstaendige
+Diagnosesnapshots gilt ausschliesslich die getrennte Grenze
+"--retention-diagnostic"; auch dort werden nur exakt erkennbare eigene
+Snapshotnamen mit STATUS.txt=UNVOLLSTAENDIG und MANIFEST.tsv beruecksichtigt.
+Fremde Ordner bleiben unangetastet. Jede Entfernung steht in
+backup-maintenance.log. Null beziehungsweise fehlende Werte bedeuten: keine
+automatische Loeschung der jeweiligen Art.
+
+Wird beim Löschen eines Sicherungsjobs dessen Offsite-Rückstand ausdrücklich
+administrativ aufgegeben, wird nur der vorhandene Sidecar atomar von
+".offsite-pending" nach ".offsite-abandoned" umbenannt. Diese Aktion selbst
+löscht null Snapshotdateien. Ein späterer Sicherungslauf darf eine solche
+Generation erst im normalen Kalenderplan bereinigen, wenn Sidecar, Snapshot,
+vollständiges Manifest, ursprüngliche Job-ID und aktuelle Ziel-ID erneut
+zusammenpassen. Manipulierte, doppelte oder mehrdeutige Sidecars bleiben
+fail-closed liegen. Pro Lauf werden höchstens
+daily + monthly + yearly solcher aufgegebenen Generationen entfernt; der
+Sidecar wird erst beim kontrollierten Löschen des zugehörigen Snapshots
+mitentfernt.
+
+Ein SIGKILL oder Stromausfall kann ein noch nicht veroeffentlichtes
+Arbeitsverzeichnis hinterlassen. Neue Arbeitsstufen erhalten deshalb vor ihrer
+Anlage eine eindeutige Owner-Datei; ältere Arbeitsstufen werden nur mit dem
+internen Formatmarker erkannt. Ein exklusiver Folgelauf entfernt hoechstens 32
+solcher eindeutig eigenen Reste kontrolliert und protokolliert. Aehnlich
+benannte fremde oder unmarkierte Ordner werden nie entfernt.
+
+Vor dem Staging muss der freie Platz den aktuell bekannten Quellumfang,
+Arbeitsmarge und konfigurierte Reserve übersteigen; andernfalls beginnt kein
+Snapshot. Jede erst aus der konsistenten DB-Kopie bekannte externe Wurzel erhält
+vor ihrer ersten physischen Kopie nochmals einen eigenen Kapazitäts-Preflight
+gegen den dann tatsächlich freien Platz. Nach der Kopie bleibt zusätzlich die
+Kapazitätswarnung aktiv. Eine nachträgliche Grenzwarnung verwirft keinen ansonsten
+vollständigen Snapshot, bleibt aber im Admin-Health sichtbar.
+
+
+5. VERSCHLUESSELTE OFFSITE-ZWEITKOPIE
+-------------------------------------
+
+Ein normal beschreibbarer Ordner auf derselben Platte oder einem normalen NAS
+ist keine ausreichende Zweitkopie. Unterstuetzt wird ein echtes Remote-restic-
+Repository mit clientseitiger authentifizierter Verschluesselung:
+
+  --offsite-mode restic \
+  --offsite-repository "s3:https://S3-ENDPUNKT/BUCKET/PFAD" \
+  --offsite-password-file "/AUSSERHALB/DES/BACKUPS/restic-password" \
+  --offsite-tag "betreuungsbuero"
+
+Zulaessige Remotearten sind s3:, sftp:, rest:, rclone:, azure:, gs:, b2: und
+swift:. Lokale und normale NAS-Dateipfade werden abgelehnt. Zugangsdaten gehoeren
+nicht in die Repository-URL; restic-/Provider-Umgebungsvariablen oder eine
+geschuetzte Credential-Datei verwenden. Die Passwortdatei muss exakt Modus 0600
+besitzen und außerhalb von Server-/Projektbaum, runtime/data, sämtlichen
+konfigurierten Dokumentwurzeln und lokalem Sicherungsziel liegen. Sie wird vor
+jeder Restic-Operation mit O_NOFOLLOW über den geöffneten Dateideskriptor geprüft.
+Jeder Restic-Unterprozess erhält eine neu aufgebaute Positivlisten-Umgebung:
+nur Laufzeitpfade, Temp-/Locale-, CA-/Proxy-/SSH-Agent-Werte und ausdrücklich
+freigegebene Provider-Variablen. `SESSION_SECRET`, `ENCRYPTION_KEY`,
+`DOCUMENT_RECOVERY_KEY`, `SETUP_TOKEN` und sonstige App-Variablen werden nie an
+Restic vererbt.
+Zusätzlich zum frei sichtbaren Profil-Tag erhält jede Generation einen stabil
+aus der Job-ID abgeleiteten Restic-Job-Tag. Eine getrennte Wartungsinstanz muss
+`forget --prune` ausschließlich auf diesen Job-Tag begrenzen; zwei Zeitpläne im
+selben Repository können deshalb auch bei gleichem Profil-Tag nicht gegenseitig
+Generationen aus der Retention entfernen.
+
+Das Remote-Repository wird nicht still durch einen Sicherungslauf angelegt.
+Vor dem Aktivieren einmal mit denselben Provider-Credentials initialisieren
+und den Zugriff pruefen:
+
+  chmod 600 "/AUSSERHALB/DES/BACKUPS/restic-password"
+  restic -r "s3:https://S3-ENDPUNKT/BUCKET/PFAD" \
+    --password-file "/AUSSERHALB/DES/BACKUPS/restic-password" init
+  restic -r "s3:https://S3-ENDPUNKT/BUCKET/PFAD" \
+    --password-file "/AUSSERHALB/DES/BACKUPS/restic-password" snapshots
+
+Ist Offsite als erforderlich aktiviert, scheitert der Gesamtjob geschlossen,
+wenn restic, Credentials, Repository, Upload oder Remote-Leseprobe fehlen. Der
+vollstaendige neue lokale Snapshot bleibt dabei immer erhalten; ein Remoteausfall
+darf die tägliche lokale Generation nicht mehr anhalten. "<Snapshot>.offsite-status"
+und ".offsite.log" zeigen den Fehler. Ein geschuetzter ".offsite-pending"-Zustand
+bindet die Wiederaufnahme an Job, Zielkennung, Snapshotname, Manifest-SHA und
+Offsiteprofil. Jeder normale planmäßige oder manuelle Lauf erzeugt zuerst einen
+frischen lokalen Snapshot und versucht diesen remote zu sichern. Erst danach
+wird höchstens eine ältere, erneut manifestgeprüfte Pending-Generation
+nachgeholt. Scheitert die erforderliche Remote-Kopie nach einem bereits
+vollständigen lokalen Snapshot, speichert der Scheduler ausdrücklich den Zustand
+"local-complete/offsite-pending". Nur dessen begrenzter Retry ruft den Runner
+mit "resumeOffsiteOnly" und dem exakt persistierten Snapshotnamen auf. Der
+Shellweg verlangt entsprechend
+`--resume-offsite-only --resume-snapshot Gesamtsicherung_...`. Dieser Weg prüft
+und überträgt ausschließlich den alten manifestgebundenen Snapshot; er liest
+keine aktuelle Datenbank, keinen Datenbaum und keine App-Datei und erzeugt keine
+zweite lokale Vollaufnahme. Ein
+normaler Lauf wird durch einen vorhandenen Pending-Sidecar niemals automatisch
+in diesen Retry-Modus versetzt. Ungültige Zustände werden quarantänisiert und
+blockieren keine neue lokale Sicherung. Die mit
+"--offsite-max-pending" gesetzte Grenze ist ausschließlich eine sichtbare
+Alarmgrenze. Das Skript entfernt niemals automatisch den Pending-Schutz einer nie
+remote bestätigten Generation.
+Der Pending-Zustand wird bereits als Teil der lokalen Veröffentlichung dauerhaft
+vor "SNAPSHOT=" und vor dem ersten Restic-Byte geschrieben. Ein Folgelauf
+rekonstruiert fehlende Pending-Zustände älterer Builds anhand des vollständigen
+Manifests. Fehler beim dauerhaften Flush verhindern jedes Erfolgssignal.
+Regelmäßig führt das Skript eine rotierende Restic-Datenprüfung aus. Mit der
+Vorgabe "--offsite-read-slices 7" liest jeder fällige Check ein anderes Siebtel
+aller Repository-Daten; nach sieben erfolgreichen Prüfungen wurde der gesamte
+Packbestand gelesen. Mit dem Wert 1 läuft "restic check --read-data". Zusätzlich
+werden aus exakt derselben Remote-Snapshot-ID STATUS.txt, MANIFEST.tsv und eine
+manifestierte Datei zurückgelesen. Die Restic-Snapshot-ID steht im Statusprotokoll.
+Fuer Ransomware-Schutz am Remoteziel zusaetzlich S3 Object Lock oder
+einen append-only rest-server einrichten. Der Client allein kann
+Unveraenderbarkeit nicht beweisen.
+
+Offsite-Rückweg bei Verlust des lokalen Sicherungsziels
+--------------------------------------------------------
+
+Der Wiederherstellungszugang ist ein dritter, nur im Notfall freigegebener
+Zugang mit Lese-/List-Rechten. Weder das append-only Uploadkonto der App noch
+das Löschkonto der Wartung in einer normalen Anwendungssitzung verwenden.
+Restic-Passwort, Backend-Zugang und der erwartete TARGET_ID-/Job-ID-Ausdruck
+werden getrennt verwahrt.
+
+Den Job-Tag reproduzierbar aus der exakten Job-ID ableiten:
+
+  node -e 'const c=require("crypto");process.stdout.write("bb-job-"+c.createHash("sha256").update("job="+process.argv[1]+"\n").digest("hex").slice(0,24)+"\n")' \
+    "<EXAKTE-JOB-ID>"
+
+Auf einem isolierten Rechner zuerst ein neues, leeres Staging-Verzeichnis
+erzeugen und das Repository mit der geschützten Provider-Umgebung öffnen:
+
+  restic -r "s3:https://S3-ENDPUNKT/BUCKET/PFAD" \
+    --password-file "/NOTFALL-SECRETS/restic-password" \
+    snapshots --json --tag "bb-job-<24-hex-aus-der-Job-ID>"
+
+Nicht blind "latest" verwenden. Eine vollständige (64-stellige) Restic-
+Snapshot-ID anhand des stabilen Job-Tags und des erwarteten Zeitpunkts
+auswählen. Die folgenden Werte bewusst setzen; der geklammerte Block läuft mit
+`set -euo pipefail` in einer eigenen Shell und ruft `restore` nur auf, wenn das
+Staging wirklich existiert, kein Link und vollständig leer ist. Er fragt die
+exakte ID noch einmal ab, verlangt genau einen Treffer mit genau einem
+gesicherten Quellpfad und leitet daraus den späteren Snapshotpfad ab:
+
+  export RESTIC_REPOSITORY="s3:https://S3-ENDPUNKT/BUCKET/PFAD"
+  export RESTIC_PASSWORD_FILE="/NOTFALL-SECRETS/restic-password"
+  export RESTIC_JOB_TAG="bb-job-<24-hex-aus-der-Job-ID>"
+  export RESTIC_SNAPSHOT_ID="<EXAKTE-64-STELLIGE-RESTIC-SNAPSHOT-ID>"
+  export RESTIC_STAGING="/NEUER/LEERER/PFAD/restic-restore"
+  export RESTIC_BIN="restic"
+
+  # BEGIN OFFSITE-RESTORE-FAIL-CLOSED
+  (
+    set -euo pipefail
+    umask 077
+    : "${RESTIC_REPOSITORY:?RESTIC_REPOSITORY fehlt}"
+    : "${RESTIC_PASSWORD_FILE:?RESTIC_PASSWORD_FILE fehlt}"
+    : "${RESTIC_JOB_TAG:?RESTIC_JOB_TAG fehlt}"
+    : "${RESTIC_SNAPSHOT_ID:?RESTIC_SNAPSHOT_ID fehlt}"
+    : "${RESTIC_STAGING:?RESTIC_STAGING fehlt}"
+    RESTIC_BIN=${RESTIC_BIN:-restic}
+
+    [[ $RESTIC_JOB_TAG =~ ^bb-job-[0-9a-f]{24}$ ]]
+    [[ $RESTIC_SNAPSHOT_ID =~ ^[0-9a-f]{64}$ ]]
+    [[ $RESTIC_STAGING = /* && -d $RESTIC_STAGING && ! -L $RESTIC_STAGING ]]
+    [[ -f $RESTIC_PASSWORD_FILE && ! -L $RESTIC_PASSWORD_FILE ]]
+    shopt -s nullglob dotglob
+    staging_eintraege=("$RESTIC_STAGING"/*)
+    ((${#staging_eintraege[@]} == 0)) || {
+      printf 'Abbruch: Restic-Staging ist nicht leer: %s\n' "$RESTIC_STAGING" >&2
+      exit 65
+    }
+
+    SNAPSHOT_META=$(mktemp "${TMPDIR:-/tmp}/bb-restic-snapshot.XXXXXXXX")
+    trap 'rm -f -- "$SNAPSHOT_META"' EXIT
+    "$RESTIC_BIN" -r "$RESTIC_REPOSITORY" \
+      --password-file "$RESTIC_PASSWORD_FILE" \
+      snapshots --json --tag "$RESTIC_JOB_TAG" "$RESTIC_SNAPSHOT_ID" \
+      > "$SNAPSHOT_META"
+    SNAPSHOT_SOURCE_PATH=$(
+      node - "$SNAPSHOT_META" "$RESTIC_SNAPSHOT_ID" "$RESTIC_JOB_TAG" <<'NODE'
+const fs = require('fs');
+const path = require('path');
+const [metaFile, expectedId, expectedTag] = process.argv.slice(2);
+const rows = JSON.parse(fs.readFileSync(metaFile, 'utf8'));
+if (!Array.isArray(rows) || rows.length !== 1) {
+  throw new Error('Die exakte Snapshotabfrage lieferte nicht genau einen Treffer.');
+}
+const row = rows[0];
+if (!row || row.id !== expectedId || !Array.isArray(row.tags)
+    || !row.tags.includes(expectedTag)) {
+  throw new Error('Restic-ID oder stabiler Job-Tag stimmt nicht exakt überein.');
+}
+if (!Array.isArray(row.paths) || row.paths.length !== 1) {
+  throw new Error('Der Snapshot enthält nicht genau einen gesicherten Quellpfad.');
+}
+const source = row.paths[0];
+if (typeof source !== 'string' || source.length > 4096
+    || !source.startsWith('/') || /[\u0000-\u001f\u007f]/.test(source)
+    || path.posix.normalize(source) !== source) {
+  throw new Error('Der gesicherte Quellpfad ist nicht sicher und eindeutig.');
+}
+if (!/^Gesamtsicherung_\d{8}_\d{6}(?:_[A-Za-z0-9_.-]+)?$/
+      .test(path.posix.basename(source))) {
+  throw new Error('Der Quellpfad ist keine gültige Gesamtsicherung.');
+}
+process.stdout.write(source);
+NODE
+    )
+    SNAPSHOT="$RESTIC_STAGING/${SNAPSHOT_SOURCE_PATH#/}"
+
+    # Unmittelbar vor restore nochmals prüfen: Auch ein zwischenzeitlich
+    # befülltes Staging darf niemals als Ziel verwendet werden.
+    staging_eintraege=("$RESTIC_STAGING"/*)
+    ((${#staging_eintraege[@]} == 0)) || {
+      printf 'Abbruch: Restic-Staging wurde zwischenzeitlich befüllt.\n' >&2
+      exit 65
+    }
+    "$RESTIC_BIN" -r "$RESTIC_REPOSITORY" \
+      --password-file "$RESTIC_PASSWORD_FILE" \
+      restore "$RESTIC_SNAPSHOT_ID" --target "$RESTIC_STAGING"
+    [[ -d $SNAPSHOT && ! -L $SNAPSHOT ]]
+    printf 'SNAPSHOT=%q\n' "$SNAPSHOT"
+  )
+  # END OFFSITE-RESTORE-FAIL-CLOSED
+
+Die ausgegebene Zeile `SNAPSHOT=...` benennt den einen, aus den geprüften
+Restic-Metadaten abgeleiteten Restorepfad; sie kann in die isolierte Prüfshell
+übernommen werden. Dieser Pfad muss mit
+"Gesamtsicherung_JJJJMMTT_HHMMSS_job-..." enden. Vor jeder Aktivierung:
+
+  * STATUS.txt muss exakt VOLLSTAENDIG sein.
+  * MANIFEST.tsv.sha256 muss exakt zum SHA-256 von MANIFEST.tsv passen.
+  * jede in MANIFEST.tsv genannte Datei muss mit Bytezahl und SHA-256 passen;
+    zusätzliche Dateien, Links und Spezialdateien sind unzulässig.
+  * die danach manifestgeprüften Dateien verwaltung/JOB-ID.txt und
+    verwaltung/TARGET-ID.txt müssen exakt zum gewählten Job und Sicherungsziel
+    passen.
+
+Diese Gesamtprüfung nicht durch einzelne grep-Aufrufe ersetzen. Das im
+Snapshot enthaltene `NOTFALL-RETTUNG.sh` führt sie ohne laufende Anwendung aus
+und schreibt nur in einen zweiten, ebenfalls leeren Ausgabeordner:
+
+  "$SNAPSHOT/NOTFALL-RETTUNG.sh" \
+    --snapshot "$SNAPSHOT" \
+    --output "/NEUER/LEERER/PFAD/Rettungsprobe"
+
+Erst nach dessen fehlerfreiem Abschluss folgt entweder die Klartextrettung aus
+diesem Ausgabeordner oder der kontrollierte App-Restore mit
+`GESAMT-RESTORE.sh`: zuerst Dry-run, dann `--apply
+--confirm-app-stopped`. Bei Docker gilt zusätzlich der Laufzeit-Neuaufbau aus
+Abschnitt 6; ein Restic-Restore in ein Staging startet oder überschreibt
+niemals selbst die Anwendung. Mindestens vierteljährlich diesen Rückweg mit
+einer konkreten Remote-Snapshot-ID in einer isolierten Testumgebung proben und
+Restic-ID, Job-ID, TARGET_ID, Prüfergebnis und Laufzeit dokumentieren.
+
+WICHTIG: Niemals eine gewöhnliche altersbasierte Provider-Lifecycle-Regel auf
+Restic-Pack-, Index- oder Snapshotobjekte anwenden. Neuere deduplizierte Snapshots
+können ältere Packs weiter benötigen; eine rohe Objektlöschung kann deshalb das
+Repository beschädigen. Der normale Sicherungslauf führt grundsätzlich weder
+`restic forget` noch `restic prune` aus und kann deshalb mit einem append-only-
+Uploadkonto arbeiten. Sind Generationenzahlen konfiguriert, weist er die
+benötigte Restic-bewusste Aufbewahrung sichtbar als `OFFSITE_RETENTION=EXTERN`
+aus. Ein getrennter, überwachter Wartungslauf führt
+`restic forget --keep-* --prune` mit einem kurzlebigen, besonders geschützten
+Löschkonto und ausschließlich dem stabilen Job-Tag aus. Sein atomarer
+Erfolgsbeleg wird erst nach Repository-Prüfung akzeptiert. Das normale
+Backupkonto erhält diese Löschrechte nie.
+Beide externen Eigenschaften werden in der Anwendung als ausdrückliche
+Admin-Attestierung geführt; die Software behauptet sie nicht aufgrund eines
+normalen Upload-Erfolgs.
+
+Ein aktivierter Dead-Man-Heartbeat benötigt eine außerhalb von Anwendung,
+Dokumentenspeicher und Sicherungsziel liegende Secret-Datei mit exakt Modus 0600.
+Er besitzt eine absolute Deadline. Ein optional fehlgeschlagenes Offsiteziel
+sendet "backup_degraded" statt eines grünen Vollschutz-Signals. Ist nur der
+Heartbeat selbst nicht erreichbar, bleibt der bereits geprüfte Snapshot ein
+Erfolg mit sichtbarer Warnung; es wird nicht nochmals die gesamte Datenmenge
+aufgenommen.
+
+
+6. DOCKER
+---------
+
+Das Image enthaelt Bash sowie die ausdrücklich installierten SQLite-, Restic-,
+TLS-, SSH-/SFTP-, Rclone-, Prozess-, Archiv-, Such- und Coreutils-Werkzeuge für
+Sicherung, Prüfung und Wiederherstellung. Es verlässt sich nicht auf zufällige Werkzeuge des
+schlanken Basisimages. docker-compose verlangt vier explizite,
+bereits vorhandene Hostpfade:
+
+  mkdir -p "/ABSOLUTER/PFAD/ZUM/GETRENNTEN/ZIEL"
+  mkdir -p "/ABSOLUTER/PFAD/ZU/backup-secrets"
+  chmod 700 "/ABSOLUTER/PFAD/ZU/backup-secrets"
+  mkdir -p "/ABSOLUTER/PFAD/ZU/offsite-maintenance-status"
+  chmod 700 "/ABSOLUTER/PFAD/ZU/offsite-maintenance-status"
+  mkdir -p "/ABSOLUTER/PFAD/ZU/offsite-maintenance-delete-secrets"
+  chmod 700 "/ABSOLUTER/PFAD/ZU/offsite-maintenance-delete-secrets"
+  printf '%s\n' 'EIN_LANGES_ZUFAELLIGES_RESTIC_PASSWORT' \
+    > "/ABSOLUTER/PFAD/ZU/backup-secrets/restic-password"
+  chmod 600 "/ABSOLUTER/PFAD/ZU/backup-secrets/restic-password"
+
+  BACKUP_HOST_DIR=/ABSOLUTER/PFAD/ZUM/GETRENNTEN/ZIEL \
+  BACKUP_SECRET_HOST_DIR=/ABSOLUTER/PFAD/ZU/backup-secrets \
+  OFFSITE_MAINTENANCE_STATUS_HOST_DIR=/ABSOLUTER/PFAD/ZU/offsite-maintenance-status \
+  OFFSITE_MAINTENANCE_SECRET_HOST_DIR=/ABSOLUTER/PFAD/ZU/offsite-maintenance-delete-secrets \
+    docker compose up -d
+
+Die vier Hostpfadwerte dauerhaft in der zum Compose-Projekt gehörenden `.env`
+ablegen; alle später verkürzt gezeigten `docker compose`-Befehle setzen diese
+Werte voraus. Geheimnisinhalte gehören weiterhin nur in die geschützten Dateien,
+nicht in `.env`.
+Alle vier Pfade müssen absolut sein und bereits existieren. Compose ist jeweils mit
+"create_host_path: false" konfiguriert und darf bei einem Tippfehler oder einem
+nicht eingehängten Datenträger keinen lokalen Ersatzordner erzeugen. Im Hostordner
+muss außerdem die vollständige Zielmarke über den Adminbereich initialisiert
+worden sein; eine leere Datei genügt ausdrücklich nicht. Der Pfad darf
+nicht auf das Anwendungsdaten-Volume zeigen. Browser-Erweiterungspakete und
+Runtime-Secrets besitzen getrennte Volumes; das Secret-Volume wird absichtlich
+nicht gesichert.
+
+Der zweite Hostpfad erscheint im Container ausschließlich read-only als
+
+  /run/betreuungsbuero-backup-secrets
+
+Im Admin-Zeitplan deshalb als restic-Passwortdatei
+`/run/betreuungsbuero-backup-secrets/restic-password` und als optionales
+Heartbeat-Secret `/run/betreuungsbuero-backup-secrets/heartbeat-secret`
+eintragen. Beide Dateien müssen exakt Modus 0600 besitzen.
+
+Für S3/B2/Azure/Google/Rclone/OpenStack oder einen authentifizierten rest-server
+liegt daneben `restic-backend.env`, ebenfalls Modus 0600. Das Format ist eine
+Zeile `SCHLUESSEL=WERT` ohne Shell-Syntax, zum Beispiel:
+
+  AWS_ACCESS_KEY_ID=...
+  AWS_SECRET_ACCESS_KEY=...
+  AWS_REGION=eu-central-1
+
+In diesem Fall in `.env` zusätzlich setzen:
+
+  TOTAL_BACKUP_RESTIC_ENV_FILE=/run/betreuungsbuero-backup-secrets/restic-backend.env
+
+Ohne diese Einstellung ist die Provider-Datei absichtlich optional; SFTP und
+ein nicht authentifiziertes REST-Backend benötigen keine leere Scheindatei.
+Der Runner öffnet diese Datei ohne Symlink-Folge, prüft Besitzerdatei/Modus und
+akzeptiert ausschließlich die bekannten restic-Provider-Variablen. Die Werte
+werden nur in der Umgebung des Sicherungs-Unterprozesses gesetzt; sie stehen
+weder in der Zeitplan-JSON noch in Argumenten, Protokollen oder Snapshots.
+Unbekannte, doppelte oder fehlerhafte Einträge brechen den Lauf geschlossen ab.
+Die Datei darf niemals im Datenvolume oder Sicherungsziel liegen.
+
+Compose reicht `DOCUMENT_RECOVERY_KEY` ausdrücklich nicht als Umgebungswert
+durch. Der Schlüssel wird nur aus der Admin-verwalteten Datei im getrennten
+Runtime-Secret-Volume gelesen und erscheint damit nicht in `docker inspect`.
+
+Der Wartungsstatus-Hostordner erscheint in der Haupt-App ausschließlich
+read-only unter
+
+  /run/betreuungsbuero-offsite-maintenance-status
+
+Die App erhält weder Wartungspasswort noch Provider-Credentials mit
+List-/Delete-Rechten. Sie prüft nur den atomaren Beleg gegen Repository-
+Fingerabdruck, Job-ID, stabilen Job-Tag, aktuelle Aufbewahrungsregel,
+`forget --prune`- und `restic check`-Ergebnis sowie das Höchstalter (Vorgabe
+192 Stunden). Ein fehlender, veralteter oder abweichender Beleg wird im
+Backup-Health sichtbar.
+Dieser Beleg ist inhaltlich gebunden, aber nicht kryptografisch signiert. Der
+Status-Hostordner ist deshalb eine ausdrückliche Vertrauensgrenze: Nur der
+getrennte Wartungsprozess und die Hostadministration dürfen dort schreiben,
+die Haupt-App sieht ihn ausschließlich read-only. Wer auf dem Host mit
+Root-Rechten den Statusordner verändern kann, kann auch einen Beleg fälschen.
+Der Writer akzeptiert den Statusordner auf POSIX-Systemen nur mit exakt Modus
+0700; 0777, Gruppen- oder Fremdschreibrechte brechen den Wartungslauf ab.
+
+Für Docker ist die Wartung als bewusstes Profil/One-shot vorhanden. Einen
+vierten, ausschließlich hierfür verwendeten Hostordner verwenden; seine
+Credentials dürfen nicht dieselben eingeschränkten Upload-Credentials der App
+sein und werden niemals in den Hauptservice gemountet:
+
+  printf '%s\n' 'WARTUNGS-RESTIC-PASSWORT' \
+    > "/ABSOLUTER/PFAD/ZU/offsite-maintenance-delete-secrets/restic-password"
+  chmod 600 "/ABSOLUTER/PFAD/ZU/offsite-maintenance-delete-secrets/restic-password"
+  # Nur wenn das Backend Provider-Variablen braucht, Modus 0600:
+  chmod 600 "/ABSOLUTER/PFAD/ZU/offsite-maintenance-delete-secrets/restic-backend.env"
+
+Dann den One-shot in einem getrennten, überwachten Wartungsfenster ausführen.
+Repository, Job-ID, Tag und Generationenzahlen müssen exakt dem App-Zeitplan
+entsprechen:
+
+  BACKUP_HOST_DIR=/ABSOLUTER/PFAD/ZUM/GETRENNTEN/ZIEL \
+  BACKUP_SECRET_HOST_DIR=/ABSOLUTER/PFAD/ZU/backup-secrets \
+  OFFSITE_MAINTENANCE_STATUS_HOST_DIR=/ABSOLUTER/PFAD/ZU/offsite-maintenance-status \
+  OFFSITE_MAINTENANCE_SECRET_HOST_DIR=/ABSOLUTER/PFAD/ZU/offsite-maintenance-delete-secrets \
+  OFFSITE_MAINTENANCE_CREDENTIAL_ENV_FILE=/run/betreuungsbuero-offsite-maintenance-secrets/restic-backend.env \
+  OFFSITE_MAINTENANCE_REPOSITORY="s3:https://S3-ENDPUNKT/BUCKET/PFAD" \
+  OFFSITE_MAINTENANCE_JOB_ID="<exakte-ID-des-App-Zeitplans>" \
+  OFFSITE_MAINTENANCE_TAG="betreuungsbuero" \
+  OFFSITE_MAINTENANCE_KEEP_DAILY=14 \
+  OFFSITE_MAINTENANCE_KEEP_MONTHLY=12 \
+  OFFSITE_MAINTENANCE_KEEP_YEARLY=10 \
+    docker compose --profile offsite-maintenance run --rm --no-deps \
+      offsite-maintenance
+
+Für SFTP oder ein nicht authentifiziertes REST-Backend
+`OFFSITE_MAINTENANCE_CREDENTIAL_ENV_FILE` leer lassen; Passwortdatei,
+Statuspfad und das getrennte Secret-Mount bleiben trotzdem Pflicht.
+
+Für die Automatik dieselbe Rechte- und Pfadtrennung über die mitgelieferten
+launchd-/cron-Beispiele einrichten. Für einen Docker-Betrieb sind das
+
+  server/tools/scheduler/crontab.offsite-maintenance.docker.example
+  server/tools/scheduler/de.betreuungsbuero.offsite-maintenance.docker.plist.example
+
+Die Beispiele ohne `.docker` rufen das Werkzeug dagegen direkt auf dem Host
+auf. Genau eine Variante wählen und niemals Host- und Docker-Wartungsplan
+parallel aktivieren. Der normale App-Zeitplan bleibt der einzige Erzeuger lokaler und
+append-only hochgeladener Generationen; der getrennte Wartungsprozess ist der
+einzige Prozess mit Löschrechten.
+
+Das Zustandsvolume ist am Elternpfad `/app/state` eingehängt. Die eigentliche
+Datenwurzel `/app/state/data` ist bewusst nur ein Unterordner: Ein Volume-
+Mountpoint selbst kann nicht atomar umbenannt werden, der Unterordner dagegen
+schon. Der kontrollierte Restore läuft deshalb in einem kurzlebigen
+Hilfscontainer desselben Compose-Projekts. Zuerst die App stoppen und einen
+reinen Prüflauf ausführen (Snapshotnamen einsetzen):
+
+  docker compose stop betreuungsbuero
+  BACKUP_HOST_DIR=/ABSOLUTER/PFAD/ZUM/GETRENNTEN/ZIEL \
+  BACKUP_SECRET_HOST_DIR=/ABSOLUTER/PFAD/ZU/backup-secrets \
+  OFFSITE_MAINTENANCE_STATUS_HOST_DIR=/ABSOLUTER/PFAD/ZU/offsite-maintenance-status \
+  OFFSITE_MAINTENANCE_SECRET_HOST_DIR=/ABSOLUTER/PFAD/ZU/offsite-maintenance-delete-secrets \
+    docker compose run --rm --no-deps --entrypoint /bin/bash \
+      betreuungsbuero -lc '
+        SNAPSHOT=/app/backups/Gesamtsicherung_JJJJMMTT_HHMMSS_JOB
+        "$SNAPSHOT/GESAMT-RESTORE.sh" \
+          --snapshot "$SNAPSHOT" \
+          --server-dir /app/server \
+          --data-dir /app/state/data \
+          --db /app/state/database/betreuungsbuero.sqlite3
+      '
+
+Erst wenn dieser Dry-run vollständig erfolgreich ist, denselben Befehl mit
+`--apply --confirm-app-stopped` wiederholen. Dieser Compose-Helfer stellt
+absichtlich nur das persistente Zustandsvolume `/app/state/data` wieder her.
+Er schreibt keine Laufzeitdateien nach `/app/server`: Dieser Pfad gehört zum
+Image und wäre nach `docker compose run --rm` wieder verschwunden.
+
+Browser-Erweiterungspakete und die ausgelieferte HTML-App haben deshalb einen
+eigenen, manifestgeprüften One-shot. Er sieht das Sicherungsziel nur lesbar,
+das Erweiterungsvolume und den outputs/-Hostordner dagegen schreibbar. Zuerst
+Dry-run (der Hostordner `../outputs` muss bereits als regulärer Ordner
+existieren):
+
+  BACKUP_HOST_DIR=/ABSOLUTER/PFAD/ZUM/GETRENNTEN/ZIEL \
+  BACKUP_SECRET_HOST_DIR=/ABSOLUTER/PFAD/ZU/backup-secrets \
+  OFFSITE_MAINTENANCE_STATUS_HOST_DIR=/ABSOLUTER/PFAD/ZU/offsite-maintenance-status \
+  OFFSITE_MAINTENANCE_SECRET_HOST_DIR=/ABSOLUTER/PFAD/ZU/offsite-maintenance-delete-secrets \
+    docker compose --profile restore run --rm --no-deps \
+      runtime-artifacts-restore \
+        --snapshot /restore/backups/Gesamtsicherung_JJJJMMTT_HHMMSS_JOB \
+        --extension-dir /restore/extension-artifacts \
+        --outputs-dir /restore/outputs \
+        --state-dir /restore/state
+
+Nach erfolgreichem Dry-run denselben Aufruf um
+`--apply --confirm-app-stopped` ergänzen. Vor dem ersten Zieltausch wird jeder
+Altbestand bytegenau im persistenten Restore-State gesichert. Bleibt nach
+Abbruch ein ACTIVE.json-Marker zurück, sperrt er den App-Start. Dann denselben
+Aufruf ausdrücklich mit `--apply --confirm-app-stopped --resume` fortsetzen
+oder mit `--apply --confirm-app-stopped --rollback` nur den gesicherten
+Altstand wiederherstellen. Einen Marker niemals von Hand löschen.
+
+Danach den Dienst erzeugen beziehungsweise starten. `start` genügt auf einem
+frischen Rechner nicht, weil noch kein persistenter App-Container existiert:
+
+  docker compose up -d --no-build --no-deps betreuungsbuero
+
+Das getrennte Volume an `/app/server/_restore-rollback` bewahrt Journal und
+Zielverweise über den Hilfscontainer hinaus. Alte Generation, fehlgeschlagener
+Neustand und Recovery-Quarantäne bleiben bis zur bewussten Admin-Freigabe
+erhalten. Enthält ein Sonderbetrieb eigenständige externe Dokumentwurzeln,
+muss auch deren Elternvolume in den Hilfscontainer eingebunden und
+`--external-root-base` auf einen Nicht-Mountpoint-Unterordner gesetzt werden.
+
+Bei Totalverlust zuerst die Laufzeit reproduzierbar aus demselben Snapshot neu
+aufbauen: `betrieb/server-quellcode.tar.gz` in einen sauberen `server/`-Ordner
+entpacken, die manifestierten Dateien aus `betrieb/konfiguration/` dorthin
+kopieren und `betrieb/server-ressourcen/templates/` als `server/assets/templates/`
+einsetzen. Vorrang hat das im Betriebsinventar genannte unveränderliche
+`APP_IMAGE` mit Registry-Digest; es wird mit `docker pull` geholt und nicht neu
+interpretiert. Fehlt ein solches Image, muss das Image aus dem manifestierten
+Quellstand neu gebaut und anschließend unter einem Digest festgehalten werden.
+Ein bloß später erneut ausgeführtes `apt-get` beweist trotz festem Basisimage
+keine bitgleiche Paketfassung.
+
+Die manifestierte HTML-App und die hochgeladenen Browser-Erweiterungspakete
+werden nicht manuell kopiert, sondern ausschließlich mit dem oben beschriebenen
+Profilservice `runtime-artifacts-restore` in den Hostordner beziehungsweise das
+Volume übertragen. Erst mit dieser wiederaufgebauten, versionsgleichen Laufzeit
+den Daten-Restore ausführen. `.env`, `ENCRYPTION_KEY`, `SESSION_SECRET` und der
+extern verwahrte `DOCUMENT_RECOVERY_KEY` stammen bewusst nicht aus dem Snapshot
+und müssen aus der getrennten Geheimnisverwahrung bereitgestellt werden. Die
+in `betrieb/BETRIEBSINVENTAR.txt` aufgeführten nichtgeheimen Laufzeitwerte sind
+in die explizite Positivliste der neuen `.env` zu übernehmen; Compose reicht
+keine `.env` pauschal in den Container durch. Ein flüchtiger Hilfscontainer ist
+niemals die dauerhafte Wiederherstellungsquelle für Programmcode oder
+Konfiguration.
+
+
+7. REGELMAESSIGE WIEDERHERSTELLUNGSPROBE
+----------------------------------------
+
+Mindestens vierteljaehrlich einen aktuellen Snapshot in eine isolierte Testumgebung
+kopieren und dort ausfuehren:
+
+  cd "/PFAD/ZUR/Gesamtsicherung_..."
+  ./NOTFALL-RETTUNG.sh \
+    --snapshot "$PWD" \
+    --output "/PFAD/ZU/EINEM/NEUEN/ORDNER/Rettung"
+
+Produktivserver, Live-Datenbank und laufende Anwendungsprozesse werden bei dieser
+Probe nicht verwendet. Details stehen in NOTFALL-WIEDERHERSTELLUNG.txt.

@@ -1,0 +1,528 @@
+{
+  "_hinweis": "Dokumenteninformationen-Kuratierung vom 22.08.2026 (zweite Runde). Muster sind die fünf handkuratierten Dokumente des Nutzers: interne Vorlagen erhalten '--'/'--'/Betreuungsbüro, amtliche Vorlagen den recherchierten Urheber, Stand und die zuständige Stelle. Ein leerer Stand ('') erscheint im Dialog als 'nicht ausgewiesen'. Stand 23.08.2026 gemeinsam mit dem Nutzer durchgegangen; Dateinamen ohne Klammerzusatz. Nur die genannten Felder werden geändert; angewendet von dokumentinfo-patch.js auf die V159-Katalogzeile.",
+  "annual_noassets": {
+    "templateDate": "01.03.2023",
+    "author": "Justiz Rheinland-Pfalz",
+    "authority": "Betreuungsgericht",
+    "sourceUrl": "https://www.die-mainzer-betreuungsvereine.de/wp-content/uploads/go-x/u/f8b317c2-fda8-4703-a305-b87c9c246667/2023-03-01-Jahresbericht-Neu-ohne-Vermoegenssorge.pdf",
+    "sourceLabel": "Veröffentlichte Fassung des Mainzer Vordrucks"
+  },
+  "annual_assets": {
+    "templateDate": "01.03.2023",
+    "author": "Justiz Rheinland-Pfalz",
+    "authority": "Betreuungsgericht",
+    "sourceUrl": "https://www.die-mainzer-betreuungsvereine.de/wp-content/uploads/go-x/u/a8e16d07-992a-450b-bbf9-dec43e643863/2023-03-01-Jahresbericht-Neu-mit-Vermoegenssorge.pdf",
+    "sourceLabel": "Veröffentlichte Fassung des Mainzer Vordrucks"
+  },
+  "closing": {
+    "templateDate": "13.04.2024",
+    "author": "Justiz Rheinland-Pfalz",
+    "authority": "Betreuungsgericht",
+    "sourceUrl": "https://justiz.rlp.de/betreuung-und-vorsorgevollmacht",
+    "sourceLabel": "Informationsseite Betreuung der Justiz Rheinland-Pfalz"
+  },
+  "self_management": {
+    "template": "251126 Selbstverwaltungserklärung.pdf",
+    "templateDate": "04/2023",
+    "author": "Justiz Mecklenburg-Vorpommern (landeseinheitlicher Vordruck F 4449)",
+    "authority": "Betreuungsgericht",
+    "sourceUrl": "https://www.mv-justiz.de/static/MVJ/Zentrale%20Formulare/Amtsgerichte/Betreuung/Landeseinheitliche%20Formulare/F_4449%20Selbstverwaltungserkla%CC%88rung%20gem.%20%C2%A7%201865%20BGB_ausfu%CC%88llbar.pdf",
+    "sourceLabel": "F 4449 – Selbstverwaltungserklärung gem. § 1865 BGB"
+  },
+  "remuneration": {
+    "template": "--",
+    "templateDate": "--",
+    "author": "Betreuungsbüro",
+    "authority": "Betreuungsgericht",
+    "pages": "dynamisch"
+  },
+  "remuneration_pdf": {
+    "template": "--",
+    "templateDate": "--",
+    "author": "Betreuungsbüro",
+    "authority": "Betreuungsgericht"
+  },
+  "asset_inventory": {
+    "templateDate": "13.04.2024",
+    "author": "Justiz Rheinland-Pfalz",
+    "authority": "Betreuungsgericht",
+    "sourceUrl": "https://justiz.rlp.de/betreuung-und-vorsorgevollmacht",
+    "sourceLabel": "Informationsseite Betreuung der Justiz Rheinland-Pfalz"
+  },
+  "letter_file_handover": {
+    "template": "--",
+    "templateDate": "--",
+    "author": "Betreuungsbüro",
+    "authority": "Empfänger laut Anschreiben"
+  },
+  "letter_care_end": {
+    "template": "--",
+    "templateDate": "--",
+    "author": "Betreuungsbüro",
+    "authority": "Empfänger laut Anschreiben"
+  },
+  "letter_death_notice": {
+    "template": "--",
+    "templateDate": "--",
+    "author": "Betreuungsbüro",
+    "authority": "Empfänger laut Anschreiben"
+  },
+  "discharge": {
+    "template": "26104 Entlastungserklärung.pdf",
+    "templateDate": "",
+    "author": "Justiz Mecklenburg-Vorpommern (landeseinheitlicher Vordruck F 292)",
+    "authority": "Betreuungsgericht",
+    "sourceUrl": "https://www.mv-justiz.de/static/MVJ/Zentrale%20Formulare/Amtsgerichte/Betreuung/Landeseinheitliche%20Formulare/F%20292%20Entlastungserkl%C3%A4rung.pdf",
+    "sourceLabel": "F 292 – Verzichts- und Entlastungserklärung (Betreuung)"
+  },
+  "funeral_directive": {
+    "templateDate": "17.03.2026",
+    "author": "Ministerium für Wissenschaft und Gesundheit Rheinland-Pfalz",
+    "authority": "persönliche Verfügung",
+    "sourceUrl": "https://mwwg.rlp.de/fileadmin/15/Abteilung_2_Gesundheit/Bestattungsgesetz/Muster_Totenfuersorgeverfuegung_17.03.2026.pdf",
+    "sourceLabel": "Muster-Totenfürsorgeverfügung des Landes Rheinland-Pfalz"
+  },
+  "power_of_attorney": {
+    "templateDate": "Januar 2023",
+    "author": "Bundesministerium der Justiz",
+    "authority": "persönliche Verfügung",
+    "sourceUrl": "https://www.bmj.de/DE/Service/Formulare/Formulare_node.html",
+    "sourceLabel": "Formularseite des Bundesministeriums der Justiz"
+  },
+  "care_register_application": {
+    "template": "Eintragungsantrag Vorsorgevollmacht.pdf",
+    "templateDate": "01.02.2024",
+    "author": "Bundesnotarkammer – Zentrales Vorsorgeregister",
+    "authority": "Bundesnotarkammer (Zentrales Vorsorgeregister)",
+    "sourceUrl": "https://www.vorsorgeregister.de/fileadmin/user_upload_zvr/Dokumente/Datenformulare_ZVR/Formular_P.pdf",
+    "sourceLabel": "ZVR-Formular P (Datenformular für Privatpersonen)"
+  },
+  "care_directive": {
+    "templateDate": "Januar 2023",
+    "author": "Bundesministerium der Justiz",
+    "authority": "persönliche Verfügung",
+    "sourceUrl": "https://www.bmj.de/DE/Service/Formulare/Formulare_node.html",
+    "sourceLabel": "Formularseite des Bundesministeriums der Justiz"
+  },
+  "advance_directive": {
+    "template": "Patientenverfügung.pdf",
+    "templateDate": "Januar 2023",
+    "author": "Bundesministerium der Justiz",
+    "authority": "persönliche Verfügung",
+    "sourceUrl": "https://www.bmj.de/DE/Service/Formulare/Formulare_node.html",
+    "sourceLabel": "Formularseite des Bundesministeriums der Justiz"
+  },
+  "rent_certificate": {
+    "template": "--",
+    "templateDate": "--",
+    "author": "Betreuungsbüro",
+    "authority": "Empfänger laut Anschreiben"
+  },
+  "rent_offer_certificate": {
+    "template": "--",
+    "templateDate": "--",
+    "author": "Betreuungsbüro",
+    "authority": "Empfänger laut Anschreiben"
+  },
+  "housing_benefit_application": {
+    "template": "Wohngeldantrag.pdf",
+    "templateDate": "",
+    "author": "Land Rheinland-Pfalz (landeseinheitlicher Vordruck)",
+    "authority": "Wohngeldbehörde",
+    "sourceUrl": "https://fm.rlp.de/fileadmin/04/Service/Vordrucke/Antrag_auf_Mietzuschuss.pdf",
+    "sourceLabel": "Antrag auf Mietzuschuss (MZ), Land Rheinland-Pfalz"
+  },
+  "housing_entitlement_application": {
+    "template": "Wohnberechtigungsschein.pdf",
+    "templateDate": "",
+    "author": "Land Rheinland-Pfalz (landeseinheitlicher Vordruck)",
+    "authority": "Stelle für Wohnberechtigungsscheine",
+    "sourceUrl": "https://mkbwk.rlp.de/service/vordrucke",
+    "sourceLabel": "Anlage 3.1 zum Rundschreiben vom 17.04.2025 (Wohnberechtigungsschein RLP)"
+  },
+  "rent_certificate_jc": {
+    "template": "Mietbescheinigung JC.pdf",
+    "templateDate": "",
+    "author": "Jobcenter (regionaler Vordruck)",
+    "authority": "Jobcenter",
+    "sourceUrl": "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/buergergeld",
+    "sourceLabel": "Informationsseite Bürgergeld der Bundesagentur für Arbeit"
+  },
+  "disability_change_application": {
+    "template": "Änderungsantrag Schwerbehinderung.pdf",
+    "templateDate": "",
+    "author": "Landesamt für Soziales, Jugend und Versorgung Rheinland-Pfalz",
+    "authority": "Versorgungsamt",
+    "sourceUrl": "https://lsjv.rlp.de/fileadmin/lsjv/Themen/Inklusion/Feststellung_Behinderung/Schwb_Aenderungsantrag.pdf",
+    "sourceLabel": "Änderungsantrag nach § 152 SGB IX (LSJV Rheinland-Pfalz)"
+  },
+  "disability_initial_application": {
+    "template": "Erstantrag Schwerbehinderung.pdf",
+    "templateDate": "",
+    "author": "Landesamt für Soziales, Jugend und Versorgung Rheinland-Pfalz",
+    "authority": "Versorgungsamt",
+    "sourceUrl": "https://lsjv.rlp.de/fileadmin/lsjv/Themen/Inklusion/Feststellung_Behinderung/Schwb_Erstantrag.pdf",
+    "sourceLabel": "Erstantrag auf Feststellung einer Behinderung (LSJV Rheinland-Pfalz)"
+  },
+  "pension_application": {
+    "template": "Rentenantrag DRV.pdf",
+    "templateDate": "eingebundene Fassung 02/2025",
+    "author": "Deutsche Rentenversicherung",
+    "authority": "Deutsche Rentenversicherung",
+    "sourceUrl": "https://www.deutsche-rentenversicherung.de/SharedDocs/Formulare/DE/_pdf/R0100.html",
+    "sourceLabel": "R0100 – Antrag auf Versichertenrente"
+  },
+  "drv_confidentiality_release": {
+    "template": "Schweigepflichtentbindung DRV.pdf",
+    "templateDate": "",
+    "author": "Deutsche Rentenversicherung",
+    "authority": "Deutsche Rentenversicherung",
+    "sourceUrl": "https://www.deutsche-rentenversicherung.de/SharedDocs/Formulare/DE/_pdf/R0210.pdf",
+    "sourceLabel": "R0210 – Anlage zum Rentenantrag (Erwerbsminderung)"
+  },
+  "sgb12_continuation_application": {
+    "templateDate": "",
+    "author": "örtlicher Träger der Sozialhilfe (regionaler Vordruck)",
+    "authority": "Träger der Sozialhilfe"
+  },
+  "sgb12_initial_application": {
+    "template": "Hauptantrag Grundsicherung SGB XII.pdf",
+    "templateDate": "",
+    "author": "örtlicher Träger der Sozialhilfe (regionaler Vordruck)",
+    "authority": "Träger der Sozialhilfe"
+  },
+  "letter_sgb12_informal": {
+    "template": "--",
+    "templateDate": "--",
+    "author": "Betreuungsbüro",
+    "authority": "Träger der Sozialhilfe"
+  },
+  "sgb12_social_assistance_application": {
+    "templateDate": "",
+    "author": "örtlicher Träger der Sozialhilfe (regionaler Vordruck)",
+    "authority": "Träger der Sozialhilfe"
+  },
+  "sgb12_asset_declaration": {
+    "templateDate": "",
+    "author": "örtlicher Träger der Sozialhilfe (regionaler Vordruck)",
+    "authority": "Träger der Sozialhilfe"
+  },
+  "sgb12_social_assistance_short": {
+    "templateDate": "",
+    "author": "örtlicher Träger der Sozialhilfe (regionaler Vordruck)",
+    "authority": "Träger der Sozialhilfe"
+  },
+  "sgb9_confidentiality_release": {
+    "templateDate": "",
+    "author": "Träger der Eingliederungshilfe (regionaler Vordruck)",
+    "authority": "Träger der Eingliederungshilfe"
+  },
+  "sgb9_initial_application": {
+    "template": "Hauptantrag Eingliederungshilfe.pdf",
+    "templateDate": "",
+    "author": "Träger der Eingliederungshilfe (regionaler Vordruck)",
+    "authority": "Träger der Eingliederungshilfe"
+  },
+  "letter_sgb9_informal": {
+    "template": "--",
+    "templateDate": "--",
+    "author": "Betreuungsbüro",
+    "authority": "Träger der Eingliederungshilfe"
+  },
+  "sgb2_annex_uf": {
+    "template": "SGB II Anlage UF.pdf",
+    "templateDate": "04/2026",
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter",
+    "sourceUrl": "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/buergergeld",
+    "sourceLabel": "Formularseite Bürgergeld der Bundesagentur für Arbeit"
+  },
+  "sgb2_withdrawal": {
+    "template": "SGB II Antragsrücknahme.pdf",
+    "templateDate": "07/2026",
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter",
+    "sourceUrl": "https://www.arbeitsagentur.de/datei/erklaerung-der-antragsruecknahme_ba053139.pdf",
+    "sourceLabel": "Erklärung der Antragsrücknahme (BA 053139)"
+  },
+  "sgb2_annex_vm": {
+    "template": "SGB II Anlage VM.pdf",
+    "templateDate": "04/2026",
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter",
+    "sourceUrl": "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/buergergeld",
+    "sourceLabel": "Formularseite Bürgergeld der Bundesagentur für Arbeit"
+  },
+  "sgb2_income_certificate": {
+    "template": "SGB II Anlage Einkommensbescheinigung.pdf",
+    "templateDate": "04/2026",
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter",
+    "sourceUrl": "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/buergergeld",
+    "sourceLabel": "Formularseite Bürgergeld der Bundesagentur für Arbeit"
+  },
+  "sgb2_annex_ek": {
+    "template": "SGB II Anlage EK.pdf",
+    "templateDate": "04/2026",
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter",
+    "sourceUrl": "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/buergergeld",
+    "sourceLabel": "Formularseite Bürgergeld der Bundesagentur für Arbeit"
+  },
+  "sgb2_annex_se": {
+    "template": "SGB II Anlage SE.pdf",
+    "templateDate": "04/2026",
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter",
+    "sourceUrl": "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/buergergeld",
+    "sourceLabel": "Formularseite Bürgergeld der Bundesagentur für Arbeit"
+  },
+  "sgb2_annex_sv": {
+    "template": "SGB II Anlage SV.pdf",
+    "templateDate": "04/2026",
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter",
+    "sourceUrl": "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/buergergeld",
+    "sourceLabel": "Formularseite Bürgergeld der Bundesagentur für Arbeit"
+  },
+  "letter_sgb2_informal": {
+    "template": "--",
+    "templateDate": "--",
+    "author": "Betreuungsbüro",
+    "authority": "Jobcenter"
+  },
+  "sgb2_employment_certificate": {
+    "template": "SGB II Arbeitsbescheinigung.pdf",
+    "templateDate": "04/2026",
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter",
+    "sourceUrl": "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/buergergeld",
+    "sourceLabel": "Formularseite Bürgergeld der Bundesagentur für Arbeit"
+  },
+  "sgb2_annex_uh2": {
+    "template": "SGB II Anlage UH2.pdf",
+    "templateDate": "04/2026",
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter",
+    "sourceUrl": "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/buergergeld",
+    "sourceLabel": "Formularseite Bürgergeld der Bundesagentur für Arbeit"
+  },
+  "sgb2_annex_ki": {
+    "template": "SGB II Anlage KI.pdf",
+    "templateDate": "04/2026",
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter",
+    "sourceUrl": "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/buergergeld",
+    "sourceLabel": "Formularseite Bürgergeld der Bundesagentur für Arbeit"
+  },
+  "sgb2_annex_uh3": {
+    "template": "SGB II Anlage UH3.pdf",
+    "templateDate": "04/2026",
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter",
+    "sourceUrl": "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/buergergeld",
+    "sourceLabel": "Formularseite Bürgergeld der Bundesagentur für Arbeit"
+  },
+  "sgb2_annex_uh1": {
+    "template": "SGB II Anlage UH1.pdf",
+    "templateDate": "04/2026",
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter",
+    "sourceUrl": "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/buergergeld",
+    "sourceLabel": "Formularseite Bürgergeld der Bundesagentur für Arbeit"
+  },
+  "citizen_benefit_continuation": {
+    "template": "SGB II Weiterbewilligungsantrag.pdf",
+    "templateDate": "04/2026",
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter",
+    "sourceUrl": "https://www.arbeitsagentur.de/datei/weiterbewilligungsantrag-sgb2_ba042699.pdf",
+    "sourceLabel": "Offizieller Weiterbewilligungsantrag Bürgergeld"
+  },
+  "sgb2_annex_hg": {
+    "template": "SGB II Anlage HG.pdf",
+    "templateDate": "04/2026",
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter",
+    "sourceUrl": "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/buergergeld",
+    "sourceLabel": "Formularseite Bürgergeld der Bundesagentur für Arbeit"
+  },
+  "sgb2_annex_wep": {
+    "template": "SGB II Anlage WEP.pdf",
+    "templateDate": "04/2026",
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter",
+    "sourceUrl": "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/buergergeld",
+    "sourceLabel": "Formularseite Bürgergeld der Bundesagentur für Arbeit"
+  },
+  "citizen_benefit_initial": {
+    "template": "SGB II Hauptantrag.pdf",
+    "templateDate": "04/2026",
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter",
+    "sourceUrl": "https://www.arbeitsagentur.de/datei/antrag-sgb2_ba042689.pdf",
+    "sourceLabel": "Offizieller Hauptantrag Bürgergeld"
+  },
+  "sgb2_annex_meb": {
+    "template": "SGB II Anlage MEB.pdf",
+    "templateDate": "04/2026",
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter",
+    "sourceUrl": "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/buergergeld",
+    "sourceLabel": "Formularseite Bürgergeld der Bundesagentur für Arbeit"
+  },
+  "sgb2_annex_kdu": {
+    "template": "SGB II Anlage KDU.pdf",
+    "templateDate": "04/2026",
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter",
+    "sourceUrl": "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/buergergeld",
+    "sourceLabel": "Formularseite Bürgergeld der Bundesagentur für Arbeit"
+  },
+  "sgb2_annex_bb": {
+    "template": "SGB II Anlage BB.pdf",
+    "templateDate": "04/2026",
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter",
+    "sourceUrl": "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/buergergeld",
+    "sourceLabel": "Formularseite Bürgergeld der Bundesagentur für Arbeit"
+  },
+  "sgb2_annex_ve": {
+    "template": "SGB II Anlage VE.pdf",
+    "templateDate": "04/2026",
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter",
+    "sourceUrl": "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/buergergeld",
+    "sourceLabel": "Formularseite Bürgergeld der Bundesagentur für Arbeit"
+  },
+  "sgb2_annex_eks": {
+    "template": "SGB II Anlage EKS.pdf",
+    "templateDate": "04/2026",
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter",
+    "sourceUrl": "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/buergergeld",
+    "sourceLabel": "Formularseite Bürgergeld der Bundesagentur für Arbeit"
+  },
+  "alg1_health_questionnaire": {
+    "template": "Gesundheitsfragebogen ALG 1.pdf",
+    "templateDate": "",
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Agentur für Arbeit",
+    "sourceUrl": "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/dokumente-aerztlicher-dienst",
+    "sourceLabel": "Dokumente des Ärztlichen Dienstes (nur nach Freischaltung)"
+  },
+  "alg1_initial_application": {
+    "template": "Hauptantrag ALG 1.pdf",
+    "templateDate": "",
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Agentur für Arbeit",
+    "sourceUrl": "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/downloads-arbeitslos-arbeit-finden",
+    "sourceLabel": "Arbeitslosengeld beantragen (eService der Bundesagentur)"
+  },
+  "letter_alg1_employment_certificate": {
+    "template": "--",
+    "templateDate": "--",
+    "author": "Betreuungsbüro",
+    "authority": "Empfänger laut Anschreiben"
+  },
+  "child_benefit_child_annex": {
+    "template": "Anlage Kind.pdf",
+    "templateDate": "09/2025",
+    "pages": "4 Seite(n)",
+    "author": "Familienkasse der Bundesagentur für Arbeit",
+    "authority": "Familienkasse",
+    "sourceUrl": "https://www.arbeitsagentur.de/datei/kg1-anlagekind_ba033765.pdf",
+    "sourceLabel": "KG 1 – Anlage Kind (offizieller Vordruck)"
+  },
+  "child_benefit_diversion": {
+    "template": "Abzweigungsantrag.pdf",
+    "templateDate": "07/2022",
+    "author": "Familienkasse der Bundesagentur für Arbeit",
+    "authority": "Familienkasse",
+    "sourceUrl": "https://www.arbeitsagentur.de/datei/antraganteiligeskindergeld_ba031880.pdf",
+    "sourceLabel": "KG 11e – Abzweigungsantrag (offizieller Vordruck)"
+  },
+  "maintenance_advance_application": {
+    "template": "Unterhaltsvorschussantrag.pdf",
+    "templateDate": "01/2023",
+    "author": "Ministerium für Familie, Frauen, Kultur und Integration Rheinland-Pfalz (landeseinheitlicher Vordruck)",
+    "authority": "Unterhaltsvorschusskasse",
+    "sourceUrl": "https://mffki.rlp.de/fileadmin/07/Dokumente/Themen/Familie/Gute_Zukunft_fuer_alle_Kinder_und_Eltern/2023_01_Antrag_UhVorschG_ausfuellbar.pdf",
+    "sourceLabel": "Landeseinheitlicher UVG-Antrag Rheinland-Pfalz"
+  },
+  "child_benefit_application": {
+    "template": "Kindergeldantrag.pdf",
+    "templateDate": "09/2025",
+    "pages": "2 Seite(n)",
+    "author": "Familienkasse der Bundesagentur für Arbeit",
+    "authority": "Familienkasse",
+    "sourceUrl": "https://www.arbeitsagentur.de/datei/kg1-antrag-kindergeld_ba036550.pdf",
+    "sourceLabel": "KG 1 – Antrag auf Kindergeld (offizieller Vordruck)"
+  },
+  "naturalization_application": {
+    "template": "Einbürgerungsantrag.pdf",
+    "templateDate": "",
+    "author": "Einbürgerungsbehörde (regionaler Vordruck)",
+    "authority": "Einbürgerungsbehörde"
+  },
+  "letter_information_notice": {
+    "template": "--",
+    "templateDate": "--",
+    "author": "Betreuungsbüro",
+    "authority": "Empfänger laut Anschreiben"
+  },
+  "letter_benefit_notice": {
+    "template": "--",
+    "templateDate": "--",
+    "author": "Betreuungsbüro",
+    "authority": "Empfänger laut Anschreiben"
+  },
+  "broadcast_registration": {
+    "template": "Wohnungsneuanmeldung.pdf",
+    "templateDate": "",
+    "author": "ARD ZDF Deutschlandradio Beitragsservice",
+    "authority": "ARD ZDF Deutschlandradio Beitragsservice",
+    "sourceUrl": "https://www.rundfunkbeitrag.de/formulare",
+    "sourceLabel": "Formularseite des Beitragsservice"
+  },
+  "broadcast_change_notice": {
+    "template": "Änderungsmitteilung.pdf",
+    "templateDate": "",
+    "author": "ARD ZDF Deutschlandradio Beitragsservice",
+    "authority": "ARD ZDF Deutschlandradio Beitragsservice",
+    "sourceUrl": "https://www.rundfunkbeitrag.de/formulare",
+    "sourceLabel": "Formularseite des Beitragsservice"
+  },
+  "broadcast_exemption_application": {
+    "template": "Befreiungsantrag.pdf",
+    "templateDate": "",
+    "author": "ARD ZDF Deutschlandradio Beitragsservice",
+    "authority": "ARD ZDF Deutschlandradio Beitragsservice",
+    "sourceUrl": "https://www.rundfunkbeitrag.de/buergerinnen-und-buerger/formulare/befreiung-oder-ermaessigung-beantragen",
+    "sourceLabel": "Befreiung oder Ermäßigung beantragen (Beitragsservice)"
+  },
+  "letter_gkv_claims": {
+    "template": "--",
+    "templateDate": "--",
+    "author": "Betreuungsbüro",
+    "authority": "Krankenkasse"
+  },
+  "letter_gkv_membership": {
+    "template": "--",
+    "templateDate": "--",
+    "author": "Betreuungsbüro",
+    "authority": "Krankenkasse"
+  },
+  "letter_bank_registration": {
+    "template": "--",
+    "templateDate": "--",
+    "author": "Betreuungsbüro",
+    "authority": "kontoführende Bank"
+  },
+  "accounting": {
+    "template": "--",
+    "templateDate": "--",
+    "author": "Betreuungsbüro",
+    "authority": "Betreuungsgericht"
+  }
+}

@@ -1,0 +1,183 @@
+# Hinweis fuer die spaetere Einrichtung des Cloudflare Tunnels (ausserhalb dieses Repos, Phase
+# 2.2): der Online-Modus nutzt seit Phase 2.1.1 WebSocket (Pfad /ws) fuer Echtzeit-Sync - der
+# Tunnel/jeder vorgeschaltete Reverse-Proxy muss HTTP-Upgrade-Requests (Connection: Upgrade,
+# Upgrade: websocket) fuer diesen Pfad durchreichen, sonst funktioniert nur der REST-Teil der App
+# und die Echtzeit-Synchronisation faellt lautlos aus (kein Fehler, nur keine Live-Updates mehr).
+services:
+  betreuungsbuero:
+    build: .
+    # Kein bewegliches "latest": dieselbe Anwendungsfassung erhält eine feste
+    # OCI-Referenz. Für eine externe Registry APP_IMAGE vollständig setzen.
+    image: ${APP_IMAGE:-betreuungsbuero-server:0.1.0}
+    restart: unless-stopped
+    ports:
+      - "8935:8935"
+    environment:
+      - PORT=8935
+      - SESSION_SECRET=${SESSION_SECRET}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+      - SETUP_TOKEN=${SETUP_TOKEN:-}
+      # Explizite Positivliste der nichtgeheimen Laufzeitkonfiguration. Eine
+      # Compose-.env-Datei wird nicht pauschal in den Container übernommen.
+      - TZ=${TZ:-Europe/Berlin}
+      - PUBLIC_BASE_URL=${PUBLIC_BASE_URL:-}
+      - CALENDAR_SYNC_INTERVAL_SECONDS=${CALENDAR_SYNC_INTERVAL_SECONDS:-60}
+      - MAILBOX_WATCH=${MAILBOX_WATCH:-1}
+      - REQUEST_TIMEOUT_MS=${REQUEST_TIMEOUT_MS:-3600000}
+      - ENABLE_DOCUMENT_MIGRATION=${ENABLE_DOCUMENT_MIGRATION:-0}
+      - EXT_AI_PROVIDER=${EXT_AI_PROVIDER:-}
+      - EXT_UPDATE_VERSION=${EXT_UPDATE_VERSION:-}
+      - EXT_UPDATE_XPI_URL=${EXT_UPDATE_XPI_URL:-}
+      - APP_FILE=${APP_FILE:-Betreuungsbuero_Dokumentenassistent_v0_7.html}
+      - DOK_GRAPH_BASE=${DOK_GRAPH_BASE:-https://graph.microsoft.com/v1.0}
+      - DOK_MS_AUTH=${DOK_MS_AUTH:-https://login.microsoftonline.com/common/oauth2/v2.0/authorize}
+      - DOK_MS_TOKEN=${DOK_MS_TOKEN:-https://login.microsoftonline.com/common/oauth2/v2.0/token}
+      - DOK_GD_AUTH=${DOK_GD_AUTH:-https://accounts.google.com/o/oauth2/v2/auth}
+      - DOK_GD_TOKEN=${DOK_GD_TOKEN:-https://oauth2.googleapis.com/token}
+      - DOK_GD_API=${DOK_GD_API:-https://www.googleapis.com/drive/v3}
+      - DOK_GD_UPLOAD=${DOK_GD_UPLOAD:-https://www.googleapis.com/upload/drive/v3}
+      # Der Recovery-Key wird ausschließlich über die Admin-verwaltete Datei
+      # gelesen. Er darf nicht in `docker inspect` als Umgebungswert erscheinen.
+      - DOCUMENT_RECOVERY_KEY_FILE=/app/runtime-secrets/document-recovery-key
+      - COOKIE_SECURE=${COOKIE_SECURE:-0}
+      # /app/state ist der Volume-Mountpoint; `data` bleibt ein normaler
+      # Unterordner und kann beim Disaster-Restore atomar umbenannt werden.
+      - DATA_DIR=/app/state/data
+      - RUNTIME_ROOT=/app/state
+      - DB_PATH=/app/state/database/betreuungsbuero.sqlite3
+      - DOCUMENTS_DATA_ROOT=/app/state/data
+      - EXTENSION_ARTIFACTS_DIR=/app/state/extension-artifacts
+      - RUNTIME_SECRETS_DIR=/app/runtime-secrets
+      # Zielpfad innerhalb des Containers. Der Hostpfad unten ist absichtlich
+      # verpflichtend und muss ein getrenntes, verschlüsseltes Zielmedium sein.
+      - TOTAL_BACKUP_DESTINATION=/app/backups
+      # Der Runner liest diese Datei selbst mit O_NOFOLLOW, Modus-0600-Prüfung
+      # und einer engen Provider-Variablen-Positivliste. Ihr Inhalt wird nur an
+      # den restic-Unterprozess weitergegeben.
+      # Optional: Für SFTP oder ein nicht authentifiziertes REST-Backend ist
+      # keine Provider-env-Datei nötig. Nur bei Bedarf in .env auf den
+      # read-only Containerpfad restic-backend.env setzen.
+      - TOTAL_BACKUP_RESTIC_ENV_FILE=${TOTAL_BACKUP_RESTIC_ENV_FILE:-}
+      # Die App erhält nur den atomaren, inhaltlich gebundenen Statusbeleg der
+      # getrennten Restic-Wartung. Der Statusordner ist die Vertrauensgrenze:
+      # hier read-only; löschfähige Wartungs-Credentials werden nie eingehängt.
+      - TOTAL_BACKUP_OFFSITE_MAINTENANCE_STATUS_DIR=/run/betreuungsbuero-offsite-maintenance-status
+      - TOTAL_BACKUP_OFFSITE_MAINTENANCE_MAX_AGE_HOURS=${TOTAL_BACKUP_OFFSITE_MAINTENANCE_MAX_AGE_HOURS:-192}
+      - APP_IMAGE_REFERENCE=${APP_IMAGE:-betreuungsbuero-server:0.1.0}
+      # Ein unvollständiger Laufzeit-Artefakt-Restore sperrt den App-Start.
+      - RUNTIME_ARTIFACT_RESTORE_STATE_DIR=/app/server/_restore-rollback
+    volumes:
+      # Fachlicher persistenter Zustand (SQLite-Datei + Dokumente). Das Volume
+      # wird am Elternordner eingehängt; /app/state/data ist kein Mountpoint und
+      # bleibt deshalb für Restore und Rollback atomar austauschbar.
+      - betreuungsbuero-state:/app/state
+      # Separates Secret-Volume: absichtlich NICHT Teil des Daten-/Backup-Volumes.
+      # Die einmal heruntergeladene Wiederherstellungskopie muss extern verwahrt werden.
+      - betreuungsbuero-runtime-secrets:/app/runtime-secrets
+      # Ohne expliziten absoluten Hostpfad startet Compose nicht versehentlich
+      # mit einem lokalen Ersatzordner. Auf dem Ziel muss zusätzlich die Datei
+      # .betreuungsbuero-backup-ziel zuvor ausdrücklich im Adminbereich mit
+      # stabiler TARGET_ID initialisiert worden sein; eine leere Datei genügt nicht.
+      - type: bind
+        source: ${BACKUP_HOST_DIR:?BACKUP_HOST_DIR muss als absoluter Pfad auf ein getrenntes Sicherungsziel zeigen}
+        target: /app/backups
+        bind:
+          # Compose darf bei Tippfehlern oder einem nicht eingehängten Medium
+          # keinen lokalen Ersatzordner erzeugen. Zusätzlich bindet die App den
+          # Zeitplan an die vorhandene TARGET_ID-Zielmarke.
+          create_host_path: false
+      # Restic-Passwort, Provider-Credentials und optionales Heartbeat-Secret
+      # liegen außerhalb von Server, Daten und Sicherungsziel. Die App kann
+      # diese Dateien lesen, aber niemals verändern oder mitsichern.
+      - type: bind
+        source: ${BACKUP_SECRET_HOST_DIR:?BACKUP_SECRET_HOST_DIR muss als absoluter Pfad auf den getrennten Backup-Secret-Ordner zeigen}
+        target: /run/betreuungsbuero-backup-secrets
+        read_only: true
+        bind:
+          create_host_path: false
+      # Ausschließlich read-only für die Haupt-App. Die separate
+      # `offsite-maintenance`-Instanz schreibt hier ihren atomaren Beleg.
+      - type: bind
+        source: ${OFFSITE_MAINTENANCE_STATUS_HOST_DIR:?OFFSITE_MAINTENANCE_STATUS_HOST_DIR muss als absoluter Pfad auf den getrennten Wartungsstatus-Ordner zeigen}
+        target: /run/betreuungsbuero-offsite-maintenance-status
+        read_only: true
+        bind:
+          create_host_path: false
+      # Hochgeladene Firefox-/Chrome-/Edge-Pakete überleben Imagewechsel und
+      # werden von der Gesamtsicherung als Betriebsartefakte mitgeführt.
+      - betreuungsbuero-extension-artifacts:/app/state/extension-artifacts
+      # Restore-Journale und Zielverweise müssen einen kurzlebigen
+      # Hilfscontainer überleben.
+      - betreuungsbuero-restore-state:/app/server/_restore-rollback
+      # Die HTML-App wird read-only aus dem outputs/-Ordner eingehaengt, damit Aenderungen an
+      # der Datei ohne Docker-Rebuild wirksam werden.
+      - ../outputs:/app/outputs:ro
+
+  # Fail-closed One-shot für den Totalverlust-Rückweg. Nur dieser Profilservice
+  # darf das Erweiterungsvolume und den outputs/-Hostordner beschreiben. Die
+  # Haupt-App behält outputs read-only und sieht keinen Snapshot-Schreibzugriff.
+  runtime-artifacts-restore:
+    profiles: ["restore"]
+    image: ${APP_IMAGE:-betreuungsbuero-server:0.1.0}
+    restart: "no"
+    entrypoint: ["node", "/app/server/tools/restore-runtime-artifacts.js"]
+    volumes:
+      - type: bind
+        source: ${BACKUP_HOST_DIR:?BACKUP_HOST_DIR muss als absoluter Pfad auf ein getrenntes Sicherungsziel zeigen}
+        target: /restore/backups
+        read_only: true
+        bind:
+          create_host_path: false
+      - betreuungsbuero-extension-artifacts:/restore/extension-artifacts
+      - ../outputs:/restore/outputs
+      - betreuungsbuero-restore-state:/restore/state
+
+  # Bewusster One-shot, nicht Teil von `docker compose up`: Diese Instanz
+  # besitzt keine App-/Recovery-/Upload-Secrets. Das kurzlebige Delete-Konto
+  # wird ausschließlich beim dokumentierten `docker compose run` als
+  # zusätzlicher read-only Mount bereitgestellt.
+  offsite-maintenance:
+    profiles: ["offsite-maintenance"]
+    image: ${APP_IMAGE:-betreuungsbuero-server:0.1.0}
+    restart: "no"
+    entrypoint: ["/app/server/tools/offsite-maintenance.sh"]
+    command:
+      - --repository
+      - "${OFFSITE_MAINTENANCE_REPOSITORY:-OFFSITE_REPOSITORY_NOT_CONFIGURED}"
+      - --password-file
+      - /run/betreuungsbuero-offsite-maintenance-secrets/restic-password
+      - --credential-env-file
+      - "${OFFSITE_MAINTENANCE_CREDENTIAL_ENV_FILE:-}"
+      - --status-dir
+      - /run/betreuungsbuero-offsite-maintenance-status
+      - --job-id
+      - "${OFFSITE_MAINTENANCE_JOB_ID:-OFFSITE_JOB_NOT_CONFIGURED}"
+      - --tag
+      - "${OFFSITE_MAINTENANCE_TAG:-betreuungsbuero}"
+      - --keep-daily
+      - "${OFFSITE_MAINTENANCE_KEEP_DAILY:-14}"
+      - --keep-monthly
+      - "${OFFSITE_MAINTENANCE_KEEP_MONTHLY:-12}"
+      - --keep-yearly
+      - "${OFFSITE_MAINTENANCE_KEEP_YEARLY:-10}"
+    volumes:
+      - type: bind
+        source: ${OFFSITE_MAINTENANCE_STATUS_HOST_DIR:?OFFSITE_MAINTENANCE_STATUS_HOST_DIR muss als absoluter Pfad auf den getrennten Wartungsstatus-Ordner zeigen}
+        target: /run/betreuungsbuero-offsite-maintenance-status
+        bind:
+          create_host_path: false
+      # Ausschließlich dieser One-shot sieht das kurzlebige List-/Delete-Konto,
+      # und auch er darf dessen Hostdateien nur lesen. Der Hauptservice besitzt
+      # diesen Mount ausdrücklich nicht.
+      - type: bind
+        source: ${OFFSITE_MAINTENANCE_SECRET_HOST_DIR:?OFFSITE_MAINTENANCE_SECRET_HOST_DIR muss als absoluter Pfad auf den getrennten Wartungs-Secret-Ordner zeigen}
+        target: /run/betreuungsbuero-offsite-maintenance-secrets
+        read_only: true
+        bind:
+          create_host_path: false
+
+volumes:
+  betreuungsbuero-state:
+  betreuungsbuero-runtime-secrets:
+  betreuungsbuero-extension-artifacts:
+  betreuungsbuero-restore-state:

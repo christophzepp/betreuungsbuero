@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>de.betreuungsbuero.offsite-maintenance.docker</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/bin/env</string>
+    <string>BACKUP_HOST_DIR=__EXTERNAL_BACKUP_DESTINATION__</string>
+    <string>BACKUP_SECRET_HOST_DIR=__UPLOAD_SECRET_DIR__</string>
+    <string>OFFSITE_MAINTENANCE_STATUS_HOST_DIR=__MAINTENANCE_STATUS_DIR__</string>
+    <string>OFFSITE_MAINTENANCE_SECRET_HOST_DIR=__MAINTENANCE_SECRET_DIR__</string>
+    <string>OFFSITE_MAINTENANCE_CREDENTIAL_ENV_FILE=__MAINTENANCE_CREDENTIAL_ENV_FILE__</string>
+    <string>OFFSITE_MAINTENANCE_REPOSITORY=__REMOTE_RESTIC_REPOSITORY__</string>
+    <string>OFFSITE_MAINTENANCE_JOB_ID=__BACKUP_JOB_ID__</string>
+    <string>OFFSITE_MAINTENANCE_TAG=betreuungsbuero</string>
+    <string>OFFSITE_MAINTENANCE_KEEP_DAILY=14</string>
+    <string>OFFSITE_MAINTENANCE_KEEP_MONTHLY=12</string>
+    <string>OFFSITE_MAINTENANCE_KEEP_YEARLY=10</string>
+    <string>__DOCKER_BIN__</string>
+    <string>compose</string>
+    <string>--project-directory</string>
+    <string>__PROJECT_ROOT__/server</string>
+    <string>-f</string>
+    <string>__PROJECT_ROOT__/server/docker-compose.yml</string>
+    <string>--profile</string>
+    <string>offsite-maintenance</string>
+    <string>run</string>
+    <string>--rm</string>
+    <string>--no-deps</string>
+    <string>offsite-maintenance</string>
+  </array>
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Weekday</key>
+    <integer>1</integer>
+    <key>Hour</key>
+    <integer>4</integer>
+    <key>Minute</key>
+    <integer>30</integer>
+  </dict>
+  <key>StandardOutPath</key>
+  <string>__MAINTENANCE_LOG_FILE__</string>
+  <key>StandardErrorPath</key>
+  <string>__MAINTENANCE_LOG_FILE__</string>
+  <key>ProcessType</key>
+  <string>Background</string>
+</dict>
+</plist>

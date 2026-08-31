@@ -1,0 +1,6 @@
+# Docker-Compose-One-shot der getrennten Restic-Wartung: sonntags 04:30 Uhr.
+# Dieses Konto braucht List-/Delete-Rechte. Der Secret-Ordner wird nur in den
+# kurzlebigen Wartungscontainer, niemals in die Haupt-App eingehängt.
+# Alle Platzhalter vor der Installation ersetzen. Nicht parallel zum direkten
+# Host-Beispiel crontab.offsite-maintenance.example aktivieren.
+30 4 * * 0 /usr/bin/env BACKUP_HOST_DIR="__EXTERNAL_BACKUP_DESTINATION__" BACKUP_SECRET_HOST_DIR="__UPLOAD_SECRET_DIR__" OFFSITE_MAINTENANCE_STATUS_HOST_DIR="__MAINTENANCE_STATUS_DIR__" OFFSITE_MAINTENANCE_SECRET_HOST_DIR="__MAINTENANCE_SECRET_DIR__" OFFSITE_MAINTENANCE_CREDENTIAL_ENV_FILE="__MAINTENANCE_CREDENTIAL_ENV_FILE__" OFFSITE_MAINTENANCE_REPOSITORY="__REMOTE_RESTIC_REPOSITORY__" OFFSITE_MAINTENANCE_JOB_ID="__BACKUP_JOB_ID__" OFFSITE_MAINTENANCE_TAG="betreuungsbuero" OFFSITE_MAINTENANCE_KEEP_DAILY="14" OFFSITE_MAINTENANCE_KEEP_MONTHLY="12" OFFSITE_MAINTENANCE_KEEP_YEARLY="10" "__DOCKER_BIN__" compose --project-directory "__PROJECT_ROOT__/server" -f "__PROJECT_ROOT__/server/docker-compose.yml" --profile offsite-maintenance run --rm --no-deps offsite-maintenance >> "__MAINTENANCE_LOG_FILE__" 2>&1

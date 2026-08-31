@@ -1,0 +1,12 @@
+# Große erzeugte bzw. binäre Artefakte sollen weder normalisiert noch als
+# unlesbarer Text-Diff dargestellt werden.
+outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html -text -diff
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.xlsx binary
+*.ods binary
+*.gz binary
+*.wasm binary
+*.wasm.js binary

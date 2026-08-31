@@ -1,0 +1,2287 @@
+{
+ "comment": "Vortrainierte Site-Profile (Formular-Assistent). INSERT OR IGNORE beim Serverstart - Nutzeraenderungen bleiben. Feldnamen am 2026-07-17 live erhoben; Captcha/Einwilligungen werden NIE gemappt.",
+ "profiles": [
+  {
+   "id": "seed-rfb--buergerinnen-und-buerger-formulare-kontakt",
+   "name": "Rundfunkbeitrag: Kontaktformular",
+   "mapping": {
+    "version": 1,
+    "urlPatterns": [
+     "https://www.rundfunkbeitrag.de/buergerinnen-und-buerger/formulare/kontakt"
+    ],
+    "contextDefault": "betreute_person",
+    "fields": [
+     {
+      "key": "case:person.contributionNumber",
+      "label": "Beitragsnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "bnr"
+       },
+       {
+        "by": "id",
+        "v": "bnr"
+       }
+      ]
+     },
+     {
+      "key": "case:person.firstName",
+      "label": "Vorname",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "vorname"
+       },
+       {
+        "by": "id",
+        "v": "vorname"
+       }
+      ]
+     },
+     {
+      "key": "case:person.lastName",
+      "label": "Nachname",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "nachname"
+       },
+       {
+        "by": "id",
+        "v": "nachname"
+       }
+      ]
+     },
+     {
+      "key": "case:person.birthDate",
+      "label": "Geburtsdatum",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "geburtsdatum"
+       },
+       {
+        "by": "id",
+        "v": "geburtsdatum"
+       }
+      ]
+     },
+     {
+      "key": "case:person.postal",
+      "label": "PLZ",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "plz"
+       },
+       {
+        "by": "id",
+        "v": "plz"
+       }
+      ]
+     },
+     {
+      "key": "case:person.city",
+      "label": "Ort",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "ort"
+       },
+       {
+        "by": "id",
+        "v": "ort"
+       }
+      ]
+     },
+     {
+      "key": "case:person.street",
+      "label": "Straße",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "strasse"
+       },
+       {
+        "by": "id",
+        "v": "strasse"
+       }
+      ]
+     },
+     {
+      "key": "case:person.house",
+      "label": "Hausnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "hausnummer"
+       },
+       {
+        "by": "id",
+        "v": "hausnummer"
+       }
+      ]
+     },
+     {
+      "key": "case:person.houseLetter",
+      "label": "Adresszusatz",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "adresszusatz"
+       },
+       {
+        "by": "id",
+        "v": "adresszusatz"
+       }
+      ]
+     },
+     {
+      "key": "case:person.phoneAreaCode",
+      "label": "Vorwahl",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "vorwahl"
+       },
+       {
+        "by": "id",
+        "v": "vorwahl"
+       }
+      ]
+     },
+     {
+      "key": "case:person.phoneNumber",
+      "label": "Telefonnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "telefonnummer"
+       },
+       {
+        "by": "id",
+        "v": "telefonnummer"
+       }
+      ]
+     },
+     {
+      "key": "case:person.email",
+      "label": "E-Mail",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "email"
+       },
+       {
+        "by": "id",
+        "v": "email"
+       }
+      ]
+     }
+    ],
+    "actions": []
+   }
+  },
+  {
+   "id": "seed-rfb--ratenzahlung",
+   "name": "Rundfunkbeitrag: Ratenzahlung",
+   "mapping": {
+    "version": 1,
+    "urlPatterns": [
+     "https://www.rundfunkbeitrag.de/ratenzahlung"
+    ],
+    "contextDefault": "betreute_person",
+    "fields": [
+     {
+      "key": "case:person.contributionNumber",
+      "label": "Beitragsnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "bnr"
+       },
+       {
+        "by": "id",
+        "v": "bnr"
+       }
+      ]
+     },
+     {
+      "key": "case:person.firstName",
+      "label": "Vorname",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "vorname"
+       },
+       {
+        "by": "id",
+        "v": "vorname"
+       }
+      ]
+     },
+     {
+      "key": "case:person.lastName",
+      "label": "Nachname",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "nachname"
+       },
+       {
+        "by": "id",
+        "v": "nachname"
+       }
+      ]
+     },
+     {
+      "key": "case:person.birthDate",
+      "label": "Geburtsdatum",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "geburtsdatum"
+       },
+       {
+        "by": "id",
+        "v": "geburtsdatum"
+       }
+      ]
+     },
+     {
+      "key": "case:person.postal",
+      "label": "PLZ",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "plz"
+       },
+       {
+        "by": "id",
+        "v": "plz"
+       }
+      ]
+     },
+     {
+      "key": "case:person.city",
+      "label": "Ort",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "ort"
+       },
+       {
+        "by": "id",
+        "v": "ort"
+       }
+      ]
+     },
+     {
+      "key": "case:person.street",
+      "label": "Straße",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "strasse"
+       },
+       {
+        "by": "id",
+        "v": "strasse"
+       }
+      ]
+     },
+     {
+      "key": "case:person.house",
+      "label": "Hausnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "hausnummer"
+       },
+       {
+        "by": "id",
+        "v": "hausnummer"
+       }
+      ]
+     },
+     {
+      "key": "case:person.houseLetter",
+      "label": "Adresszusatz",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "adresszusatz"
+       },
+       {
+        "by": "id",
+        "v": "adresszusatz"
+       }
+      ]
+     },
+     {
+      "key": "case:person.phoneAreaCode",
+      "label": "Vorwahl",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "vorwahl"
+       },
+       {
+        "by": "id",
+        "v": "vorwahl"
+       }
+      ]
+     },
+     {
+      "key": "case:person.phoneNumber",
+      "label": "Telefonnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "telefonnummer"
+       },
+       {
+        "by": "id",
+        "v": "telefonnummer"
+       }
+      ]
+     },
+     {
+      "key": "case:person.email",
+      "label": "E-Mail",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "email"
+       },
+       {
+        "by": "id",
+        "v": "email"
+       }
+      ]
+     }
+    ],
+    "actions": []
+   }
+  },
+  {
+   "id": "seed-rfb--datenschutz-datenauskunft",
+   "name": "Rundfunkbeitrag: Datenauskunft (DSGVO)",
+   "mapping": {
+    "version": 1,
+    "urlPatterns": [
+     "https://www.rundfunkbeitrag.de/datenschutz/datenauskunft"
+    ],
+    "contextDefault": "betreute_person",
+    "fields": [
+     {
+      "key": "case:person.contributionNumber",
+      "label": "Beitragsnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "bnr"
+       },
+       {
+        "by": "id",
+        "v": "bnr"
+       }
+      ]
+     },
+     {
+      "key": "case:person.firstName",
+      "label": "Vorname",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "vorname"
+       },
+       {
+        "by": "id",
+        "v": "vorname"
+       }
+      ]
+     },
+     {
+      "key": "case:person.lastName",
+      "label": "Nachname",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "nachname"
+       },
+       {
+        "by": "id",
+        "v": "nachname"
+       }
+      ]
+     },
+     {
+      "key": "case:person.birthDate",
+      "label": "Geburtsdatum",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "geburtsdatum"
+       },
+       {
+        "by": "id",
+        "v": "geburtsdatum"
+       }
+      ]
+     },
+     {
+      "key": "case:person.postal",
+      "label": "PLZ",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "plz"
+       },
+       {
+        "by": "id",
+        "v": "plz"
+       }
+      ]
+     },
+     {
+      "key": "case:person.city",
+      "label": "Ort",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "ort"
+       },
+       {
+        "by": "id",
+        "v": "ort"
+       }
+      ]
+     },
+     {
+      "key": "case:person.street",
+      "label": "Straße",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "strasse"
+       },
+       {
+        "by": "id",
+        "v": "strasse"
+       }
+      ]
+     },
+     {
+      "key": "case:person.house",
+      "label": "Hausnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "hausnummer"
+       },
+       {
+        "by": "id",
+        "v": "hausnummer"
+       }
+      ]
+     },
+     {
+      "key": "case:person.houseLetter",
+      "label": "Adresszusatz",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "adresszusatz"
+       },
+       {
+        "by": "id",
+        "v": "adresszusatz"
+       }
+      ]
+     },
+     {
+      "key": "case:person.phoneAreaCode",
+      "label": "Vorwahl",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "vorwahl"
+       },
+       {
+        "by": "id",
+        "v": "vorwahl"
+       }
+      ]
+     },
+     {
+      "key": "case:person.phoneNumber",
+      "label": "Telefonnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "telefonnummer"
+       },
+       {
+        "by": "id",
+        "v": "telefonnummer"
+       }
+      ]
+     },
+     {
+      "key": "case:person.email",
+      "label": "E-Mail",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "email"
+       },
+       {
+        "by": "id",
+        "v": "email"
+       }
+      ]
+     }
+    ],
+    "actions": []
+   }
+  },
+  {
+   "id": "seed-rfb--buergerinnen-und-buerger-formulare-antworten",
+   "name": "Rundfunkbeitrag: Antworten auf Schreiben",
+   "mapping": {
+    "version": 1,
+    "urlPatterns": [
+     "https://www.rundfunkbeitrag.de/buergerinnen-und-buerger/formulare/antworten"
+    ],
+    "contextDefault": "betreute_person",
+    "fields": [
+     {
+      "key": "case:person.contributionNumber",
+      "label": "Beitragsnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "bnr"
+       },
+       {
+        "by": "id",
+        "v": "bnr"
+       }
+      ]
+     },
+     {
+      "key": "case:person.firstName",
+      "label": "Vorname",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "vorname"
+       },
+       {
+        "by": "id",
+        "v": "vorname"
+       }
+      ]
+     },
+     {
+      "key": "case:person.lastName",
+      "label": "Nachname",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "nachname"
+       },
+       {
+        "by": "id",
+        "v": "nachname"
+       }
+      ]
+     },
+     {
+      "key": "case:person.birthDate",
+      "label": "Geburtsdatum",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "geburtsdatum"
+       },
+       {
+        "by": "id",
+        "v": "geburtsdatum"
+       }
+      ]
+     },
+     {
+      "key": "case:person.postal",
+      "label": "PLZ",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "plz"
+       },
+       {
+        "by": "id",
+        "v": "plz"
+       }
+      ]
+     },
+     {
+      "key": "case:person.city",
+      "label": "Ort",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "ort"
+       },
+       {
+        "by": "id",
+        "v": "ort"
+       }
+      ]
+     },
+     {
+      "key": "case:person.street",
+      "label": "Straße",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "strasse"
+       },
+       {
+        "by": "id",
+        "v": "strasse"
+       }
+      ]
+     },
+     {
+      "key": "case:person.house",
+      "label": "Hausnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "hausnummer"
+       },
+       {
+        "by": "id",
+        "v": "hausnummer"
+       }
+      ]
+     },
+     {
+      "key": "case:person.houseLetter",
+      "label": "Adresszusatz",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "adresszusatz"
+       },
+       {
+        "by": "id",
+        "v": "adresszusatz"
+       }
+      ]
+     },
+     {
+      "key": "case:person.phoneAreaCode",
+      "label": "Vorwahl",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "vorwahl"
+       },
+       {
+        "by": "id",
+        "v": "vorwahl"
+       }
+      ]
+     },
+     {
+      "key": "case:person.phoneNumber",
+      "label": "Telefonnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "telefonnummer"
+       },
+       {
+        "by": "id",
+        "v": "telefonnummer"
+       }
+      ]
+     },
+     {
+      "key": "case:person.email",
+      "label": "E-Mail",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "email"
+       },
+       {
+        "by": "id",
+        "v": "email"
+       }
+      ]
+     }
+    ],
+    "actions": []
+   }
+  },
+  {
+   "id": "seed-rfb--buergerinnen-und-buerger-formulare-befreiung-nebenwohnung",
+   "name": "Rundfunkbeitrag: Befreiung Nebenwohnung",
+   "mapping": {
+    "version": 1,
+    "urlPatterns": [
+     "https://www.rundfunkbeitrag.de/buergerinnen-und-buerger/formulare/befreiung-nebenwohnung"
+    ],
+    "contextDefault": "betreute_person",
+    "fields": [
+     {
+      "key": "case:person.firstName",
+      "label": "Vorname",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "vorname"
+       },
+       {
+        "by": "id",
+        "v": "vorname"
+       }
+      ]
+     },
+     {
+      "key": "case:person.lastName",
+      "label": "Nachname",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "nachname"
+       },
+       {
+        "by": "id",
+        "v": "nachname"
+       }
+      ]
+     },
+     {
+      "key": "case:person.birthDate",
+      "label": "Geburtsdatum",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "geburtsdatum"
+       },
+       {
+        "by": "id",
+        "v": "geburtsdatum"
+       }
+      ]
+     },
+     {
+      "key": "case:person.postal",
+      "label": "PLZ",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "plz"
+       },
+       {
+        "by": "id",
+        "v": "plz"
+       }
+      ]
+     },
+     {
+      "key": "case:person.city",
+      "label": "Ort",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "ort"
+       },
+       {
+        "by": "id",
+        "v": "ort"
+       }
+      ]
+     },
+     {
+      "key": "case:person.street",
+      "label": "Straße",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "strasse"
+       },
+       {
+        "by": "id",
+        "v": "strasse"
+       }
+      ]
+     },
+     {
+      "key": "case:person.house",
+      "label": "Hausnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "hausnummer"
+       },
+       {
+        "by": "id",
+        "v": "hausnummer"
+       }
+      ]
+     },
+     {
+      "key": "case:person.houseLetter",
+      "label": "Adresszusatz",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "adresszusatz"
+       },
+       {
+        "by": "id",
+        "v": "adresszusatz"
+       }
+      ]
+     },
+     {
+      "key": "case:person.phoneAreaCode",
+      "label": "Vorwahl",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "vorwahl"
+       },
+       {
+        "by": "id",
+        "v": "vorwahl"
+       }
+      ]
+     },
+     {
+      "key": "case:person.phoneNumber",
+      "label": "Telefonnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "telefonnummer"
+       },
+       {
+        "by": "id",
+        "v": "telefonnummer"
+       }
+      ]
+     },
+     {
+      "key": "case:person.email",
+      "label": "E-Mail",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "email"
+       },
+       {
+        "by": "id",
+        "v": "email"
+       }
+      ]
+     },
+     {
+      "key": "case:person.contributionNumber",
+      "label": "Beitragsnummer Nebenwohnung",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "bnrNebenwohnung"
+       },
+       {
+        "by": "id",
+        "v": "bnrNebenwohnung"
+       }
+      ]
+     },
+     {
+      "key": "case:person.postal",
+      "label": "PLZ Hauptwohnung",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "adressdatenHauptwohnung_plz"
+       },
+       {
+        "by": "id",
+        "v": "adressdatenHauptwohnung_plz"
+       }
+      ]
+     },
+     {
+      "key": "case:person.city",
+      "label": "Ort Hauptwohnung",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "adressdatenHauptwohnung_ort"
+       },
+       {
+        "by": "id",
+        "v": "adressdatenHauptwohnung_ort"
+       }
+      ]
+     },
+     {
+      "key": "case:person.street",
+      "label": "Straße Hauptwohnung",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "adressdatenHauptwohnung_strasse"
+       },
+       {
+        "by": "id",
+        "v": "adressdatenHauptwohnung_strasse"
+       }
+      ]
+     },
+     {
+      "key": "case:person.house",
+      "label": "Hausnummer Hauptwohnung",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "adressdatenHauptwohnung_hausnummer"
+       },
+       {
+        "by": "id",
+        "v": "adressdatenHauptwohnung_hausnummer"
+       }
+      ]
+     }
+    ],
+    "actions": []
+   }
+  },
+  {
+   "id": "seed-rfb--buergerinnen-und-buerger-formulare-abmeldung-fuer-bewohner-einer-pflegeeinrichtung",
+   "name": "Rundfunkbeitrag: Abmeldung Pflegeeinrichtung",
+   "mapping": {
+    "version": 1,
+    "urlPatterns": [
+     "https://www.rundfunkbeitrag.de/buergerinnen-und-buerger/formulare/abmeldung-fuer-bewohner-einer-pflegeeinrichtung"
+    ],
+    "contextDefault": "betreute_person",
+    "fields": [
+     {
+      "key": "case:person.contributionNumber",
+      "label": "Beitragsnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "bnr"
+       },
+       {
+        "by": "id",
+        "v": "bnr"
+       }
+      ]
+     },
+     {
+      "key": "case:person.firstName",
+      "label": "Vorname",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "vorname"
+       },
+       {
+        "by": "id",
+        "v": "vorname"
+       }
+      ]
+     },
+     {
+      "key": "case:person.lastName",
+      "label": "Nachname",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "nachname"
+       },
+       {
+        "by": "id",
+        "v": "nachname"
+       }
+      ]
+     },
+     {
+      "key": "case:person.birthDate",
+      "label": "Geburtsdatum",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "geburtsdatum"
+       },
+       {
+        "by": "id",
+        "v": "geburtsdatum"
+       }
+      ]
+     },
+     {
+      "key": "case:person.postal",
+      "label": "PLZ",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "plz"
+       },
+       {
+        "by": "id",
+        "v": "plz"
+       }
+      ]
+     },
+     {
+      "key": "case:person.city",
+      "label": "Ort",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "ort"
+       },
+       {
+        "by": "id",
+        "v": "ort"
+       }
+      ]
+     },
+     {
+      "key": "case:person.street",
+      "label": "Straße",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "strasse"
+       },
+       {
+        "by": "id",
+        "v": "strasse"
+       }
+      ]
+     },
+     {
+      "key": "case:person.house",
+      "label": "Hausnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "hausnummer"
+       },
+       {
+        "by": "id",
+        "v": "hausnummer"
+       }
+      ]
+     },
+     {
+      "key": "case:person.houseLetter",
+      "label": "Adresszusatz",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "adresszusatz"
+       },
+       {
+        "by": "id",
+        "v": "adresszusatz"
+       }
+      ]
+     },
+     {
+      "key": "case:person.phoneAreaCode",
+      "label": "Vorwahl",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "vorwahl"
+       },
+       {
+        "by": "id",
+        "v": "vorwahl"
+       }
+      ]
+     },
+     {
+      "key": "case:person.phoneNumber",
+      "label": "Telefonnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "telefonnummer"
+       },
+       {
+        "by": "id",
+        "v": "telefonnummer"
+       }
+      ]
+     },
+     {
+      "key": "case:person.email",
+      "label": "E-Mail",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "email"
+       },
+       {
+        "by": "id",
+        "v": "email"
+       }
+      ]
+     },
+     {
+      "key": "case:care.endDate",
+      "label": "Abmeldedatum",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "abmeldedatum"
+       },
+       {
+        "by": "id",
+        "v": "abmeldedatum"
+       }
+      ]
+     }
+    ],
+    "actions": []
+   }
+  },
+  {
+   "id": "seed-rfb--buergerinnen-und-buerger-formulare-abmelden",
+   "name": "Rundfunkbeitrag: Wohnung abmelden",
+   "mapping": {
+    "version": 1,
+    "urlPatterns": [
+     "https://www.rundfunkbeitrag.de/buergerinnen-und-buerger/formulare/abmelden"
+    ],
+    "contextDefault": "betreute_person",
+    "fields": [
+     {
+      "key": "case:person.contributionNumber",
+      "label": "Beitragsnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "bnr"
+       },
+       {
+        "by": "id",
+        "v": "bnr"
+       }
+      ]
+     },
+     {
+      "key": "case:person.firstName",
+      "label": "Vorname",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "vorname"
+       },
+       {
+        "by": "id",
+        "v": "vorname"
+       }
+      ]
+     },
+     {
+      "key": "case:person.lastName",
+      "label": "Nachname",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "nachname"
+       },
+       {
+        "by": "id",
+        "v": "nachname"
+       }
+      ]
+     },
+     {
+      "key": "case:person.birthDate",
+      "label": "Geburtsdatum",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "geburtsdatum"
+       },
+       {
+        "by": "id",
+        "v": "geburtsdatum"
+       }
+      ]
+     },
+     {
+      "key": "case:person.postal",
+      "label": "PLZ",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "plz"
+       },
+       {
+        "by": "id",
+        "v": "plz"
+       }
+      ]
+     },
+     {
+      "key": "case:person.city",
+      "label": "Ort",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "ort"
+       },
+       {
+        "by": "id",
+        "v": "ort"
+       }
+      ]
+     },
+     {
+      "key": "case:person.street",
+      "label": "Straße",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "strasse"
+       },
+       {
+        "by": "id",
+        "v": "strasse"
+       }
+      ]
+     },
+     {
+      "key": "case:person.house",
+      "label": "Hausnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "hausnummer"
+       },
+       {
+        "by": "id",
+        "v": "hausnummer"
+       }
+      ]
+     },
+     {
+      "key": "case:person.houseLetter",
+      "label": "Adresszusatz",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "adresszusatz"
+       },
+       {
+        "by": "id",
+        "v": "adresszusatz"
+       }
+      ]
+     },
+     {
+      "key": "case:person.phoneAreaCode",
+      "label": "Vorwahl",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "vorwahl"
+       },
+       {
+        "by": "id",
+        "v": "vorwahl"
+       }
+      ]
+     },
+     {
+      "key": "case:person.phoneNumber",
+      "label": "Telefonnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "telefonnummer"
+       },
+       {
+        "by": "id",
+        "v": "telefonnummer"
+       }
+      ]
+     },
+     {
+      "key": "case:person.email",
+      "label": "E-Mail",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "email"
+       },
+       {
+        "by": "id",
+        "v": "email"
+       }
+      ]
+     },
+     {
+      "key": "case:care.endDate",
+      "label": "Abmeldedatum",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "abmeldedatum"
+       },
+       {
+        "by": "id",
+        "v": "abmeldedatum"
+       }
+      ]
+     }
+    ],
+    "actions": []
+   }
+  },
+  {
+   "id": "seed-rfb--buergerinnen-und-buerger-formulare-wegfall-von-voraussetzungen",
+   "name": "Rundfunkbeitrag: Wegfall von Voraussetzungen",
+   "mapping": {
+    "version": 1,
+    "urlPatterns": [
+     "https://www.rundfunkbeitrag.de/buergerinnen-und-buerger/formulare/wegfall-von-voraussetzungen"
+    ],
+    "contextDefault": "betreute_person",
+    "fields": [
+     {
+      "key": "case:person.contributionNumber",
+      "label": "Beitragsnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "bnr"
+       },
+       {
+        "by": "id",
+        "v": "bnr"
+       }
+      ]
+     },
+     {
+      "key": "case:person.firstName",
+      "label": "Vorname",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "vorname"
+       },
+       {
+        "by": "id",
+        "v": "vorname"
+       }
+      ]
+     },
+     {
+      "key": "case:person.lastName",
+      "label": "Nachname",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "nachname"
+       },
+       {
+        "by": "id",
+        "v": "nachname"
+       }
+      ]
+     },
+     {
+      "key": "case:person.birthDate",
+      "label": "Geburtsdatum",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "geburtsdatum"
+       },
+       {
+        "by": "id",
+        "v": "geburtsdatum"
+       }
+      ]
+     },
+     {
+      "key": "case:person.postal",
+      "label": "PLZ",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "plz"
+       },
+       {
+        "by": "id",
+        "v": "plz"
+       }
+      ]
+     },
+     {
+      "key": "case:person.city",
+      "label": "Ort",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "ort"
+       },
+       {
+        "by": "id",
+        "v": "ort"
+       }
+      ]
+     },
+     {
+      "key": "case:person.street",
+      "label": "Straße",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "strasse"
+       },
+       {
+        "by": "id",
+        "v": "strasse"
+       }
+      ]
+     },
+     {
+      "key": "case:person.house",
+      "label": "Hausnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "hausnummer"
+       },
+       {
+        "by": "id",
+        "v": "hausnummer"
+       }
+      ]
+     },
+     {
+      "key": "case:person.houseLetter",
+      "label": "Adresszusatz",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "adresszusatz"
+       },
+       {
+        "by": "id",
+        "v": "adresszusatz"
+       }
+      ]
+     },
+     {
+      "key": "case:person.phoneAreaCode",
+      "label": "Vorwahl",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "vorwahl"
+       },
+       {
+        "by": "id",
+        "v": "vorwahl"
+       }
+      ]
+     },
+     {
+      "key": "case:person.phoneNumber",
+      "label": "Telefonnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "telefonnummer"
+       },
+       {
+        "by": "id",
+        "v": "telefonnummer"
+       }
+      ]
+     },
+     {
+      "key": "case:person.email",
+      "label": "E-Mail",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "email"
+       },
+       {
+        "by": "id",
+        "v": "email"
+       }
+      ]
+     }
+    ],
+    "actions": []
+   }
+  },
+  {
+   "id": "seed-rfb--buergerinnen-und-buerger-formulare-befreiung-oder-ermaessigung-beantragen",
+   "name": "Rundfunkbeitrag: Befreiung/Ermäßigung",
+   "mapping": {
+    "version": 1,
+    "urlPatterns": [
+     "https://www.rundfunkbeitrag.de/buergerinnen-und-buerger/formulare/befreiung-oder-ermaessigung-beantragen"
+    ],
+    "contextDefault": "betreute_person",
+    "fields": [
+     {
+      "key": "case:person.contributionNumber",
+      "label": "Beitragsnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "bnr"
+       },
+       {
+        "by": "id",
+        "v": "bnr"
+       }
+      ]
+     },
+     {
+      "key": "case:person.firstName",
+      "label": "Vorname",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "vorname"
+       },
+       {
+        "by": "id",
+        "v": "vorname"
+       }
+      ]
+     },
+     {
+      "key": "case:person.lastName",
+      "label": "Nachname",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "nachname"
+       },
+       {
+        "by": "id",
+        "v": "nachname"
+       }
+      ]
+     },
+     {
+      "key": "case:person.birthDate",
+      "label": "Geburtsdatum",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "geburtsdatum"
+       },
+       {
+        "by": "id",
+        "v": "geburtsdatum"
+       }
+      ]
+     },
+     {
+      "key": "case:person.postal",
+      "label": "PLZ",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "plz"
+       },
+       {
+        "by": "id",
+        "v": "plz"
+       }
+      ]
+     },
+     {
+      "key": "case:person.city",
+      "label": "Ort",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "ort"
+       },
+       {
+        "by": "id",
+        "v": "ort"
+       }
+      ]
+     },
+     {
+      "key": "case:person.street",
+      "label": "Straße",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "strasse"
+       },
+       {
+        "by": "id",
+        "v": "strasse"
+       }
+      ]
+     },
+     {
+      "key": "case:person.house",
+      "label": "Hausnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "hausnummer"
+       },
+       {
+        "by": "id",
+        "v": "hausnummer"
+       }
+      ]
+     },
+     {
+      "key": "case:person.houseLetter",
+      "label": "Adresszusatz",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "adresszusatz"
+       },
+       {
+        "by": "id",
+        "v": "adresszusatz"
+       }
+      ]
+     },
+     {
+      "key": "case:person.phoneAreaCode",
+      "label": "Vorwahl",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "vorwahl"
+       },
+       {
+        "by": "id",
+        "v": "vorwahl"
+       }
+      ]
+     },
+     {
+      "key": "case:person.phoneNumber",
+      "label": "Telefonnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "telefonnummer"
+       },
+       {
+        "by": "id",
+        "v": "telefonnummer"
+       }
+      ]
+     },
+     {
+      "key": "case:person.email",
+      "label": "E-Mail",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "email"
+       },
+       {
+        "by": "id",
+        "v": "email"
+       }
+      ]
+     },
+     {
+      "key": "case:person.maritalStatus",
+      "label": "Familienstand",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "familienstand"
+       },
+       {
+        "by": "id",
+        "v": "familienstand"
+       }
+      ]
+     }
+    ],
+    "actions": []
+   }
+  },
+  {
+   "id": "seed-rfb--buergerinnen-und-buerger-formulare-zumelden",
+   "name": "Rundfunkbeitrag: Wohnung zumelden",
+   "mapping": {
+    "version": 1,
+    "urlPatterns": [
+     "https://www.rundfunkbeitrag.de/buergerinnen-und-buerger/formulare/zumelden"
+    ],
+    "contextDefault": "betreute_person",
+    "fields": [
+     {
+      "key": "case:person.contributionNumber",
+      "label": "Beitragsnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "bnr"
+       },
+       {
+        "by": "id",
+        "v": "bnr"
+       }
+      ]
+     },
+     {
+      "key": "case:person.firstName",
+      "label": "Vorname",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "vorname"
+       },
+       {
+        "by": "id",
+        "v": "vorname"
+       }
+      ]
+     },
+     {
+      "key": "case:person.lastName",
+      "label": "Nachname",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "nachname"
+       },
+       {
+        "by": "id",
+        "v": "nachname"
+       }
+      ]
+     },
+     {
+      "key": "case:person.birthDate",
+      "label": "Geburtsdatum",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "geburtsdatum"
+       },
+       {
+        "by": "id",
+        "v": "geburtsdatum"
+       }
+      ]
+     },
+     {
+      "key": "case:person.postal",
+      "label": "PLZ",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "plz"
+       },
+       {
+        "by": "id",
+        "v": "plz"
+       }
+      ]
+     },
+     {
+      "key": "case:person.city",
+      "label": "Ort",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "ort"
+       },
+       {
+        "by": "id",
+        "v": "ort"
+       }
+      ]
+     },
+     {
+      "key": "case:person.street",
+      "label": "Straße",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "strasse"
+       },
+       {
+        "by": "id",
+        "v": "strasse"
+       }
+      ]
+     },
+     {
+      "key": "case:person.house",
+      "label": "Hausnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "hausnummer"
+       },
+       {
+        "by": "id",
+        "v": "hausnummer"
+       }
+      ]
+     },
+     {
+      "key": "case:person.houseLetter",
+      "label": "Adresszusatz",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "adresszusatz"
+       },
+       {
+        "by": "id",
+        "v": "adresszusatz"
+       }
+      ]
+     },
+     {
+      "key": "case:person.phoneAreaCode",
+      "label": "Vorwahl",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "vorwahl"
+       },
+       {
+        "by": "id",
+        "v": "vorwahl"
+       }
+      ]
+     },
+     {
+      "key": "case:person.phoneNumber",
+      "label": "Telefonnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "telefonnummer"
+       },
+       {
+        "by": "id",
+        "v": "telefonnummer"
+       }
+      ]
+     },
+     {
+      "key": "case:person.email",
+      "label": "E-Mail",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "email"
+       },
+       {
+        "by": "id",
+        "v": "email"
+       }
+      ]
+     }
+    ],
+    "actions": []
+   }
+  },
+  {
+   "id": "seed-rfb--buergerinnen-und-buerger-formulare-anmelden",
+   "name": "Rundfunkbeitrag: Wohnung anmelden",
+   "mapping": {
+    "version": 1,
+    "urlPatterns": [
+     "https://www.rundfunkbeitrag.de/buergerinnen-und-buerger/formulare/anmelden"
+    ],
+    "contextDefault": "betreute_person",
+    "fields": [
+     {
+      "key": "case:person.contributionNumber",
+      "label": "Beitragsnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "bnr"
+       },
+       {
+        "by": "id",
+        "v": "bnr"
+       }
+      ]
+     },
+     {
+      "key": "case:person.firstName",
+      "label": "Vorname",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "vorname"
+       },
+       {
+        "by": "id",
+        "v": "vorname"
+       }
+      ]
+     },
+     {
+      "key": "case:person.lastName",
+      "label": "Nachname",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "nachname"
+       },
+       {
+        "by": "id",
+        "v": "nachname"
+       }
+      ]
+     },
+     {
+      "key": "case:person.birthDate",
+      "label": "Geburtsdatum",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "geburtsdatum"
+       },
+       {
+        "by": "id",
+        "v": "geburtsdatum"
+       }
+      ]
+     },
+     {
+      "key": "case:person.postal",
+      "label": "PLZ",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "plz"
+       },
+       {
+        "by": "id",
+        "v": "plz"
+       }
+      ]
+     },
+     {
+      "key": "case:person.city",
+      "label": "Ort",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "ort"
+       },
+       {
+        "by": "id",
+        "v": "ort"
+       }
+      ]
+     },
+     {
+      "key": "case:person.street",
+      "label": "Straße",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "strasse"
+       },
+       {
+        "by": "id",
+        "v": "strasse"
+       }
+      ]
+     },
+     {
+      "key": "case:person.house",
+      "label": "Hausnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "hausnummer"
+       },
+       {
+        "by": "id",
+        "v": "hausnummer"
+       }
+      ]
+     },
+     {
+      "key": "case:person.houseLetter",
+      "label": "Adresszusatz",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "adresszusatz"
+       },
+       {
+        "by": "id",
+        "v": "adresszusatz"
+       }
+      ]
+     },
+     {
+      "key": "case:person.phoneAreaCode",
+      "label": "Vorwahl",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "vorwahl"
+       },
+       {
+        "by": "id",
+        "v": "vorwahl"
+       }
+      ]
+     },
+     {
+      "key": "case:person.phoneNumber",
+      "label": "Telefonnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "telefonnummer"
+       },
+       {
+        "by": "id",
+        "v": "telefonnummer"
+       }
+      ]
+     },
+     {
+      "key": "case:person.email",
+      "label": "E-Mail",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "email"
+       },
+       {
+        "by": "id",
+        "v": "email"
+       }
+      ]
+     }
+    ],
+    "actions": []
+   }
+  },
+  {
+   "id": "seed-rfb--buergerinnen-und-buerger-formulare-aendern",
+   "name": "Rundfunkbeitrag: Daten ändern",
+   "mapping": {
+    "version": 1,
+    "urlPatterns": [
+     "https://www.rundfunkbeitrag.de/buergerinnen-und-buerger/formulare/aendern"
+    ],
+    "contextDefault": "betreute_person",
+    "fields": [
+     {
+      "key": "case:person.contributionNumber",
+      "label": "Beitragsnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "bnr"
+       },
+       {
+        "by": "id",
+        "v": "bnr"
+       }
+      ]
+     },
+     {
+      "key": "case:person.firstName",
+      "label": "Vorname",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "vorname"
+       },
+       {
+        "by": "id",
+        "v": "vorname"
+       }
+      ]
+     },
+     {
+      "key": "case:person.lastName",
+      "label": "Nachname",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "nachname"
+       },
+       {
+        "by": "id",
+        "v": "nachname"
+       }
+      ]
+     },
+     {
+      "key": "case:person.birthDate",
+      "label": "Geburtsdatum",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "geburtsdatum"
+       },
+       {
+        "by": "id",
+        "v": "geburtsdatum"
+       }
+      ]
+     },
+     {
+      "key": "case:person.postal",
+      "label": "PLZ",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "plz"
+       },
+       {
+        "by": "id",
+        "v": "plz"
+       }
+      ]
+     },
+     {
+      "key": "case:person.city",
+      "label": "Ort",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "ort"
+       },
+       {
+        "by": "id",
+        "v": "ort"
+       }
+      ]
+     },
+     {
+      "key": "case:person.street",
+      "label": "Straße",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "strasse"
+       },
+       {
+        "by": "id",
+        "v": "strasse"
+       }
+      ]
+     },
+     {
+      "key": "case:person.house",
+      "label": "Hausnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "hausnummer"
+       },
+       {
+        "by": "id",
+        "v": "hausnummer"
+       }
+      ]
+     },
+     {
+      "key": "case:person.houseLetter",
+      "label": "Adresszusatz",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "adresszusatz"
+       },
+       {
+        "by": "id",
+        "v": "adresszusatz"
+       }
+      ]
+     },
+     {
+      "key": "case:person.phoneAreaCode",
+      "label": "Vorwahl",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "vorwahl"
+       },
+       {
+        "by": "id",
+        "v": "vorwahl"
+       }
+      ]
+     },
+     {
+      "key": "case:person.phoneNumber",
+      "label": "Telefonnummer",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "telefonnummer"
+       },
+       {
+        "by": "id",
+        "v": "telefonnummer"
+       }
+      ]
+     },
+     {
+      "key": "case:person.email",
+      "label": "E-Mail",
+      "selectorChain": [
+       {
+        "by": "name",
+        "v": "email"
+       },
+       {
+        "by": "id",
+        "v": "email"
+       }
+      ]
+     }
+    ],
+    "actions": []
+   }
+  }
+ ]
+}

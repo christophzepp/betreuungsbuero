@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>Formular-Assistent Runtime-Test</title>
+  <style>
+    body { font: 15px system-ui; padding: 20px; }
+    label, button, iframe, #shadowHost { display: block; margin: 8px 0; }
+    iframe { width: 500px; height: 150px; border: 1px solid #999; }
+    #result { white-space: pre-wrap; padding: 10px; background: #eee; }
+  </style>
+</head>
+<body>
+  <h1>Formular-Assistent Runtime-Test</h1>
+  <form id="testForm">
+    <label for="rootName">Vorname</label><input id="rootName" name="rootName">
+    <label for="rootSelect">Anrede</label><select id="rootSelect"><option>Bitte wählen</option><option value="Frau">Frau</option></select>
+    <label><input id="rootCheck" type="checkbox"> Zustimmung</label>
+    <input id="rootFile" type="file">
+    <button id="defaultSubmit">Weiter</button>
+    <button id="plainButton" type="button">Nur prüfen</button>
+  </form>
+  <div id="shadowHost"></div>
+  <iframe id="sameOriginFrame" title="Innenteil" srcdoc="<!doctype html><html><body><label for='frameName'>Nachname</label><input id='frameName' name='frameName'><input id='frameFile' type='file'></body></html>"></iframe>
+  <button id="runTests" type="button">Tests ausführen</button>
+  <pre id="result">bereit</pre>
+
+  <script>
+    // Minimales WebExtension-Runtime-Double für den Content-Router.
+    window.__messageListener = null;
+    window.chrome = {
+      runtime: {
+        onMessage: { addListener(fn) { window.__messageListener = fn; } },
+        sendMessage() { return Promise.resolve({ ok: true }); }
+      }
+    };
+
+    const firstShadow = document.getElementById('shadowHost').attachShadow({ mode: 'open' });
+    firstShadow.innerHTML = '<label for="shadowName">Straße</label><input id="shadowName" name="shadowName"><div id="nestedHost"></div>';
+    const nestedShadow = firstShadow.getElementById('nestedHost').attachShadow({ mode: 'open' });
+    nestedShadow.innerHTML = '<label for="nestedName">Ort</label><input id="nestedName" name="nestedName">';
+  </script>
+  <script src="../../src/content/scanner.js"></script>
+  <script src="../../src/content/filler.js"></script>
+  <script src="../../src/content/overlay.js"></script>
+  <script src="../../src/content/main.js"></script>
+  <script>
+    function assertion(condition, message) {
+      if (!condition) throw new Error(message);
+    }
+    function message(payload) {
+      return new Promise((resolve, reject) => {
+        try {
+          const keep = window.__messageListener(payload, {}, resolve);
+          if (keep !== true) reject(new Error('Content-Router hält die asynchrone Antwort nicht offen.'));
+        } catch (error) { reject(error); }
+      });
+    }
+    async function runRuntimeTests() {
+      const result = document.getElementById('result');
+      result.textContent = 'läuft …';
+      try {
+        const frame = document.getElementById('sameOriginFrame');
+        if (!frame.contentDocument || frame.contentDocument.readyState !== 'complete') {
+          await new Promise(resolve => frame.addEventListener('load', resolve, { once: true }));
+        }
+        const scan = window.__BXA_SCANNER__.scan();
+        const byId = new Map(scan.descriptors.map(item => [item.id, item]));
+        for (const id of ['rootName', 'rootSelect', 'rootCheck', 'rootFile', 'defaultSubmit', 'plainButton', 'shadowName', 'nestedName', 'frameName', 'frameFile']) {
+          assertion(byId.has(id), 'Scanner übersieht #' + id);
+        }
+        assertion(byId.get('defaultSubmit').type === 'submit', 'Impliziter Submit-Button wurde nicht als submit erkannt.');
+
+        const frameInput = frame.contentDocument.getElementById('frameName');
+        let frameEvents = 0;
+        frameInput.addEventListener('input', () => frameEvents++);
+        frameInput.addEventListener('change', () => frameEvents++);
+        const fill = window.__BXA_FILLER__.fillOne(frameInput, 'Muster');
+        assertion(fill.ok && frameInput.value === 'Muster' && frameEvents === 2, 'iframe-Feld wurde nicht framework-kompatibel gesetzt.');
+
+        const nestedInput = nestedShadow.getElementById('nestedName');
+        nestedInput.focus();
+        const activeFill = await message({ type: 'BXA_FILL_ACTIVE', value: 'Köln' });
+        assertion(activeFill.ok && nestedInput.value === 'Köln', 'Aktives Feld im verschachtelten Shadow DOM wurde nicht erkannt.');
+
+        const resolved = await message({ type: 'BXA_RESOLVE_PROFILE', profile: { fields: [
+          { key: 'frame', selectorChain: byId.get('frameName').selectorChain },
+          { key: 'shadow', selectorChain: byId.get('shadowName').selectorChain },
+          { key: 'nested', selectorChain: byId.get('nestedName').selectorChain }
+        ], actions: [] } });
+        assertion(resolved.fields.every(field => field.ref), 'Profilauflösung scheitert in iframe oder Shadow DOM.');
+
+        let submitClicks = 0;
+        document.getElementById('testForm').addEventListener('submit', event => event.preventDefault());
+        document.getElementById('defaultSubmit').addEventListener('click', () => submitClicks++);
+        const blocked = await message({ type: 'BXA_CLICK', ref: byId.get('defaultSubmit').ref });
+        assertion(blocked.requiresConfirmation === true && submitClicks === 0, 'Submit wurde ohne Bestätigung ausgeführt.');
+        const clicked = await message({ type: 'BXA_CLICK', ref: byId.get('defaultSubmit').ref, confirmed: true });
+        assertion(clicked.ok === true && submitClicks === 1, 'Bestätigter Submit-Klick wurde nicht ausgeführt.');
+
+        const upload = await message({ type: 'BXA_SET_FILE', ref: byId.get('frameFile').ref, base64: 'SGFsbG8=', filename: 'test.txt', mime: 'text/plain' });
+        assertion(upload.ok === true && frame.contentDocument.getElementById('frameFile').files[0].name === 'test.txt', 'iframe-Dateifeld wurde nicht gesetzt.');
+
+        result.dataset.ok = 'true';
+        result.textContent = JSON.stringify({ ok: true, descriptors: scan.descriptors.length, frameEvents, activeFill: nestedInput.value, submitClicks, upload: upload.applied }, null, 2);
+      } catch (error) {
+        result.dataset.ok = 'false';
+        result.textContent = String(error && error.stack || error);
+      }
+    }
+    document.getElementById('runTests').addEventListener('click', runRuntimeTests);
+  </script>
+</body>
+</html>

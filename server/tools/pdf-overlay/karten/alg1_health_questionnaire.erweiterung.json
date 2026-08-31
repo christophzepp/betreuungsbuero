@@ -1,0 +1,15 @@
+{
+  "elementId": "tpl_v159_alg1_health_questionnaire",
+  "reportId": "alg1_health_questionnaire",
+  "einheit": "px",
+  "bildBreite": 1240,
+  "seitenBreitePt": 597.6,
+  "seitenHoehePt": 841.68,
+  "hinweis": "ERWEITERUNG nach Vorlagen-Bereinigung (Weissung der Echtdaten, regionen/alg1_health_questionnaire.regionen.json): Der Kundendaten-Kasten auf S.1 ist danach leer, damit bekommen die bisher ausgelassenen Schema-Felder name/birth/address/reference einen freien Slot (Wertzeilen unter den gedruckten Beschriftungen 'Name, Vorname:'/'Geburtsdatum:'/'Anschrift:'/'Kundennummer:'). NICHT aufgenommen: benefit/start (das Formular hat weiterhin kein Feld dafuer), needs/notes (kein passender Freibereich - die geweissten Antwortzonen von Frage 1 sind bereits an household/assets vergeben). Die ebenfalls geweissten Ich,/wohnhaft-in-Zeilen S.7-12 waeren Duplikate von name/birth/address und bleiben unbelegt (Kuratierung: Schweigepflichtentbindungen fuellt die betreute Person selbst aus). Koordinaten wie Hauptkarte: px@1240, x/y = LINKE OBERE Ecke, page 0-basiert.",
+  "felder": {
+    "alg1_health_questionnaire_name":      { "page": 0, "x": 140, "y": 602, "width": 650, "height": 26, "typ": "text", "groesse": 10 },
+    "alg1_health_questionnaire_birth":     { "page": 0, "x": 140, "y": 655, "width": 400, "height": 26, "typ": "text", "groesse": 10, "transform": "date" },
+    "alg1_health_questionnaire_address":   { "page": 0, "x": 140, "y": 709, "width": 650, "height": 26, "typ": "text", "groesse": 10 },
+    "alg1_health_questionnaire_reference": { "page": 0, "x": 140, "y": 761, "width": 650, "height": 26, "typ": "text", "groesse": 10 }
+  }
+}

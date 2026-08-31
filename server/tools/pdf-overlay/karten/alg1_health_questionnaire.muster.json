@@ -1,0 +1,9 @@
+{
+ "alg1_health_questionnaire_household": "Beispielbeschwerden im Bewegungsapparat, Bluthochdruck; Diagnosen laut Musterbefund (Testdaten)",
+ "alg1_health_questionnaire_assets": "Belastbarkeit fuer koerperliche Taetigkeiten reduziert; laengere Wegstrecken nur eingeschraenkt moeglich (Testdaten)",
+ "alg1_health_questionnaire_income": "Dr. med. Erika Beispiel (Hausaerztin), Musterstraße 12, 56068 Koblenz; Medikation: Beispielpraeparat 10 mg 1-0-1",
+ "alg1_health_questionnaire_name": "Bastuck, Franz Josef",
+ "alg1_health_questionnaire_birth": "01.01.1990",
+ "alg1_health_questionnaire_address": "Musterstraße 12, 56068 Koblenz",
+ "alg1_health_questionnaire_reference": "123456789"
+}

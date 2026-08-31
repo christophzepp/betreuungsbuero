@@ -1,0 +1,696 @@
+{
+  "hinweis": "Vorlagenrunde 23.08.2026. Der Nutzer hat sieben Vordrucke des Amtsgerichts Bad Duerkheim bzw. der Formularsammlung Stassmann bereitgestellt. 'ersetzen' tauscht die eingebettete Original-PDF eines bestehenden Dokuments, 'neu' legt ein zusaetzliches Dokument an.",
+  "quellordner": "vorlagen-2026-08",
+  "ersetzen": {
+    "closing": {
+      "datei": "Schlussbericht.pdf",
+      "grund": "Bisher ein Scan mit abweichendem Seitenformat (578x824) und getilgter Gerichtsanschrift, ohne Textebene. Die neue Fassung ist dasselbe Formular als durchsuchbares Text-PDF im A4-Format.",
+      "katalog": {
+        "template": "Schlussbericht.pdf",
+        "templateDate": "kein Stand ausgewiesen (Vordruck erzeugt 27.02.2023)",
+        "pages": "2 Seite(n)",
+        "author": "Justiz Rheinland-Pfalz (forumSTAR-Länderverbund)",
+        "authority": "Betreuungsgericht",
+        "sourceUrl": "https://agduw.justiz.rlp.de/fileadmin/justiz/Gerichte/Ordentliche_Gerichte/Amtsgerichte/Bad_Duerkheim/betreuung/Schlussbericht.pdf",
+        "sourceLabel": "Vordruck F_583_I1763, veröffentlicht vom Amtsgericht Bad Dürkheim"
+      },
+      "vorlage": {
+        "fileName": "Schlussbericht.pdf",
+        "title": "Schlussbericht",
+        "version": "bereitgestellt 23.08.2026",
+        "pages": 2,
+        "note": "Flache Original-PDF des Amtsgerichts Bad Dürkheim; die eingegebenen Daten werden als geprüftes Ausfüllblatt an das unveränderte Original angefügt."
+      }
+    },
+    "accounting": {
+      "datei": "Rechnungslegung.pdf",
+      "grund": "Die bisher eingebettete Datei war KEINE Blankovorlage, sondern eine ausgefuellte 19-seitige Rechnungslegung einer namentlich genannten Person samt Aktenzeichen. Die neue Fassung ist das leere zweiseitige Formular des Amtsgerichts Bad Duerkheim.",
+      "katalog": {
+        "template": "Rechnungslegung.pdf",
+        "templateDate": "kein Stand ausgewiesen (Vordruck erzeugt 27.02.2023)",
+        "pages": "2 Seite(n)",
+        "author": "Justiz Rheinland-Pfalz (forumSTAR-Länderverbund)",
+        "authority": "Betreuungsgericht",
+        "sourceUrl": "https://agduw.justiz.rlp.de/fileadmin/justiz/Gerichte/Ordentliche_Gerichte/Amtsgerichte/Bad_Duerkheim/betreuung/Rechnungslegung.pdf",
+        "sourceLabel": "Vordruck F_3705_G8727, veröffentlicht vom Amtsgericht Bad Dürkheim"
+      },
+      "vorlage": {
+        "fileName": "Rechnungslegung.pdf",
+        "title": "Rechnungslegung",
+        "version": "bereitgestellt 23.08.2026",
+        "pages": 2,
+        "note": "Blankovordruck „Abrechnung über die Verwaltung des Vermögens\" des Amtsgerichts Bad Dürkheim; die eingegebenen Daten werden als geprüftes Ausfüllblatt angefügt."
+      }
+    },
+    "annual_assets": {
+      "datei": "RLP_Jahresbericht_mit_Vermoegen_2024-12-04.pdf",
+      "grund": "Wie annual_noassets, zusaetzlich mit Vermoegensuebersicht.",
+      "katalog": {
+        "template": "Jahresbericht mit Vermögensübersicht.pdf",
+        "templateDate": "04.12.2024",
+        "pages": "6 Seite(n)",
+        "author": "Justiz Rheinland-Pfalz (OLG Koblenz)",
+        "authority": "Betreuungsgericht",
+        "sourceUrl": "https://justiz.rlp.de/fileadmin/justiz/Gerichte/Ordentliche_Gerichte/Oberlandesgerichte/Koblenz/Zentrale_Seiten/Betreuung_und_Vorsorgevollmacht/Formular_Jahresbericht_mit_Vermoegensuebersicht_fuer_ehrenamtliche_Betreuer-Stand_2024-12-04.pdf",
+        "sourceLabel": "Landeseinheitlicher Vordruck der Justiz Rheinland-Pfalz, veröffentlicht beim OLG Koblenz"
+      },
+      "vorlage": {
+        "fileName": "Jahresbericht mit Vermögensübersicht.pdf",
+        "title": "Jahresbericht mit Vermögenssorge",
+        "version": "Stand 04.12.2024",
+        "pages": 6,
+        "note": "Landeseinheitlicher Vordruck mit leerem Briefkopf; das zuständige Amtsgericht wird beim Ausfüllen eingetragen."
+      }
+    },
+    "annual_noassets": {
+      "datei": "RLP_Jahresbericht_ohne_Vermoegen_2024-12-04.pdf",
+      "grund": "Nachfolgefassung mit ausgewiesenem Stand 04.12.2024 und leerem Briefkopf, dadurch fuer jedes Gericht verwendbar. Gegenueber der Bad-Duerkheimer Fassung zusaetzlich: Hausarzt, weiterer Arzt, Orientierung, Verstaendigungsfaehigkeit, Gruende zur Zustandsaenderung.",
+      "katalog": {
+        "template": "Jahresbericht ohne Vermögensübersicht.pdf",
+        "templateDate": "04.12.2024",
+        "pages": "5 Seite(n)",
+        "author": "Justiz Rheinland-Pfalz (OLG Koblenz)",
+        "authority": "Betreuungsgericht",
+        "sourceUrl": "https://justiz.rlp.de/fileadmin/justiz/Gerichte/Ordentliche_Gerichte/Oberlandesgerichte/Koblenz/Zentrale_Seiten/Betreuung_und_Vorsorgevollmacht/Formular_Jahresbericht_ohne_Vermoegensuebersicht_fuer_ehrenamtliche_Betreuer-Stand_2024-12-04.pdf",
+        "sourceLabel": "Landeseinheitlicher Vordruck der Justiz Rheinland-Pfalz, veröffentlicht beim OLG Koblenz"
+      },
+      "vorlage": {
+        "fileName": "Jahresbericht ohne Vermögensübersicht.pdf",
+        "title": "Jahresbericht ohne Vermögenssorge",
+        "version": "Stand 04.12.2024",
+        "pages": 5,
+        "note": "Landeseinheitlicher Vordruck mit leerem Briefkopf; das zuständige Amtsgericht wird beim Ausfüllen eingetragen."
+      }
+    },
+    "asset_inventory": {
+      "datei": "BS10_Vermoegensverzeichnis_01-2023.pdf",
+      "grund": "Die eingebettete BS-10-Fassung von 02.2012 zitiert die aufgehobenen §§ 1802, 1908i, 1915 BGB und ist ein 2-MB-Scan ohne Textebene. Die Nachfolgefassung derselben Reihe fuehrt § 1835 BGB im Titel.",
+      "katalog": {
+        "template": "BS 10 Verzeichnis über das Vermögen (§ 1835 BGB), Langfassung.pdf",
+        "templateDate": "01.2023",
+        "pages": "6 Seite(n)",
+        "author": "Bundeseinheitliche Vordruckreihe BS (Justizverwaltungen der Länder)",
+        "authority": "Betreuungsgericht",
+        "sourceUrl": "https://www.mv-justiz.de/static/MVJ/Zentrale%20Formulare/Amtsgerichte/Betreuung/Bundeseinheitliche%20Formulare/BS%2010%20-%20Verzeichnis%20%C3%BCber%20das%20Verm%C3%B6gen.pdf",
+        "sourceLabel": "Formularsammlung der Justiz Mecklenburg-Vorpommern, Rubrik „Bundeseinheitliche Formulare“"
+      },
+      "vorlage": {
+        "fileName": "BS 10 Verzeichnis über das Vermögen (§ 1835 BGB), Langfassung.pdf",
+        "title": "Vermögensverzeichnis",
+        "version": "gen. 01.2023",
+        "pages": 6,
+        "status": "coordinate-map-bs10",
+        "mode": "asset-coordinate",
+        "pdfFieldCount": 48,
+        "note": "Bundeseinheitlicher Vordruck BS 10 nach neuem Recht (§ 1835 BGB). Die Kategoriesummen werden an den Originalpositionen eingetragen, die vollständige Postenliste folgt als Detailseiten.",
+        "ready": true
+      }
+    },
+    "initial": {
+      "datei": "BB_Anfangsbericht_02-2026.pdf",
+      "grund": "Auf Nutzerentscheid: dieselbe Formularreihe (F 4389), Stand 02/2026, ohne festen Briefkopf und mit sechs zusaetzlichen Fragen gegenueber der Mainzer Fassung.",
+      "katalog": {
+        "template": "F 4389 Anfangsbericht.pdf",
+        "templateDate": "02/2026",
+        "pages": "5 Seite(n)",
+        "author": "Ordentliche Gerichtsbarkeit Brandenburg (Vordruckreihe F)",
+        "authority": "Betreuungsgericht",
+        "sourceUrl": "https://ordentliche-gerichtsbarkeit.brandenburg.de/sixcms/media.php/9/F_4389_Anfangsbericht_Stand_02_26.pdf",
+        "sourceLabel": "Formularsammlung der ordentlichen Gerichtsbarkeit Brandenburg"
+      },
+      "vorlage": {
+        "fileName": "F 4389 Anfangsbericht.pdf",
+        "title": "Anfangsbericht",
+        "version": "Stand 02/2026",
+        "pages": 5,
+        "status": "coordinate-map",
+        "mode": "flat",
+        "pdfFieldCount": 0,
+        "note": "Vordruck ohne festen Briefkopf; Gericht und Absender werden aus den Stammdaten gesetzt."
+      },
+      "probequelle": "BB_Anfangsbericht_02-2026.pdf"
+    }
+  },
+  "neu": [
+    {
+      "id": "care_extension",
+      "datei": "Erweiterung_der_Betreuung_Antrag.pdf",
+      "kuerzel": "EAK",
+      "nachId": "care_change_zepp",
+      "katalog": {
+        "id": "care_extension",
+        "title": "Erweiterung des Aufgabenkreises",
+        "icon": "PDF",
+        "group": "cat_01",
+        "groupLabel": "Einrichtung und Wechsel der Betreuung",
+        "template": "Erweiterung der Betreuung – Antrag.pdf",
+        "templateDate": "kein Stand ausgewiesen (© 2007)",
+        "author": "Jörg Staatsmann, Richter am Amtsgericht Montabaur",
+        "authority": "Betreuungsgericht",
+        "sourceUrl": "https://agduw.justiz.rlp.de/fileadmin/justiz/Gerichte/Ordentliche_Gerichte/Amtsgerichte/Bad_Duerkheim/betreuung/Erweiterung_der_Betreuung_Antrag.pdf",
+        "sourceLabel": "Vordruck Nr. 4 mit ärztlichem Gutachten Nr. 5, veröffentlicht vom Amtsgericht Bad Dürkheim",
+        "templateKind": "pdf",
+        "pages": "4 Seite(n)"
+      },
+      "vorlage": {
+        "elementId": "tpl_v159_care_extension",
+        "fileName": "Erweiterung der Betreuung – Antrag.pdf",
+        "title": "Erweiterung des Aufgabenkreises",
+        "version": "bereitgestellt 23.08.2026",
+        "pages": 4,
+        "authority": "zuständige Stelle laut Originalvorlage",
+        "mappingVersion": 1,
+        "status": "flat-with-data-sheet",
+        "tested": false,
+        "ready": true,
+        "mode": "flat-supplement",
+        "pdfFieldCount": 0,
+        "note": "Gescannter Vordruck ohne Textebene (Scan des Amtsgerichts vom 02.09.2021). Die Seiten 1 und 2 werden vom Büro ausgefüllt, die Seiten 3 und 4 sind das ärztliche Gutachten Nr. 5 und bleiben leer. Urheberrechtlich geschützte Vorlage – Lizenzvorbehalt des Urhebers beachten."
+      },
+      "schema": {
+        "sections": [
+          {
+            "title": "1. Anliegen",
+            "fields": [
+              {
+                "id": "ext_request_type",
+                "label": "Was wird angeregt?",
+                "type": "checks",
+                "required": true,
+                "options": [
+                  "Erweiterung des Aufgabenkreises",
+                  "Verlängerung der Betreuung"
+                ]
+              }
+            ]
+          },
+          {
+            "title": "2. Betreute Person",
+            "fields": [
+              {
+                "id": "ext_name",
+                "label": "Vorname, Name der betreuten Person",
+                "type": "text",
+                "required": true,
+                "sourcePath": "person.fullName"
+              },
+              {
+                "id": "ext_birth",
+                "label": "Geburtsdatum",
+                "type": "date",
+                "sourcePath": "person.birthDate"
+              },
+              {
+                "id": "ext_address",
+                "label": "Wohnanschrift, ggf. gegenwärtiger Aufenthaltsort",
+                "type": "text",
+                "full": true,
+                "sourcePath": "person.address"
+              },
+              {
+                "id": "ext_reference",
+                "label": "Aktenzeichen des Gerichts",
+                "type": "text",
+                "hint": "Der Vordruck hat kein eigenes Feld dafür – das Aktenzeichen wird rechts neben den Namen gedruckt."
+              }
+            ]
+          },
+          {
+            "title": "3. Aufgabenkreise, um die erweitert werden soll",
+            "fields": [
+              {
+                "id": "ext_scopes",
+                "label": "Aufgabenkreise des Vordrucks",
+                "type": "checks",
+                "options": [
+                  "die Gesundheitssorge",
+                  "die Aufenthaltsbestimmung",
+                  "die Entscheidung über unterbringungsähnliche Maßnahmen",
+                  "die Entscheidung über die geschlossene Unterbringung",
+                  "die Vermögenssorge",
+                  "die Wohnungsangelegenheiten",
+                  "die Entgegennahme, das Öffnen und das Anhalten der Post",
+                  "die Rechts-, Antrags- und Behördenangelegenheiten"
+                ]
+              },
+              {
+                "id": "ext_scope_extra1",
+                "label": "Weiterer Aufgabenkreis (Zeile 1)",
+                "type": "text",
+                "full": true,
+                "hint": "Der Vordruck hat drei freie Zeilen für Aufgabenkreise, die nicht in der Liste stehen."
+              },
+              {
+                "id": "ext_scope_extra2",
+                "label": "Weiterer Aufgabenkreis (Zeile 2)",
+                "type": "text",
+                "full": true
+              },
+              {
+                "id": "ext_scope_extra3",
+                "label": "Weiterer Aufgabenkreis (Zeile 3)",
+                "type": "text",
+                "full": true
+              }
+            ]
+          },
+          {
+            "title": "4. Verlängerung der Betreuung",
+            "fields": [
+              {
+                "id": "ext_extend_months",
+                "label": "Verlängerung um … Monate",
+                "type": "text"
+              },
+              {
+                "id": "ext_extend_years",
+                "label": "Verlängerung um … Jahr(e)",
+                "type": "text"
+              },
+              {
+                "id": "ext_extend_seven",
+                "label": "Höchstfrist",
+                "type": "checks",
+                "options": [
+                  "7 Jahre"
+                ]
+              }
+            ]
+          },
+          {
+            "title": "5. Ärztliches Zeugnis",
+            "fields": [
+              {
+                "id": "ext_report_basis",
+                "label": "Begründung stützt sich auf ein Zeugnis",
+                "type": "checks",
+                "options": [
+                  "beiliegendes oder bereits vorliegendes fachärztliches Zeugnis / Gutachten"
+                ]
+              },
+              {
+                "id": "ext_doctor",
+                "label": "Ärztin / Arzt (Herr/Frau Dr. …)",
+                "type": "text"
+              },
+              {
+                "id": "ext_report_date",
+                "label": "Zeugnis vom",
+                "type": "date"
+              },
+              {
+                "id": "ext_attest_status",
+                "label": "Falls noch kein Zeugnis vorliegt",
+                "type": "select",
+                "options": [
+                  "",
+                  "Ein entsprechendes Attest wird nachgereicht.",
+                  "Ein entsprechendes ärztliches Attest habe ich angefordert und wird Ihnen vom Arzt direkt übersandt.",
+                  "Ein ärztliches Attest soll vom Gericht eingeholt werden."
+                ]
+              }
+            ]
+          },
+          {
+            "title": "6. Haltung der betreuten Person",
+            "fields": [
+              {
+                "id": "ext_person_view",
+                "label": "Die betreute Person",
+                "type": "select",
+                "required": true,
+                "options": [
+                  "",
+                  "ist mit dieser Vorgehensweise einverstanden.",
+                  "ist mit dieser Vorgehensweise nicht einverstanden.",
+                  "kann sich zu dieser Anregung nicht äußern.",
+                  "hat keine Kenntnis von der Anregung."
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "death_notice_court",
+      "datei": "Mitteilung_ueber_Tod_des_Betreuten.pdf",
+      "kuerzel": "TM",
+      "nachId": "letter_death_notice",
+      "katalog": {
+        "id": "death_notice_court",
+        "title": "Todesmitteilung an das Gericht",
+        "icon": "PDF",
+        "group": "cat_04",
+        "groupLabel": "Beendigung und Entlastung",
+        "template": "Mitteilung über den Tod des Betreuten.pdf",
+        "templateDate": "kein Stand ausgewiesen (© 2007)",
+        "author": "Jörg Staatsmann, Richter am Amtsgericht Montabaur",
+        "authority": "Betreuungsgericht",
+        "sourceUrl": "https://agduw.justiz.rlp.de/fileadmin/justiz/Gerichte/Ordentliche_Gerichte/Amtsgerichte/Bad_Duerkheim/betreuung/Mitteilung_ueber_Tod_des_Betreuten.pdf",
+        "sourceLabel": "Vordruck Nr. 14, veröffentlicht vom Amtsgericht Bad Dürkheim",
+        "templateKind": "pdf",
+        "pages": "1 Seite(n)"
+      },
+      "vorlage": {
+        "elementId": "tpl_v159_death_notice_court",
+        "fileName": "Mitteilung über den Tod des Betreuten.pdf",
+        "title": "Todesmitteilung an das Gericht",
+        "version": "bereitgestellt 23.08.2026",
+        "pages": 1,
+        "authority": "zuständige Stelle laut Originalvorlage",
+        "mappingVersion": 1,
+        "status": "flat-with-data-sheet",
+        "tested": false,
+        "ready": true,
+        "mode": "flat-supplement",
+        "pdfFieldCount": 0,
+        "note": "Gescannter Vordruck ohne Textebene. Urheberrechtlich geschützte Vorlage – Lizenzvorbehalt des Urhebers beachten."
+      },
+      "schema": {
+        "sections": [
+          {
+            "title": "1. Betreute Person",
+            "fields": [
+              {
+                "id": "death_name",
+                "label": "Vorname, Name der betreuten Person",
+                "type": "text",
+                "required": true,
+                "sourcePath": "person.fullName"
+              },
+              {
+                "id": "death_birth",
+                "label": "Geburtsdatum",
+                "type": "date",
+                "sourcePath": "person.birthDate"
+              },
+              {
+                "id": "death_address",
+                "label": "Wohnanschrift, ggf. gegenwärtiger Aufenthaltsort",
+                "type": "text",
+                "full": true,
+                "sourcePath": "person.address"
+              }
+            ]
+          },
+          {
+            "title": "2. Verfahren",
+            "fields": [
+              {
+                "id": "death_reference",
+                "label": "Aktenzeichen des Gerichts",
+                "type": "text"
+              }
+            ]
+          },
+          {
+            "title": "3. Todesfall",
+            "fields": [
+              {
+                "id": "death_date",
+                "label": "Verstorben am",
+                "type": "date",
+                "required": true
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "care_suggestion",
+      "datei": "RLP_Betreuungsanregung_2024-12-05.pdf",
+      "kuerzel": "BAnr",
+      "nachId": "letter_care_notice",
+      "katalog": {
+        "id": "care_suggestion",
+        "title": "Betreuungsanregung (amtlicher Vordruck)",
+        "icon": "PDF",
+        "group": "cat_01",
+        "groupLabel": "Einrichtung und Wechsel der Betreuung",
+        "template": "Betreuungsanregung.pdf",
+        "templateDate": "05.12.2024",
+        "author": "Justiz Rheinland-Pfalz (OLG Koblenz)",
+        "authority": "Betreuungsgericht",
+        "sourceUrl": "https://justiz.rlp.de/fileadmin/justiz/Gerichte/Ordentliche_Gerichte/Oberlandesgerichte/Koblenz/Zentrale_Seiten/Betreuung_und_Vorsorgevollmacht/Formular_Betreuungsanregung-Stand_2024-12-05.pdf",
+        "sourceLabel": "Landeseinheitlicher Vordruck der Justiz Rheinland-Pfalz, veröffentlicht beim OLG Koblenz",
+        "templateKind": "pdf",
+        "pages": "4 Seite(n)"
+      },
+      "vorlage": {
+        "elementId": "tpl_v159_care_suggestion",
+        "fileName": "Betreuungsanregung.pdf",
+        "title": "Betreuungsanregung",
+        "version": "Stand 05.12.2024",
+        "pages": 4,
+        "authority": "zuständige Stelle laut Originalvorlage",
+        "mappingVersion": 1,
+        "status": "flat-with-data-sheet",
+        "tested": false,
+        "ready": true,
+        "mode": "flat-supplement",
+        "pdfFieldCount": 0,
+        "note": "Landeseinheitlicher Vordruck mit leerem Briefkopf; zitiert bereits § 1814 Abs. 1 BGB (Recht ab 2023)."
+      },
+      "schema": {
+        "sections": [
+          {
+            "title": "1. Anliegen",
+            "fields": [
+              {
+                "id": "sug_urgent",
+                "label": "Zusätzlich beantragt",
+                "type": "checks",
+                "options": [
+                  "Bestellung eines vorläufigen Betreuers / einer vorläufigen Betreuerin"
+                ]
+              }
+            ]
+          },
+          {
+            "title": "2. Betroffene Person",
+            "fields": [
+              {
+                "id": "sug_person",
+                "label": "Name, Vorname, Geburtsdatum, Geburtsort",
+                "type": "text",
+                "required": true,
+                "full": true,
+                "sourcePath": "person.fullName"
+              },
+              {
+                "id": "sug_birthname",
+                "label": "Geburtsname, Familienstand",
+                "type": "text",
+                "full": true
+              },
+              {
+                "id": "sug_address",
+                "label": "Genaue Anschrift",
+                "type": "text",
+                "full": true,
+                "sourcePath": "person.address"
+              },
+              {
+                "id": "sug_residence",
+                "label": "Derzeitiger Aufenthalt",
+                "type": "text",
+                "full": true
+              },
+              {
+                "id": "sug_contact",
+                "label": "Telefon, Fax, E-Mail",
+                "type": "text",
+                "full": true
+              }
+            ]
+          },
+          {
+            "title": "3. Aufgabenkreis",
+            "fields": [
+              {
+                "id": "sug_scopes",
+                "label": "Der Aufgabenkreis soll umfassen",
+                "type": "checks",
+                "required": true,
+                "options": [
+                  "die Gesundheitssorge",
+                  "die Aufenthaltsbestimmung",
+                  "die Entscheidung über unterbringungsähnliche Maßnahmen",
+                  "die Entscheidung über die geschlossene Unterbringung",
+                  "die Vermögenssorge",
+                  "die Wohnungsangelegenheiten",
+                  "die Entgegennahme, das Öffnen und das Anhalten der Post",
+                  "Vertretung gegenüber Ämtern, Behörden, Sozialversicherungsträgern und Dritten"
+                ]
+              }
+            ]
+          },
+          {
+            "title": "4. Vorschlag zur Person des Betreuers",
+            "fields": [
+              {
+                "id": "sug_proposal_type",
+                "label": "Für das Amt des Betreuers",
+                "type": "select",
+                "options": [
+                  "",
+                  "schlage ich den/die Antragsteller/in vor",
+                  "schlage ich die unten genannte Person vor",
+                  "überlasse ich die Auswahl dem Gericht"
+                ]
+              },
+              {
+                "id": "sug_proposal_person",
+                "label": "Name, Vorname, Geburtsdatum, Anschrift, Telefon, persönlicher Bezug",
+                "type": "textarea",
+                "full": true
+              },
+              {
+                "id": "sug_proposal_informed",
+                "label": "Einverständnis",
+                "type": "checks",
+                "options": [
+                  "Die vorgeschlagene Person ist über den Vorschlag informiert und damit einverstanden."
+                ]
+              }
+            ]
+          },
+          {
+            "title": "5. Begründung",
+            "fields": [
+              {
+                "id": "sug_reasons",
+                "label": "D. Betroffene kann die Angelegenheiten nicht mehr selbst besorgen wegen",
+                "type": "checks",
+                "options": [
+                  "Bewegungsunfähigkeit",
+                  "Verwirrtheitszuständen",
+                  "sonstiger körperlicher/geistiger Behinderung",
+                  "Persönlichkeitsveränderung",
+                  "Auffälligkeiten im Umgang mit Vermögen"
+                ]
+              },
+              {
+                "id": "sug_reason_personality",
+                "label": "Persönlichkeitsveränderung, und zwar",
+                "type": "text",
+                "full": true
+              },
+              {
+                "id": "sug_reason_assets",
+                "label": "Auffälligkeiten im Umgang mit Vermögen, und zwar",
+                "type": "text",
+                "full": true
+              }
+            ]
+          },
+          {
+            "title": "6. Ärztliche Angaben",
+            "fields": [
+              {
+                "id": "sug_doctor",
+                "label": "Hausärztin / Hausarzt",
+                "type": "text",
+                "full": true
+              },
+              {
+                "id": "sug_report",
+                "label": "Ein ärztliches Gutachten",
+                "type": "select",
+                "options": [
+                  "",
+                  "soll vom Gericht eingeholt werden.",
+                  "liegt dem Antrag bei.",
+                  "werde ich nachreichen."
+                ]
+              }
+            ]
+          },
+          {
+            "title": "7. Angehörige",
+            "fields": [
+              {
+                "id": "sug_spouse",
+                "label": "Ehepartner (mit Anschrift und Telefon)",
+                "type": "text",
+                "full": true
+              },
+              {
+                "id": "sug_parents",
+                "label": "Eltern",
+                "type": "text",
+                "full": true
+              },
+              {
+                "id": "sug_children",
+                "label": "Kinder (mit Geburtsdatum und Altersangabe)",
+                "type": "text",
+                "full": true
+              },
+              {
+                "id": "sug_siblings",
+                "label": "Geschwister",
+                "type": "text",
+                "full": true,
+                "hint": "Nur erforderlich, wenn keine Ehefrau oder Kinder vorhanden sind."
+              },
+              {
+                "id": "sug_relatives_agree",
+                "label": "Einverständnis der Angehörigen",
+                "type": "checks",
+                "options": [
+                  "Die genannten Angehörigen sind mit einer Betreuung und der Person des Betreuers einverstanden."
+                ]
+              },
+              {
+                "id": "sug_relatives_except",
+                "label": "mit Ausnahme von",
+                "type": "text",
+                "full": true
+              }
+            ]
+          },
+          {
+            "title": "8. Haltung der betroffenen Person",
+            "fields": [
+              {
+                "id": "sug_person_view",
+                "label": "D. Betroffene",
+                "type": "select",
+                "options": [
+                  "",
+                  "hat keine Kenntnis von dieser Anregung.",
+                  "hat Kenntnis von dieser Anregung und ihr zugestimmt.",
+                  "hat Kenntnis von dieser Anregung und ihr nicht zugestimmt.",
+                  "kann sich zu dieser Anregung nicht äußern."
+                ]
+              },
+              {
+                "id": "sug_communication",
+                "label": "Eine Verständigung mit d. Betroffenen",
+                "type": "select",
+                "options": [
+                  "",
+                  "ist möglich.",
+                  "ist bedingt möglich.",
+                  "ist nicht möglich."
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "umbenennen": {
+    "letter_death_notice": {
+      "title": "Todesmitteilung an Dritte",
+      "grund": "Steht neben dem amtlichen Vordruck 'Todesmitteilung an das Gericht'. Der Titel sagt jetzt, an wen das Schreiben geht (Banken, Versicherungen, Behoerden)."
+    }
+  },
+  "probevorlagen": {
+    "funeral_directive": "Totenfuersorgeverfuegung.pdf"
+  }
+}

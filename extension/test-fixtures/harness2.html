@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="de">
+<head><meta charset="utf-8"><title>BXA Härtetest-Harness</title></head>
+<body>
+<h1>Härtetest: Falsch-Zuordnungen, Datumsformate, Checkbox/Radio/Select, Kontext</h1>
+
+<!-- Fallstrick-Felder: generische "Name"-Kollisionen + betreute Person vs. Betreuer -->
+<fieldset><legend>Angaben zur betreuten Person</legend>
+  <label for="p_name">Name</label><input id="p_name" name="p_name" type="text">
+  <label for="p_gebdat_iso">Geburtsdatum</label><input id="p_gebdat_iso" name="p_gebdat_iso" type="date">
+  <label for="p_gebdat_de">Geburtsdatum (Text)</label><input id="p_gebdat_de" name="p_gebdat_de" type="text" placeholder="TT.MM.JJJJ">
+  <label for="bankname">Name der Bank</label><input id="bankname" name="bankname" type="text">
+  <label for="dateiname">Dateiname des Anhangs</label><input id="dateiname" name="dateiname" type="text">
+  <label for="famstand">Familienstand</label>
+  <select id="famstand" name="famstand"><option value="">–</option><option value="LEDIG">ledig</option><option value="VERH">verheiratet</option><option value="GESCH">geschieden</option></select>
+  <label>Geschlecht:
+    <label><input type="radio" name="geschlecht" value="m"> männlich</label>
+    <label><input type="radio" name="geschlecht" value="w"> weiblich</label>
+    <label><input type="radio" name="geschlecht" value="d"> divers</label>
+  </label>
+  <label><input id="zustimmung" type="checkbox"> Ich stimme der Datenverarbeitung zu</label>
+</fieldset>
+
+<fieldset><legend>Angaben zum gesetzlichen Vertreter / Betreuer</legend>
+  <label for="b_name">Name</label><input id="b_name" name="b_name" type="text">
+  <label for="b_plz">Postleitzahl</label><input id="b_plz" name="b_plz" type="text">
+</fieldset>
+
+<button id="btnWeiter" type="button">Weiter</button>
+<button id="btnAbsenden" type="submit">Verbindlich absenden</button>
+
+<div id="result"></div>
+
+<script>
+window.chrome = { runtime:{ onMessage:{ addListener(fn){ window.__on=fn } }, sendMessage(){} } };
+window.mockSend = (msg) => new Promise((resolve)=>window.__on(msg,{},resolve));
+</script>
+<script src="../src/common/browser-shim.js"></script>
+<script src="../src/common/synonyms.js"></script>
+<script src="../src/common/dictionary.js"></script>
+<script src="../src/common/matcher.js"></script>
+<script src="../src/content/scanner.js"></script>
+<script src="../src/content/filler.js"></script>
+<script src="../src/content/overlay.js"></script>
+<script src="../src/content/main.js"></script>
+<script>
+const FILLDATA={
+  case:{id:'x',label:'Muster, Erika'},
+  caseData:{
+    person:{lastName:'Muster',firstName:'Erika',birthDate:'1965-04-12',gender:'weiblich',maritalStatus:'geschieden',postalCode:'56068'},
+    banks:[{bankName:'Sparkasse Koblenz',iban:'DE89370400440532013000'}]
+  },
+  contacts:[],
+  officeProfile:{companyName:'Betreuungsbüro Zepp',firstName:'Christoph',lastName:'Zepp',postalCode:'56070'},
+  officeBankAccounts:[],officeEmployees:[]
+};
+window.runHardTest=async function(){
+  const dict=bxaBuildDictionary(FILLDATA);
+  const scan=await window.mockSend({type:'BXA_SCAN'});
+  const proposals=BxaMatcher.match(scan.descriptors,dict,'auto');
+  const map={};
+  for(const p of proposals){const d=scan.descriptors.find(x=>x.ref===p.ref);map[d.id||d.name||d.type]={key:p.key,group:p.group,conf:p.confidence};}
+  // Fülle alle Vorschläge und lies das DOM zurück
+  await window.mockSend({type:'BXA_FILL',items:proposals.map(p=>({ref:p.ref,value:p.value}))});
+  const dom={};
+  for(const id of ['p_name','p_gebdat_iso','p_gebdat_de','bankname','dateiname','famstand','b_name','b_plz']){const el=document.getElementById(id);if(el)dom[id]=el.value;}
+  dom.geschlecht=(document.querySelector('input[name=geschlecht]:checked')||{}).value||'';
+  dom.zustimmung=document.getElementById('zustimmung').checked;
+  // Prüfungen
+  const checks={
+    'p_name→person.lastName': map.p_name&&map.p_name.key==='case:person.lastName',
+    'bankname→NICHT person.lastName': !map.bankname||map.bankname.key!=='case:person.lastName',
+    'bankname→banks.0.bankName': map.bankname&&map.bankname.key==='case:banks.0.bankName',
+    'dateiname→gar nicht gemappt': !map.dateiname,
+    'b_name→betreuer (nicht betreute Person)': map.b_name&&map.b_name.group==='betreuer_buero',
+    'gebdat_iso(type=date)→ISO': dom.p_gebdat_iso==='1965-04-12',
+    'gebdat_de(text)→TT.MM.JJJJ': dom.p_gebdat_de==='12.04.1965',
+    'famstand-Select→GESCH (geschieden)': dom.famstand==='GESCH',
+    'zustimmung bleibt UNgeprüft (kein Wert)': dom.zustimmung===false
+  };
+  return {map,dom,checks,alleBestanden:Object.values(checks).every(Boolean)};
+};
+</script>
+</body>
+</html>

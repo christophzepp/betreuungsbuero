@@ -1,0 +1,4 @@
+# Getrennte Restic-Wartung: sonntags 04:30 Uhr.
+# Dieses Konto braucht List-/Delete-Rechte und darf NICHT dem App-/Backup-
+# Prozess zur Verfügung stehen. Alle Platzhalter vor der Installation ersetzen.
+30 4 * * 0 "__PROJECT_ROOT__/server/tools/offsite-maintenance.sh" --repository "__REMOTE_RESTIC_REPOSITORY__" --password-file "__MAINTENANCE_PASSWORD_FILE__" --credential-env-file "__MAINTENANCE_CREDENTIAL_ENV_FILE__" --status-dir "__MAINTENANCE_STATUS_DIR__" --job-id "__BACKUP_JOB_ID__" --tag "betreuungsbuero" --keep-daily 14 --keep-monthly 12 --keep-yearly 10 >> "__MAINTENANCE_LOG_FILE__" 2>&1

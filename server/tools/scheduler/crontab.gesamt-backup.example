@@ -1,0 +1,11 @@
+# NICHT INSTALLIEREN: historische Referenz für einen einmaligen manuellen
+# Notfalllauf bei vollständig gestoppter App. Der Admin-Zeitplan ist der einzige
+# autoritative automatische Scheduler; kein paralleles cron einrichten.
+# Die enthaltene Zeitzeile zeigt nur den früheren täglichen Beispielrhythmus.
+# VOR DER VERWENDUNG beide __...__-Platzhalter durch absolute Pfade ersetzen.
+# __EXTERNAL_BACKUP_DESTINATION__ muss ein getrennter Datentraeger oder ein
+# eingehangenes Sicherungssystem sein. Die Zielmappe vorher anlegen.
+SHELL=/bin/bash
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
+15 2 * * * "__PROJECT_ROOT__/server/tools/gesamt-backup.sh" --db "__PROJECT_ROOT__/runtime/database/betreuungsbuero.sqlite3" --data-dir "__PROJECT_ROOT__/runtime/data" --server-dir "__PROJECT_ROOT__/server" --destination "__EXTERNAL_BACKUP_DESTINATION__" --require-marker --consistency-retries 3 --retention-daily 14 --retention-monthly 12 --retention-yearly 10 --retention-diagnostic 6 --capacity-warning-percent 15 --label "taeglich" >> "__EXTERNAL_BACKUP_DESTINATION__/scheduler.log" 2>&1

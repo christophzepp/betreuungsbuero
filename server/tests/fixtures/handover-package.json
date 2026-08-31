@@ -1,0 +1,28 @@
+{
+  "caseLabel": "Müller, Jörg 650203",
+  "generatedAt": "2026-07-28T08:15:00.000Z",
+  "documents": [
+    {
+      "fileId": "doc-kerndokument",
+      "path": "Fallakte/02 - Kerndokumente/260724 Müller, Jörg Bestallungsurkunde.pdf",
+      "content": "Bestallungsurkunde – Testinhalt"
+    },
+    {
+      "fileId": "doc-bericht",
+      "path": "Fallakte/10 - Berichte & Rechnungslegung/Berichte (§ 1863 BGB)/2026/260728 Müller, Jörg Jahresbericht.pdf",
+      "content": "Jahresbericht § 1863 BGB"
+    },
+    {
+      "fileId": "doc-doku",
+      "path": "Fallakte/11 - Betreuungsführung/Falldokumentation/2026/07/260724 1352 Hausbesuch/260724 Müller, Jörg Gesprächsnotiz.txt",
+      "content": "Gesprächsnotiz mit Umlauten: ä ö ü Ä Ö Ü ß"
+    }
+  ],
+  "missing": [
+    {
+      "fileId": "doc-fehlt",
+      "path": "Fallakte/05 - Finanzen/Belege/2026/07/260701 Müller, Jörg Rechnung.pdf",
+      "reason": "file_missing"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+name: betreuungsbuero
+
+services:
+  betreuungsbuero:
+    image: ${APP_IMAGE:-ghcr.io/derzerpoo/betreuungsbuero:stable}
+    pull_policy: always
+    restart: unless-stopped
+    init: true
+    ports:
+      - "${APP_PORT:-8935}:8935"
+    environment:
+      PORT: "8935"
+      TZ: ${TZ:-Europe/Berlin}
+      SESSION_SECRET: ${SESSION_SECRET:?SESSION_SECRET fehlt in der .env-Datei}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:?ENCRYPTION_KEY fehlt in der .env-Datei}
+      SETUP_TOKEN: ${SETUP_TOKEN:?SETUP_TOKEN fehlt in der .env-Datei}
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-http://localhost:8935}
+      COOKIE_SECURE: ${COOKIE_SECURE:-0}
+      CALENDAR_SYNC_INTERVAL_SECONDS: ${CALENDAR_SYNC_INTERVAL_SECONDS:-60}
+      MAILBOX_WATCH: ${MAILBOX_WATCH:-1}
+      REQUEST_TIMEOUT_MS: ${REQUEST_TIMEOUT_MS:-3600000}
+      ENABLE_DOCUMENT_MIGRATION: ${ENABLE_DOCUMENT_MIGRATION:-0}
+      APP_IMAGE_REFERENCE: ${APP_IMAGE:-ghcr.io/derzerpoo/betreuungsbuero:stable}
+      OUTPUTS_DIR: /app/outputs
+      APP_FILE: Betreuungsbuero_Dokumentenassistent_v0_7.html
+      SP_PLUGIN_DIR: /app/sp-plugin
+      RUNTIME_ROOT: /app/state
+      DATA_DIR: /app/state/data
+      DOCUMENTS_DATA_ROOT: /app/state/data
+      DB_PATH: /app/state/database/betreuungsbuero.sqlite3
+      EXTENSION_ARTIFACTS_DIR: /app/state/extension-artifacts
+      RUNTIME_SECRETS_DIR: /app/runtime-secrets
+      DOCUMENT_RECOVERY_KEY_FILE: /app/runtime-secrets/document-recovery-key
+      TOTAL_BACKUP_DESTINATION: /app/backups
+      RUNTIME_ARTIFACT_RESTORE_STATE_DIR: /app/server/_restore-rollback
+    volumes:
+      - betreuungsbuero-state:/app/state
+      - betreuungsbuero-runtime-secrets:/app/runtime-secrets
+      - betreuungsbuero-backups:/app/backups
+      - betreuungsbuero-restore-state:/app/server/_restore-rollback
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  betreuungsbuero-state:
+  betreuungsbuero-runtime-secrets:
+  betreuungsbuero-backups:
+  betreuungsbuero-restore-state:

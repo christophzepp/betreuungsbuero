@@ -1,0 +1,306 @@
+{
+  "letter_care_notice": {
+    "author": "Betreuungsbüro",
+    "authority": "Empfänger laut Anschreiben"
+  },
+  "care_change_zepp": {
+    "author": "Betreuungsbüro",
+    "authority": "Betreuungsgericht"
+  },
+  "annual_assets": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "Betreuungsgericht"
+  },
+  "initial": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "Betreuungsgericht"
+  },
+  "closing": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "Betreuungsgericht"
+  },
+  "annual_noassets": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "Betreuungsgericht"
+  },
+  "self_management": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "Betreuungsgericht"
+  },
+  "remuneration": {
+    "author": "Betreuungsbüro",
+    "authority": "Betreuungsgericht"
+  },
+  "asset_inventory": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "Betreuungsgericht"
+  },
+  "remuneration_pdf": {
+    "author": "Betreuungsbüro",
+    "authority": "Betreuungsgericht"
+  },
+  "accounting": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "Betreuungsgericht"
+  },
+  "letter_file_handover": {
+    "author": "Betreuungsbüro",
+    "authority": "Empfänger laut Anschreiben"
+  },
+  "letter_care_end": {
+    "author": "Betreuungsbüro",
+    "authority": "Empfänger laut Anschreiben"
+  },
+  "discharge": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "Betreuungsgericht"
+  },
+  "letter_death_notice": {
+    "author": "Betreuungsbüro",
+    "authority": "Empfänger laut Anschreiben"
+  },
+  "funeral_directive": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "persönliche Verfügung; keine Behörde"
+  },
+  "power_of_attorney": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "persönliche Verfügung; keine Behörde"
+  },
+  "care_register_application": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "Bundesnotarkammer (Zentrales Vorsorgeregister)"
+  },
+  "care_directive": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "persönliche Verfügung; keine Behörde"
+  },
+  "advance_directive": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "persönliche Verfügung; keine Behörde"
+  },
+  "rent_certificate": {
+    "author": "Betreuungsbüro",
+    "authority": "Jobcenter bzw. anfordernde Stelle"
+  },
+  "rent_offer_certificate": {
+    "author": "Betreuungsbüro",
+    "authority": "Jobcenter bzw. anfordernde Stelle"
+  },
+  "housing_benefit_application": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "Wohngeldbehörde"
+  },
+  "housing_entitlement_application": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "zuständige Stelle für Wohnberechtigungsscheine"
+  },
+  "rent_certificate_jc": {
+    "author": "Betreuungsbüro",
+    "authority": "Jobcenter bzw. anfordernde Stelle"
+  },
+  "disability_change_application": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "Versorgungsamt / Amt für soziale Angelegenheiten"
+  },
+  "disability_initial_application": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "Versorgungsamt / Amt für soziale Angelegenheiten"
+  },
+  "pension_application": {
+    "author": "Deutsche Rentenversicherung",
+    "authority": "Deutsche Rentenversicherung"
+  },
+  "drv_confidentiality_release": {
+    "author": "Deutsche Rentenversicherung",
+    "authority": "Deutsche Rentenversicherung"
+  },
+  "sgb12_continuation_application": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "Träger der Sozialhilfe"
+  },
+  "sgb12_initial_application": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "Träger der Sozialhilfe"
+  },
+  "letter_sgb12_informal": {
+    "author": "Betreuungsbüro",
+    "authority": "Träger der Sozialhilfe"
+  },
+  "sgb12_social_assistance_application": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "Träger der Sozialhilfe"
+  },
+  "sgb12_asset_declaration": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "Träger der Sozialhilfe"
+  },
+  "sgb12_social_assistance_short": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "Träger der Sozialhilfe"
+  },
+  "sgb9_confidentiality_release": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "Träger der Eingliederungshilfe"
+  },
+  "sgb9_initial_application": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "Träger der Eingliederungshilfe"
+  },
+  "letter_sgb9_informal": {
+    "author": "Betreuungsbüro",
+    "authority": "Träger der Eingliederungshilfe"
+  },
+  "sgb2_annex_uf": {
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter"
+  },
+  "sgb2_withdrawal": {
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter"
+  },
+  "sgb2_annex_vm": {
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter"
+  },
+  "sgb2_income_certificate": {
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter"
+  },
+  "sgb2_annex_ek": {
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter"
+  },
+  "sgb2_annex_se": {
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter"
+  },
+  "sgb2_annex_sv": {
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter"
+  },
+  "letter_sgb2_informal": {
+    "author": "Betreuungsbüro",
+    "authority": "Jobcenter"
+  },
+  "sgb2_employment_certificate": {
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter"
+  },
+  "sgb2_annex_uh2": {
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter"
+  },
+  "sgb2_annex_ki": {
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter"
+  },
+  "sgb2_annex_uh3": {
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter"
+  },
+  "sgb2_annex_uh1": {
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter"
+  },
+  "citizen_benefit_continuation": {
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter"
+  },
+  "sgb2_annex_hg": {
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter"
+  },
+  "sgb2_annex_wep": {
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter"
+  },
+  "citizen_benefit_initial": {
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter"
+  },
+  "sgb2_annex_meb": {
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter"
+  },
+  "sgb2_annex_kdu": {
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter"
+  },
+  "sgb2_annex_bb": {
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter"
+  },
+  "sgb2_annex_ve": {
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter"
+  },
+  "sgb2_annex_eks": {
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Jobcenter"
+  },
+  "alg1_health_questionnaire": {
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Bundesagentur für Arbeit"
+  },
+  "alg1_initial_application": {
+    "author": "Bundesagentur für Arbeit",
+    "authority": "Bundesagentur für Arbeit"
+  },
+  "letter_alg1_employment_certificate": {
+    "author": "Betreuungsbüro",
+    "authority": "Empfänger laut Anschreiben (ehemaliger Arbeitgeber)"
+  },
+  "child_benefit_child_annex": {
+    "author": "Bundesagentur für Arbeit (Familienkasse)",
+    "authority": "Familienkasse"
+  },
+  "child_benefit_diversion": {
+    "author": "Bundesagentur für Arbeit (Familienkasse)",
+    "authority": "Familienkasse"
+  },
+  "maintenance_advance_application": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "Unterhaltsvorschusskasse (Jugendamt)"
+  },
+  "child_benefit_application": {
+    "author": "Bundesagentur für Arbeit (Familienkasse)",
+    "authority": "Familienkasse"
+  },
+  "naturalization_application": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "Einbürgerungsbehörde"
+  },
+  "letter_information_notice": {
+    "author": "Betreuungsbüro",
+    "authority": "Empfänger laut Anschreiben"
+  },
+  "letter_benefit_notice": {
+    "author": "Betreuungsbüro",
+    "authority": "Empfänger laut Anschreiben"
+  },
+  "broadcast_registration": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "ARD ZDF Deutschlandradio Beitragsservice"
+  },
+  "broadcast_change_notice": {
+    "author": "Urheber laut Originalvorlage",
+    "authority": "ARD ZDF Deutschlandradio Beitragsservice"
+  },
+  "broadcast_exemption_application": {
+    "author": "ARD ZDF Deutschlandradio Beitragsservice",
+    "authority": "ARD ZDF Deutschlandradio Beitragsservice"
+  },
+  "letter_gkv_claims": {
+    "author": "Betreuungsbüro",
+    "authority": "Krankenkasse"
+  },
+  "letter_gkv_membership": {
+    "author": "Betreuungsbüro",
+    "authority": "Krankenkasse"
+  },
+  "letter_bank_registration": {
+    "author": "Betreuungsbüro",
+    "authority": "kontoführende Bank"
+  }
+}

@@ -1,0 +1,73 @@
+NOTFALL-KURZANLEITUNG – BETREUUNGSBÜRO
+=======================================
+
+Diese Mappe „Gesamtsicherung_*“ ist ohne die Betreuungssoftware lesbar.
+Bewahren Sie die ganze Mappe unverändert auf. Arbeiten Sie nur mit einer Kopie.
+
+SOFORT PRÜFEN
+-------------
+
+1. STATUS.txt muss „VOLLSTAENDIG“ enthalten.
+2. PRUEFBERICHT.txt muss bei der Datenbank „ok“ melden.
+3. Bei „UNVOLLSTAENDIG“ nichts löschen: Der Bericht nennt den Befund.
+4. Die getrennt verwahrte Datei mit dem Wiederherstellungsschlüssel bereitlegen.
+   Sie ist absichtlich nicht Bestandteil dieser Mappe.
+5. MANIFEST.tsv.sha256 und jede Zeile in MANIFEST.tsv müssen durch das
+   Rettungsskript bestätigt werden. STATUS.txt allein genügt nie als Nachweis.
+
+Liegt nur noch die verschlüsselte Restic-Zweitkopie vor, zuerst mit `restic
+snapshots` die protokollierte Snapshot-ID bestimmen und genau diesen Snapshot in
+einen neuen lokalen Ordner wiederherstellen. Niemals einzelne Pack-/Indexobjekte
+aus einem Object-Store kopieren oder nach Alter löschen. Danach erst die Schritte
+dieses Blatts auf der vollständig restaurierten Mappe ausführen.
+
+LESBARE FALLAKTEN ERZEUGEN
+--------------------------
+
+Benötigt werden bash und sqlite3. Im Terminal:
+
+  cd "/PFAD/ZUR/Gesamtsicherung_..."
+  ./NOTFALL-RETTUNG.sh \
+    --snapshot "$PWD" \
+    --output "/PFAD/ZU/EINEM/NEUEN/ORDNER/Rettung"
+
+Die Sicherung selbst wird dabei nicht verändert. Im Ziel entstehen Fallakten und
+Bürodateien mit Klarnamen. Nicht sicher zuordenbare Inhalte liegen unter
+„_Ohne_Zuordnung“. RETTUNGSBERICHT.txt nennt fehlende Dateien, Kollisionen und
+Namensanpassungen. Öffnen Sie stichprobenartig Dokumente aus mehreren Fallakten.
+
+Nur bei beschädigtem Manifest und ausschließlich zur Bergung:
+
+  ./NOTFALL-RETTUNG.sh --skip-verify \
+    --snapshot "$PWD" --output "/PFAD/ZU/Rettung-ungeprüft"
+
+Das Ergebnis gilt als ungeprüft und ersetzt keine intakte Sicherung.
+
+ANWENDUNG WIEDERHERSTELLEN
+--------------------------
+
+Nicht in eine laufende Installation kopieren. Anwendung beenden, bisherigen Stand
+getrennt aufbewahren und eine isolierte Testinstallation verwenden. Zuerst
+`GESAMT-RESTORE.sh` ohne `--apply` als Dry-run ausführen. Bei eigenständigen
+Dokumentwurzeln `--external-root-base /NEUER/ABSOLUTER/PFAD` angeben. Sollen
+Servervorlagen, Browser-Erweiterungen und die ausgelieferte App mit zurückkommen, zusätzlich
+`--restore-runtime-artifacts --outputs-dir /ABSOLUTER/OUTPUTS-PFAD` verwenden:
+
+  * datenbank/betreuungsbuero.sqlite3 ist die konsistente Datenbankkopie.
+  * inhalt/server-data ist die Datenwurzel.
+  * Weitere Klarname-/Legacy-Wurzeln stehen in verwaltung/WURZELN.tsv.
+  * betrieb/server-quellcode.tar.gz ist der gesicherte Backend-Quellstand;
+    SHA-256, Bytegroesse und Build-/Git-Kennung stehen im Betriebsinventar.
+
+In der Testkopie zuerst Datenbankprüfung und Anmeldung durchführen, danach
+im Admin-Panel die verschlüsselten Sicherheits-/Zugangsdaten mit dem externen
+Wiederherstellungsschlüssel einlesen. Dieser DOCUMENT_RECOVERY_KEY ist
+verpflichtend getrennt verwahrt und kann nicht aus dieser Sicherungsmappe
+rekonstruiert werden. Das Restore-Werkzeug lehnt eine Datenbank ohne aktiven,
+anmeldbaren Online-Administrator ab. Anschließend Fallakten und mindestens ein
+vollständiges Herausgabepaket prüfen. Erst dann die Wiederherstellung in Betrieb
+nehmen.
+
+Das ausführliche Vorgehen steht in DETAILANLEITUNG.txt. Bei einer Übergabe an
+Nachfolgebetreuung, Gericht oder Erben genügen die lesbaren Fallakten bzw. das
+Herausgabepaket; „Büroorganisation/_Verwaltung & Sicherungen“ gehört nicht hinein.

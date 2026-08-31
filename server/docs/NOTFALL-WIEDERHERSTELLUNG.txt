@@ -1,0 +1,196 @@
+NOTFALL-WIEDERHERSTELLUNG – KURZANLEITUNG
+=========================================
+
+Zweck
+-----
+Eine „Gesamtsicherung_*“-Mappe enthält
+
+  * eine konsistente SQLite-Kopie unter datenbank/,
+  * den vollständigen runtime/data-Baum unter inhalt/server-data/,
+  * die zentrale Klarname-Wurzel "storageRoot" und alle alten
+    Blob-/Legacy-Wurzeln "baseDir"/"caseDirs" aus der Büro-Konfiguration,
+  * den exakt gesicherten Server-Quellstand unter
+    betrieb/server-quellcode.tar.gz sowie dessen SHA-256, Bytegröße und
+    optionale Build-/Git-Kennung in betrieb/BETRIEBSINVENTAR.txt,
+  * Prüfsummen und Wurzelzuordnungen,
+  * dieses Blatt sowie NOTFALL-RETTUNG.sh.
+
+Die Sicherung kann ohne die Betreuungssoftware gelesen werden. Eine Sicherung mit
+STATUS.txt = UNVOLLSTAENDIG ist kein Grund zum Löschen: Vorhandenes bleibt rettbar,
+aber PRUEFBERICHT.txt nennt fehlende oder abweichende Dateien.
+
+Der Wiederherstellungsschlüssel für Sicherheit.json.enc und Zugangsdaten.json.enc
+liegt absichtlich NICHT in dieser Mappe. Er muss als getrennt verwahrte Schlüsseldatei
+vorhanden sein. Für lesbare Fallakten und Dokumente wird er nicht benötigt.
+
+
+1. TÄGLICHE GESAMTSICHERUNG
+---------------------------
+Der Zeitplan unter Admin -> Datei-Explorer -> Sicherung & Synchronisation ist der
+einzige autoritative automatische Planer. Pro Ziel ist genau ein aktiver
+Gesamtsicherungs-Zeitplan zulässig. cron/launchd darf NICHT zusätzlich eingeplant
+werden: Nur der App-Zeitplan erzwingt unmittelbar vorher aktuelle
+Verwaltungsabbilder und die kurze Schreibschranke.
+
+Der folgende direkte Aufruf ist ausschließlich eine manuelle Notfallprobe bei
+vollständig gestoppter Anwendung. Die Pfade müssen ausdrücklich angepasst werden:
+
+  /PFAD/ZUM/server/tools/gesamt-backup.sh \
+    --db "/PFAD/ZUM/runtime/database/betreuungsbuero.sqlite3" \
+    --data-dir "/PFAD/ZUM/runtime/data" \
+    --server-dir "/PFAD/ZUM/server" \
+    --destination "/PFAD/ZU/GETRENNTEM/SICHERUNGSZIEL" \
+    --require-marker
+
+Rückgabecode 0 bedeutet „vollständig“. Rückgabecode 2 bedeutet: Der Snapshot wurde
+entweder bewusst als „*_UNVOLLSTAENDIG“ aufbewahrt oder wegen einer flüchtigen
+Dateisystem-Race beziehungsweise fehlgeschlagenen Abschlussprüfung nicht als
+Erfolg veröffentlicht; Ausgabe und PRUEFBERICHT.txt prüfen. Bei einem anderen
+Rückgabecode wurde kein bestätigter Snapshot veröffentlicht. Ein `SNAPSHOT=`-
+Erfolg wird erst nach vollständiger Manifestprüfung und erfolgreichem dauerhaftem
+Flush ausgegeben.
+
+Wichtig:
+
+  * Datenbank, -wal und -shm niemals mit cp sichern. Das Skript benutzt SQLite
+    „.backup“ und schließt die Live-Dateien aus dem normalen Dateibaum aus.
+  * Das Ziel muss auf einem getrennten Datenträger bzw. Sicherungssystem liegen.
+    Für automatische Läufe dort vorher die reguläre Datei
+    ".betreuungsbuero-backup-ziel" anlegen; fehlt sie oder der Datenträger,
+    scheitert der Lauf sichtbar, statt intern weiterzuschreiben.
+  * Automatische Läufe ausschließlich im Admin-Panel aktivieren. Das Shellskript
+    ist Engine und manueller Fallback, kein zweiter Scheduler.
+  * Eine Generationenregel ist nur aktiv, wenn --retention-daily,
+    --retention-monthly oder --retention-yearly ausdrücklich gesetzt sind.
+    Ohne diese Werte löscht das Skript nichts. Kandidaten werden vor Auswahl und
+    Löschung vollständig gegen ihr Manifest gelesen. Bei aktivem Offsiteprofil
+    bleibt jede Generation ohne positiven, zum Job und Profil passenden
+    Restic-Status geschützt; eine volle Pending-Warteschlange hebt diesen Schutz
+    niemals automatisch auf.
+  * Nach dem Einrichten oder Wechseln des Wiederherstellungsschlüssels die vom
+    Admin-Panel heruntergeladene Schlüsseldatei getrennt vom Server und von den
+    Sicherungsdatenträgern verwahren. Alte Sicherungen brauchen ihren damaligen
+    Schlüssel.
+
+Für die verschlüsselte Zweitkopie gilt: Niemals Restic-Pack-, Index- oder
+Snapshotobjekte per Provider-Lifecycle nach Alter löschen. Restic dedupliziert
+zwischen Generationen; neuere Snapshots können ältere Packs benötigen. Remote-
+Aufbewahrung ausschließlich mit `restic forget --keep-* --prune` durchführen,
+bei append-only/Object-Lock-Zielen in einem getrennten, besonders geschützten
+Wartungsfenster. Die regelmäßige Engine-Prüfung liest rotierende Teile aller
+Remote-Daten; sie ersetzt nicht die vierteljährliche echte Restoreprobe.
+
+
+2. LESBARE RETTUNG ERZEUGEN
+---------------------------
+Auf einem Rechner mit bash, sqlite3 und den üblichen Systemwerkzeugen:
+
+  cd "/PFAD/ZUR/Gesamtsicherung_..."
+  ./NOTFALL-RETTUNG.sh \
+    --snapshot "$PWD" \
+    --output "/PFAD/ZU/EINEM/NEUEN/ORDNER/Rettung"
+
+Das Skript prüft zuerst jede Datei gegen MANIFEST.tsv. Danach entstehen lesbare
+Fallakten und Bürodateien mit Klarnamen. Nicht zuordenbare oder verwaiste Inhalte
+landen verlustfrei unter „_Ohne_Zuordnung“. RETTUNGSBERICHT.txt nennt fehlende
+Dateien, Namensanpassungen und Kollisionen. Die Sicherung selbst wird nie verändert.
+
+Nur wenn das Manifest beschädigt ist und trotzdem ein Bergungsversuch nötig ist:
+
+  ./NOTFALL-RETTUNG.sh --skip-verify \
+    --snapshot "$PWD" --output "/PFAD/ZU/Rettung-ungeprüft"
+
+Dieses Ergebnis wird immer als unsicher/unvollständig gekennzeichnet.
+
+
+3. DATENBANK UND ORIGINALABLAGE WIEDER IN BETRIEB NEHMEN
+--------------------------------------------------------
+Nicht in eine laufende Installation kopieren.
+
+Vor jedem echten Tausch zuerst den beigefügten Dry-run verwenden:
+
+  ./GESAMT-RESTORE.sh --snapshot "$PWD" \
+    --server-dir "/PFAD/ZUM/server" \
+    --data-dir "/PFAD/ZUM/runtime/data" \
+    --db "/PFAD/ZUR/app.db" \
+    --external-root-base "/NEUER/GETRENNTER/DOKUMENTENSPEICHER" \
+    --restore-runtime-artifacts --outputs-dir "/PFAD/ZU/outputs"
+
+Erst nach einem fehlerfreien Dry-run und bei vollständig gestoppter Anwendung
+denselben Aufruf um "--apply --confirm-app-stopped" ergänzen. Das Werkzeug baut
+den neuen Stand im Staging auf, bewahrt den bisherigen Zielstand samt
+Rollback-Journal und setzt immer die Recovery-Quarantäne. Enthält der Snapshot
+eigenständige externe Wurzeln, ist "--external-root-base" beim echten Restore
+Pflicht. Das Werkzeug stellt sie dort manifestgeprüft wieder her und schreibt die
+neuen Pfade in documents_config der Restore-Datenbank; alte absolute Pfade werden
+nie still verwendet. "--restore-runtime-artifacts" stellt die gesicherten
+Servervorlagen, Browser-Erweiterungspakete und die ausgelieferte HTML-App wieder
+her; dafür ist "--outputs-dir" Pflicht. Serverquellcode und Containerdefinitionen bleiben
+Wiederaufbauquellen und werden nicht über eine bestehende Installation kopiert.
+
+  1. Anwendung vollständig beenden und den bisherigen Stand getrennt aufbewahren.
+  2. Eine neue, isolierte Installation bzw. Testkopie bereitstellen.
+  3. betrieb/BETRIEBSINVENTAR.txt lesen. Für eine Wiederherstellung derselben
+     Backend-Fassung betrieb/server-quellcode.tar.gz in ein leeres
+     Server-Verzeichnis entpacken. Das Archiv enthält nur die feste Positivliste
+     aus Server-JavaScript, Routen, Werkzeugen, Anleitungen und OCR-Laufzeit;
+     Abhängigkeiten anhand betrieb/konfiguration/package-lock.json neu installieren.
+     package.json, Dockerfile, docker-compose.yml, .dockerignore und .env.example
+     liegen ebenfalls unter betrieb/konfiguration. Vor dem Container-Neuaufbau
+     ihre SHA-256-Angaben im Betriebsinventar, insbesondere .dockerignore, prüfen.
+     .env, Secrets, Daten, Logs, node_modules und alte Backups sind absichtlich
+     nicht im Quellarchiv.
+  4. datenbank/betreuungsbuero.sqlite3 als Datenbankkopie einsetzen.
+  5. inhalt/server-data als Datenwurzel einsetzen.
+  6. Für externe Wurzeln einen neuen leeren gemeinsamen Zielordner festlegen und
+     ihn mit "--external-root-base" übergeben. Das Restore-Werkzeug rekonstruiert
+     "STORAGE", "BASE" und "CASE" manifestgeprüft, erhält deduplizierte
+     Mehrfachzuordnungen und passt documents_config automatisch an.
+  7. Falls benötigt, mit "--restore-runtime-artifacts --outputs-dir ..." die
+     Servervorlagen, Browser-Erweiterungspakete und die ausgelieferte HTML-App
+     kontrolliert wiederherstellen.
+  8. Für die Testkopie einen neuen, gültigen ENCRYPTION_KEY setzen und den Server
+     starten. Erkennt er die wiederhergestellte Datenbank mit einer anderen
+     Schlüsselkennung, startet er automatisch im geschützten Recovery-Modus:
+     alte Sitzungen werden verworfen; Hintergrundjobs, Integrationen, WebDAV,
+     Fach-APIs und normale Nutzeranmeldungen bleiben gesperrt.
+     Der Restore bricht bereits vorher ab, wenn die Datenbank keinen aktiven,
+     anmeldbaren Online-Administrator enthält.
+  9. Den für diese Sicherung gültigen DOCUMENT_RECOVERY_KEY beziehungsweise die
+     beim Einrichten heruntergeladene Schlüsseldatei aus der getrennten externen
+     Verwahrung bereitlegen. Sie darf weder aus dem Snapshot noch vom
+     Sicherungsdatenträger stammen.
+ 10. Als Administrator im Online-Modus anmelden. Dabei werden im Recovery-Modus
+     bewusst noch keine alten Dienste-Geheimnisse entschlüsselt. Im Admin-Panel
+     unter Datenadministration -> Sicherheit zuerst Sicherheit.json.enc und danach
+     Zugangsdaten.json.enc mit der getrennten Schlüsseldatei einlesen. Beide
+     Dateien müssen Schema 3 sowie dieselbe generationId und sourceRevision tragen.
+     Abweichende Generationen werden atomar abgewiesen.
+ 11. Für alte API-, MCP- und WebDAV-Tokens ausdrücklich "verwerfen" (empfohlen)
+     oder "reaktivieren" wählen. Sitzungen werden niemals restauriert.
+ 12. Die Wiederherstellungsvorschau muss bei jeder erwarteten Zeile entweder
+     "übernehmbar" oder einen ausdrücklich gewählten Token-Verwerfungsgrund nennen.
+     Unerwartete ausgelassene oder abgelehnte Zeilen verhindern den Import.
+ 13. Erst nach beiden erfolgreichen Teil-Restores die Recovery-Freigabe mit dem
+     aktuellen Admin-Kennwort bestätigen. Der laufende Prozess bleibt absichtlich
+     gesperrt. Server vollständig neu starten; erst dieser Neustart aktiviert
+     Hintergrundjobs und Integrationen wieder.
+ 14. Danach Integritätsprüfung und Stichproben durchführen sowie alle Fallakten und
+     das Herausgabepaket mindestens eines Falls prüfen.
+
+Bei Unsicherheit ist die unter Schritt 2 erzeugte Klarnamen-Ablage die maßgebliche
+Arbeitskopie für Gericht, Nachfolgebetreuung oder Erben. Original-Snapshot und
+RETTUNGSBERICHT.txt unverändert aufbewahren.
+
+
+4. WIEDERHERSTELLUNG REGELMÄSSIG PROBEN
+---------------------------------------
+Mindestens vierteljährlich einen aktuellen Snapshot auf einen anderen Datenträger
+kopieren, die Rettung ausführen und prüfen:
+
+  * STATUS.txt = VOLLSTAENDIG,
+  * Datenbank-Prüfung im Bericht = ok,
+  * Fall- und Bürodokumente lassen sich ohne die Anwendung öffnen,
+  * „_Ohne_Zuordnung“ und alle gemeldeten Befunde wurden gesichtet.
+
+Die Probe nie gegen den Produktivserver und nie mit der Live-Datenbank durchführen.

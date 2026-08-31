@@ -1,0 +1,12 @@
+{
+  "rent_offer_certificate_landlord": "Wohnbau Muster GmbH, Musterstraße 12, 56068 Koblenz, Tel. 0261 000000",
+  "rent_offer_certificate_name": "Bastuck, Franz Josef",
+  "rent_offer_certificate_address": "Musterstraße 12, 56068 Koblenz",
+  "rent_offer_certificate_property": "Beispielweg 5, 2. OG links, 56068 Koblenz",
+  "rent_offer_certificate_basic": "450,00",
+  "rent_offer_certificate_service": "110,00",
+  "rent_offer_certificate_heating": "85,00",
+  "rent_offer_certificate_start": "01.11.2026",
+  "rent_offer_certificate_size": "58",
+  "rent_offer_certificate_rooms": "2"
+}

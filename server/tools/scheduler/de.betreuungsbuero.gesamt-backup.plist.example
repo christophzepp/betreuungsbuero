@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>de.betreuungsbuero.gesamt-backup</string>
+
+  <!--
+    NICHT ALS LAUNCHAGENT LADEN: historische Referenz für einen einmaligen
+    manuellen Notfalllauf bei vollständig gestoppter App. Die Automatik wird
+    ausschließlich im Admin-Panel verwaltet.
+    VOR DER VERWENDUNG alle __...__-Platzhalter durch absolute Pfade ersetzen.
+    Das Ziel muss ein getrennter Datentraeger oder ein eingehangenes Sicherungssystem sein.
+  -->
+  <key>ProgramArguments</key>
+  <array>
+    <string>__PROJECT_ROOT__/server/tools/gesamt-backup.sh</string>
+    <string>--db</string>
+    <string>__PROJECT_ROOT__/runtime/database/betreuungsbuero.sqlite3</string>
+    <string>--data-dir</string>
+    <string>__PROJECT_ROOT__/runtime/data</string>
+    <string>--server-dir</string>
+    <string>__PROJECT_ROOT__/server</string>
+    <string>--destination</string>
+    <string>__EXTERNAL_BACKUP_DESTINATION__</string>
+    <string>--require-marker</string>
+    <string>--consistency-retries</string>
+    <string>3</string>
+    <string>--retention-daily</string>
+    <string>14</string>
+    <string>--retention-monthly</string>
+    <string>12</string>
+    <string>--retention-yearly</string>
+    <string>10</string>
+    <string>--retention-diagnostic</string>
+    <string>6</string>
+    <string>--capacity-warning-percent</string>
+    <string>15</string>
+    <string>--label</string>
+    <string>taeglich</string>
+  </array>
+
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>2</integer>
+    <key>Minute</key>
+    <integer>15</integer>
+  </dict>
+
+  <key>RunAtLoad</key>
+  <false/>
+  <key>KeepAlive</key>
+  <false/>
+  <key>ProcessType</key>
+  <string>Background</string>
+  <key>LowPriorityIO</key>
+  <true/>
+</dict>
+</plist>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="de">
+<head><meta charset="utf-8"><title>BXA Integrations-Harness</title></head>
+<body>
+<h1>Integrations-Harness: kompletter Pipeline-Test ohne Extension-Installation</h1>
+<p>Lädt die ECHTEN common-/content-Module dieser Erweiterung als normale Scripts und fährt die
+Pipeline Scan → Heuristik-Match → Fill → Read-back → Profil-Roundtrip → Protokoll-PDF direkt in
+dieser Seite (mit eingebettetem Formular). Aufruf: <code>window.runPipelineTest()</code> aus der
+Konsole – gibt ein Ergebnisobjekt zurück.</p>
+
+<!-- Eingebettetes Formular = Kopie von form-plain.html-Kernfeldern -->
+<fieldset>
+  <legend>Angaben zur betreuten Person</legend>
+  <label for="nachname">Name</label><input id="nachname" name="nachname" type="text" autocomplete="family-name">
+  <label for="vorname">Vorname</label><input id="vorname" name="vorname" type="text" autocomplete="given-name">
+  <label for="gebdat">Geburtsdatum</label><input id="gebdat" name="geburtsdatum" type="text" placeholder="TT.MM.JJJJ">
+  <label for="plz">Postleitzahl</label><input id="plz" name="plz" type="text">
+  <label for="famstand">Familienstand</label>
+  <select id="famstand" name="familienstand"><option value="">bitte wählen</option><option>ledig</option><option>verheiratet</option><option>geschieden</option></select>
+  <label for="iban">IBAN</label><input id="iban" name="iban" type="text">
+</fieldset>
+<fieldset>
+  <legend>Angaben zum gesetzlichen Vertreter / Betreuer</legend>
+  <label for="btr_name">Name</label><input id="btr_name" name="vertreter_name" type="text">
+  <label for="btr_plz">Postleitzahl</label><input id="btr_plz" name="vertreter_plz" type="text">
+</fieldset>
+<button id="btnWeiter" type="button">Weiter</button>
+<button id="btnAbsenden" type="submit">Antrag verbindlich absenden</button>
+
+<script>
+// Chrome-API-Mock VOR den Modulen (browser-shim greift sonst ins Leere): nur was main.js braucht.
+window.chrome = {
+  runtime: {
+    onMessage: { addListener(fn) { window.__mockOnMessage = fn; } },
+    sendMessage() { /* Pick-Ereignisse landen im Harness nicht */ }
+  }
+};
+// Direktzustellung wie tabs.sendMessage: ruft den registrierten Listener auf.
+window.mockSend = (msg) => new Promise((resolve) => { window.__mockOnMessage(msg, {}, resolve); });
+</script>
+<script src="../src/common/browser-shim.js"></script>
+<script src="../src/common/synonyms.js"></script>
+<script src="../src/common/dictionary.js"></script>
+<script src="../src/common/matcher.js"></script>
+<script src="../src/common/pdf.js"></script>
+<script src="../src/content/scanner.js"></script>
+<script src="../src/content/filler.js"></script>
+<script src="../src/content/overlay.js"></script>
+<script src="../src/content/main.js"></script>
+<script>
+// Synthetische filldata (Form wie GET /api/ext/cases/:id/filldata).
+const FILLDATA = {
+  case: { id: 'x', label: 'Muster, Erika' },
+  caseData: {
+    person: { lastName: 'Muster', firstName: 'Erika', birthDate: '1965-04-12', street: 'Beispielweg', houseNumber: '4a', postalCode: '56068', city: 'Koblenz', maritalStatus: 'geschieden' },
+    care: { fileNumber: '7 XVII 123/24', courtName: 'Amtsgericht Koblenz' },
+    banks: [{ bankName: 'Sparkasse Koblenz', iban: 'DE89370400440532013000', bic: 'MALADE51KOB', accountHolder: 'Erika Muster' }],
+    accommodation: { type: 'Wohnung' }
+  },
+  contacts: [],
+  officeProfile: { companyName: 'Betreuungsbüro Zepp', firstName: 'Christoph', lastName: 'Zepp', street: 'Bürostraße 1', postalCode: '56070', city: 'Koblenz', phone: '0261 12345', email: 'info@example.de' },
+  officeBankAccounts: [], officeEmployees: []
+};
+
+window.runPipelineTest = async function () {
+  const out = { steps: [] };
+  const step = (name, data) => { out.steps.push({ name, ...data }); };
+
+  // 1) Dictionary
+  const dict = bxaBuildDictionary(FILLDATA);
+  const dictIdx = bxaDictionaryIndex(dict);
+  step('dictionary', { entries: dict.length, hasPersonLastName: dictIdx.has('case:person.lastName'), hasBetreuer: dictIdx.has('betreuer:lastName'), hasIban: dictIdx.has('case:banks.0.iban') });
+
+  // 2) Scan (ueber den ECHTEN Message-Router)
+  const scan = await window.mockSend({ type: 'BXA_SCAN' });
+  step('scan', { fields: scan.descriptors.filter(d => d.kind === 'field').length, buttons: scan.descriptors.filter(d => d.kind === 'button').length });
+
+  // 3) Heuristik-Match
+  const proposals = BxaMatcher.match(scan.descriptors, dict, 'auto');
+  const byField = {};
+  for (const p of proposals) { const d = scan.descriptors.find(x => x.ref === p.ref); byField[d.id || d.name] = { key: p.key, group: p.group, conf: p.confidence }; }
+  step('match', { count: proposals.length, byField });
+
+  // 4) Fill (alle Vorschlaege)
+  const fill = await window.mockSend({ type: 'BXA_FILL', items: proposals.map(p => ({ ref: p.ref, value: p.value })) });
+  step('fill', { ok: fill.results.filter(r => r.ok).length, fail: fill.results.filter(r => !r.ok) });
+  step('domValues', {
+    nachname: document.getElementById('nachname').value,
+    gebdat: document.getElementById('gebdat').value,
+    famstand: document.getElementById('famstand').value,
+    iban: document.getElementById('iban').value,
+    btr_name: document.getElementById('btr_name').value,
+    btr_plz: document.getElementById('btr_plz').value
+  });
+
+  // 5) Profil-Roundtrip: Selektor-Ketten der gescannten Felder -> resolve -> erneuter Fill
+  const profile = {
+    fields: proposals.slice(0, 3).map(p => {
+      const d = scan.descriptors.find(x => x.ref === p.ref);
+      return { selectorChain: d.selectorChain, key: p.key };
+    }),
+    actions: [{ selectorChain: scan.descriptors.find(d => d.kind === 'button' && /weiter/i.test(d.label)).selectorChain, action: 'weiter', label: 'Weiter' }]
+  };
+  const resolved = await window.mockSend({ type: 'BXA_RESOLVE_PROFILE', profile });
+  step('profileResolve', { fieldsResolved: resolved.fields.filter(f => f.ref).length, actionsResolved: resolved.actions.filter(a => a.ref).length });
+
+  // 6) Protokoll-PDF
+  const pdf = BxaPdf.buildProtocolPdf({
+    title: 'Ausfüllprotokoll Online-Formular',
+    meta: [['Webseite', document.title], ['Fall', 'Muster, Erika'], ['Zeitpunkt', '12.07.2026, 12:00']],
+    fields: proposals.map(p => { const d = scan.descriptors.find(x => x.ref === p.ref); return [d.label || d.name, String(p.value)]; }),
+    actions: ['Weiter (12:01)'],
+    footer: 'Testlauf im Harness.'
+  });
+  step('pdf', { bytes: pdf.length, header: String.fromCharCode(...pdf.slice(0, 5)) });
+  window.__lastPdf = pdf;
+
+  return out;
+};
+</script>
+</body>
+</html>

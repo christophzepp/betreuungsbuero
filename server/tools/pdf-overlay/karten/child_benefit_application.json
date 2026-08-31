@@ -1,0 +1,473 @@
+{
+ "elementId": "tpl_kg1",
+ "reportId": "child_benefit_application",
+ "einheit": "px",
+ "bildBreite": 1240,
+ "seitenBreitePt": 595.28,
+ "seitenHoehePt": 841.89,
+ "hinweis": "Automatisch konvertiert aus OFFICIAL_COORDINATE_MAPS.child_benefit_application (koordinaten-konvertieren.js); Sichtpruefung über Probe-Render erforderlich.",
+ "felder": {
+  "kg_number": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8.5,
+   "x": 125,
+   "y": 64,
+   "width": 427,
+   "height": 32
+  },
+  "kg_phone": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8.5,
+   "x": 837,
+   "y": 241,
+   "width": 344,
+   "height": 32
+  },
+  "kg_attachments_count": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 9,
+   "x": 625,
+   "y": 363,
+   "width": 125,
+   "height": 33
+  },
+  "kg_tax_id": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 9.5,
+   "x": 123,
+   "y": 538,
+   "width": 448,
+   "height": 30,
+   "transform": "digits"
+  },
+  "kg_last_name": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8.5,
+   "x": 123,
+   "y": 609,
+   "width": 792,
+   "height": 32
+  },
+  "kg_title": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8.5,
+   "x": 937,
+   "y": 609,
+   "width": 240,
+   "height": 32
+  },
+  "kg_first_name": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8.5,
+   "x": 123,
+   "y": 674,
+   "width": 625,
+   "height": 32
+  },
+  "kg_birth_name": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8.2,
+   "x": 771,
+   "y": 675,
+   "width": 406,
+   "height": 32
+  },
+  "kg_birth_date": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8.5,
+   "x": 123,
+   "y": 741,
+   "width": 146,
+   "height": 32,
+   "transform": "date"
+  },
+  "kg_birth_place": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8.5,
+   "x": 283,
+   "y": 741,
+   "width": 365,
+   "height": 32
+  },
+  "kg_gender": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 7.5,
+   "x": 667,
+   "y": 743,
+   "width": 87,
+   "height": 30
+  },
+  "kg_nationality": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8.2,
+   "x": 771,
+   "y": 741,
+   "width": 406,
+   "height": 32
+  },
+  "kg_address": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8.3,
+   "x": 123,
+   "y": 843,
+   "width": 1052,
+   "height": 48,
+   "multiline": true
+  },
+  "kg_marital_since": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8.2,
+   "x": 327,
+   "y": 954,
+   "width": 177,
+   "height": 32,
+   "transform": "date"
+  },
+  "kg_partner_tax_id": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 9.5,
+   "x": 123,
+   "y": 1152,
+   "width": 448,
+   "height": 28,
+   "transform": "digits"
+  },
+  "kg_partner_name": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8.2,
+   "x": 123,
+   "y": 1213,
+   "width": 396,
+   "height": 32
+  },
+  "kg_partner_birth": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8.2,
+   "x": 123,
+   "y": 1280,
+   "width": 146,
+   "height": 32,
+   "transform": "date"
+  },
+  "kg_partner_nationality": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8.2,
+   "x": 283,
+   "y": 1280,
+   "width": 365,
+   "height": 32
+  },
+  "kg_partner_gender": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 7.5,
+   "x": 667,
+   "y": 1281,
+   "width": 87,
+   "height": 30
+  },
+  "kg_partner_birth_name": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8,
+   "x": 771,
+   "y": 1280,
+   "width": 406,
+   "height": 31
+  },
+  "kg_partner_address": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8,
+   "x": 123,
+   "y": 1351,
+   "width": 1052,
+   "height": 46,
+   "multiline": true
+  },
+  "kg_iban": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8.5,
+   "x": 124,
+   "y": 1471,
+   "width": 1018,
+   "height": 29,
+   "transform": "compact",
+   "comb": true,
+   "maxLength": 35
+  },
+  "kg_bic": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8.5,
+   "x": 124,
+   "y": 1539,
+   "width": 311,
+   "height": 30,
+   "transform": "compact",
+   "comb": true,
+   "maxLength": 11
+  },
+  "kg_bank": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8.2,
+   "x": 454,
+   "y": 1537,
+   "width": 723,
+   "height": 32
+  },
+  "kg_account_holder": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8.2,
+   "x": 460,
+   "y": 1624,
+   "width": 717,
+   "height": 32
+  },
+  "kg_recipient_name": {
+   "page": 2,
+   "typ": "text",
+   "groesse": 8.5,
+   "x": 102,
+   "y": 197,
+   "width": 1073,
+   "height": 32
+  },
+  "kg_recipient_address": {
+   "page": 2,
+   "typ": "text",
+   "groesse": 8.2,
+   "x": 102,
+   "y": 267,
+   "width": 1073,
+   "height": 48,
+   "multiline": true
+  },
+  "kg_signature_date": {
+   "page": 2,
+   "typ": "text",
+   "groesse": 8.5,
+   "x": 102,
+   "y": 1449,
+   "width": 271,
+   "height": 32,
+   "transform": "date"
+  },
+  "kg_partner_consent_date": {
+   "page": 2,
+   "typ": "text",
+   "groesse": 8.5,
+   "x": 102,
+   "y": 1587,
+   "width": 271,
+   "height": 32,
+   "transform": "date"
+  },
+  "kg_marital_status": {
+   "page": 1,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "ledig": {
+     "x": 127,
+     "y": 964,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    },
+    "verheiratet": {
+     "x": 527,
+     "y": 932,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    },
+    "eingetragene Lebenspartnerschaft": {
+     "x": 733,
+     "y": 932,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    },
+    "geschieden": {
+     "x": 527,
+     "y": 964,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    },
+    "aufgehobene Lebenspartnerschaft": {
+     "x": 733,
+     "y": 964,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    },
+    "verwitwet": {
+     "x": 527,
+     "y": 995,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    },
+    "dauernd getrennt lebend": {
+     "x": 733,
+     "y": 995,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    }
+   }
+  },
+  "kg_account_holder_type": {
+   "page": 1,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "antragstellende Person": {
+     "x": 127,
+     "y": 1597,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    },
+    "andere Person": {
+     "x": 127,
+     "y": 1626,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    }
+   }
+  },
+  "kg_consent_partner": {
+   "page": 2,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "ja": {
+     "x": 621,
+     "y": 1593,
+     "width": 25,
+     "height": 25,
+     "page": 2
+    }
+   }
+  },
+  "kg_children_current": {
+   "page": 2,
+   "typ": "tabelle",
+   "x": 0,
+   "y": 533,
+   "width": 10,
+   "height": 10,
+   "zeilenY": [
+    533,
+    575,
+    617,
+    658,
+    700
+   ],
+   "zeilenHoehe": 31,
+   "spalten": {
+    "name": {
+     "x": 102,
+     "width": 298,
+     "groesse": 7.7
+    },
+    "birthDate": {
+     "x": 402,
+     "width": 129,
+     "groesse": 7.5,
+     "transform": "date"
+    },
+    "gender": {
+     "x": 542,
+     "width": 81,
+     "groesse": 7.2
+    },
+    "familyOffice": {
+     "x": 637,
+     "width": 537,
+     "groesse": 7.5
+    }
+   }
+  },
+  "kg_children_other": {
+   "page": 2,
+   "typ": "tabelle",
+   "x": 0,
+   "y": 877,
+   "width": 10,
+   "height": 10,
+   "zeilenY": [
+    877,
+    919,
+    960,
+    1002
+   ],
+   "zeilenHoehe": 31,
+   "spalten": {
+    "name": {
+     "x": 102,
+     "width": 298,
+     "groesse": 7.7
+    },
+    "birthDate": {
+     "x": 402,
+     "width": 129,
+     "groesse": 7.5,
+     "transform": "date"
+    },
+    "gender": {
+     "x": 542,
+     "width": 81,
+     "groesse": 7.2
+    },
+    "recipient": {
+     "x": 635,
+     "width": 258,
+     "groesse": 7.3
+    },
+    "familyOffice": {
+     "x": 906,
+     "width": 269,
+     "groesse": 7.3
+    }
+   }
+  }
+ },
+ "hinweise": [
+  "Comb-Kalibrierung 13.08.2026: IBAN (35 Zellen) und BIC (12 Zellen) sind äquidistant und tragen echtes Comb. Die Steuer-ID-Raster haben 3er-Gruppenlücken (33/22,5 px) — Comb würde dort in die Lücken driften; Felder bleiben Fließtext über der Reihe."
+ ]
+}

@@ -1,0 +1,356 @@
+{
+  "self_management": {
+    "pdf_0001": {
+      "label": "Betreuungsgericht",
+      "sourcePathAlt": "care.courtName",
+      "quelle": "pfad:care.courtName",
+      "kommentar": "Name des Betreuungsgerichts (wie bisher)."
+    },
+    "pdf_0002": {
+      "label": "Straße + Hausnummer",
+      "sourcePathAlt": "person.houseNumber",
+      "quelle": "kombi:[\"pfad:person.streetOnly\", \"pfad:person.houseNumber\"]",
+      "kommentar": "Annahme laut Vorgabe: Anschrift der betroffenen Person; person.street existiert nicht im Schema, daher Kombination aus streetOnly + houseNumber (bisheriges Mapping person.houseNumber war unvollständig). Falls der Block die Gerichtsadresse ist, stattdessen care.courtAddress."
+    },
+    "pdf_0003": {
+      "label": "PLZ + Stadt",
+      "sourcePathAlt": "person.postalCode",
+      "quelle": "kombi:[\"pfad:person.postalCode\", \"pfad:person.city\"]",
+      "kommentar": "PLZ + Stadt kombiniert; bisher nur person.postalCode."
+    },
+    "pdf_0004": {
+      "label": "Aktenzeichen",
+      "sourcePathAlt": "care.fileNumber",
+      "quelle": "pfad:care.fileNumber",
+      "kommentar": "Aktenzeichen (wie bisher)."
+    },
+    "pdf_0005": {
+      "label": "Vorname Name",
+      "sourcePathAlt": "person.firstName",
+      "quelle": "pfad:person.fullName",
+      "kommentar": "Vor- und Nachname; bisher nur person.firstName (unvollständig)."
+    },
+    "pdf_0006": {
+      "label": "Geburtsdatum",
+      "sourcePathAlt": "person.birthDate",
+      "quelle": "pfad:person.birthDate",
+      "kommentar": "Geburtsdatum (wie bisher)."
+    },
+    "pdf_0007": {
+      "label": "Datum Berichtszeitraum Ende",
+      "sourcePathAlt": null,
+      "quelle": "feld:sm_period_to",
+      "kommentar": "Berichtszeitraum Ende."
+    },
+    "pdf_0008": {
+      "label": "Datum Berichtszeitraum Start",
+      "sourcePathAlt": null,
+      "quelle": "feld:sm_period_from",
+      "kommentar": "Berichtszeitraum Start."
+    },
+    "pdf_0009": {
+      "label": "Kontrollkasten 1",
+      "sourcePathAlt": null,
+      "quelle": "leer",
+      "kommentar": "Ja/Nein-Auswahl ohne aussagekräftiges PDF-Label (nur \"Kontrollkasten N\"). Kandidaten: sm_scope, sm_transactions, sm_discussed, sm_assets_care_needed, sm_hearing. 11 Kontrollkästen stehen 5 fachlichen Ja/Nein-Feldern gegenüber — sichere Zuordnung nur per Sichtprüfung des PDF."
+    },
+    "pdf_0010": {
+      "label": "Kontrollkasten 2",
+      "sourcePathAlt": null,
+      "quelle": "leer",
+      "kommentar": "Ja/Nein-Auswahl ohne aussagekräftiges PDF-Label (nur \"Kontrollkasten N\"). Kandidaten: sm_scope, sm_transactions, sm_discussed, sm_assets_care_needed, sm_hearing. 11 Kontrollkästen stehen 5 fachlichen Ja/Nein-Feldern gegenüber — sichere Zuordnung nur per Sichtprüfung des PDF."
+    },
+    "pdf_0011": {
+      "label": "BIC",
+      "sourcePathAlt": "banks.0.bic",
+      "quelle": "feld:sm_bic",
+      "kommentar": "BIC; Vorbelegung aus banks.0.bic. Duplikatfeld: pdf_0034."
+    },
+    "pdf_0012": {
+      "label": "Kontrollkasten 3",
+      "sourcePathAlt": null,
+      "quelle": "leer",
+      "kommentar": "Ja/Nein-Auswahl ohne aussagekräftiges PDF-Label (nur \"Kontrollkasten N\"). Kandidaten: sm_scope, sm_transactions, sm_discussed, sm_assets_care_needed, sm_hearing. 11 Kontrollkästen stehen 5 fachlichen Ja/Nein-Feldern gegenüber — sichere Zuordnung nur per Sichtprüfung des PDF."
+    },
+    "pdf_0013": {
+      "label": "Kontrollkasten 4",
+      "sourcePathAlt": null,
+      "quelle": "leer",
+      "kommentar": "Ja/Nein-Auswahl ohne aussagekräftiges PDF-Label (nur \"Kontrollkasten N\"). Kandidaten: sm_scope, sm_transactions, sm_discussed, sm_assets_care_needed, sm_hearing. 11 Kontrollkästen stehen 5 fachlichen Ja/Nein-Feldern gegenüber — sichere Zuordnung nur per Sichtprüfung des PDF."
+    },
+    "pdf_0014": {
+      "label": "Geldinstitut + Ort",
+      "sourcePathAlt": "person.city",
+      "quelle": "feld:sm_bank",
+      "kommentar": "Geldinstitut + Ort; Vorbelegung aus banks.0.institution. Bisheriges Mapping person.city ist fachlich falsch. Duplikatfeld: pdf_0016."
+    },
+    "pdf_0015": {
+      "label": "IBAN",
+      "sourcePathAlt": "banks.0.iban",
+      "quelle": "feld:sm_iban",
+      "kommentar": "IBAN; Vorbelegung aus banks.0.iban. Duplikatfeld: pdf_0017."
+    },
+    "pdf_0016": {
+      "label": "Geldinstitut + Ort",
+      "sourcePathAlt": "person.city",
+      "quelle": "feld:sm_bank",
+      "kommentar": "Geldinstitut + Ort, zweites Vorkommen (Duplikat von pdf_0014)."
+    },
+    "pdf_0017": {
+      "label": "IBAN",
+      "sourcePathAlt": "banks.0.iban",
+      "quelle": "feld:sm_iban",
+      "kommentar": "IBAN, zweites Vorkommen (Duplikat von pdf_0015)."
+    },
+    "pdf_0018": {
+      "label": "Kontrollkasten 5",
+      "sourcePathAlt": null,
+      "quelle": "leer",
+      "kommentar": "Ja/Nein-Auswahl ohne aussagekräftiges PDF-Label (nur \"Kontrollkasten N\"). Kandidaten: sm_scope, sm_transactions, sm_discussed, sm_assets_care_needed, sm_hearing. 11 Kontrollkästen stehen 5 fachlichen Ja/Nein-Feldern gegenüber — sichere Zuordnung nur per Sichtprüfung des PDF."
+    },
+    "pdf_0019": {
+      "label": "Kontrollkasten 6",
+      "sourcePathAlt": null,
+      "quelle": "leer",
+      "kommentar": "Ja/Nein-Auswahl ohne aussagekräftiges PDF-Label (nur \"Kontrollkasten N\"). Kandidaten: sm_scope, sm_transactions, sm_discussed, sm_assets_care_needed, sm_hearing. 11 Kontrollkästen stehen 5 fachlichen Ja/Nein-Feldern gegenüber — sichere Zuordnung nur per Sichtprüfung des PDF."
+    },
+    "pdf_0020": {
+      "label": "Ort",
+      "sourcePathAlt": "person.city",
+      "quelle": "pfad:person.city",
+      "kommentar": "Unterschriftsort; Vorbelegung wie bisher aus person.city. Welcher der drei Unterschriftsblöcke wem gehört, ist nur am PDF prüfbar."
+    },
+    "pdf_0021": {
+      "label": "Datum Selbstverfügung",
+      "sourcePathAlt": null,
+      "quelle": "leer",
+      "kommentar": "Unterschriftsdatum (\"Datum Selbstverfügung\"); kein fachliches Feld vorhanden, ggf. Tagesdatum beim Export einsetzen."
+    },
+    "pdf_0022": {
+      "label": "Kontrollkasten 7",
+      "sourcePathAlt": null,
+      "quelle": "leer",
+      "kommentar": "Ja/Nein-Auswahl ohne aussagekräftiges PDF-Label (nur \"Kontrollkasten N\"). Kandidaten: sm_scope, sm_transactions, sm_discussed, sm_assets_care_needed, sm_hearing. 11 Kontrollkästen stehen 5 fachlichen Ja/Nein-Feldern gegenüber — sichere Zuordnung nur per Sichtprüfung des PDF."
+    },
+    "pdf_0023": {
+      "label": "Kontrollkasten 8",
+      "sourcePathAlt": null,
+      "quelle": "leer",
+      "kommentar": "Ja/Nein-Auswahl ohne aussagekräftiges PDF-Label (nur \"Kontrollkasten N\"). Kandidaten: sm_scope, sm_transactions, sm_discussed, sm_assets_care_needed, sm_hearing. 11 Kontrollkästen stehen 5 fachlichen Ja/Nein-Feldern gegenüber — sichere Zuordnung nur per Sichtprüfung des PDF."
+    },
+    "pdf_0024": {
+      "label": "Ort",
+      "sourcePathAlt": "person.city",
+      "quelle": "pfad:person.city",
+      "kommentar": "Unterschriftsort; Vorbelegung wie bisher aus person.city. Welcher der drei Unterschriftsblöcke wem gehört, ist nur am PDF prüfbar."
+    },
+    "pdf_0025": {
+      "label": "Datum Selbstverfügung",
+      "sourcePathAlt": null,
+      "quelle": "leer",
+      "kommentar": "Unterschriftsdatum (\"Datum Selbstverfügung\"); kein fachliches Feld vorhanden, ggf. Tagesdatum beim Export einsetzen."
+    },
+    "pdf_0026": {
+      "label": "Kontrollkasten 9",
+      "sourcePathAlt": null,
+      "quelle": "leer",
+      "kommentar": "Ja/Nein-Auswahl ohne aussagekräftiges PDF-Label (nur \"Kontrollkasten N\"). Kandidaten: sm_scope, sm_transactions, sm_discussed, sm_assets_care_needed, sm_hearing. 11 Kontrollkästen stehen 5 fachlichen Ja/Nein-Feldern gegenüber — sichere Zuordnung nur per Sichtprüfung des PDF."
+    },
+    "pdf_0027": {
+      "label": "Kontrollkasten 10",
+      "sourcePathAlt": null,
+      "quelle": "leer",
+      "kommentar": "Ja/Nein-Auswahl ohne aussagekräftiges PDF-Label (nur \"Kontrollkasten N\"). Kandidaten: sm_scope, sm_transactions, sm_discussed, sm_assets_care_needed, sm_hearing. 11 Kontrollkästen stehen 5 fachlichen Ja/Nein-Feldern gegenüber — sichere Zuordnung nur per Sichtprüfung des PDF."
+    },
+    "pdf_0028": {
+      "label": "Kontrollkasten 11",
+      "sourcePathAlt": null,
+      "quelle": "leer",
+      "kommentar": "Ja/Nein-Auswahl ohne aussagekräftiges PDF-Label (nur \"Kontrollkasten N\"). Kandidaten: sm_scope, sm_transactions, sm_discussed, sm_assets_care_needed, sm_hearing. 11 Kontrollkästen stehen 5 fachlichen Ja/Nein-Feldern gegenüber — sichere Zuordnung nur per Sichtprüfung des PDF."
+    },
+    "pdf_0029": {
+      "label": "Ort",
+      "sourcePathAlt": "person.city",
+      "quelle": "pfad:person.city",
+      "kommentar": "Unterschriftsort; Vorbelegung wie bisher aus person.city. Welcher der drei Unterschriftsblöcke wem gehört, ist nur am PDF prüfbar."
+    },
+    "pdf_0030": {
+      "label": "Datum Selbstverfügung",
+      "sourcePathAlt": null,
+      "quelle": "leer",
+      "kommentar": "Unterschriftsdatum (\"Datum Selbstverfügung\"); kein fachliches Feld vorhanden, ggf. Tagesdatum beim Export einsetzen."
+    },
+    "pdf_0031": {
+      "label": "Beschreibung 1",
+      "sourcePathAlt": null,
+      "quelle": "leer",
+      "kommentar": "Freitextfeld ohne aussagekräftiges PDF-Label (\"Beschreibung N\"). Kandidaten: sm_scope, sm_no_signature_reason, sm_hearing_reason (ggf. auch sm_transactions). Reihenfolge nur per Sichtprüfung des PDF sicher zuzuordnen."
+    },
+    "pdf_0032": {
+      "label": "Beschreibung 2",
+      "sourcePathAlt": null,
+      "quelle": "leer",
+      "kommentar": "Freitextfeld ohne aussagekräftiges PDF-Label (\"Beschreibung N\"). Kandidaten: sm_scope, sm_no_signature_reason, sm_hearing_reason (ggf. auch sm_transactions). Reihenfolge nur per Sichtprüfung des PDF sicher zuzuordnen."
+    },
+    "pdf_0033": {
+      "label": "Beschreibung 3",
+      "sourcePathAlt": null,
+      "quelle": "leer",
+      "kommentar": "Freitextfeld ohne aussagekräftiges PDF-Label (\"Beschreibung N\"). Kandidaten: sm_scope, sm_no_signature_reason, sm_hearing_reason (ggf. auch sm_transactions). Reihenfolge nur per Sichtprüfung des PDF sicher zuzuordnen."
+    },
+    "pdf_0034": {
+      "label": "BIC",
+      "sourcePathAlt": "banks.0.bic",
+      "quelle": "feld:sm_bic",
+      "kommentar": "BIC, zweites Vorkommen (Duplikat von pdf_0011)."
+    }
+  },
+  "discharge": {
+    "pdf_0001": {
+      "label": "Betreuungsgericht",
+      "sourcePathAlt": "care.courtName",
+      "quelle": "pfad:care.courtName",
+      "kommentar": "Name des Betreuungsgerichts (wie bisher)."
+    },
+    "pdf_0002": {
+      "label": "Straße + Hausnummer",
+      "sourcePathAlt": "person.houseNumber",
+      "quelle": "kombi:[\"pfad:person.streetOnly\", \"pfad:person.houseNumber\"]",
+      "kommentar": "Annahme laut Vorgabe: Anschrift der betroffenen Person; person.street existiert nicht im Schema, daher Kombination aus streetOnly + houseNumber (bisheriges Mapping person.houseNumber war unvollständig). Falls der Block die Gerichtsadresse ist, stattdessen care.courtAddress."
+    },
+    "pdf_0003": {
+      "label": "PLZ + Stadt",
+      "sourcePathAlt": "person.postalCode",
+      "quelle": "kombi:[\"pfad:person.postalCode\", \"pfad:person.city\"]",
+      "kommentar": "PLZ + Stadt kombiniert; bisher nur person.postalCode."
+    },
+    "pdf_0004": {
+      "label": "Aktenzeichen",
+      "sourcePathAlt": "care.fileNumber",
+      "quelle": "pfad:care.fileNumber",
+      "kommentar": "Aktenzeichen (wie bisher)."
+    },
+    "pdf_0005": {
+      "label": "Vorname Name",
+      "sourcePathAlt": "person.firstName",
+      "quelle": "pfad:person.fullName",
+      "kommentar": "Vor- und Nachname der betroffenen Person; bisher nur person.firstName (unvollständig)."
+    },
+    "pdf_0006": {
+      "label": "Geburtsdatum",
+      "sourcePathAlt": "person.birthDate",
+      "quelle": "pfad:person.birthDate",
+      "kommentar": "Geburtsdatum (wie bisher)."
+    },
+    "pdf_0007": {
+      "label": "Datum Berichtszeitraum Ende",
+      "sourcePathAlt": null,
+      "quelle": "feld:dis_period_to",
+      "kommentar": "Berichtszeitraum Ende."
+    },
+    "pdf_0008": {
+      "label": "Datum Berichtszeitraum Start",
+      "sourcePathAlt": null,
+      "quelle": "feld:dis_period_from",
+      "kommentar": "Berichtszeitraum Start."
+    },
+    "pdf_0009": {
+      "label": "Kontrollkasten 1",
+      "sourcePathAlt": null,
+      "quelle": "leer",
+      "kommentar": "Ja/Nein-Auswahl ohne aussagekräftiges Label (\"Kontrollkasten 1\"). Kandidaten: dis_waiver oder dis_release — nur per Sichtprüfung des PDF entscheidbar."
+    },
+    "pdf_0010": {
+      "label": "Vorname Name Betreuer",
+      "sourcePathAlt": "person.firstName",
+      "quelle": "leer",
+      "kommentar": "Vorname/Name des Betreuers; kein Stammdatenpfad für Betreuer-/Bürodaten im Katalog vorhanden. Bisheriges Mapping person.firstName (Daten der BETREUTEN Person) ist fachlich falsch."
+    },
+    "pdf_0011": {
+      "label": "Adresse Betreuer",
+      "sourcePathAlt": "person.address",
+      "quelle": "leer",
+      "kommentar": "Adresse des Betreuers; kein Stammdatenpfad für Betreuer-/Bürodaten im Katalog vorhanden. Bisheriges Mapping person.address ist fachlich falsch."
+    },
+    "pdf_0012": {
+      "label": "Telefon",
+      "sourcePathAlt": "person.phone",
+      "quelle": "leer",
+      "kommentar": "Telefon — steht im Betreuer-Block, vermutlich Telefon des Betreuers (kein Büro-Stammdatenpfad vorhanden). Falls doch die betroffene Person gemeint ist: pfad:person.phone (bisheriges Mapping)."
+    },
+    "pdf_0013": {
+      "label": "Ort",
+      "sourcePathAlt": "person.city",
+      "quelle": "pfad:person.city",
+      "kommentar": "Unterschriftsort, erster Block; Vorbelegung wie bisher. Zuordnung der beiden Unterschriftsblöcke (Betreuter/Erben vs. Betreuer) nur am PDF prüfbar."
+    },
+    "pdf_0014": {
+      "label": "Datum",
+      "sourcePathAlt": null,
+      "quelle": "leer",
+      "kommentar": "Unterschriftsdatum, erster Block; kein fachliches Feld, ggf. Tagesdatum beim Export einsetzen."
+    },
+    "pdf_0015": {
+      "label": "Ort",
+      "sourcePathAlt": "person.city",
+      "quelle": "pfad:person.city",
+      "kommentar": "Unterschriftsort, zweiter Block; Vorbelegung wie bisher, Zuordnung nur am PDF prüfbar."
+    },
+    "pdf_0016": {
+      "label": "Datum",
+      "sourcePathAlt": null,
+      "quelle": "leer",
+      "kommentar": "Unterschriftsdatum, zweiter Block; kein fachliches Feld, ggf. Tagesdatum beim Export einsetzen."
+    }
+  },
+  "care_change_zepp": {
+    "pdf_0001": {
+      "label": "Adresse Amts-/Familiengericht",
+      "sourcePathAlt": "person.address",
+      "quelle": "pfad:care.courtAddress",
+      "kommentar": "Adressblock des Amts-/Familiengerichts (Vorgabe: care.courtAddress). Achtung: Pfad wird in v159 nirgends als sourcePath verwendet — Existenz im Stammdatenschema prüfen, sonst feld:ccz_court_address. Bisheriges Mapping person.address ist fachlich falsch."
+    },
+    "pdf_0002": {
+      "label": "Datum",
+      "sourcePathAlt": null,
+      "quelle": "leer",
+      "kommentar": "Briefdatum; bisher deriveKey todayIso (Tagesdatum) — beibehalten. Alternativ Bestandteil von feld:ccz_place_date."
+    },
+    "pdf_0003": {
+      "label": "Amts /Betreuungsgericht",
+      "sourcePathAlt": "care.courtName",
+      "quelle": "pfad:care.courtName",
+      "kommentar": "Amts-/Betreuungsgericht (wie bisher); manuelle Übersteuerung über feld:ccz_court möglich."
+    },
+    "pdf_0004": {
+      "label": "Aktenzeichen",
+      "sourcePathAlt": "care.fileNumber",
+      "quelle": "pfad:care.fileNumber",
+      "kommentar": "Aktenzeichen (wie bisher); manuelle Übersteuerung über feld:ccz_file_number möglich."
+    },
+    "pdf_0005": {
+      "label": "Geburtsdatum",
+      "sourcePathAlt": "person.birthDate",
+      "quelle": "pfad:person.birthDate",
+      "kommentar": "Geburtsdatum (wie bisher); manuelle Übersteuerung über feld:ccz_birth_date möglich."
+    },
+    "pdf_0006": {
+      "label": "Straße, Hausnummer",
+      "sourcePathAlt": "person.houseNumber",
+      "quelle": "kombi:[\"pfad:person.streetOnly\", \"pfad:person.houseNumber\"]",
+      "kommentar": "Straße + Hausnummer der betroffenen Person; person.street existiert nicht, daher Kombination streetOnly + houseNumber (bisher nur person.houseNumber). Manuelle Übersteuerung über feld:ccz_person_address möglich."
+    },
+    "pdf_0007": {
+      "label": "PLZ, Ort",
+      "sourcePathAlt": "person.postalCode",
+      "quelle": "kombi:[\"pfad:person.postalCode\", \"pfad:person.city\"]",
+      "kommentar": "PLZ + Ort der betroffenen Person; bisher nur person.postalCode."
+    },
+    "pdf_0008": {
+      "label": "Vorname, Nachname",
+      "sourcePathAlt": "person.firstName",
+      "quelle": "pfad:person.fullName",
+      "kommentar": "Vorname, Nachname der betroffenen Person; bisher nur person.firstName (unvollständig). Manuelle Übersteuerung über feld:ccz_person_name möglich."
+    }
+  }
+}

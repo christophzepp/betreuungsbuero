@@ -1,0 +1,955 @@
+<title>Panelentwurf Formular-Assistent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  --grund:#eef1f4; --flaeche:#ffffff; --flaeche-2:#f6f8fa;
+  --tinte:#16232e; --tinte-leise:#5d7185;
+  --linie:#d5dee6; --linie-fein:#e6ecf1;
+  --blau:#1f4e78; --blau-hell:#2e6da4; --blau-hauch:#e8f0f7;
+  --ocker:#8a5210; --ocker-hauch:#faf0e0;
+  --gruen:#1a6f47; --gruen-hauch:#e4f2ea;
+  --warn:#a4530a; --warn-hauch:#fdf0df;
+  --rot:#a03434; --rot-hauch:#fbeaea;
+  --lila:#5b4a9c; --lila-hauch:#eeecf9;
+  --schatten:0 1px 2px rgba(22,35,46,.06), 0 8px 24px rgba(22,35,46,.08);
+  --schatten-tief:0 2px 6px rgba(22,35,46,.10), 0 18px 44px rgba(22,35,46,.14);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --grund:#0e151b; --flaeche:#161f27; --flaeche-2:#1b262f;
+    --tinte:#e6edf3; --tinte-leise:#93a6b6;
+    --linie:#2b3945; --linie-fein:#233039;
+    --blau:#8ab6dd; --blau-hell:#a8cbe9; --blau-hauch:#182838;
+    --ocker:#dda85e; --ocker-hauch:#2c2317;
+    --gruen:#6dc79b; --gruen-hauch:#152a20;
+    --warn:#e0a763; --warn-hauch:#2d2317;
+    --rot:#e79b9b; --rot-hauch:#2e1b1b;
+    --lila:#b3a8e6; --lila-hauch:#221f33;
+    --schatten:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+    --schatten-tief:0 2px 6px rgba(0,0,0,.5), 0 18px 44px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --grund:#0e151b; --flaeche:#161f27; --flaeche-2:#1b262f;
+  --tinte:#e6edf3; --tinte-leise:#93a6b6;
+  --linie:#2b3945; --linie-fein:#233039;
+  --blau:#8ab6dd; --blau-hell:#a8cbe9; --blau-hauch:#182838;
+  --ocker:#dda85e; --ocker-hauch:#2c2317;
+  --gruen:#6dc79b; --gruen-hauch:#152a20;
+  --warn:#e0a763; --warn-hauch:#2d2317;
+  --rot:#e79b9b; --rot-hauch:#2e1b1b;
+  --lila:#b3a8e6; --lila-hauch:#221f33;
+  --schatten:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+  --schatten-tief:0 2px 6px rgba(0,0,0,.5), 0 18px 44px rgba(0,0,0,.5);
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--grund);color:var(--tinte);
+  font-family:"Source Sans 3","Segoe UI",system-ui,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.blatt{max-width:1180px;margin:0 auto;padding:44px 24px 88px}
+h1,h2,h3{font-family:"Source Serif 4",Georgia,serif;font-weight:600;text-wrap:balance;margin:0}
+h1{font-size:clamp(30px,4.4vw,44px);line-height:1.12;letter-spacing:-.01em}
+h2{font-size:24px;margin:0 0 4px}
+h3{font-size:18px;margin:0 0 6px}
+p{margin:0 0 12px;max-width:64ch}
+.leise{color:var(--tinte-leise)}
+.klein{font-size:13.5px}
+
+.kopf{border-bottom:1px solid var(--linie);padding-bottom:26px;margin-bottom:34px}
+.kopf .these{font-size:19px;line-height:1.5;max-width:60ch;margin-top:10px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:16px;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11.5px;color:var(--tinte-leise);text-transform:uppercase;letter-spacing:.02em}
+
+section{margin:0 0 42px}
+.abschnittskopf{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.nummer{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--tinte-leise);letter-spacing:.08em;padding-top:6px}
+
+.befunde{display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:14px}
+.befund{background:var(--flaeche);border:1px solid var(--linie);border-radius:12px;padding:15px 16px}
+.befund .zahl{font-family:"IBM Plex Mono",monospace;font-size:26px;font-weight:500;color:var(--blau);line-height:1.1;font-variant-numeric:tabular-nums}
+.befund .titel{font-weight:600;margin:6px 0 3px}
+.befund p{margin:0;font-size:13.5px;color:var(--tinte-leise);line-height:1.5}
+
+.galerie{display:flex;gap:22px;overflow-x:auto;padding:6px 2px 20px;scroll-snap-type:x proximity}
+.galerie::-webkit-scrollbar{height:9px}
+.galerie::-webkit-scrollbar-thumb{background:var(--linie);border-radius:9px}
+.stand{flex:0 0 auto;width:372px;scroll-snap-align:start;margin:0}
+.stand > figcaption{margin:0 0 9px;display:flex;align-items:baseline;gap:8px}
+.stand .schritt{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--tinte-leise);letter-spacing:.06em}
+.stand .name{font-weight:600;font-size:15px}
+.stand .warum{margin:9px 2px 0;font-size:13px;color:var(--tinte-leise);line-height:1.5}
+
+/* ---------- Panel ---------- */
+.panel{position:relative;width:372px;background:var(--flaeche);border:1px solid var(--linie);border-radius:12px;
+  box-shadow:var(--schatten);overflow:hidden;font-size:13.5px;line-height:1.45;
+  display:flex;flex-direction:column;height:720px}
+.panel.tief{box-shadow:var(--schatten-tief)}
+/* Verlauf am unteren Rand: zeigt, dass die Liste weitergeht. Sitzt am Panel, nicht im
+   scrollenden Koerper - sonst wandert er mit und verdeckt Zeilen. */
+.panel::after{content:"";position:absolute;left:1px;right:1px;bottom:71px;height:22px;pointer-events:none;
+  background:linear-gradient(to bottom,transparent,var(--flaeche))}
+.panel.ohnefuss::after{bottom:1px}
+
+.p-kopf{padding:11px 13px 10px;border-bottom:1px solid var(--linie-fein);background:var(--flaeche)}
+.p-marke{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.p-marke .wort{font-weight:700;font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--tinte-leise);flex:1}
+.p-status{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--tinte-leise)}
+.punkt{width:7px;height:7px;border-radius:50%;background:var(--gruen);flex:none}
+.punkt.rot{background:var(--rot)}
+.symbol{width:24px;height:24px;border-radius:6px;border:1px solid var(--linie);background:var(--flaeche);
+  display:grid;place-items:center;font-size:12px;color:var(--tinte-leise);flex:none}
+.symbol.an{background:var(--lila-hauch);border-color:var(--lila);color:var(--lila)}
+
+.p-fall{display:flex;align-items:center;gap:9px;padding:8px 9px;border:1px solid var(--linie);border-radius:9px;background:var(--flaeche-2)}
+.p-fall .initialen{width:30px;height:30px;border-radius:8px;background:var(--blau-hauch);color:var(--blau);display:grid;place-items:center;font-weight:700;font-size:12px;flex:none}
+.p-fall .wer{min-width:0;flex:1}
+.p-fall .wer b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.p-fall .wer span{display:block;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--tinte-leise)}
+.p-fall .tausch{font-size:11.5px;color:var(--blau-hell);flex:none}
+
+.p-seite{display:flex;align-items:center;gap:7px;margin-top:8px;padding:7px 9px;border-radius:8px;background:var(--blau-hauch);font-size:12px}
+.p-seite .globus{flex:none;opacity:.75}
+.p-seite b{font-weight:600}
+.p-seite .chip{margin-left:auto;flex:none}
+
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:600;padding:2px 7px;border-radius:20px;
+  border:1px solid var(--linie);color:var(--tinte-leise);background:var(--flaeche);white-space:nowrap}
+.chip.blau{color:var(--blau);border-color:color-mix(in srgb,var(--blau) 35%,transparent);background:var(--blau-hauch)}
+.chip.ocker{color:var(--ocker);border-color:color-mix(in srgb,var(--ocker) 35%,transparent);background:var(--ocker-hauch)}
+.chip.gruen{color:var(--gruen);border-color:color-mix(in srgb,var(--gruen) 35%,transparent);background:var(--gruen-hauch)}
+.chip.warn{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 40%,transparent);background:var(--warn-hauch)}
+.chip.lila{color:var(--lila);border-color:color-mix(in srgb,var(--lila) 40%,transparent);background:var(--lila-hauch)}
+
+.p-schritte{display:flex;align-items:center;padding:9px 13px;border-bottom:1px solid var(--linie-fein);background:var(--flaeche-2)}
+.p-schritt{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--tinte-leise)}
+.p-schritt + .p-schritt::before{content:"";width:14px;height:1px;background:var(--linie);margin:0 7px;display:block}
+.p-schritt .kreis{width:15px;height:15px;border-radius:50%;border:1.5px solid var(--linie);display:grid;place-items:center;font-size:9px;font-weight:700;color:var(--tinte-leise);background:var(--flaeche)}
+.p-schritt.fertig .kreis{background:var(--gruen);border-color:var(--gruen);color:#fff}
+.p-schritt.jetzt{color:var(--blau);font-weight:700}
+.p-schritt.jetzt .kreis{border-color:var(--blau);color:var(--blau);background:var(--blau-hauch)}
+
+.p-koerper{flex:1;overflow-y:auto;padding:11px 13px;display:flex;flex-direction:column;gap:11px;scrollbar-width:thin}
+/* Flex-Kinder duerfen nicht schrumpfen, sonst quetscht ein Kasten seine eigenen Zeilen weg. */
+.p-koerper > *{flex:0 0 auto}
+
+.gruppe{border:1px solid var(--linie);border-radius:10px;overflow:hidden}
+.gruppe > .kopfzeile{display:flex;align-items:center;gap:7px;padding:7px 10px;font-size:11.5px;font-weight:700;border-bottom:1px solid var(--linie-fein)}
+.gruppe.person > .kopfzeile{background:var(--blau-hauch);color:var(--blau)}
+.gruppe.buero > .kopfzeile{background:var(--ocker-hauch);color:var(--ocker)}
+.gruppe.unsicher > .kopfzeile{background:var(--warn-hauch);color:var(--warn)}
+.gruppe.neutral > .kopfzeile{background:var(--flaeche-2);color:var(--tinte-leise)}
+.gruppe .anzahl{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-weight:500;font-variant-numeric:tabular-nums}
+
+.feld{display:grid;grid-template-columns:16px 1fr auto;gap:8px;align-items:start;padding:7px 10px;border-bottom:1px solid var(--linie-fein);background:var(--flaeche)}
+.feld.zweispaltig{grid-template-columns:1fr auto;align-items:center}
+.feld:last-child{border-bottom:none}
+.haken{width:15px;height:15px;border-radius:4px;border:1.5px solid var(--blau);background:var(--blau);position:relative;margin-top:2px}
+.haken::after{content:"";position:absolute;left:4px;top:1px;width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(43deg)}
+.haken.leer{background:transparent;border-color:var(--linie)}
+.haken.leer::after{display:none}
+.feld .beschriftung{font-weight:600;font-size:12.5px;line-height:1.35}
+.feld .wert{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--tinte-leise);margin-top:2px;word-break:break-word}
+.feld .wert b{color:var(--tinte);font-weight:500}
+.feld.aus{opacity:.5}
+.balken{width:26px;height:3px;border-radius:3px;background:var(--linie);overflow:hidden;margin-top:7px}
+.balken i{display:block;height:100%;background:var(--gruen)}
+.balken.mittel i{background:var(--warn)}
+
+.hinweisleiste{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border-radius:8px;background:var(--warn-hauch);color:var(--warn);font-size:12px;line-height:1.45}
+.hinweisleiste.gruen{background:var(--gruen-hauch);color:var(--gruen)}
+.hinweisleiste.blau{background:var(--blau-hauch);color:var(--blau)}
+.hinweisleiste.rot{background:var(--rot-hauch);color:var(--rot)}
+.hinweisleiste.lila{background:var(--lila-hauch);color:var(--lila)}
+.hinweisleiste.grau{background:var(--flaeche-2);color:var(--tinte-leise)}
+.hinweisleiste b{font-weight:700}
+
+.p-fuss{border-top:1px solid var(--linie-fein);background:var(--flaeche-2);padding:10px 13px}
+.knopfreihe{display:flex;gap:8px;align-items:center}
+.knopf{flex:1;text-align:center;padding:9px 10px;border-radius:8px;border:1px solid var(--linie);background:var(--flaeche);font-weight:600;font-size:13px;color:var(--tinte)}
+.knopf.haupt{background:var(--blau);border-color:var(--blau);color:#fff;flex:2}
+.knopf.stopp{background:var(--rot);border-color:var(--rot);color:#fff}
+:root[data-theme="dark"] .knopf.haupt,:root[data-theme="dark"] .knopf.stopp{color:#0e151b}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .knopf.haupt,:root:not([data-theme="light"]) .knopf.stopp{color:#0e151b}}
+.knopf.schmal{flex:none;padding:9px 11px}
+.p-fuss .nie{margin-top:7px;font-size:11px;color:var(--tinte-leise);text-align:center}
+
+.schub{border:1px solid var(--linie);border-radius:10px;overflow:hidden;background:var(--flaeche)}
+.schub .griff{display:flex;align-items:center;gap:8px;padding:8px 10px;font-weight:600;font-size:12.5px;border-bottom:1px solid var(--linie-fein);background:var(--flaeche-2)}
+.werkzeuge{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--linie-fein)}
+.werkzeug{background:var(--flaeche);padding:10px;display:flex;flex-direction:column;gap:2px}
+.werkzeug .w-name{font-weight:600;font-size:12.5px}
+.werkzeug .w-was{font-size:11.5px;color:var(--tinte-leise);line-height:1.4}
+
+/* Aufzeichnung */
+.panel.aufzeichnung .p-kopf{background:var(--lila-hauch);border-bottom-color:color-mix(in srgb,var(--lila) 30%,transparent)}
+.aufnahmeband{display:flex;align-items:center;gap:7px;padding:7px 13px;background:var(--lila);color:#fff;font-size:11.5px;font-weight:600}
+:root[data-theme="dark"] .aufnahmeband{color:#0e151b}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .aufnahmeband{color:#0e151b}}
+.aufnahmeband .blink{width:8px;height:8px;border-radius:50%;background:#fff;flex:none}
+:root[data-theme="dark"] .aufnahmeband .blink{background:#0e151b}
+
+/* Protokollzeilen des Agenten */
+.protokoll{border:1px solid var(--linie);border-radius:10px;overflow:hidden;font-size:11.5px}
+.protokoll .zeile{display:grid;grid-template-columns:14px 1fr auto;gap:7px;padding:6px 9px;border-bottom:1px solid var(--linie-fein);align-items:start}
+.protokoll .zeile:last-child{border-bottom:none}
+.protokoll .zeile .z-nr{font-family:"IBM Plex Mono",monospace;color:var(--tinte-leise)}
+.protokoll .zeile .z-zeit{font-family:"IBM Plex Mono",monospace;color:var(--tinte-leise);font-size:10.5px}
+.protokoll .zeile.gestoppt{background:var(--rot-hauch);color:var(--rot);font-weight:600}
+
+/* Störungsmuster */
+.stoerungen{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:14px}
+.stoerung{background:var(--flaeche);border:1px solid var(--linie);border-radius:12px;padding:14px}
+.stoerung .fall{font-size:12px;color:var(--tinte-leise);margin-bottom:9px;font-family:"IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.04em}
+.stoerung .warum{margin:9px 0 0;font-size:13px;color:var(--tinte-leise);line-height:1.5}
+
+/* Listen */
+.spalten{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px}
+.liste{background:var(--flaeche);border:1px solid var(--linie);border-radius:12px;padding:16px 18px}
+.liste ul{margin:0;padding:0;list-style:none}
+.liste li{padding:8px 0;border-bottom:1px solid var(--linie-fein);font-size:14px;line-height:1.5}
+.liste li:last-child{border-bottom:none}
+.liste li .dazu{display:block;color:var(--tinte-leise);font-size:13px}
+.entschieden{background:var(--flaeche);border:1px solid var(--linie);border-left:3px solid var(--gruen);border-radius:10px;padding:16px 18px;margin-bottom:16px}
+.entschieden dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:8px 16px;align-items:baseline}
+.entschieden dt{font-weight:600;white-space:nowrap}
+.entschieden dd{margin:0;color:var(--tinte-leise);font-size:14px;line-height:1.5}
+.offen{background:var(--flaeche);border:1px solid var(--linie);border-left:3px solid var(--blau);border-radius:10px;padding:16px 18px}
+.offen ol{margin:8px 0 0;padding-left:20px}
+.offen li{margin-bottom:9px;line-height:1.5}
+.offen li:last-child{margin-bottom:0}
+
+/* Erzwungen dunkles Fenster: zeigt den Dunkelmodus unabhaengig davon, wie der Betrachter
+   dieses Blatt gerade sieht. Dieselben Merkmalsnamen, andere Werte. */
+.dunkel{--grund:#0e151b;--flaeche:#161f27;--flaeche-2:#1b262f;--tinte:#e6edf3;--tinte-leise:#93a6b6;
+  --linie:#2b3945;--linie-fein:#233039;--blau:#8ab6dd;--blau-hell:#a8cbe9;--blau-hauch:#182838;
+  --ocker:#dda85e;--ocker-hauch:#2c2317;--gruen:#6dc79b;--gruen-hauch:#152a20;--warn:#e0a763;--warn-hauch:#2d2317;
+  --rot:#e79b9b;--rot-hauch:#2e1b1b;--lila:#b3a8e6;--lila-hauch:#221f33;
+  background:var(--grund);color:var(--tinte);padding:18px;border-radius:14px;border:1px solid #2b3945}
+.dunkel .knopf.haupt,.dunkel .knopf.stopp{color:#0e151b}
+.dunkel .aufnahmeband{color:#0e151b}
+.gegenueber{display:grid;grid-template-columns:repeat(auto-fit,minmax(372px,1fr));gap:22px;align-items:start}
+
+/* Panel in einer breiten Sidebar */
+.panel.breit{width:520px}
+.panel.kurz{height:auto}
+.panel.kurz::after{display:none}
+
+/* Optionsseite */
+.optseite{background:var(--flaeche);border:1px solid var(--linie);border-radius:12px;box-shadow:var(--schatten);
+  overflow:hidden;max-width:860px;font-size:14px}
+.opt-kopf{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--linie-fein)}
+.opt-kopf .titel{font-weight:700;font-size:15px}
+.opt-kopf .p-status{margin-left:auto}
+.opt-raster{display:grid;grid-template-columns:200px 1fr;min-height:420px}
+.opt-nav{border-right:1px solid var(--linie-fein);background:var(--flaeche-2);padding:10px 0}
+.opt-nav a{display:block;padding:8px 18px;font-size:13.5px;color:var(--tinte-leise);text-decoration:none;border-left:3px solid transparent}
+.opt-nav a.an{color:var(--blau);font-weight:700;background:var(--blau-hauch);border-left-color:var(--blau)}
+.opt-inhalt{padding:18px 20px;display:flex;flex-direction:column;gap:16px}
+.opt-block h4{margin:0 0 4px;font-family:"Source Sans 3",sans-serif;font-size:14.5px;font-weight:700}
+.opt-block p{margin:0 0 10px;font-size:13px;color:var(--tinte-leise);max-width:60ch}
+.opt-feld{display:grid;grid-template-columns:150px 1fr;gap:10px;align-items:center;margin-bottom:8px}
+.opt-feld label{font-size:13px;color:var(--tinte-leise)}
+.opt-feld .eingabe{border:1px solid var(--linie);border-radius:7px;padding:7px 10px;background:var(--flaeche-2);
+  font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--tinte)}
+.opt-tabelle{border:1px solid var(--linie);border-radius:9px;overflow:hidden}
+.opt-zeile{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:8px 11px;border-bottom:1px solid var(--linie-fein)}
+.opt-zeile:last-child{border-bottom:none}
+.opt-zeile .z-name{font-weight:600;font-size:13px}
+.opt-zeile .z-muster{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--tinte-leise)}
+
+footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--linie);font-size:13px;color:var(--tinte-leise)}
+@media (max-width:760px){.blatt{padding:30px 16px 60px}.stand,.panel{width:min(372px,86vw)}}
+</style>
+
+<div class="blatt">
+
+<header class="kopf">
+  <h1>Panelentwurf Formular-Assistent</h1>
+  <p class="these">Das Seitenpanel ist heute eine Sammlung von Kästen. Es soll ein Arbeitsweg werden: ein Fall, eine Seite, eine Prüfliste, ein Knopf — und alles Übrige aus dem Weg.</p>
+  <div class="meta">
+    <span>Entwurf 3 · 31.08.2026</span>
+    <span>Panelbreite 372 px</span>
+    <span>Grundlage: Fassung 0.4.9</span>
+    <span>Noch nichts gebaut</span>
+  </div>
+</header>
+
+<section>
+  <div class="abschnittskopf"><span class="nummer">01</span><h2>Was heute im Weg steht</h2></div>
+  <p class="klein leise" style="margin-top:-6px">Am ausgeklappten Panel der Fassung 0.4.9 gemessen, nicht geschätzt.</p>
+  <div class="befunde">
+    <div class="befund">
+      <div class="zahl">200 px</div><div class="titel">für drei Knöpfe</div>
+      <p>Die Kachelreihe „Scannen · Ausfüllen · Protokoll-PDF" belegt bei 372 px Breite rund ein Drittel der sichtbaren Höhe — bevor irgendein Inhalt beginnt.</p>
+    </div>
+    <div class="befund">
+      <div class="zahl">9</div><div class="titel">Abschnitte in einer Spalte</div>
+      <p>Prüfliste, Upload, Dokumentation, Kopierwerte, Portale, Dateien … alle im selben Kastenformat, alle gleich laut. Das Wichtigste sieht aus wie das Nebensächlichste.</p>
+    </div>
+    <div class="befund">
+      <div class="zahl">1 724 px</div><div class="titel">Gesamthöhe</div>
+      <p>So lang wird die Spalte, wenn alles sichtbar ist — gut das Doppelte eines Panelfensters. Gearbeitet wird per Scrollen statt per Blick.</p>
+    </div>
+    <div class="befund">
+      <div class="zahl">0</div><div class="titel">Zustandsanzeige</div>
+      <p>Wo im Ablauf man steht, sagt nur ein Textkasten „So geht's". Ob gescannt, ob ein Profil geladen, ob schon ausgefüllt wurde — man reimt es sich zusammen.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="abschnittskopf"><span class="nummer">02</span><h2>Der Arbeitsweg</h2></div>
+  <p>Ganz links das heutige Panel im selben Maßstab, rechts daneben der Vorschlag Zustand für Zustand. Dieselben Funktionen, andere Ordnung.</p>
+
+  <div class="galerie">
+
+    <figure class="stand">
+      <figcaption><span class="schritt">HEUTE</span><span class="name">Fassung 0.4.9</span></figcaption>
+      <div class="panel ohnefuss" style="overflow:hidden">
+        <div class="p-kopf" style="background:var(--blau);border-bottom:none">
+          <div class="p-marke"><span class="wort" style="color:#dbe8f3">Formular-Assistent</span><span style="color:#dbe8f3;font-size:11px">…</span></div>
+          <div style="display:flex;gap:6px">
+            <div style="flex:1;background:#fff;border-radius:6px;padding:6px 9px;font-size:12px;color:#5d7185">– Fall wählen –</div>
+            <div style="width:30px;background:#2e6da4;border-radius:6px"></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:4px;padding:9px 13px 0">
+          <span style="font-size:12px;padding:6px 13px;border-radius:7px 7px 0 0;background:var(--blau);color:#fff;font-weight:700">Assistent</span>
+          <span style="font-size:12px;padding:6px 13px;border:1px solid var(--linie);border-bottom:none;border-radius:7px 7px 0 0;background:var(--flaeche-2);color:var(--tinte-leise)">KI</span>
+          <span style="font-size:12px;padding:6px 13px;border:1px solid var(--linie);border-bottom:none;border-radius:7px 7px 0 0;background:var(--flaeche-2);color:var(--tinte-leise)">Training</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:11px 13px">
+          <div style="aspect-ratio:1.25;border-radius:8px;background:linear-gradient(160deg,#1f4e78,#2b3f56);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600">Scannen</div>
+          <div style="aspect-ratio:1.25;border-radius:8px;background:linear-gradient(160deg,#1f4e78,#2b3f56);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600">Ausfüllen</div>
+          <div style="aspect-ratio:1.25;border-radius:8px;background:linear-gradient(160deg,#1f4e78,#2b3f56);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600;text-align:center;padding:4px">Protokoll-PDF</div>
+        </div>
+        <div class="p-koerper" style="gap:8px;padding-top:0">
+          <div class="hinweisleiste">Braucht einmalig Zugriff auf Webseiten. <u>Erlauben</u></div>
+          <div class="hinweisleiste rot">Die Seite hat sich geändert. <u>Neu scannen</u></div>
+          <div class="gruppe neutral"><div class="kopfzeile">SO GEHT'S</div><div class="feld zweispaltig"><span class="wert" style="margin:0">1. Fall wählen 2. Formular öffnen 3. Scannen</span></div></div>
+          <div class="gruppe neutral"><div class="kopfzeile">SITE-PROFIL</div><div class="feld zweispaltig"><span class="wert" style="margin:0">—</span></div></div>
+          <div class="gruppe neutral"><div class="kopfzeile">PRÜFLISTE</div><div class="feld zweispaltig"><span class="wert" style="margin:0">Ausfüllen (0) · Markierungen weg</span></div></div>
+          <div class="gruppe neutral"><div class="kopfzeile">UPLOAD-HELFER</div><div class="feld zweispaltig"><span class="wert" style="margin:0">Datei-Feld · Dokument · einsetzen</span></div></div>
+          <div class="gruppe neutral"><div class="kopfzeile">DOKUMENTATION</div><div class="feld zweispaltig"><span class="wert" style="margin:0">Protokoll-PDF · Seite drucken</span></div></div>
+          <div class="gruppe neutral"><div class="kopfzeile">WERTE ZUM KOPIEREN</div><div class="feld zweispaltig"><span class="wert" style="margin:0">Datenwert suchen …</span></div></div>
+          <div style="text-align:center;font-size:11px;color:var(--tinte-leise)">… und drei weitere Kästen</div>
+        </div>
+      </div>
+      <p class="warum">Alles sichtbar, nichts gewichtet. Die Prüfliste — das eigentliche Werkzeug — liegt zwischen Site-Profil und Upload-Helfer.</p>
+    </figure>
+
+    <figure class="stand">
+      <figcaption><span class="schritt">NEU · 1</span><span class="name">Bereit</span></figcaption>
+      <div class="panel tief">
+        <div class="p-kopf">
+          <div class="p-marke">
+            <span class="wort">Formular-Assistent</span>
+            <span class="symbol" title="Training">⦿</span>
+            <span class="p-status"><span class="punkt"></span>Büro</span>
+          </div>
+          <div class="p-fall">
+            <div class="initialen" style="background:var(--flaeche-2);color:var(--tinte-leise)">?</div>
+            <div class="wer"><b>Kein Fall gewählt</b><span>ohne Fall wird nichts gelesen</span></div>
+            <span class="tausch">Wählen</span>
+          </div>
+        </div>
+        <div class="p-schritte">
+          <span class="p-schritt jetzt"><span class="kreis">1</span>Fall</span>
+          <span class="p-schritt"><span class="kreis">2</span>Seite</span>
+          <span class="p-schritt"><span class="kreis">3</span>Prüfen</span>
+          <span class="p-schritt"><span class="kreis">4</span>Ausfüllen</span>
+        </div>
+        <div class="p-koerper">
+          <div class="hinweisleiste blau">
+            <span>ℹ</span><div>Diese Seite kennt das Büro bereits: <b>jobcenter.digital</b> — Profil „Weiterbewilligung" liegt vor.</div>
+          </div>
+          <div class="hinweisleiste grau">
+            <span>🔒</span><div>Namen betreuter Personen erscheinen erst, wenn Sie „Wählen" antippen — das Panel steht offen neben fremden Webseiten.</div>
+          </div>
+        </div>
+        <div class="p-fuss">
+          <div class="knopfreihe"><span class="knopf haupt">Fall wählen</span><span class="knopf schmal">⚙</span></div>
+          <div class="nie">Abgesendet wird nie automatisch.</div>
+        </div>
+      </div>
+      <p class="warum">Deine Entscheidung: schlank. Kein Zustandsbericht über Zugang und Fassung — der meldet sich von selbst, wenn etwas nicht stimmt (Abschnitt 03).</p>
+    </figure>
+
+    <figure class="stand">
+      <figcaption><span class="schritt">NEU · 2</span><span class="name">Fallwahl</span></figcaption>
+      <div class="panel tief">
+        <div class="p-kopf">
+          <div class="p-marke">
+            <span class="wort">Fall wählen</span>
+            <span class="p-status">abbrechen ✕</span>
+          </div>
+          <div class="p-fall" style="background:var(--flaeche)">
+            <span style="opacity:.5">🔍</span>
+            <div class="wer"><b style="font-weight:400;color:var(--tinte-leise)">Name oder Aktenzeichen …</b></div>
+          </div>
+        </div>
+        <div class="p-koerper">
+          <div class="gruppe neutral">
+            <div class="kopfzeile">Zuletzt bearbeitet <span class="anzahl">3</span></div>
+            <div class="feld zweispaltig"><div><div class="beschriftung">Bastuck, Franz Josef</div><div class="wert">10 XVII 118/25 · gestern</div></div><span class="chip blau">öffnen</span></div>
+            <div class="feld zweispaltig"><div><div class="beschriftung">Nowak, Halina</div><div class="wert">17 XVII 42/26 · Montag</div></div><span class="chip">öffnen</span></div>
+            <div class="feld zweispaltig"><div><div class="beschriftung">Rothenberg, Dieter</div><div class="wert">17 XVII 45/26 · letzte Woche</div></div><span class="chip">öffnen</span></div>
+          </div>
+          <div class="gruppe neutral">
+            <div class="kopfzeile">Alle Fälle <span class="anzahl">34</span></div>
+            <div class="feld zweispaltig"><div><div class="beschriftung">Adam, Berta</div><div class="wert">17 XVII 08/24</div></div><span class="chip">öffnen</span></div>
+            <div class="feld zweispaltig"><div><div class="beschriftung">Alt, Anton</div><div class="wert">17 XVII 09/24 · archiviert</div></div><span class="chip">öffnen</span></div>
+            <div class="feld zweispaltig"><div><div class="beschriftung">Berger, Marianne</div><div class="wert">10 XVII 77/25</div></div><span class="chip">öffnen</span></div>
+            <div class="feld zweispaltig"><div><div class="beschriftung">Fremd, Frieda</div><div class="wert">17 XVII 45/26</div></div><span class="chip">öffnen</span></div>
+          </div>
+        </div>
+        <div class="p-fuss">
+          <div class="knopfreihe"><span class="knopf">Zurück</span><span class="knopf schmal">lokale Datei laden</span></div>
+        </div>
+      </div>
+      <p class="warum">Erst hier stehen Namen — auf einer Fläche, die man bewusst öffnet und die sich nach der Wahl wieder schließt.</p>
+    </figure>
+
+    <figure class="stand">
+      <figcaption><span class="schritt">NEU · 3</span><span class="name">Prüfliste</span></figcaption>
+      <div class="panel tief">
+        <div class="p-kopf">
+          <div class="p-marke">
+            <span class="wort">Formular-Assistent</span>
+            <span class="symbol" title="Training">⦿</span>
+            <span class="p-status"><span class="punkt"></span>Büro</span>
+          </div>
+          <div class="p-fall">
+            <div class="initialen">FB</div>
+            <div class="wer"><b>Bastuck, Franz Josef</b><span>10 XVII 118/25</span></div>
+            <span class="tausch">wechseln</span>
+          </div>
+          <div class="p-seite">
+            <span class="globus">🌐</span><span><b>jobcenter.digital</b> · Seite 2 von 6</span><span class="chip blau">Profil</span>
+          </div>
+        </div>
+        <div class="p-schritte">
+          <span class="p-schritt fertig"><span class="kreis">✓</span>Fall</span>
+          <span class="p-schritt fertig"><span class="kreis">✓</span>Seite</span>
+          <span class="p-schritt jetzt"><span class="kreis">3</span>Prüfen</span>
+          <span class="p-schritt"><span class="kreis">4</span>Ausfüllen</span>
+        </div>
+        <div class="p-koerper">
+          <div class="gruppe unsicher">
+            <div class="kopfzeile">⚠ Bitte ansehen <span class="anzahl">2</span></div>
+            <div class="feld">
+              <span class="haken leer"></span>
+              <div><div class="beschriftung">Name des Kontoinhabers</div><div class="wert">← person.iban-inhaber: <b>F. J. Bastuck</b></div></div>
+              <div><span class="chip warn">unsicher</span><div class="balken mittel"><i style="width:45%"></i></div></div>
+            </div>
+            <div class="feld">
+              <span class="haken leer"></span>
+              <div><div class="beschriftung">Ansprechpartner Telefon</div><div class="wert">← buero.telefon: <b>06544 9819812</b></div></div>
+              <div><span class="chip warn">unsicher</span><div class="balken mittel"><i style="width:38%"></i></div></div>
+            </div>
+          </div>
+          <div class="gruppe person">
+            <div class="kopfzeile">Betreute Person <span class="anzahl">8</span></div>
+            <div class="feld"><span class="haken"></span><div><div class="beschriftung">Familienname</div><div class="wert">← person.nachname: <b>Bastuck</b></div></div><div><span class="chip blau">Profil</span><div class="balken"><i style="width:100%"></i></div></div></div>
+            <div class="feld"><span class="haken"></span><div><div class="beschriftung">Vorname</div><div class="wert">← person.vorname: <b>Franz Josef</b></div></div><div><span class="chip blau">Profil</span><div class="balken"><i style="width:100%"></i></div></div></div>
+            <div class="feld"><span class="haken"></span><div><div class="beschriftung">Geburtsdatum</div><div class="wert">← person.geburtsdatum: <b>01.01.1990</b></div></div><div><span class="chip">Heuristik</span><div class="balken"><i style="width:88%"></i></div></div></div>
+            <div class="feld"><span class="haken"></span><div><div class="beschriftung">Straße, Hausnummer</div><div class="wert">← person.anschrift: <b>Marktplatz 8</b></div></div><div><span class="chip">Heuristik</span><div class="balken"><i style="width:82%"></i></div></div></div>
+            <div class="feld aus"><span class="haken leer"></span><div><div class="beschriftung">Steuer-ID</div><div class="wert">← person.steuerId: <b>—</b> (leer)</div></div><div><span class="chip">kein Wert</span></div></div>
+          </div>
+          <div class="gruppe buero">
+            <div class="kopfzeile">Betreuer &amp; Büro <span class="anzahl">3</span></div>
+            <div class="feld"><span class="haken"></span><div><div class="beschriftung">Gesetzlicher Vertreter</div><div class="wert">← betreuer.name: <b>Christoph Zepp</b></div></div><div><span class="chip ocker">Profil</span><div class="balken"><i style="width:100%"></i></div></div></div>
+            <div class="feld"><span class="haken"></span><div><div class="beschriftung">Anschrift des Vertreters</div><div class="wert">← buero.anschrift: <b>Marktplatz 8, 56865 St. Goarshausen</b></div></div><div><span class="chip ocker">Profil</span><div class="balken"><i style="width:96%"></i></div></div></div>
+          </div>
+        </div>
+        <div class="p-fuss">
+          <div class="knopfreihe"><span class="knopf haupt">11 Werte ausfüllen</span><span class="knopf schmal">Auswahl</span><span class="knopf schmal">⋯</span></div>
+          <div class="nie">Abgesendet wird nie automatisch.</div>
+        </div>
+      </div>
+      <p class="warum">Der Hauptzustand. Zuerst das Unsichere, dann nach Zugehörigkeit gruppiert — die Verwechslung „Person ↔ Betreuer" ist farblich nicht mehr zu übersehen.</p>
+    </figure>
+
+    <figure class="stand">
+      <figcaption><span class="schritt">NEU · 4</span><span class="name">Ausgefüllt</span></figcaption>
+      <div class="panel tief">
+        <div class="p-kopf">
+          <div class="p-marke">
+            <span class="wort">Formular-Assistent</span>
+            <span class="symbol" title="Training">⦿</span>
+            <span class="p-status"><span class="punkt"></span>Büro</span>
+          </div>
+          <div class="p-fall">
+            <div class="initialen">FB</div>
+            <div class="wer"><b>Bastuck, Franz Josef</b><span>10 XVII 118/25</span></div>
+            <span class="tausch">wechseln</span>
+          </div>
+          <div class="p-seite"><span class="globus">🌐</span><span><b>jobcenter.digital</b> · Seite 2 von 6</span><span class="chip gruen">gefüllt</span></div>
+        </div>
+        <div class="p-schritte">
+          <span class="p-schritt fertig"><span class="kreis">✓</span>Fall</span>
+          <span class="p-schritt fertig"><span class="kreis">✓</span>Seite</span>
+          <span class="p-schritt fertig"><span class="kreis">✓</span>Prüfen</span>
+          <span class="p-schritt jetzt"><span class="kreis">4</span>Ausfüllen</span>
+        </div>
+        <div class="p-koerper">
+          <div class="hinweisleiste gruen"><span>✓</span><div><b>11 Felder ausgefüllt.</b> Auf der Seite grün markiert. Zwei Vorschläge haben Sie abgelehnt.</div></div>
+          <div class="hinweisleiste"><span>⚠</span><div>Zwei Pflichtfelder der Seite sind noch leer: <b>Bankleitzahl</b>, <b>Datum der Antragstellung</b>.</div></div>
+          <div class="gruppe neutral">
+            <div class="kopfzeile">Jetzt festhalten</div>
+            <div class="feld zweispaltig"><div><div class="beschriftung">In die Falldokumentation</div><div class="wert">Verlaufseintrag + Protokoll-PDF</div></div><span class="chip blau">übernehmen</span></div>
+            <div class="feld zweispaltig"><div><div class="beschriftung">Protokoll-PDF sichern</div><div class="wert">Welcher Wert wohin geschrieben wurde</div></div><span class="chip">sichern</span></div>
+            <div class="feld zweispaltig"><div><div class="beschriftung">Seite als PDF drucken</div><div class="wert">Sichtbare Kopie des Formulars</div></div><span class="chip">drucken</span></div>
+          </div>
+        </div>
+        <div class="p-fuss">
+          <div class="knopfreihe"><span class="knopf haupt">Nächste Seite scannen</span><span class="knopf schmal">⋯</span></div>
+          <div class="nie">Absenden bleibt Ihre Sache — die Erweiterung klickt nichts.</div>
+        </div>
+      </div>
+      <p class="warum">Nach dem Ausfüllen führt das Panel weiter: was fehlt der Seite noch, was wird dokumentiert, wie geht es auf Seite 3 weiter.</p>
+    </figure>
+
+    <figure class="stand">
+      <figcaption><span class="schritt">NEU · 5</span><span class="name">Werkzeuge</span></figcaption>
+      <div class="panel tief">
+        <div class="p-kopf">
+          <div class="p-marke">
+            <span class="wort">Formular-Assistent</span>
+            <span class="symbol" title="Training">⦿</span>
+            <span class="p-status"><span class="punkt"></span>Büro</span>
+          </div>
+          <div class="p-fall">
+            <div class="initialen">FB</div>
+            <div class="wer"><b>Bastuck, Franz Josef</b><span>10 XVII 118/25</span></div>
+            <span class="tausch">wechseln</span>
+          </div>
+        </div>
+        <div class="p-koerper" style="padding-top:13px">
+          <div class="schub">
+            <div class="griff">⋯ Werkzeuge<span style="margin-left:auto;font-weight:400;color:var(--tinte-leise);font-size:11.5px">schließen</span></div>
+            <div class="werkzeuge">
+              <div class="werkzeug"><span class="w-name">Datei einsetzen</span><span class="w-was">Dokument der Fallakte in ein Upload-Feld</span></div>
+              <div class="werkzeug"><span class="w-name">Werte kopieren</span><span class="w-was">Einzelnen Datenwert in die Zwischenablage</span></div>
+              <div class="werkzeug"><span class="w-name">Portale</span><span class="w-was">Büroweit trainierte Formulare öffnen</span></div>
+              <div class="werkzeug"><span class="w-name">Dateien</span><span class="w-was">Ablage der Erweiterung, Sitzungsdateien</span></div>
+              <div class="werkzeug"><span class="w-name">KI-Hilfe</span><span class="w-was">Zuordnung und Freitext, Werte bleiben hier</span></div>
+              <div class="werkzeug"><span class="w-name">KI-Agent</span><span class="w-was">Mehrseitige Formulare, Schritt für Schritt</span></div>
+              <div class="werkzeug"><span class="w-name">Site-Profil</span><span class="w-was">Anwenden, ansehen, löschen</span></div>
+              <div class="werkzeug"><span class="w-name">Einstellungen</span><span class="w-was">Server, Zugang, Sicherung</span></div>
+            </div>
+          </div>
+          <div class="hinweisleiste grau"><span>↩</span><div>Der Schub legt sich über die Prüfliste und verschwindet nach der Auswahl — die Liste bleibt der Ort, an dem gearbeitet wird. <b>Training</b> liegt nicht hier, sondern als Schalter oben.</div></div>
+        </div>
+        <div class="p-fuss">
+          <div class="knopfreihe"><span class="knopf haupt">11 Werte ausfüllen</span><span class="knopf schmal">Auswahl</span><span class="knopf schmal" style="background:var(--blau-hauch);border-color:var(--blau)">⋯</span></div>
+          <div class="nie">Abgesendet wird nie automatisch.</div>
+        </div>
+      </div>
+      <p class="warum">Sieben der neun bisherigen Abschnitte ziehen hierher um. Sie sind einen Klick entfernt statt dauerhaft im Blickfeld.</p>
+    </figure>
+
+    <figure class="stand">
+      <figcaption><span class="schritt">NEU · 6</span><span class="name">Training läuft</span></figcaption>
+      <div class="panel tief aufzeichnung">
+        <div class="aufnahmeband"><span class="blink">●</span> Aufzeichnung läuft — Klicks auf der Seite werden angelernt</div>
+        <div class="p-kopf">
+          <div class="p-marke">
+            <span class="wort" style="color:var(--lila)">Training</span>
+            <span class="symbol an" title="Training beenden">⦿</span>
+            <span class="p-status"><span class="punkt"></span>Büro</span>
+          </div>
+          <div class="p-seite" style="background:var(--lila-hauch);margin-top:0">
+            <span class="globus">🌐</span><span><b>jobcenter.digital</b> · Seite 2</span><span class="chip lila">neues Profil</span>
+          </div>
+        </div>
+        <div class="p-koerper">
+          <div class="gruppe neutral">
+            <div class="kopfzeile">Angelernt <span class="anzahl">6</span></div>
+            <div class="feld zweispaltig"><div><div class="beschriftung">Familienname</div><div class="wert">→ person.nachname</div></div><span class="chip blau">Feld</span></div>
+            <div class="feld zweispaltig"><div><div class="beschriftung">Vorname</div><div class="wert">→ person.vorname</div></div><span class="chip blau">Feld</span></div>
+            <div class="feld zweispaltig"><div><div class="beschriftung">Vertreter/in</div><div class="wert">→ betreuer.name</div></div><span class="chip ocker">Feld</span></div>
+            <div class="feld zweispaltig"><div><div class="beschriftung">„Weiter"</div><div class="wert">→ Aktion: nächste Seite</div></div><span class="chip">Knopf</span></div>
+            <div class="feld zweispaltig"><div><div class="beschriftung">„Hochladen"</div><div class="wert">→ Aktion: Dateiauswahl</div></div><span class="chip">Knopf</span></div>
+            <div class="feld zweispaltig"><div><div class="beschriftung">Geburtsdatum</div><div class="wert">→ noch ohne Zuordnung</div></div><span class="chip warn">offen</span></div>
+          </div>
+          <div class="hinweisleiste lila"><span>●</span><div>Klicken Sie ein Feld auf der Seite an und wählen Sie hier das Datenfeld. Das Profil wird beim Beenden <b>büroweit</b> geteilt.</div></div>
+        </div>
+        <div class="p-fuss">
+          <div class="knopfreihe"><span class="knopf stopp">Aufzeichnung beenden</span><span class="knopf schmal">verwerfen</span></div>
+          <div class="nie">Solange dieses Band steht, wird angelernt statt ausgefüllt.</div>
+        </div>
+      </div>
+      <p class="warum">Deine Entscheidung: Training ist ein Modus, kein Werkzeug. Das Band oben lässt keinen Zweifel, dass gerade aufgezeichnet wird.</p>
+    </figure>
+
+    <figure class="stand">
+      <figcaption><span class="schritt">NEU · 7</span><span class="name">KI-Agent</span></figcaption>
+      <div class="panel tief">
+        <div class="p-kopf">
+          <div class="p-marke">
+            <span class="wort">KI-Agent</span>
+            <span class="p-status">Schritt 4 von 15</span>
+          </div>
+          <div class="p-fall">
+            <div class="initialen">FB</div>
+            <div class="wer"><b>Bastuck, Franz Josef</b><span>Ziel: Weiterbewilligung ausfüllen</span></div>
+          </div>
+        </div>
+        <div class="p-koerper">
+          <div class="hinweisleiste rot">
+            <span>✋</span><div><b>Der Agent möchte „Antrag absenden" klicken.</b> Das macht die Erweiterung nie von selbst — bitte einzeln bestätigen.</div>
+          </div>
+          <div class="knopfreihe" style="gap:6px"><span class="knopf" style="font-size:12px">Klick erlauben</span><span class="knopf" style="font-size:12px">Ablehnen</span></div>
+          <div class="protokoll">
+            <div class="zeile"><span class="z-nr">1</span><span>Seite 1 gescannt · 9 Felder erkannt</span><span class="z-zeit">12:04</span></div>
+            <div class="zeile"><span class="z-nr">2</span><span>7 Werte geschrieben, 2 zur Prüfung offen gelassen</span><span class="z-zeit">12:04</span></div>
+            <div class="zeile"><span class="z-nr">3</span><span>„Weiter" geklickt · Seite 2 geladen</span><span class="z-zeit">12:05</span></div>
+            <div class="zeile"><span class="z-nr">4</span><span>Seite 2: 11 Felder erkannt, 11 geschrieben</span><span class="z-zeit">12:05</span></div>
+            <div class="zeile gestoppt"><span class="z-nr">!</span><span>Angehalten vor „Antrag absenden"</span><span class="z-zeit">12:06</span></div>
+          </div>
+          <div class="gruppe neutral">
+            <div class="kopfzeile">Grenzen dieses Laufs</div>
+            <div class="feld zweispaltig"><div><div class="beschriftung">Schrittbudget</div><div class="wert">4 von 15 verbraucht</div></div><span class="chip">15</span></div>
+            <div class="feld zweispaltig"><div><div class="beschriftung">Falldaten an die KI</div><div class="wert">nur Feldnamen, keine Werte</div></div><span class="chip gruen">aus</span></div>
+            <div class="feld zweispaltig"><div><div class="beschriftung">Domainwechsel</div><div class="wert">stoppt den Lauf sofort</div></div><span class="chip gruen">an</span></div>
+          </div>
+        </div>
+        <div class="p-fuss">
+          <div class="knopfreihe"><span class="knopf stopp">Agent stoppen</span><span class="knopf schmal">Protokoll</span></div>
+          <div class="nie">Verbindliche Klicks immer einzeln — auch hier.</div>
+        </div>
+      </div>
+      <p class="warum">Der Agent bekommt dieselbe Bauform: Protokoll als Liste, Grenzen sichtbar, und die Submit-Sperre als roter Halt statt als Textkasten.</p>
+    </figure>
+
+  </div>
+</section>
+
+<section>
+  <div class="abschnittskopf"><span class="nummer">03</span><h2>Bei mehr Breite</h2></div>
+  <p>In Firefox ist es eine frei ziehbare Sidebar, in Chrome ein Seitenpanel mit verstellbarem Rand. Deine Entscheidung: <b>eine Spalte, die mitwächst</b> — kein zweites Layout. Der gewonnene Platz geht an die Werte, nicht an eine zweite Spalte.</p>
+  <div class="gegenueber">
+    <figure class="stand" style="width:auto">
+      <figcaption><span class="schritt">372 PX</span><span class="name">Regelbreite</span></figcaption>
+      <div class="panel kurz">        <div class="p-kopf">
+          <div class="p-marke">
+            <span class="wort">Formular-Assistent</span>
+            <span class="symbol" title="Training">⦿</span>
+            <span class="p-status"><span class="punkt"></span>Büro</span>
+          </div>
+          <div class="p-fall">
+            <div class="initialen">FB</div>
+            <div class="wer"><b>Bastuck, Franz Josef</b><span>10 XVII 118/25</span></div>
+            <span class="tausch">wechseln</span>
+          </div>
+          <div class="p-seite"><span class="globus">🌐</span><span><b>jobcenter.digital</b> · Seite 2 von 6</span><span class="chip blau">Profil</span></div>
+        </div>
+        <div class="p-schritte">
+          <span class="p-schritt fertig"><span class="kreis">✓</span>Fall</span>
+          <span class="p-schritt fertig"><span class="kreis">✓</span>Seite</span>
+          <span class="p-schritt jetzt"><span class="kreis">3</span>Prüfen</span>
+          <span class="p-schritt"><span class="kreis">4</span>Ausfüllen</span>
+        </div>
+        <div class="p-koerper">
+          <div class="gruppe unsicher">
+            <div class="kopfzeile">⚠ Bitte ansehen <span class="anzahl">2</span></div>
+            <div class="feld"><span class="haken leer"></span><div><div class="beschriftung">Name des Kontoinhabers</div><div class="wert">← person.iban-inhaber: <b>F. J. Bastuck</b></div></div><div><span class="chip warn">unsicher</span><div class="balken mittel"><i style="width:45%"></i></div></div></div>
+          </div>
+          <div class="gruppe person">
+            <div class="kopfzeile">Betreute Person <span class="anzahl">8</span></div>
+            <div class="feld"><span class="haken"></span><div><div class="beschriftung">Familienname</div><div class="wert">← person.nachname: <b>Bastuck</b></div></div><div><span class="chip blau">Profil</span><div class="balken"><i style="width:100%"></i></div></div></div>
+            <div class="feld"><span class="haken"></span><div><div class="beschriftung">Straße, Hausnummer</div><div class="wert">← person.anschrift: <b>Marktplatz 8, 56865 St. Goarshausen</b></div></div><div><span class="chip">Heuristik</span><div class="balken"><i style="width:82%"></i></div></div></div>
+          </div>
+          <div class="gruppe buero">
+            <div class="kopfzeile">Betreuer &amp; Büro <span class="anzahl">3</span></div>
+            <div class="feld"><span class="haken"></span><div><div class="beschriftung">Gesetzlicher Vertreter</div><div class="wert">← betreuer.name: <b>Christoph Zepp</b></div></div><div><span class="chip ocker">Profil</span><div class="balken"><i style="width:100%"></i></div></div></div>
+          </div>
+        </div>
+        <div class="p-fuss">
+          <div class="knopfreihe"><span class="knopf haupt">11 Werte ausfüllen</span><span class="knopf schmal">Auswahl</span><span class="knopf schmal">⋯</span></div>
+          <div class="nie">Abgesendet wird nie automatisch.</div>
+        </div></div>
+    </figure>
+    <figure class="stand" style="width:auto">
+      <figcaption><span class="schritt">520 PX</span><span class="name">Weit gezogen</span></figcaption>
+      <div class="panel kurz breit">        <div class="p-kopf">
+          <div class="p-marke">
+            <span class="wort">Formular-Assistent</span>
+            <span class="symbol" title="Training">⦿</span>
+            <span class="p-status"><span class="punkt"></span>Büro</span>
+          </div>
+          <div class="p-fall">
+            <div class="initialen">FB</div>
+            <div class="wer"><b>Bastuck, Franz Josef</b><span>10 XVII 118/25</span></div>
+            <span class="tausch">wechseln</span>
+          </div>
+          <div class="p-seite"><span class="globus">🌐</span><span><b>jobcenter.digital</b> · Seite 2 von 6</span><span class="chip blau">Profil</span></div>
+        </div>
+        <div class="p-schritte">
+          <span class="p-schritt fertig"><span class="kreis">✓</span>Fall</span>
+          <span class="p-schritt fertig"><span class="kreis">✓</span>Seite</span>
+          <span class="p-schritt jetzt"><span class="kreis">3</span>Prüfen</span>
+          <span class="p-schritt"><span class="kreis">4</span>Ausfüllen</span>
+        </div>
+        <div class="p-koerper">
+          <div class="gruppe unsicher">
+            <div class="kopfzeile">⚠ Bitte ansehen <span class="anzahl">2</span></div>
+            <div class="feld"><span class="haken leer"></span><div><div class="beschriftung">Name des Kontoinhabers</div><div class="wert">← person.iban-inhaber: <b>F. J. Bastuck</b></div></div><div><span class="chip warn">unsicher</span><div class="balken mittel"><i style="width:45%"></i></div></div></div>
+          </div>
+          <div class="gruppe person">
+            <div class="kopfzeile">Betreute Person <span class="anzahl">8</span></div>
+            <div class="feld"><span class="haken"></span><div><div class="beschriftung">Familienname</div><div class="wert">← person.nachname: <b>Bastuck</b></div></div><div><span class="chip blau">Profil</span><div class="balken"><i style="width:100%"></i></div></div></div>
+            <div class="feld"><span class="haken"></span><div><div class="beschriftung">Straße, Hausnummer</div><div class="wert">← person.anschrift: <b>Marktplatz 8, 56865 St. Goarshausen</b></div></div><div><span class="chip">Heuristik</span><div class="balken"><i style="width:82%"></i></div></div></div>
+          </div>
+          <div class="gruppe buero">
+            <div class="kopfzeile">Betreuer &amp; Büro <span class="anzahl">3</span></div>
+            <div class="feld"><span class="haken"></span><div><div class="beschriftung">Gesetzlicher Vertreter</div><div class="wert">← betreuer.name: <b>Christoph Zepp</b></div></div><div><span class="chip ocker">Profil</span><div class="balken"><i style="width:100%"></i></div></div></div>
+          </div>
+        </div>
+        <div class="p-fuss">
+          <div class="knopfreihe"><span class="knopf haupt">11 Werte ausfüllen</span><span class="knopf schmal">Auswahl</span><span class="knopf schmal">⋯</span></div>
+          <div class="nie">Abgesendet wird nie automatisch.</div>
+        </div></div>
+      <p class="warum">Dieselben Zeilen, nur ohne Umbrüche: „Marktplatz 8, 56865 St. Goarshausen" steht wieder in einer Zeile, Beschriftung und Wert bleiben nebeneinander lesbar.</p>
+    </figure>
+  </div>
+</section>
+
+<section>
+  <div class="abschnittskopf"><span class="nummer">04</span><h2>Dunkelmodus</h2></div>
+  <p>Die Erweiterung hat heute keinen — die Hauptanwendung schon. Beim Umbau werden die Farben ohnehin als Merkmale neu angelegt; ein zweiter Satz für dunkel kostet dann fast nichts. Links, wie dieses Blatt es gerade zeigt, rechts fest dunkel.</p>
+  <div class="gegenueber">
+    <figure class="stand" style="width:auto">
+      <figcaption><span class="schritt">HELL</span><span class="name">wie bisher</span></figcaption>
+      <div class="panel kurz">        <div class="p-kopf">
+          <div class="p-marke">
+            <span class="wort">Formular-Assistent</span>
+            <span class="symbol" title="Training">⦿</span>
+            <span class="p-status"><span class="punkt"></span>Büro</span>
+          </div>
+          <div class="p-fall">
+            <div class="initialen">FB</div>
+            <div class="wer"><b>Bastuck, Franz Josef</b><span>10 XVII 118/25</span></div>
+            <span class="tausch">wechseln</span>
+          </div>
+          <div class="p-seite"><span class="globus">🌐</span><span><b>jobcenter.digital</b> · Seite 2 von 6</span><span class="chip blau">Profil</span></div>
+        </div>
+        <div class="p-schritte">
+          <span class="p-schritt fertig"><span class="kreis">✓</span>Fall</span>
+          <span class="p-schritt fertig"><span class="kreis">✓</span>Seite</span>
+          <span class="p-schritt jetzt"><span class="kreis">3</span>Prüfen</span>
+          <span class="p-schritt"><span class="kreis">4</span>Ausfüllen</span>
+        </div>
+        <div class="p-koerper">
+          <div class="gruppe unsicher">
+            <div class="kopfzeile">⚠ Bitte ansehen <span class="anzahl">2</span></div>
+            <div class="feld"><span class="haken leer"></span><div><div class="beschriftung">Name des Kontoinhabers</div><div class="wert">← person.iban-inhaber: <b>F. J. Bastuck</b></div></div><div><span class="chip warn">unsicher</span><div class="balken mittel"><i style="width:45%"></i></div></div></div>
+          </div>
+          <div class="gruppe person">
+            <div class="kopfzeile">Betreute Person <span class="anzahl">8</span></div>
+            <div class="feld"><span class="haken"></span><div><div class="beschriftung">Familienname</div><div class="wert">← person.nachname: <b>Bastuck</b></div></div><div><span class="chip blau">Profil</span><div class="balken"><i style="width:100%"></i></div></div></div>
+            <div class="feld"><span class="haken"></span><div><div class="beschriftung">Straße, Hausnummer</div><div class="wert">← person.anschrift: <b>Marktplatz 8, 56865 St. Goarshausen</b></div></div><div><span class="chip">Heuristik</span><div class="balken"><i style="width:82%"></i></div></div></div>
+          </div>
+          <div class="gruppe buero">
+            <div class="kopfzeile">Betreuer &amp; Büro <span class="anzahl">3</span></div>
+            <div class="feld"><span class="haken"></span><div><div class="beschriftung">Gesetzlicher Vertreter</div><div class="wert">← betreuer.name: <b>Christoph Zepp</b></div></div><div><span class="chip ocker">Profil</span><div class="balken"><i style="width:100%"></i></div></div></div>
+          </div>
+        </div>
+        <div class="p-fuss">
+          <div class="knopfreihe"><span class="knopf haupt">11 Werte ausfüllen</span><span class="knopf schmal">Auswahl</span><span class="knopf schmal">⋯</span></div>
+          <div class="nie">Abgesendet wird nie automatisch.</div>
+        </div></div>
+    </figure>
+    <figure class="stand" style="width:auto">
+      <figcaption><span class="schritt">DUNKEL</span><span class="name">neu</span></figcaption>
+      <div class="dunkel"><div class="panel kurz">        <div class="p-kopf">
+          <div class="p-marke">
+            <span class="wort">Formular-Assistent</span>
+            <span class="symbol" title="Training">⦿</span>
+            <span class="p-status"><span class="punkt"></span>Büro</span>
+          </div>
+          <div class="p-fall">
+            <div class="initialen">FB</div>
+            <div class="wer"><b>Bastuck, Franz Josef</b><span>10 XVII 118/25</span></div>
+            <span class="tausch">wechseln</span>
+          </div>
+          <div class="p-seite"><span class="globus">🌐</span><span><b>jobcenter.digital</b> · Seite 2 von 6</span><span class="chip blau">Profil</span></div>
+        </div>
+        <div class="p-schritte">
+          <span class="p-schritt fertig"><span class="kreis">✓</span>Fall</span>
+          <span class="p-schritt fertig"><span class="kreis">✓</span>Seite</span>
+          <span class="p-schritt jetzt"><span class="kreis">3</span>Prüfen</span>
+          <span class="p-schritt"><span class="kreis">4</span>Ausfüllen</span>
+        </div>
+        <div class="p-koerper">
+          <div class="gruppe unsicher">
+            <div class="kopfzeile">⚠ Bitte ansehen <span class="anzahl">2</span></div>
+            <div class="feld"><span class="haken leer"></span><div><div class="beschriftung">Name des Kontoinhabers</div><div class="wert">← person.iban-inhaber: <b>F. J. Bastuck</b></div></div><div><span class="chip warn">unsicher</span><div class="balken mittel"><i style="width:45%"></i></div></div></div>
+          </div>
+          <div class="gruppe person">
+            <div class="kopfzeile">Betreute Person <span class="anzahl">8</span></div>
+            <div class="feld"><span class="haken"></span><div><div class="beschriftung">Familienname</div><div class="wert">← person.nachname: <b>Bastuck</b></div></div><div><span class="chip blau">Profil</span><div class="balken"><i style="width:100%"></i></div></div></div>
+            <div class="feld"><span class="haken"></span><div><div class="beschriftung">Straße, Hausnummer</div><div class="wert">← person.anschrift: <b>Marktplatz 8, 56865 St. Goarshausen</b></div></div><div><span class="chip">Heuristik</span><div class="balken"><i style="width:82%"></i></div></div></div>
+          </div>
+          <div class="gruppe buero">
+            <div class="kopfzeile">Betreuer &amp; Büro <span class="anzahl">3</span></div>
+            <div class="feld"><span class="haken"></span><div><div class="beschriftung">Gesetzlicher Vertreter</div><div class="wert">← betreuer.name: <b>Christoph Zepp</b></div></div><div><span class="chip ocker">Profil</span><div class="balken"><i style="width:100%"></i></div></div></div>
+          </div>
+        </div>
+        <div class="p-fuss">
+          <div class="knopfreihe"><span class="knopf haupt">11 Werte ausfüllen</span><span class="knopf schmal">Auswahl</span><span class="knopf schmal">⋯</span></div>
+          <div class="nie">Abgesendet wird nie automatisch.</div>
+        </div></div></div>
+      <p class="warum">Dieselben Rollen, andere Werte: Blau und Ocker bleiben unterscheidbar, die Warnfarbe bleibt Warnfarbe. Kein zweites Layout, nur ein zweiter Farbsatz.</p>
+    </figure>
+  </div>
+</section>
+
+<section>
+  <div class="abschnittskopf"><span class="nummer">05</span><h2>Die Optionsseite</h2></div>
+  <p>Sie öffnet sich als eigener Tab und hat heute fünf Abschnitte über- und untereinander. Als volle Seite darf sie sich anders verhalten als das Panel: links die Bereiche, rechts der Inhalt — dieselben Bausteine, dieselben Farben.</p>
+  <div class="optseite">
+    <div class="opt-kopf">
+      <span class="titel">Formular-Assistent — Einstellungen</span>
+      <span class="chip">Fassung 0.4.9</span>
+      <span class="p-status"><span class="punkt"></span>mit dem Büro verbunden</span>
+    </div>
+    <div class="opt-raster">
+      <nav class="opt-nav">
+        <a class="an">Server &amp; Zugang</a>
+        <a>Lokale Fälle</a>
+        <a>Sicherung</a>
+        <a>Angelernte Formulare</a>
+        <a>Ausfüllprotokolle</a>
+      </nav>
+      <div class="opt-inhalt">
+        <div class="opt-block">
+          <h4>Server &amp; Zugang</h4>
+          <p>Das API-Token erstellen Sie in der Anwendung unter Nutzer-Menü → Erweiterungs-Zugänge (Online-Modus).</p>
+          <div class="opt-feld"><label>Serveradresse</label><div class="eingabe">https://buero.example.de</div></div>
+          <div class="opt-feld"><label>API-Token</label><div class="eingabe">••••••••••••••••••••  ·  gültig bis 31.12.2026</div></div>
+          <div class="knopfreihe" style="max-width:420px"><span class="knopf haupt">Speichern &amp; verbinden</span><span class="knopf">Seiten-Zugriff erlauben</span></div>
+        </div>
+        <div class="opt-block">
+          <h4>Angelernte Formulare</h4>
+          <p>Büroweit geteilt. Ansehen, umbenennen, URL-Muster anpassen, einzelne Felder entfernen.</p>
+          <div class="opt-tabelle">
+            <div class="opt-zeile"><div><div class="z-name">Jobcenter · Weiterbewilligung</div><div class="z-muster">jobcenter.digital/wba/*  ·  38 Felder  ·  6 Knöpfe</div></div><span class="chip gruen">büroweit</span><span class="chip">bearbeiten</span></div>
+            <div class="opt-zeile"><div><div class="z-name">DRV · Rentenantrag</div><div class="z-muster">rentenversicherung.de/antrag/*  ·  112 Felder</div></div><span class="chip gruen">büroweit</span><span class="chip">bearbeiten</span></div>
+            <div class="opt-zeile"><div><div class="z-name">Rundfunkbeitrag · Befreiung</div><div class="z-muster">rundfunkbeitrag.de/*  ·  24 Felder</div></div><span class="chip">nur lokal</span><span class="chip">bearbeiten</span></div>
+          </div>
+        </div>
+        <div class="opt-block">
+          <h4>Sicherung</h4>
+          <p>Sichert Einstellungen (<b>ohne</b> Token), lokale Fälle, lokale Profile und die Protokollhistorie als JSON.</p>
+          <div class="knopfreihe" style="max-width:520px"><span class="knopf">Sicherung schreiben</span><span class="knopf">Sicherung einlesen</span><span class="knopf" style="color:var(--rot);border-color:color-mix(in srgb,var(--rot) 40%,transparent)">Alle Daten löschen</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="klein leise" style="margin-top:12px">Was sich ändert: Die fünf Abschnitte stehen nicht mehr untereinander, sondern nebeneinander erreichbar. Die angelernten Formulare bekommen eine echte Tabelle mit URL-Muster und Feldzahl statt einer Klappliste. „Alle Daten löschen" bleibt sichtbar, trägt aber als einziges Rot.</p>
+</section>
+
+<section>
+  <div class="abschnittskopf"><span class="nummer">06</span><h2>Wenn etwas nicht stimmt</h2></div>
+  <p>Heute stapeln sich Störungen als Banner übereinander und schieben den Inhalt nach unten. Im Entwurf sitzt immer nur <em>eine</em> Meldung an derselben Stelle — direkt unter dem Kopf, mit dem Ausweg im Text.</p>
+  <div class="stoerungen">
+    <div class="stoerung">
+      <div class="fall">Kein Zugang</div>
+      <div class="panel" style="height:auto;width:100%;box-shadow:none">
+        <div class="p-kopf" style="border-bottom:none;padding-bottom:0">
+          <div class="p-marke"><span class="wort">Formular-Assistent</span><span class="p-status"><span class="punkt rot"></span>getrennt</span></div>
+        </div>
+        <div style="padding:0 13px 13px">
+          <div class="hinweisleiste rot"><span>⚠</span><div><b>Kein Zugang zum Büro.</b> Der Token ist abgelaufen oder der Server nicht erreichbar. <u>Zugang prüfen</u> · <u>lokale Datei laden</u></div></div>
+        </div>
+      </div>
+      <p class="warum">Sagt, was fehlt, und bietet beide Auswege — statt nur einen roten Punkt in der Kopfzeile.</p>
+    </div>
+    <div class="stoerung">
+      <div class="fall">Seite unbekannt</div>
+      <div class="panel" style="height:auto;width:100%;box-shadow:none">
+        <div class="p-kopf" style="border-bottom:none;padding-bottom:0">
+          <div class="p-marke"><span class="wort">Formular-Assistent</span><span class="p-status"><span class="punkt"></span>Büro</span></div>
+        </div>
+        <div style="padding:0 13px 13px">
+          <div class="hinweisleiste"><span>◌</span><div><b>Kein Formular erkannt.</b> Diese Seite kennt das Büro noch nicht. <u>Training starten</u> · <u>KI-Vorschläge holen</u></div></div>
+        </div>
+      </div>
+      <p class="warum">Die häufigste Sackgasse bekommt zwei konkrete Fortsetzungen statt einer leeren Prüfliste.</p>
+    </div>
+    <div class="stoerung">
+      <div class="fall">Veraltete Fassung</div>
+      <div class="panel" style="height:auto;width:100%;box-shadow:none">
+        <div class="p-kopf" style="border-bottom:none;padding-bottom:0">
+          <div class="p-marke"><span class="wort">Formular-Assistent</span><span class="p-status"><span class="punkt rot"></span>schreibgesperrt</span></div>
+        </div>
+        <div style="padding:0 13px 13px">
+          <div class="hinweisleiste rot"><span>🔒</span><div><b>Schreiben gesperrt.</b> Die Erweiterung ist älter als der Server (0.4.7 gegen 0.4.9). Lesen geht weiter. <u>Aktualisieren</u></div></div>
+        </div>
+      </div>
+      <p class="warum">Der bestehende Schutz bleibt — er sagt jetzt aber, was noch geht und was nicht.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="abschnittskopf"><span class="nummer">07</span><h2>Was sich ändert — und was bleibt</h2></div>
+  <div class="spalten">
+    <div class="liste">
+      <h3>Neu</h3>
+      <ul>
+        <li><b>Kontextkopf statt Kachelreihe.</b><span class="dazu">Fall und erkannte Seite stehen immer oben, zwei Zeilen hoch. Die drei Kacheln entfallen; ihre Aktionen wandern dorthin, wo man sie braucht.</span></li>
+        <li><b>Schrittleiste.</b><span class="dazu">Fall → Seite → Prüfen → Ausfüllen. Vier Wörter, die die Anleitung „So geht's" ersetzen und zugleich den Stand zeigen.</span></li>
+        <li><b>Prüfliste gruppiert.</b><span class="dazu">Unsicheres zuerst, dann „Betreute Person" (blau) und „Betreuer &amp; Büro" (ocker).</span></li>
+        <li><b>Training als Schalter oben.</b><span class="dazu">Ein Symbol in der Kopfzeile, das den Modus einschaltet — und ein Band, das während der Aufzeichnung nicht zu übersehen ist.</span></li>
+        <li><b>Feste Fußleiste.</b><span class="dazu">Der Ausfüllknopf trägt die Zahl und ist immer erreichbar, ohne zu scrollen.</span></li>
+        <li><b>Werkzeugschub.</b><span class="dazu">Upload, Kopierwerte, Portale, Dateien, KI, Site-Profil und Einstellungen liegen hinter „⋯".</span></li>
+        <li><b>Eine Störungsstelle.</b><span class="dazu">Immer nur eine Meldung, immer an derselben Stelle, immer mit Ausweg im Text.</span></li>
+      </ul>
+    </div>
+    <div class="liste">
+      <h3>Bleibt</h3>
+      <ul>
+        <li><b>Jede Funktion.</b><span class="dazu">Nichts wird gestrichen. Die neun Abschnitte werden umsortiert, nicht entfernt.</span></li>
+        <li><b>Die Prüfliste als Prinzip.</b><span class="dazu">Nichts ohne Sichtprüfung, nichts ohne Häkchen. Auch die Angaben je Zeile bleiben: Feld, Datenfeld, Wert, Herkunft, Konfidenz.</span></li>
+        <li><b>Die Sperre gegen das Absenden.</b><span class="dazu">Unverändert — im Agenten sogar deutlicher als heute.</span></li>
+        <li><b>Die Trennung Person / Büro.</b><span class="dazu">Dieselbe fachliche Unterscheidung wie heute, nur als Farbe statt als drittes Abzeichen in einer Reihe.</span></li>
+        <li><b>Das Blau des Büros.</b><span class="dazu">Dieselbe Leitfarbe wie die Hauptanwendung, sparsamer eingesetzt: als Akzent statt als Farbfläche.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="abschnittskopf"><span class="nummer">08</span><h2>Entschieden und noch offen</h2></div>
+  <div class="entschieden">
+    <dl>
+      <dt>Training</dt><dd>Schalter in der Kopfzeile, nicht im Schub — mit sichtbarem Aufzeichnungsband (Zustand 6).</dd>
+      <dt>Fallliste</dt><dd>Klarnamen erst nach „Wählen" (Zustand 2). Der Startzustand zeigt stattdessen, ob Zugang, Seitenrecht und Fassung stimmen.</dd>
+      <dt>Farbe Büro</dt><dd>Ocker bleibt. Rot ist für echte Warnungen reserviert — unsichere Zuordnung, fehlende Pflichtfelder, Submit-Halt.</dd>
+      <dt>Optionsseite</dt><dd>Kommt mit in denselben Entwurf (Abschnitt 05) — Panel und Einstellungen bekommen dieselbe Bauform.</dd>
+      <dt>Breite</dt><dd>Eine Spalte, die mitwächst (Abschnitt 03). Kein zweites Layout für breite Sidebars.</dd>
+      <dt>Dunkelmodus</dt><dd>Wird gleich mitgebaut (Abschnitt 04) — die Farben entstehen beim Umbau ohnehin neu.</dd>
+      <dt>Startzustand</dt><dd>Schlank: nur „Fall wählen" und der Seitenhinweis. Zugang und Fassung melden sich, wenn etwas fehlt.</dd>
+      <dt>Vorgehen</dt><dd>Erst der Entwurf, dann der Code. Dies ist Entwurf 3.</dd>
+    </dl>
+  </div>
+  <div class="offen">
+    <p style="margin:0 0 4px"><b>Offen ist damit nur noch das Kleingedruckte:</b></p>
+    <ol>
+      <li><b>Ausfüllprotokolle</b> stehen in der Optionsseite als eigener Bereich. Sollen sie dort bleiben — oder gehören sie in die Falldokumentation der Hauptanwendung, wo der Rest der Fallhistorie liegt?</li>
+      <li><b>Angelernte Formulare</b> zeigt der Entwurf als Tabelle mit URL-Muster und Feldzahl. Brauchst du dort auch, <em>wer</em> zuletzt trainiert hat und wann — oder ist das Ballast?</li>
+      <li><b>Sitzung der Fallwahl:</b> Soll der gewählte Fall über einen Browserneustart hinaus stehen bleiben, oder beim Schließen vergessen werden (sicherer, aber jeden Morgen ein Klick mehr)?</li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  Entwurf 3 zum Ansehen — am Code ist nichts geändert. Grundlage: <code>extension/src/panel/</code> der Fassung 0.4.9, vermessen am 31.08.2026.
+</footer>
+
+</div>

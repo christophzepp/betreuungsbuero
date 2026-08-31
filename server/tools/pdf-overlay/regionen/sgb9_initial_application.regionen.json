@@ -1,0 +1,98 @@
+{
+  "bildBreite": 2480,
+  "hinweis": "Echtdaten-Regionen des EfA-Ausdrucks tpl_v159_sgb9_initial_application (10 Seiten). Alle eingedruckten Antwortwerte (Schriftgrad ~22px@1240, x=102 bzw. Wertespalte x=412 auf S.1) werden geweisst; gedruckte Fragen/Beschriftungen (15.6px) und Ueberschriften bleiben. Grenzfall S.1 Vorgangsnummer-Zeile: Wert 'EfA-RP-prod.-79140' stoesst pixelgenau an das fette Label 'Versand am' - die ganze Wertespalte inkl. 'Versand am' wird geweisst (im Bericht dokumentiert). Der Anmeldedaten-Block (Vorname:/Nachname:/E-Mail Adresse:/Typ:) ist im PDF in der Werte-Schriftart gesetzt (Teil des gerenderten Werts) und wird komplett geweisst.",
+  "seiten": {
+    "1": [
+      { "x": 810, "y": 1610, "width": 1490, "height": 70 },
+      { "x": 810, "y": 1900, "width": 1490, "height": 70 },
+      { "x": 810, "y": 1978, "width": 1490, "height": 70 },
+      { "x": 810, "y": 2266, "width": 1490, "height": 70 },
+      { "x": 810, "y": 2344, "width": 1490, "height": 268 }
+    ],
+    "2": [
+      { "x": 198, "y": 294, "width": 2084, "height": 70 },
+      { "x": 198, "y": 860, "width": 2084, "height": 70 },
+      { "x": 198, "y": 1238, "width": 2084, "height": 70 },
+      { "x": 198, "y": 1366, "width": 2084, "height": 70 },
+      { "x": 198, "y": 1494, "width": 2084, "height": 70 },
+      { "x": 198, "y": 1622, "width": 2084, "height": 70 },
+      { "x": 198, "y": 1750, "width": 2084, "height": 70 },
+      { "x": 198, "y": 2004, "width": 2084, "height": 70 },
+      { "x": 198, "y": 2256, "width": 2084, "height": 70 },
+      { "x": 198, "y": 2384, "width": 2084, "height": 70 },
+      { "x": 198, "y": 2906, "width": 2084, "height": 70 }
+    ],
+    "3": [
+      { "x": 198, "y": 366, "width": 2084, "height": 70 },
+      { "x": 198, "y": 494, "width": 2084, "height": 70 },
+      { "x": 198, "y": 622, "width": 2084, "height": 70 },
+      { "x": 198, "y": 750, "width": 2084, "height": 70 },
+      { "x": 198, "y": 880, "width": 2084, "height": 70 },
+      { "x": 198, "y": 1132, "width": 2084, "height": 70 },
+      { "x": 198, "y": 1354, "width": 2084, "height": 70 },
+      { "x": 198, "y": 1482, "width": 2084, "height": 70 },
+      { "x": 198, "y": 1610, "width": 2084, "height": 70 },
+      { "x": 198, "y": 1738, "width": 2084, "height": 70 },
+      { "x": 198, "y": 1866, "width": 2084, "height": 70 },
+      { "x": 198, "y": 1994, "width": 2084, "height": 70 },
+      { "x": 198, "y": 2622, "width": 2084, "height": 136 },
+      { "x": 198, "y": 2816, "width": 2084, "height": 70 },
+      { "x": 198, "y": 2944, "width": 2084, "height": 70 },
+      { "x": 198, "y": 3166, "width": 2084, "height": 70 }
+    ],
+    "4": [
+      { "x": 198, "y": 242, "width": 2084, "height": 70 },
+      { "x": 198, "y": 370, "width": 2084, "height": 70 },
+      { "x": 198, "y": 1528, "width": 2084, "height": 70 },
+      { "x": 198, "y": 2000, "width": 2084, "height": 70 },
+      { "x": 198, "y": 2226, "width": 2084, "height": 70 },
+      { "x": 198, "y": 2354, "width": 2084, "height": 70 },
+      { "x": 198, "y": 2482, "width": 2084, "height": 70 },
+      { "x": 198, "y": 2610, "width": 2084, "height": 70 },
+      { "x": 198, "y": 2738, "width": 2084, "height": 70 },
+      { "x": 198, "y": 2866, "width": 2084, "height": 70 },
+      { "x": 198, "y": 3088, "width": 2084, "height": 70 },
+      { "x": 198, "y": 3216, "width": 2084, "height": 70 }
+    ],
+    "5": [
+      { "x": 198, "y": 242, "width": 2084, "height": 70 },
+      { "x": 198, "y": 370, "width": 2084, "height": 70 },
+      { "x": 198, "y": 716, "width": 2084, "height": 70 },
+      { "x": 198, "y": 1220, "width": 2084, "height": 70 },
+      { "x": 198, "y": 2098, "width": 2084, "height": 70 },
+      { "x": 198, "y": 2350, "width": 2084, "height": 70 },
+      { "x": 198, "y": 2478, "width": 2084, "height": 70 },
+      { "x": 198, "y": 2606, "width": 2084, "height": 70 },
+      { "x": 198, "y": 2782, "width": 2084, "height": 70 }
+    ],
+    "6": [
+      { "x": 198, "y": 772, "width": 2084, "height": 70 },
+      { "x": 198, "y": 900, "width": 2084, "height": 70 },
+      { "x": 198, "y": 1028, "width": 2084, "height": 70 },
+      { "x": 198, "y": 2516, "width": 2084, "height": 70 },
+      { "x": 198, "y": 3226, "width": 2084, "height": 70 }
+    ],
+    "7": [
+      { "x": 198, "y": 366, "width": 2084, "height": 70 },
+      { "x": 198, "y": 1370, "width": 2084, "height": 70 },
+      { "x": 198, "y": 1592, "width": 2084, "height": 70 },
+      { "x": 198, "y": 2610, "width": 2084, "height": 70 }
+    ],
+    "8": [
+      { "x": 198, "y": 242, "width": 2084, "height": 70 },
+      { "x": 198, "y": 588, "width": 2084, "height": 70 },
+      { "x": 198, "y": 716, "width": 2084, "height": 70 },
+      { "x": 198, "y": 938, "width": 2084, "height": 70 },
+      { "x": 198, "y": 1160, "width": 2084, "height": 70 },
+      { "x": 198, "y": 1414, "width": 2084, "height": 70 },
+      { "x": 198, "y": 1666, "width": 2084, "height": 70 },
+      { "x": 198, "y": 1794, "width": 2084, "height": 70 }
+    ],
+    "9": [
+      { "x": 198, "y": 648, "width": 2084, "height": 70 },
+      { "x": 198, "y": 2338, "width": 2084, "height": 70 },
+      { "x": 198, "y": 2950, "width": 2084, "height": 136 }
+    ],
+    "10": []
+  }
+}

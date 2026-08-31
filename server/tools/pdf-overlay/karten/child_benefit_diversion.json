@@ -1,0 +1,421 @@
+{
+ "elementId": "tpl_kg11e",
+ "reportId": "child_benefit_diversion",
+ "einheit": "px",
+ "bildBreite": 1240,
+ "seitenBreitePt": 595.38,
+ "seitenHoehePt": 841.97998,
+ "hinweis": "Automatisch konvertiert aus OFFICIAL_COORDINATE_MAPS.child_benefit_diversion (koordinaten-konvertieren.js); Sichtpruefung über Probe-Render erforderlich.",
+ "felder": {
+  "kga_kindergeld_number": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 9,
+   "x": 127,
+   "y": 94,
+   "width": 427,
+   "height": 33
+  },
+  "kga_tax_id": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 8,
+   "x": 129,
+   "y": 187,
+   "width": 427,
+   "height": 31,
+   "transform": "digits"
+  },
+  "kga_phone": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 9,
+   "x": 810,
+   "y": 244,
+   "width": 333,
+   "height": 33
+  },
+  "kga_last_name": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 9,
+   "x": 125,
+   "y": 531,
+   "width": 427,
+   "height": 33
+  },
+  "kga_first_name": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 9,
+   "x": 569,
+   "y": 531,
+   "width": 427,
+   "height": 33
+  },
+  "kga_birth": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 9,
+   "x": 1006,
+   "y": 531,
+   "width": 146,
+   "height": 33,
+   "transform": "date"
+  },
+  "kga_address": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 9,
+   "x": 125,
+   "y": 639,
+   "width": 1021,
+   "height": 50,
+   "multiline": true
+  },
+  "kga_iban": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 8.5,
+   "x": 129,
+   "y": 905,
+   "width": 996,
+   "height": 30,
+   "transform": "compact",
+   "comb": true,
+   "maxLength": 34
+  },
+  "kga_bic": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 8,
+   "x": 123,
+   "y": 958,
+   "width": 312,
+   "height": 31,
+   "transform": "compact"
+  },
+  "kga_bank": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 8.5,
+   "x": 467,
+   "y": 957,
+   "width": 677,
+   "height": 32
+  },
+  "kga_account_holder": {
+   "page": 0,
+   "typ": "text",
+   "groesse": 9,
+   "x": 123,
+   "y": 1043,
+   "width": 1021,
+   "height": 33
+  },
+  "kga_father": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8.5,
+   "x": 198,
+   "y": 305,
+   "width": 948,
+   "height": 50,
+   "multiline": true
+  },
+  "kga_mother": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8.5,
+   "x": 198,
+   "y": 411,
+   "width": 948,
+   "height": 50,
+   "multiline": true
+  },
+  "kga_other_recipient": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8.5,
+   "x": 552,
+   "y": 526,
+   "width": 594,
+   "height": 32
+  },
+  "kga_family_office": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8.5,
+   "x": 296,
+   "y": 597,
+   "width": 458,
+   "height": 32
+  },
+  "kga_current_kg_number": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8.5,
+   "x": 881,
+   "y": 597,
+   "width": 265,
+   "height": 32
+  },
+  "kga_father_support_amount": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8.5,
+   "x": 556,
+   "y": 661,
+   "width": 192,
+   "height": 32,
+   "transform": "money"
+  },
+  "kga_mother_support_amount": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 8.5,
+   "x": 556,
+   "y": 757,
+   "width": 192,
+   "height": 32,
+   "transform": "money"
+  },
+  "kga_signature_date": {
+   "page": 1,
+   "typ": "text",
+   "groesse": 9,
+   "x": 94,
+   "y": 1220,
+   "width": 250,
+   "height": 33,
+   "transform": "date"
+  },
+  "kga_own_flat": {
+   "page": 0,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "ja": {
+     "x": 971,
+     "y": 685,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    },
+    "nein": {
+     "x": 1075,
+     "y": 685,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    }
+   }
+  },
+  "kga_same_house_separate_flat": {
+   "page": 0,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "ja": {
+     "x": 971,
+     "y": 743,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    },
+    "nein": {
+     "x": 1075,
+     "y": 743,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    }
+   }
+  },
+  "kga_eligibility": {
+   "page": 0,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "Schulausbildung": {
+     "x": 125,
+     "y": 1177,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    },
+    "Berufsausbildung": {
+     "x": 125,
+     "y": 1210,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    },
+    "Studium": {
+     "x": 125,
+     "y": 1243,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    },
+    "Ausbildungsplatzsuche": {
+     "x": 125,
+     "y": 1277,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    },
+    "Freiwilligendienst": {
+     "x": 125,
+     "y": 1310,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    },
+    "arbeitsuchend und ohne Beschäftigung": {
+     "x": 125,
+     "y": 1343,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    },
+    "Übergangszeit bis vier Monate": {
+     "x": 125,
+     "y": 1377,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    },
+    "Behinderung – außerstande, sich selbst zu unterhalten": {
+     "x": 125,
+     "y": 1412,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    }
+   }
+  },
+  "kga_evidence": {
+   "page": 0,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "beigefügt": {
+     "x": 125,
+     "y": 1512,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    },
+    "liegen bereits vor": {
+     "x": 125,
+     "y": 1545,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    },
+    "werden nachgereicht": {
+     "x": 125,
+     "y": 1579,
+     "width": 25,
+     "height": 25,
+     "page": 0
+    }
+   }
+  },
+  "kga_current_recipient": {
+   "page": 1,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "Vater": {
+     "x": 350,
+     "y": 444,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    },
+    "Mutter": {
+     "x": 350,
+     "y": 491,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    },
+    "sonstige Person": {
+     "x": 350,
+     "y": 539,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    }
+   }
+  },
+  "kga_father_support": {
+   "page": 1,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "kein Unterhalt": {
+     "x": 248,
+     "y": 629,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    },
+    "Unterhalt wird geleistet": {
+     "x": 248,
+     "y": 662,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    }
+   }
+  },
+  "kga_mother_support": {
+   "page": 1,
+   "typ": "radio",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 24,
+   "optionen": {
+    "kein Unterhalt": {
+     "x": 248,
+     "y": 725,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    },
+    "Unterhalt wird geleistet": {
+     "x": 248,
+     "y": 758,
+     "width": 25,
+     "height": 25,
+     "page": 1
+    }
+   }
+  }
+ },
+ "hinweise": [
+  "Comb-Kalibrierung 13.08.2026: IBAN-Reihe äquidistant (29,5 px) → echtes Comb über 34 Zellen. Steuer-ID und BIC sind freie Rahmenfelder ohne Kästchenraster und bleiben Fließtext."
+ ]
+}

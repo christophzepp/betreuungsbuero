@@ -1,0 +1,14 @@
+{
+  "elementId": "tpl_v159_sgb12_social_assistance_short",
+  "reportId": "sgb12_social_assistance_short",
+  "einheit": "px",
+  "bildBreite": 1240,
+  "seitenBreitePt": 595.28,
+  "seitenHoehePt": 841.89,
+  "hinweis": "Koordinaten in Bildpixeln der 1240px-Renderings (tpl_v159_sgb12_social_assistance_short_s1/s2.png); x/y = LINKE OBERE Ecke, page 0-basiert. Das Dokument ist die 'Erklaerung zum Antrag auf Gewaehrung von Sozialhilfeleistungen': Seite 1 enthaelt nur die Personalien-Tabelle (Spalten Antragsteller / Ehegatte-Lebenspartner), Belehrungstext sowie Ort/Datum- und Unterschriftszeilen; Seite 2 ist reiner Gesetzesabdruck (SGB I, StGB) ohne Ausfuellslots. Gemappt sind daher nur name (Zeile 'Name:', Wert im Format 'Nachname, Vorname', da das Schema keinen getrennten Vornamen fuehrt - Zeile 'Vorname:' bleibt bewusst leer), birth (Zeile 'Geburtsdatum:') und address (Zeile 'Strasse:', volle Anschrift einzeilig in kleinerer Schrift, da das Schema nur EIN Anschrift-Feld hat - Zeile 'PLZ, Wohnort' bleibt bewusst leer), jeweils Spalte Antragsteller. Nicht gemappt: reference (kein Aktenzeichen-Slot auf dem Formular), benefit und start (die Erklaerung fragt Leistung/Zeitraum nirgends ab), household/income/assets/needs/notes (keine freien Antwortbereiche; der Leerraum vor 'Ort, Datum' gehoert zum Unterschriftenblock, nicht zu einer Frage). Ehegatten-Spalte, Ort/Datum und Unterschriften bleiben bewusst leer (fuellen Betroffene handschriftlich).",
+  "felder": {
+    "sgb12_social_assistance_short_name":    { "page": 0, "x": 352, "y": 396, "width": 358, "height": 26, "typ": "text", "groesse": 10 },
+    "sgb12_social_assistance_short_birth":   { "page": 0, "x": 352, "y": 500, "width": 200, "height": 26, "typ": "text", "groesse": 10, "transform": "date" },
+    "sgb12_social_assistance_short_address": { "page": 0, "x": 352, "y": 554, "width": 360, "height": 26, "typ": "text", "groesse": 8.5 }
+  }
+}

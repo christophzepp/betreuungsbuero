@@ -1,0 +1,2497 @@
+{
+  "hinweis": "Koordinatenzuordnungen fuer flache Original-PDFs. Werte in PDF-Punkten, Ursprung unten links, y = Grundlinie der Schrift bzw. Unterkante des Ankreuzkaestchens. Ermittelt mit server/pdf-linien-tmp.js (Text-PDFs) bzw. scan-vermessen.py (gescannte Vordrucke) und anschliessend am Debug-Ausdruck geprueft.",
+  "death_notice_court": {
+    "quelle": "Mitteilung ueber den Tod d. Betreuten, 1 Seite, 595x842",
+    "text": {
+      "death_name": {
+        "page": 0,
+        "x": 74,
+        "y": 427.5,
+        "width": 440,
+        "size": 10
+      },
+      "death_birth": {
+        "page": 0,
+        "x": 74,
+        "y": 410.4,
+        "width": 200,
+        "size": 10,
+        "transform": "date"
+      },
+      "death_address": {
+        "page": 0,
+        "x": 74,
+        "y": 393.4,
+        "width": 440,
+        "size": 10
+      },
+      "death_reference": {
+        "page": 0,
+        "x": 218,
+        "y": 363.6,
+        "width": 196,
+        "size": 10
+      },
+      "death_date": {
+        "page": 0,
+        "x": 397,
+        "y": 257.0,
+        "width": 66,
+        "size": 9,
+        "transform": "date"
+      },
+      "stamm.betreuerName": {
+        "page": 0,
+        "x": 144,
+        "y": 747,
+        "width": 162,
+        "size": 9
+      },
+      "stamm.betreuerAnschrift": {
+        "page": 0,
+        "x": 144,
+        "y": 729,
+        "width": 162,
+        "size": 9
+      },
+      "stamm.betreuerTelefon": {
+        "page": 0,
+        "x": 144,
+        "y": 692,
+        "width": 162,
+        "size": 9
+      },
+      "stamm.gerichtStrasse": {
+        "page": 0,
+        "x": 72,
+        "y": 583,
+        "width": 170,
+        "size": 10
+      },
+      "stamm.gerichtPlzOrt": {
+        "page": 0,
+        "x": 72,
+        "y": 543,
+        "width": 170,
+        "size": 10
+      },
+      "stamm.ortDatum": {
+        "page": 0,
+        "x": 356,
+        "y": 752,
+        "width": 150,
+        "size": 9
+      }
+    }
+  },
+  "care_extension": {
+    "quelle": "Anregung zur Erweiterung des Aufgabenkreises, 4 Seiten, 595x842. Die Seiten 3 und 4 sind das aerztliche Gutachten und werden nicht vom Buero ausgefuellt.",
+    "text": {
+      "ext_name": {
+        "page": 0,
+        "x": 69,
+        "y": 451.0,
+        "width": 250,
+        "size": 10
+      },
+      "ext_birth": {
+        "page": 0,
+        "x": 69,
+        "y": 433.9,
+        "width": 200,
+        "size": 10,
+        "transform": "date"
+      },
+      "ext_address": {
+        "page": 0,
+        "x": 69,
+        "y": 416.7,
+        "width": 440,
+        "size": 10
+      },
+      "ext_scope_extra1": {
+        "page": 0,
+        "x": 103,
+        "y": 114.5,
+        "width": 293,
+        "size": 10
+      },
+      "ext_scope_extra2": {
+        "page": 0,
+        "x": 103,
+        "y": 95.7,
+        "width": 293,
+        "size": 10
+      },
+      "ext_scope_extra3": {
+        "page": 0,
+        "x": 103,
+        "y": 76.5,
+        "width": 293,
+        "size": 10
+      },
+      "ext_extend_months": {
+        "page": 1,
+        "x": 115,
+        "y": 762.8,
+        "width": 86,
+        "size": 10
+      },
+      "ext_extend_years": {
+        "page": 1,
+        "x": 115,
+        "y": 744.1,
+        "width": 86,
+        "size": 10
+      },
+      "ext_doctor": {
+        "page": 1,
+        "x": 80,
+        "y": 613.5,
+        "width": 250,
+        "size": 10
+      },
+      "ext_report_date": {
+        "page": 1,
+        "x": 360,
+        "y": 612.8,
+        "width": 130,
+        "size": 10,
+        "transform": "date"
+      },
+      "ext_reference": {
+        "page": 0,
+        "x": 330,
+        "y": 451.0,
+        "width": 180,
+        "size": 10,
+        "prefix": "Az. "
+      },
+      "stamm.betreuerName": {
+        "page": 0,
+        "x": 138,
+        "y": 746,
+        "width": 162,
+        "size": 9
+      },
+      "stamm.betreuerAnschrift": {
+        "page": 0,
+        "x": 138,
+        "y": 728,
+        "width": 162,
+        "size": 9
+      },
+      "stamm.betreuerTelefon": {
+        "page": 0,
+        "x": 138,
+        "y": 691,
+        "width": 162,
+        "size": 9
+      },
+      "stamm.gerichtStrasse": {
+        "page": 0,
+        "x": 67,
+        "y": 582,
+        "width": 168,
+        "size": 10
+      },
+      "stamm.gerichtPlzOrt": {
+        "page": 0,
+        "x": 67,
+        "y": 542,
+        "width": 168,
+        "size": 10
+      },
+      "stamm.ortDatum": {
+        "page": 0,
+        "x": 350,
+        "y": 752,
+        "width": 150,
+        "size": 9
+      }
+    },
+    "checks": {
+      "ext_request_type": {
+        "Erweiterung des Aufgabenkreises": {
+          "page": 0,
+          "x": 65.3,
+          "y": 365.1
+        },
+        "Verlängerung der Betreuung": {
+          "page": 0,
+          "x": 65.3,
+          "y": 351.6
+        }
+      },
+      "ext_scopes": {
+        "die Gesundheitssorge": {
+          "page": 0,
+          "x": 65,
+          "y": 216.5
+        },
+        "die Aufenthaltsbestimmung": {
+          "page": 0,
+          "x": 65,
+          "y": 204.0
+        },
+        "die Entscheidung über unterbringungsähnliche Maßnahmen": {
+          "page": 0,
+          "x": 65,
+          "y": 191.5
+        },
+        "die Entscheidung über die geschlossene Unterbringung": {
+          "page": 0,
+          "x": 65,
+          "y": 179.1
+        },
+        "die Vermögenssorge": {
+          "page": 0,
+          "x": 65,
+          "y": 166.3
+        },
+        "die Wohnungsangelegenheiten": {
+          "page": 0,
+          "x": 65,
+          "y": 153.6
+        },
+        "die Entgegennahme, das Öffnen und das Anhalten der Post": {
+          "page": 0,
+          "x": 65,
+          "y": 141.1
+        },
+        "die Rechts-, Antrags- und Behördenangelegenheiten": {
+          "page": 0,
+          "x": 65,
+          "y": 129.1
+        }
+      },
+      "ext_extend_seven": {
+        "7 Jahre": {
+          "page": 1,
+          "x": 77.5,
+          "y": 723.7
+        }
+      },
+      "ext_report_basis": {
+        "beiliegendes oder bereits vorliegendes fachärztliches Zeugnis / Gutachten": {
+          "page": 1,
+          "x": 42.0,
+          "y": 662.0
+        }
+      },
+      "ext_attest_status": {
+        "Ein entsprechendes Attest wird nachgereicht.": {
+          "page": 1,
+          "x": 41.7,
+          "y": 594.3
+        },
+        "Ein entsprechendes ärztliches Attest habe ich angefordert und wird Ihnen vom Arzt direkt übersandt.": {
+          "page": 1,
+          "x": 41.7,
+          "y": 582.5
+        },
+        "Ein ärztliches Attest soll vom Gericht eingeholt werden.": {
+          "page": 1,
+          "x": 41.5,
+          "y": 557.3
+        }
+      },
+      "ext_person_view": {
+        "ist mit dieser Vorgehensweise einverstanden.": {
+          "page": 1,
+          "x": 76.1,
+          "y": 477.4
+        },
+        "ist mit dieser Vorgehensweise nicht einverstanden.": {
+          "page": 1,
+          "x": 76.1,
+          "y": 464.7
+        },
+        "kann sich zu dieser Anregung nicht äußern.": {
+          "page": 1,
+          "x": 76.1,
+          "y": 452.9
+        },
+        "hat keine Kenntnis von der Anregung.": {
+          "page": 1,
+          "x": 76.1,
+          "y": 440.2
+        }
+      }
+    }
+  },
+  "closing": {
+    "quelle": "Schlussbericht d. Betreuer/in (AG Bad Duerkheim, F_583_I1763), 2 Seiten, 596x842. Der Vordruck hat kein Feld fuer den Beendigungsgrund - er wird rechts neben die Aktenzeichenzeile geschrieben. 'keine Unterlagen vorhanden' und 'nicht einschlaegig' teilen sich das Kaestchen mit der jeweils gleichbedeutenden Nachbaroption, weil der Vordruck dafuer kein eigenes hat. Ebenso teilen sich Vermoegensaufstellung, Belegliste und sonstige das dritte Anlagenkaestchen; die Bezeichnung traegt das Feld 'Weitere Anlagen' auf der Linie daneben. Der Briefkopf des Gerichts ist eingedruckt und wird nicht ueberschrieben.",
+    "text": {
+      "end_reason": {
+        "page": 0,
+        "x": 230,
+        "y": 600.8,
+        "width": 300,
+        "size": 9,
+        "prefix": "Grund der Beendigung: "
+      },
+      "changes_since_last": {
+        "page": 0,
+        "x": 108,
+        "y": 493,
+        "width": 398,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 27.8
+      },
+      "possible_heirs": {
+        "page": 0,
+        "x": 108,
+        "y": 367.5,
+        "width": 398,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 27.7
+      },
+      "documents_date": {
+        "page": 0,
+        "x": 140,
+        "y": 256.5,
+        "width": 110,
+        "size": 9,
+        "transform": "date"
+      },
+      "documents_recipient": {
+        "page": 0,
+        "x": 108,
+        "y": 194.5,
+        "width": 398,
+        "size": 10
+      },
+      "documents_pending_reason": {
+        "page": 0,
+        "x": 108,
+        "y": 131.5,
+        "width": 398,
+        "size": 10
+      },
+      "assets_handover_date": {
+        "page": 1,
+        "x": 153,
+        "y": 738,
+        "width": 110,
+        "size": 9,
+        "transform": "date"
+      },
+      "assets_recipient": {
+        "page": 1,
+        "x": 123,
+        "y": 676,
+        "width": 358,
+        "size": 10
+      },
+      "assets_pending_reason": {
+        "page": 1,
+        "x": 123,
+        "y": 585.5,
+        "width": 358,
+        "size": 10
+      },
+      "attachments_other": {
+        "page": 1,
+        "x": 375,
+        "y": 502,
+        "width": 88,
+        "size": 8
+      },
+      "stamm.betreuerName": {
+        "page": 0,
+        "x": 75,
+        "y": 812.3,
+        "width": 215,
+        "size": 9
+      },
+      "stamm.betreuerAnschrift": {
+        "page": 0,
+        "x": 75,
+        "y": 784.5,
+        "width": 215,
+        "size": 9
+      },
+      "stamm.betreuerTelefon": {
+        "page": 0,
+        "x": 75,
+        "y": 747.8,
+        "width": 215,
+        "size": 9
+      },
+      "stamm.aktenzeichen": {
+        "page": 0,
+        "x": 98,
+        "y": 603,
+        "width": 98,
+        "size": 10
+      },
+      "stamm.personName": {
+        "page": 0,
+        "x": 146,
+        "y": 589,
+        "width": 242,
+        "size": 10
+      },
+      "stamm.personGeburtsdatum": {
+        "page": 0,
+        "x": 443,
+        "y": 589,
+        "width": 64,
+        "size": 9,
+        "transform": "date"
+      },
+      "stamm.ortDatum": {
+        "page": 1,
+        "x": 75,
+        "y": 377.5,
+        "width": 183,
+        "size": 9
+      }
+    },
+    "checks": {
+      "documents_status": {
+        "herausgegeben": {
+          "page": 0,
+          "x": 105.8,
+          "y": 255
+        },
+        "noch nicht herausgegeben": {
+          "page": 0,
+          "x": 105.8,
+          "y": 157.5
+        },
+        "keine Unterlagen vorhanden": {
+          "page": 0,
+          "x": 105.8,
+          "y": 157.5
+        }
+      },
+      "assets_managed": {
+        "ja": {
+          "page": 1,
+          "x": 118.5,
+          "y": 778.5
+        },
+        "nein": {
+          "page": 1,
+          "x": 118.5,
+          "y": 549
+        }
+      },
+      "assets_handover_status": {
+        "herausgegeben": {
+          "page": 1,
+          "x": 118.5,
+          "y": 736.5
+        },
+        "noch nicht herausgegeben": {
+          "page": 1,
+          "x": 118.5,
+          "y": 612
+        },
+        "nicht einschlägig": {
+          "page": 1,
+          "x": 118.5,
+          "y": 549
+        }
+      },
+      "attachments": {
+        "Betreuerausweis": {
+          "page": 1,
+          "x": 105.8,
+          "y": 500.3
+        },
+        "Schlussrechnung": {
+          "page": 1,
+          "x": 230.3,
+          "y": 500.3
+        },
+        "Vermögensaufstellung": {
+          "page": 1,
+          "x": 357.8,
+          "y": 500.3
+        },
+        "Belegliste": {
+          "page": 1,
+          "x": 357.8,
+          "y": 500.3
+        },
+        "sonstige": {
+          "page": 1,
+          "x": 357.8,
+          "y": 500.3
+        }
+      }
+    }
+  },
+  "annual_noassets": {
+    "quelle": "Bericht ueber die Fuehrung der Betreuung, ohne Vermoegensuebersicht (Justiz RLP, Stand 04.12.2024), 5 Seiten, 596x842. Leerer Briefkopf, deshalb werden Gericht und Absender aus den Stammdaten gesetzt. Der Vordruck fragt zusaetzlich nach Hausarzt, weiterem Arzt, Orientierung und Verstaendigung - dafuer gibt es im Dokument noch keine Felder, die Zeilen bleiben leer. Seite 5 (Aufwandspauschale) betrifft ehrenamtliche Betreuer und wird nicht befuellt.",
+    "text": {
+      "stamm.betreuerName": {
+        "page": 0,
+        "x": 75,
+        "y": 812.5,
+        "width": 215,
+        "size": 9
+      },
+      "stamm.betreuerAnschrift": {
+        "page": 0,
+        "x": 75,
+        "y": 784.8,
+        "width": 215,
+        "size": 9
+      },
+      "stamm.betreuerTelefon": {
+        "page": 0,
+        "x": 75,
+        "y": 748,
+        "width": 215,
+        "size": 9
+      },
+      "stamm.gerichtOrt": {
+        "page": 0,
+        "x": 143,
+        "y": 672,
+        "width": 86,
+        "size": 9
+      },
+      "stamm.gerichtStrasse": {
+        "page": 0,
+        "x": 75,
+        "y": 652,
+        "width": 142,
+        "size": 9
+      },
+      "stamm.gerichtPlzOrt": {
+        "page": 0,
+        "x": 75,
+        "y": 631.5,
+        "width": 142,
+        "size": 9
+      },
+      "stamm.aktenzeichen": {
+        "page": 0,
+        "x": 98,
+        "y": 580.5,
+        "width": 96,
+        "size": 9
+      },
+      "stamm.personName": {
+        "page": 0,
+        "x": 146,
+        "y": 566.5,
+        "width": 226,
+        "size": 9
+      },
+      "stamm.personGeburtsdatum": {
+        "page": 0,
+        "x": 441,
+        "y": 566.5,
+        "width": 86,
+        "size": 9,
+        "transform": "date"
+      },
+      "stamm.ortDatum": {
+        "page": 3,
+        "x": 75,
+        "y": 363,
+        "width": 190,
+        "size": 9
+      },
+      "residence": {
+        "page": 0,
+        "x": 111,
+        "y": 492,
+        "width": 386,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 28.5
+      },
+      "personal_impression": {
+        "page": 0,
+        "x": 111,
+        "y": 214,
+        "width": 380,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 27.7
+      },
+      "care_need_reason": {
+        "page": 1,
+        "x": 111,
+        "y": 516,
+        "width": 380,
+        "size": 10,
+        "maxLines": 3,
+        "lineHeight": 27.8
+      },
+      "last_contact": {
+        "page": 1,
+        "x": 433,
+        "y": 412.5,
+        "width": 97,
+        "size": 9,
+        "transform": "date"
+      },
+      "contact_description": {
+        "page": 1,
+        "x": 111,
+        "y": 271,
+        "width": 380,
+        "size": 10,
+        "maxLines": 8,
+        "lineHeight": 28.4
+      },
+      "approx_assets": {
+        "page": 2,
+        "x": 315,
+        "y": 763.5,
+        "width": 97,
+        "size": 9,
+        "transform": "money"
+      },
+      "goals": {
+        "page": 2,
+        "x": 111,
+        "y": 715.8,
+        "width": 380,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 27.8
+      },
+      "measures": {
+        "page": 2,
+        "x": 111,
+        "y": 646,
+        "width": 380,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 27.7
+      },
+      "against_will": {
+        "page": 2,
+        "x": 111,
+        "y": 576.3,
+        "width": 380,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 27.8
+      },
+      "other_report": {
+        "page": 2,
+        "x": 111,
+        "y": 500.5,
+        "width": 380,
+        "size": 10,
+        "maxLines": 8,
+        "lineHeight": 27.8
+      },
+      "discussed_date": {
+        "page": 3,
+        "x": 166,
+        "y": 763.5,
+        "width": 118,
+        "size": 9,
+        "transform": "date"
+      },
+      "discussed_reason": {
+        "page": 3,
+        "x": 188,
+        "y": 735.8,
+        "width": 316,
+        "size": 9
+      },
+      "view_contacts": {
+        "page": 3,
+        "x": 111,
+        "y": 666.3,
+        "width": 380,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 27.8
+      },
+      "view_goals": {
+        "page": 3,
+        "x": 111,
+        "y": 596.5,
+        "width": 380,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 27.7
+      },
+      "view_need": {
+        "page": 3,
+        "x": 111,
+        "y": 526.8,
+        "width": 380,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 27.8
+      }
+    },
+    "checks": {
+      "home_placement": {
+        "ja": {
+          "page": 0,
+          "x": 207,
+          "y": 421.5
+        },
+        "nein": {
+          "page": 0,
+          "x": 236.3,
+          "y": 421.5
+        }
+      },
+      "closed_unit": {
+        "ja": {
+          "page": 0,
+          "x": 422.3,
+          "y": 421.5
+        },
+        "nein": {
+          "page": 0,
+          "x": 451.5,
+          "y": 421.5
+        }
+      },
+      "housing_relinquished": {
+        "ja": {
+          "page": 0,
+          "x": 108.8,
+          "y": 393.8
+        },
+        "nein": null,
+        "nicht einschlägig": null
+      },
+      "care_providers": {
+        "versorgt sich selbst": {
+          "page": 0,
+          "x": 108.8,
+          "y": 316.5
+        },
+        "ambulante Pflegedienste": {
+          "page": 0,
+          "x": 274.5,
+          "y": 316.5
+        },
+        "Betreuer/in": {
+          "page": 0,
+          "x": 108.8,
+          "y": 302.3
+        },
+        "Personal des Heims / der Einrichtung": {
+          "page": 0,
+          "x": 274.5,
+          "y": 302.3
+        },
+        "Angehörige": {
+          "page": 0,
+          "x": 108.8,
+          "y": 273.8
+        },
+        "sonstige": {
+          "page": 0,
+          "x": 108.8,
+          "y": 273.8
+        }
+      },
+      "condition_change": {
+        "gebessert": {
+          "page": 0,
+          "x": 108.8,
+          "y": 141
+        },
+        "nicht verändert": {
+          "page": 0,
+          "x": 199.5,
+          "y": 141
+        },
+        "verschlechtert": {
+          "page": 0,
+          "x": 313.5,
+          "y": 141
+        }
+      },
+      "care_need": {
+        "weiter erforderlich": {
+          "page": 1,
+          "x": 108.8,
+          "y": 598.5
+        },
+        "kann aufgehoben werden": {
+          "page": 1,
+          "x": 108.8,
+          "y": 584.3
+        },
+        "Aufgabenbereiche sollten geändert werden": {
+          "page": 1,
+          "x": 108.8,
+          "y": 570
+        }
+      },
+      "contact_frequency": {
+        "monatlich": {
+          "page": 1,
+          "x": 108.8,
+          "y": 353.3
+        },
+        "wöchentlich": {
+          "page": 1,
+          "x": 198,
+          "y": 353.3
+        },
+        "täglich": {
+          "page": 1,
+          "x": 297.8,
+          "y": 353.3
+        },
+        "gemeinsamer Hausstand": {
+          "page": 1,
+          "x": 371.3,
+          "y": 353.3
+        },
+        "vierteljährlich": {
+          "page": 1,
+          "x": 108.8,
+          "y": 339
+        },
+        "nach Bedarf": {
+          "page": 1,
+          "x": 108.8,
+          "y": 339
+        }
+      },
+      "discussed": {
+        "ja": {
+          "page": 3,
+          "x": 108.8,
+          "y": 761.3
+        },
+        "nein": {
+          "page": 3,
+          "x": 108.8,
+          "y": 733.5
+        }
+      }
+    }
+  },
+  "care_suggestion": {
+    "quelle": "Betreuungsanregung (Justiz RLP, Stand 05.12.2024), 4 Seiten, 595x842. Leerer Briefkopf, Absender und Gericht kommen aus den Stammdaten. Die Ankreuzkaestchen sind Sonderzeichen am Zeilenanfang bei x=70,8. 'schlage ich die unten genannte Person vor' teilt sich das Kaestchen mit dem Antragsteller-Vorschlag; unterschieden wird ueber die Namenszeile darunter.",
+    "text": {
+      "stamm.betreuerName": {
+        "page": 0,
+        "x": 112,
+        "y": 741.5,
+        "width": 166,
+        "size": 9
+      },
+      "stamm.betreuerTelefon": {
+        "page": 0,
+        "x": 370,
+        "y": 698.2,
+        "width": 117,
+        "size": 8
+      },
+      "stamm.ortDatum": {
+        "page": 0,
+        "x": 370,
+        "y": 719.9,
+        "width": 117,
+        "size": 8
+      },
+      "stamm.gerichtOrt": {
+        "page": 0,
+        "x": 139,
+        "y": 633.3,
+        "width": 78,
+        "size": 9
+      },
+      "stamm.gerichtStrasse": {
+        "page": 0,
+        "x": 73,
+        "y": 589.9,
+        "width": 133,
+        "size": 9
+      },
+      "stamm.gerichtPlzOrt": {
+        "page": 0,
+        "x": 73,
+        "y": 568.3,
+        "width": 133,
+        "size": 9
+      },
+      "sug_person": {
+        "page": 0,
+        "x": 73,
+        "y": 394,
+        "width": 396,
+        "size": 10
+      },
+      "sug_birthname": {
+        "page": 0,
+        "x": 73,
+        "y": 352,
+        "width": 396,
+        "size": 10
+      },
+      "sug_address": {
+        "page": 0,
+        "x": 73,
+        "y": 309.8,
+        "width": 396,
+        "size": 10
+      },
+      "sug_residence": {
+        "page": 0,
+        "x": 73,
+        "y": 267.8,
+        "width": 396,
+        "size": 10
+      },
+      "sug_contact": {
+        "page": 0,
+        "x": 73,
+        "y": 225.7,
+        "width": 396,
+        "size": 10
+      },
+      "sug_proposal_person": {
+        "page": 1,
+        "x": 73,
+        "y": 525,
+        "width": 401,
+        "size": 10
+      },
+      "sug_reason_personality": {
+        "page": 1,
+        "x": 260,
+        "y": 275.7,
+        "width": 248,
+        "size": 9
+      },
+      "sug_reason_assets": {
+        "page": 1,
+        "x": 332,
+        "y": 232.3,
+        "width": 187,
+        "size": 9
+      },
+      "sug_doctor": {
+        "page": 1,
+        "x": 73,
+        "y": 124.1,
+        "width": 401,
+        "size": 10
+      },
+      "sug_spouse": {
+        "page": 2,
+        "x": 156,
+        "y": 633.3,
+        "width": 336,
+        "size": 9
+      },
+      "sug_parents": {
+        "page": 2,
+        "x": 134,
+        "y": 611.7,
+        "width": 358,
+        "size": 9
+      },
+      "sug_children": {
+        "page": 2,
+        "x": 128,
+        "y": 589.9,
+        "width": 358,
+        "size": 9
+      },
+      "sug_siblings": {
+        "page": 2,
+        "x": 156,
+        "y": 526.2,
+        "width": 330,
+        "size": 9
+      },
+      "sug_relatives_except": {
+        "page": 2,
+        "x": 213,
+        "y": 405.6,
+        "width": 276,
+        "size": 9
+      },
+      "stamm.betreuerStrasse": {
+        "page": 0,
+        "x": 117,
+        "y": 719.9,
+        "width": 166,
+        "size": 9
+      },
+      "stamm.betreuerPlzOrt": {
+        "page": 0,
+        "x": 123,
+        "y": 698.2,
+        "width": 160,
+        "size": 9
+      }
+    },
+    "checks": {
+      "sug_urgent": {
+        "Bestellung eines vorläufigen Betreuers / einer vorläufigen Betreuerin": {
+          "page": 0,
+          "x": 70.8,
+          "y": 456.5
+        }
+      },
+      "sug_scopes": {
+        "die Gesundheitssorge": {
+          "page": 0,
+          "x": 70.8,
+          "y": 118.8
+        },
+        "die Aufenthaltsbestimmung": {
+          "page": 0,
+          "x": 70.8,
+          "y": 97.2
+        },
+        "die Entscheidung über unterbringungsähnliche Maßnahmen": {
+          "page": 0,
+          "x": 70.8,
+          "y": 75.5
+        },
+        "die Entscheidung über die geschlossene Unterbringung": {
+          "page": 1,
+          "x": 70.8,
+          "y": 760.9
+        },
+        "die Vermögenssorge": {
+          "page": 1,
+          "x": 70.8,
+          "y": 739.2
+        },
+        "die Wohnungsangelegenheiten": {
+          "page": 1,
+          "x": 70.8,
+          "y": 717.6
+        },
+        "die Entgegennahme, das Öffnen und das Anhalten der Post": {
+          "page": 1,
+          "x": 70.8,
+          "y": 695.9
+        },
+        "Vertretung gegenüber Ämtern, Behörden, Sozialversicherungsträgern und Dritten": {
+          "page": 1,
+          "x": 70.8,
+          "y": 674.3
+        }
+      },
+      "sug_proposal_type": {
+        "schlage ich den/die Antragsteller/in vor": {
+          "page": 1,
+          "x": 70.8,
+          "y": 566
+        },
+        "schlage ich die unten genannte Person vor": {
+          "page": 1,
+          "x": 70.8,
+          "y": 566
+        },
+        "überlasse ich die Auswahl dem Gericht": {
+          "page": 1,
+          "x": 70.8,
+          "y": 438.6
+        }
+      },
+      "sug_proposal_informed": {
+        "Die vorgeschlagene Person ist über den Vorschlag informiert und damit einverstanden.": {
+          "page": 1,
+          "x": 70.8,
+          "y": 460.2
+        }
+      },
+      "sug_reasons": {
+        "Bewegungsunfähigkeit": {
+          "page": 1,
+          "x": 70.8,
+          "y": 338.4
+        },
+        "Verwirrtheitszuständen": {
+          "page": 1,
+          "x": 70.8,
+          "y": 316.7
+        },
+        "sonstiger körperlicher/geistiger Behinderung": {
+          "page": 1,
+          "x": 70.8,
+          "y": 295.1
+        },
+        "Persönlichkeitsveränderung": {
+          "page": 1,
+          "x": 70.8,
+          "y": 273.4
+        },
+        "Auffälligkeiten im Umgang mit Vermögen": {
+          "page": 1,
+          "x": 70.8,
+          "y": 230
+        }
+      },
+      "sug_report": {
+        "soll vom Gericht eingeholt werden.": {
+          "page": 2,
+          "x": 70.8,
+          "y": 739.2
+        },
+        "liegt dem Antrag bei.": {
+          "page": 2,
+          "x": 70.8,
+          "y": 717.6
+        },
+        "werde ich nachreichen.": {
+          "page": 2,
+          "x": 70.8,
+          "y": 695.9
+        }
+      },
+      "sug_relatives_agree": {
+        "Die genannten Angehörigen sind mit einer Betreuung und der Person des Betreuers einverstanden.": {
+          "page": 2,
+          "x": 70.8,
+          "y": 438.5
+        }
+      },
+      "sug_person_view": {
+        "hat keine Kenntnis von dieser Anregung.": {
+          "page": 2,
+          "x": 70.8,
+          "y": 338.4
+        },
+        "hat Kenntnis von dieser Anregung und ihr zugestimmt.": {
+          "page": 2,
+          "x": 70.8,
+          "y": 316.7
+        },
+        "hat Kenntnis von dieser Anregung und ihr nicht zugestimmt.": {
+          "page": 2,
+          "x": 70.8,
+          "y": 295.1
+        },
+        "kann sich zu dieser Anregung nicht äußern.": {
+          "page": 2,
+          "x": 70.8,
+          "y": 273.4
+        }
+      },
+      "sug_communication": {
+        "ist möglich.": {
+          "page": 2,
+          "x": 70.8,
+          "y": 208.4
+        },
+        "ist bedingt möglich.": {
+          "page": 2,
+          "x": 70.8,
+          "y": 186.8
+        },
+        "ist nicht möglich.": {
+          "page": 2,
+          "x": 70.8,
+          "y": 165.1
+        }
+      }
+    }
+  },
+  "initial": {
+    "quelle": "Anfangsbericht F 4389 (Ordentliche Gerichtsbarkeit Brandenburg, Stand 02/2026), 5 Seiten, 596x842. Leerer Briefkopf, deshalb kommen Absender und Gericht aus den Stammdaten. Die Vorlage fragt zusaetzlich nach Vermoegensstand, Besprechbarkeit, persoenlicher Anhoerung und Aenderungen des Aufgabenkreises - dafuer gibt es im Dokument noch keine Felder. Der Beruf/Arbeitgeber wird auf die Zeile des Arbeitsverhaeltnisses geschrieben; das Kaestchen 'bereits festgestellter Pflegegrad' bleibt frei, weil der Pflegegrad selbst als Text daneben steht.",
+    "text": {
+      "stamm.betreuerName": {
+        "page": 0,
+        "x": 71,
+        "y": 804.3,
+        "width": 215,
+        "size": 9
+      },
+      "stamm.betreuerTelefon": {
+        "page": 0,
+        "x": 71,
+        "y": 753.5,
+        "width": 215,
+        "size": 9
+      },
+      "stamm.gerichtOrt": {
+        "page": 0,
+        "x": 132,
+        "y": 685.4,
+        "width": 110,
+        "size": 9
+      },
+      "stamm.gerichtStrasse": {
+        "page": 0,
+        "x": 71,
+        "y": 666.4,
+        "width": 171,
+        "size": 9
+      },
+      "stamm.gerichtPlzOrt": {
+        "page": 0,
+        "x": 71,
+        "y": 647.4,
+        "width": 171,
+        "size": 9
+      },
+      "stamm.aktenzeichen": {
+        "page": 0,
+        "x": 90,
+        "y": 603.1,
+        "width": 116,
+        "size": 9
+      },
+      "stamm.personName": {
+        "page": 0,
+        "x": 141,
+        "y": 574.4,
+        "width": 242,
+        "size": 9
+      },
+      "stamm.personGeburtsdatum": {
+        "page": 0,
+        "x": 449,
+        "y": 574.4,
+        "width": 80,
+        "size": 9,
+        "transform": "date"
+      },
+      "stamm.uebernahmeDatum": {
+        "page": 0,
+        "x": 308,
+        "y": 536.5,
+        "width": 215,
+        "size": 9,
+        "transform": "date"
+      },
+      "registered_address": {
+        "page": 0,
+        "x": 254,
+        "y": 453.8,
+        "width": 269,
+        "size": 10
+      },
+      "current_residence": {
+        "page": 0,
+        "x": 206,
+        "y": 417.1,
+        "width": 318,
+        "size": 10
+      },
+      "planned_housing_changes": {
+        "page": 0,
+        "x": 74,
+        "y": 287,
+        "width": 456,
+        "size": 10,
+        "maxLines": 4,
+        "lineHeight": 19
+      },
+      "housing_notes": {
+        "page": 0,
+        "x": 74,
+        "y": 179.3,
+        "width": 456,
+        "size": 10,
+        "maxLines": 4,
+        "lineHeight": 19
+      },
+      "treating_doctors": {
+        "page": 1,
+        "x": 74,
+        "y": 733.4,
+        "width": 456,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 18.9
+      },
+      "severe_diseases": {
+        "page": 1,
+        "x": 74,
+        "y": 664,
+        "width": 456,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 19
+      },
+      "treatment_care": {
+        "page": 1,
+        "x": 74,
+        "y": 588,
+        "width": 456,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 19
+      },
+      "resources": {
+        "page": 1,
+        "x": 74,
+        "y": 518.4,
+        "width": 456,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 19
+      },
+      "impairments": {
+        "page": 1,
+        "x": 74,
+        "y": 448.9,
+        "width": 456,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 19
+      },
+      "care_level": {
+        "page": 1,
+        "x": 305,
+        "y": 398.2,
+        "width": 11,
+        "size": 8
+      },
+      "health_notes": {
+        "page": 1,
+        "x": 74,
+        "y": 352.8,
+        "width": 456,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 19
+      },
+      "relatives": {
+        "page": 1,
+        "x": 74,
+        "y": 228.8,
+        "width": 456,
+        "size": 10,
+        "maxLines": 3,
+        "lineHeight": 19
+      },
+      "family_situation": {
+        "page": 1,
+        "x": 74,
+        "y": 152.9,
+        "width": 456,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 18.9
+      },
+      "social_contacts": {
+        "page": 1,
+        "x": 74,
+        "y": 75.9,
+        "width": 456,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 19
+      },
+      "relationship": {
+        "page": 2,
+        "x": 74,
+        "y": 772.8,
+        "width": 456,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 19
+      },
+      "social_notes": {
+        "page": 2,
+        "x": 74,
+        "y": 703.3,
+        "width": 456,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 19.1
+      },
+      "employer_occupation": {
+        "page": 2,
+        "x": 332,
+        "y": 618,
+        "width": 190,
+        "size": 9
+      },
+      "daily_life": {
+        "page": 2,
+        "x": 74,
+        "y": 548.4,
+        "width": 456,
+        "size": 10,
+        "maxLines": 1
+      },
+      "goals": {
+        "page": 2,
+        "x": 74,
+        "y": 465.2,
+        "width": 456,
+        "size": 10,
+        "maxLines": 4,
+        "lineHeight": 18.97
+      },
+      "measures": {
+        "page": 2,
+        "x": 74,
+        "y": 357.7,
+        "width": 456,
+        "size": 10,
+        "maxLines": 4,
+        "lineHeight": 19
+      },
+      "special_matters": {
+        "page": 2,
+        "x": 74,
+        "y": 250.2,
+        "width": 456,
+        "size": 10,
+        "maxLines": 4,
+        "lineHeight": 19
+      },
+      "goal_notes": {
+        "page": 2,
+        "x": 74,
+        "y": 142.6,
+        "width": 456,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 19
+      },
+      "wishes_care": {
+        "page": 3,
+        "x": 74,
+        "y": 732.4,
+        "width": 456,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 19
+      },
+      "wishes_assets": {
+        "page": 3,
+        "x": 74,
+        "y": 643.8,
+        "width": 456,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 19
+      },
+      "desired_outcome": {
+        "page": 3,
+        "x": 74,
+        "y": 574.2,
+        "width": 456,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 19
+      },
+      "prevent_outcome": {
+        "page": 3,
+        "x": 74,
+        "y": 504.7,
+        "width": 456,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 19
+      },
+      "unfulfillable_wishes": {
+        "page": 3,
+        "x": 74,
+        "y": 416.1,
+        "width": 456,
+        "size": 10,
+        "maxLines": 3,
+        "lineHeight": 18.95
+      },
+      "self_managed_assets": {
+        "page": 3,
+        "x": 74,
+        "y": 327.6,
+        "width": 456,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 19
+      },
+      "first_contact": {
+        "page": 3,
+        "x": 265,
+        "y": 258,
+        "width": 74,
+        "size": 9,
+        "transform": "date"
+      },
+      "contact_count": {
+        "page": 3,
+        "x": 298,
+        "y": 239,
+        "width": 74,
+        "size": 9
+      },
+      "future_contacts": {
+        "page": 3,
+        "x": 392,
+        "y": 220,
+        "width": 130,
+        "size": 9
+      },
+      "contact_limit_reason": {
+        "page": 3,
+        "x": 173,
+        "y": 155.4,
+        "width": 191,
+        "size": 9
+      },
+      "contact_notes": {
+        "page": 3,
+        "x": 74,
+        "y": 110,
+        "width": 456,
+        "size": 10,
+        "maxLines": 1
+      },
+      "stamm.ortDatum": {
+        "page": 4,
+        "x": 71,
+        "y": 281.7,
+        "width": 193,
+        "size": 9
+      },
+      "stamm.betreuerAnschrift": {
+        "page": 0,
+        "x": 71,
+        "y": 779.7,
+        "width": 355,
+        "size": 9
+      }
+    },
+    "checks": {
+      "residence_type": {
+        "eigene Häuslichkeit": {
+          "page": 0,
+          "x": 104.5,
+          "y": 400.9
+        },
+        "Krankenhaus": {
+          "page": 0,
+          "x": 104.5,
+          "y": 386.9
+        },
+        "Reha- oder Therapieeinrichtung": {
+          "page": 0,
+          "x": 104.5,
+          "y": 373.1
+        },
+        "sonstige Unterkunft": {
+          "page": 0,
+          "x": 104.5,
+          "y": 359.2
+        },
+        "Heim/Einrichtung": {
+          "page": 0,
+          "x": 104.5,
+          "y": 345.3
+        },
+        "geschlossene Abteilung": {
+          "page": 0,
+          "x": 104.5,
+          "y": 331.4
+        }
+      },
+      "care_allowance": {
+        "bewilligt": {
+          "page": 1,
+          "x": 319.2,
+          "y": 395.9
+        },
+        "beantragt": {
+          "page": 1,
+          "x": 319.2,
+          "y": 395.9
+        },
+        "nicht beantragt": null,
+        "nicht einschlägig": null
+      },
+      "employment_status": {
+        "Arbeitsverhältnis": {
+          "page": 2,
+          "x": 71.5,
+          "y": 615.7
+        },
+        "Beschäftigungsangebot / Tagesstruktur": {
+          "page": 2,
+          "x": 71.5,
+          "y": 596.7
+        },
+        "arbeitslos": null,
+        "erwerbsgemindert": null,
+        "Rente": null,
+        "sonstiges": null
+      },
+      "can_express_wishes": {
+        "ja": {
+          "page": 3,
+          "x": 312.4,
+          "y": 775.6
+        },
+        "nein": {
+          "page": 3,
+          "x": 342.4,
+          "y": 775.6
+        },
+        "bedingt": {
+          "page": 3,
+          "x": 384.7,
+          "y": 775.6
+        }
+      },
+      "can_initiate_contact": {
+        "ja": {
+          "page": 3,
+          "x": 71.5,
+          "y": 153.1
+        },
+        "nein": {
+          "page": 3,
+          "x": 101.5,
+          "y": 153.1
+        },
+        "bedingt": null
+      }
+    }
+  },
+  "funeral_directive": {
+    "quelle": "Totenfuersorgeverfuegung des Ministeriums fuer Wissenschaft und Gesundheit Rheinland-Pfalz, 2 Seiten, 595x842. Die Schrift des Vordrucks laesst sich nicht dekodieren; Linien wurden ueber die Wiederholung gleicher Glyphen gemessen, die Ankreuzkaestchen und Auswahlkreise am gerenderten Seitenbild. Die Unterschriftszeile bleibt fuer die eigenhaendige Unterschrift frei.",
+    "text": {
+      "fd_name": {
+        "page": 0,
+        "x": 186,
+        "y": 704.8,
+        "width": 272,
+        "size": 10
+      },
+      "fd_birth": {
+        "page": 0,
+        "x": 144,
+        "y": 682.3,
+        "width": 314,
+        "size": 10
+      },
+      "fd_street": {
+        "page": 0,
+        "x": 186,
+        "y": 659.8,
+        "width": 274,
+        "size": 10
+      },
+      "fd_postal_city": {
+        "page": 0,
+        "x": 182,
+        "y": 637.3,
+        "width": 278,
+        "size": 10
+      },
+      "fd_river": {
+        "page": 0,
+        "x": 109,
+        "y": 481.3,
+        "width": 373,
+        "size": 10
+      },
+      "fd_scatter_place": {
+        "page": 0,
+        "x": 109,
+        "y": 421.9,
+        "width": 373,
+        "size": 10
+      },
+      "fd_urn_processing": {
+        "page": 0,
+        "x": 109,
+        "y": 313.6,
+        "width": 351,
+        "size": 10
+      },
+      "fd_partial_processing": {
+        "page": 0,
+        "x": 109,
+        "y": 205.5,
+        "width": 351,
+        "size": 10
+      },
+      "fd_remaining_ashes": {
+        "page": 0,
+        "x": 109,
+        "y": 146,
+        "width": 362,
+        "size": 10
+      },
+      "fd_primary_name": {
+        "page": 1,
+        "x": 165,
+        "y": 695.4,
+        "width": 278,
+        "size": 10
+      },
+      "fd_primary_birth": {
+        "page": 1,
+        "x": 144,
+        "y": 673,
+        "width": 299,
+        "size": 10
+      },
+      "fd_primary_street": {
+        "page": 1,
+        "x": 189,
+        "y": 650.4,
+        "width": 251,
+        "size": 10
+      },
+      "fd_primary_postal_city": {
+        "page": 1,
+        "x": 181,
+        "y": 628,
+        "width": 263,
+        "size": 10
+      },
+      "fd_substitute_name": {
+        "page": 1,
+        "x": 165,
+        "y": 546,
+        "width": 278,
+        "size": 10
+      },
+      "fd_substitute_birth": {
+        "page": 1,
+        "x": 144,
+        "y": 523.5,
+        "width": 299,
+        "size": 10
+      },
+      "fd_substitute_street": {
+        "page": 1,
+        "x": 188,
+        "y": 501,
+        "width": 252,
+        "size": 10
+      },
+      "fd_substitute_postal_city": {
+        "page": 1,
+        "x": 181,
+        "y": 478.5,
+        "width": 263,
+        "size": 10
+      },
+      "fd_memorial_name": {
+        "page": 1,
+        "x": 165,
+        "y": 396.6,
+        "width": 278,
+        "size": 10
+      },
+      "fd_memorial_birth": {
+        "page": 1,
+        "x": 144,
+        "y": 374,
+        "width": 299,
+        "size": 10
+      },
+      "fd_memorial_street": {
+        "page": 1,
+        "x": 187,
+        "y": 351.6,
+        "width": 256,
+        "size": 10
+      },
+      "fd_memorial_postal_city": {
+        "page": 1,
+        "x": 177,
+        "y": 329,
+        "width": 265,
+        "size": 10
+      },
+      "stamm.ortDatum": {
+        "page": 1,
+        "x": 73,
+        "y": 144.2,
+        "width": 363,
+        "size": 9
+      }
+    },
+    "checks": {
+      "fd_burial_type": {
+        "Flussbestattung": {
+          "page": 0,
+          "x": 69.6,
+          "y": 514.3
+        },
+        "Ausbringung der Asche außerhalb von Friedhöfen": {
+          "page": 0,
+          "x": 69.6,
+          "y": 456.0
+        },
+        "Aushändigung der Urne an bestimmte Personen zur privaten Aufbewahrung": {
+          "page": 0,
+          "x": 69.6,
+          "y": 371.8
+        },
+        "Aushändigung von Teilen der Asche zur würdevollen Weiterverarbeitung": {
+          "page": 0,
+          "x": 69.6,
+          "y": 241.5
+        },
+        "Tuchbestattung": {
+          "page": 0,
+          "x": 69.6,
+          "y": 96.7
+        }
+      },
+      "fd_urn_division": {
+        "mit Teilungsmöglichkeit": {
+          "page": 0,
+          "x": 106.7,
+          "y": 351
+        },
+        "ohne Teilungsmöglichkeit": {
+          "page": 0,
+          "x": 106.7,
+          "y": 287
+        }
+      },
+      "fd_signature_declarant": {
+        "true": null
+      }
+    }
+  },
+  "annual_assets": {
+    "quelle": "Bericht ueber die Fuehrung der Betreuung, mit Vermoegensuebersicht (Justiz RLP, Stand 04.12.2024), 6 Seiten, 596x842. Leerer Briefkopf. Der Vordruck hat keine freie Zeilenliste, sondern vorgedruckte Kategorien - deshalb werden Vermoegens- und Einkuenftezeilen ueber die Kategorie zugeordnet ('zeilen'), mit einer Auffangzeile '*'. Passt eine Angabe in keine Zeile und ist die Auffangzeile belegt, bricht der Export mit Hinweis ab. Seite 6 (Aufwandspauschale) betrifft ehrenamtliche Betreuer und wird nicht befuellt.",
+    "text": {
+      "stamm.betreuerName": {
+        "page": 0,
+        "x": 75,
+        "y": 812.5,
+        "width": 215,
+        "size": 9
+      },
+      "stamm.betreuerAnschrift": {
+        "page": 0,
+        "x": 75,
+        "y": 784.8,
+        "width": 215,
+        "size": 9
+      },
+      "stamm.betreuerTelefon": {
+        "page": 0,
+        "x": 75,
+        "y": 748,
+        "width": 215,
+        "size": 9
+      },
+      "stamm.gerichtOrt": {
+        "page": 0,
+        "x": 143,
+        "y": 672,
+        "width": 75,
+        "size": 9
+      },
+      "stamm.gerichtStrasse": {
+        "page": 0,
+        "x": 75,
+        "y": 652,
+        "width": 129,
+        "size": 9
+      },
+      "stamm.gerichtPlzOrt": {
+        "page": 0,
+        "x": 75,
+        "y": 631.5,
+        "width": 129,
+        "size": 9
+      },
+      "stamm.aktenzeichen": {
+        "page": 0,
+        "x": 98,
+        "y": 580.5,
+        "width": 94,
+        "size": 9
+      },
+      "stamm.personName": {
+        "page": 0,
+        "x": 146,
+        "y": 566.5,
+        "width": 236,
+        "size": 9
+      },
+      "stamm.personGeburtsdatum": {
+        "page": 0,
+        "x": 441,
+        "y": 566.5,
+        "width": 62,
+        "size": 9,
+        "transform": "date"
+      },
+      "residence": {
+        "page": 0,
+        "x": 111,
+        "y": 478,
+        "width": 386,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 28.5
+      },
+      "personal_impression": {
+        "page": 0,
+        "x": 111,
+        "y": 256,
+        "width": 380,
+        "size": 10,
+        "maxLines": 4,
+        "lineHeight": 27.8
+      },
+      "care_need_reason": {
+        "page": 1,
+        "x": 111,
+        "y": 495.1,
+        "width": 380,
+        "size": 10,
+        "maxLines": 3,
+        "lineHeight": 27.8
+      },
+      "last_contact": {
+        "page": 1,
+        "x": 433,
+        "y": 377.3,
+        "width": 92,
+        "size": 9,
+        "transform": "date"
+      },
+      "contact_description": {
+        "page": 1,
+        "x": 111,
+        "y": 235.6,
+        "width": 380,
+        "size": 10,
+        "maxLines": 7,
+        "lineHeight": 28.3
+      },
+      "housing_cost_carrier": {
+        "page": 3,
+        "x": 315,
+        "y": 475.6,
+        "width": 137,
+        "size": 9
+      },
+      "housing_costs": {
+        "page": 3,
+        "x": 441,
+        "y": 336.1,
+        "width": 75,
+        "size": 8,
+        "transform": "money"
+      },
+      "acquisitions": {
+        "page": 3,
+        "x": 126,
+        "y": 132.8,
+        "width": 374,
+        "size": 9
+      },
+      "legal_activities": {
+        "page": 3,
+        "x": 111,
+        "y": 41.3,
+        "width": 384,
+        "size": 9
+      },
+      "goals": {
+        "page": 4,
+        "x": 111,
+        "y": 750.1,
+        "width": 380,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 27.8
+      },
+      "measures": {
+        "page": 4,
+        "x": 111,
+        "y": 680.3,
+        "width": 380,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 27.7
+      },
+      "against_will": {
+        "page": 4,
+        "x": 111,
+        "y": 610.6,
+        "width": 380,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 27.8
+      },
+      "other_report": {
+        "page": 4,
+        "x": 111,
+        "y": 534.8,
+        "width": 380,
+        "size": 10,
+        "maxLines": 3,
+        "lineHeight": 27.8
+      },
+      "discussed_date": {
+        "page": 4,
+        "x": 166,
+        "y": 444.8,
+        "width": 116,
+        "size": 9,
+        "transform": "date"
+      },
+      "discussed_reason": {
+        "page": 4,
+        "x": 188,
+        "y": 417.1,
+        "width": 314,
+        "size": 9
+      },
+      "view_contacts": {
+        "page": 4,
+        "x": 111,
+        "y": 347.3,
+        "width": 380,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 27.7
+      },
+      "view_goals": {
+        "page": 4,
+        "x": 111,
+        "y": 277.6,
+        "width": 380,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 27.8
+      },
+      "view_need": {
+        "page": 4,
+        "x": 111,
+        "y": 207.8,
+        "width": 380,
+        "size": 10,
+        "maxLines": 2,
+        "lineHeight": 27.7
+      },
+      "stamm.ortDatum": {
+        "page": 4,
+        "x": 75,
+        "y": 72.8,
+        "width": 189,
+        "size": 9
+      }
+    },
+    "checks": {
+      "home_placement": {
+        "ja": {
+          "page": 0,
+          "x": 207,
+          "y": 407.3
+        },
+        "nein": {
+          "page": 0,
+          "x": 236.3,
+          "y": 407.3
+        }
+      },
+      "closed_unit": {
+        "ja": {
+          "page": 0,
+          "x": 422.3,
+          "y": 407.3
+        },
+        "nein": {
+          "page": 0,
+          "x": 451.5,
+          "y": 407.3
+        }
+      },
+      "care_providers": {
+        "versorgt sich selbst": {
+          "page": 0,
+          "x": 108.8,
+          "y": 358.5
+        },
+        "ambulante Pflegedienste": {
+          "page": 0,
+          "x": 274.5,
+          "y": 358.5
+        },
+        "Betreuer/in": {
+          "page": 0,
+          "x": 108.8,
+          "y": 344.3
+        },
+        "Personal des Heims / der Einrichtung": {
+          "page": 0,
+          "x": 274.5,
+          "y": 344.3
+        },
+        "Angehörige": {
+          "page": 0,
+          "x": 108.8,
+          "y": 315.8
+        },
+        "sonstige": {
+          "page": 0,
+          "x": 108.8,
+          "y": 315.8
+        }
+      },
+      "condition_change": {
+        "gebessert": {
+          "page": 0,
+          "x": 108.8,
+          "y": 127.5
+        },
+        "nicht verändert": {
+          "page": 0,
+          "x": 199.5,
+          "y": 127.5
+        },
+        "verschlechtert": {
+          "page": 0,
+          "x": 313.5,
+          "y": 127.5
+        }
+      },
+      "care_need": {
+        "weiter erforderlich": {
+          "page": 1,
+          "x": 108.8,
+          "y": 577.5
+        },
+        "kann aufgehoben werden": {
+          "page": 1,
+          "x": 108.8,
+          "y": 563.3
+        },
+        "Aufgabenbereiche sollten geändert werden": {
+          "page": 1,
+          "x": 108.8,
+          "y": 549
+        }
+      },
+      "contact_frequency": {
+        "monatlich": {
+          "page": 1,
+          "x": 108.8,
+          "y": 318
+        },
+        "wöchentlich": {
+          "page": 1,
+          "x": 198,
+          "y": 318
+        },
+        "täglich": {
+          "page": 1,
+          "x": 297,
+          "y": 318
+        },
+        "gemeinsamer Hausstand": {
+          "page": 1,
+          "x": 371.3,
+          "y": 318
+        },
+        "vierteljährlich": {
+          "page": 1,
+          "x": 108.8,
+          "y": 303.8
+        },
+        "nach Bedarf": {
+          "page": 1,
+          "x": 108.8,
+          "y": 303.8
+        }
+      },
+      "custody_cash_control": {
+        "regelmäßige Einsicht in Verwendungsnachweise": {
+          "page": 2,
+          "x": 141.8,
+          "y": 345
+        },
+        "Vorlage von Kopien": {
+          "page": 2,
+          "x": 141.8,
+          "y": 303
+        },
+        "bestimmungsgemäße Verwendung bestätigt": {
+          "page": 2,
+          "x": 141.8,
+          "y": 261
+        }
+      },
+      "discussed": {
+        "ja": {
+          "page": 4,
+          "x": 108.8,
+          "y": 442.5
+        },
+        "nein": {
+          "page": 4,
+          "x": 108.8,
+          "y": 414.8
+        }
+      }
+    },
+    "tables": {
+      "assets_detail": {
+        "page": 2,
+        "zuordnenNach": [
+          "category",
+          "type"
+        ],
+        "columns": {
+          "category": {
+            "x": 197,
+            "width": 126,
+            "size": 8
+          },
+          "institution": {
+            "x": 342,
+            "width": 88,
+            "size": 8
+          },
+          "amount": {
+            "x": 467,
+            "width": 52,
+            "size": 8,
+            "transform": "money"
+          }
+        },
+        "zeilen": {
+          "Grundbesitz": {
+            "y": 758.3,
+            "spalten": {
+              "institution": false,
+              "amount": {
+                "x": 450,
+                "width": 52
+              }
+            }
+          },
+          "Girokonto": {
+            "y": 702
+          },
+          "Sparkonto": {
+            "y": 681
+          },
+          "Depotkonto": {
+            "y": 660
+          },
+          "weitere Konten": {
+            "y": 639
+          },
+          "Lebensversicherung": {
+            "y": 618,
+            "spalten": {
+              "category": {
+                "x": 283,
+                "width": 44
+              }
+            }
+          },
+          "Rückkaufswert Lebensversicherung": {
+            "y": 618,
+            "spalten": {
+              "category": {
+                "x": 283,
+                "width": 44
+              }
+            }
+          },
+          "Genossenschaftsanteile": {
+            "y": 597,
+            "spalten": {
+              "category": {
+                "x": 271,
+                "width": 54
+              }
+            }
+          },
+          "Mietkaution": {
+            "y": 576
+          },
+          "Sterbegeld": {
+            "y": 555,
+            "spalten": {
+              "category": false,
+              "institution": {
+                "x": 350,
+                "width": 82
+              }
+            }
+          },
+          "Bestattungsvorsorge": {
+            "y": 513,
+            "spalten": {
+              "category": {
+                "x": 252,
+                "width": 75
+              }
+            }
+          },
+          "Bargeld": {
+            "y": 450,
+            "spalten": {
+              "category": false,
+              "institution": false,
+              "amount": {
+                "x": 456,
+                "width": 53
+              }
+            }
+          },
+          "Verwahrgeldkonto": {
+            "y": 387,
+            "spalten": {
+              "category": {
+                "x": 200,
+                "width": 126
+              },
+              "institution": {
+                "x": 347,
+                "width": 92
+              },
+              "amount": {
+                "x": 466,
+                "width": 53
+              }
+            }
+          },
+          "Schulden": {
+            "y": 178.5,
+            "spalten": {
+              "institution": false,
+              "category": {
+                "x": 175,
+                "width": 258
+              },
+              "amount": {
+                "x": 450,
+                "width": 62
+              }
+            }
+          },
+          "*": {
+            "y": 429,
+            "spalten": {
+              "category": {
+                "x": 138,
+                "width": 181
+              },
+              "institution": {
+                "x": 340,
+                "width": 91
+              }
+            }
+          },
+          "Vermögen": {
+            "y": 429,
+            "spalten": {
+              "category": {
+                "x": 138,
+                "width": 181
+              },
+              "institution": {
+                "x": 340,
+                "width": 91
+              }
+            }
+          },
+          "Schuld": {
+            "y": 178.5,
+            "spalten": {
+              "institution": false,
+              "category": {
+                "x": 175,
+                "width": 258
+              },
+              "amount": {
+                "x": 450,
+                "width": 62
+              }
+            }
+          }
+        }
+      },
+      "income_detail": {
+        "page": 3,
+        "zuordnenNach": [
+          "type"
+        ],
+        "columns": {
+          "provider": {
+            "x": 223,
+            "width": 190,
+            "size": 8
+          },
+          "amount": {
+            "x": 441,
+            "width": 75,
+            "size": 8,
+            "transform": "money"
+          }
+        },
+        "zeilen": {
+          "Rente": {
+            "y": 761.3
+          },
+          "Rente(n)/Pension": {
+            "y": 761.3
+          },
+          "Pension": {
+            "y": 761.3
+          },
+          "Krankengeld": {
+            "y": 740.3
+          },
+          "Lohn": {
+            "y": 719.3
+          },
+          "Gehalt": {
+            "y": 719.3
+          },
+          "Lohn/Gehalt": {
+            "y": 719.3
+          },
+          "Miete": {
+            "y": 698.3
+          },
+          "Pacht": {
+            "y": 698.3
+          },
+          "Miete/Pacht": {
+            "y": 698.3
+          },
+          "Sozialleistungen": {
+            "y": 677.3
+          },
+          "Pflegegeld": {
+            "y": 656.3
+          },
+          "Barbetrag": {
+            "y": 614.3
+          },
+          "Monatlicher Barbetrag vom Kostenträger": {
+            "y": 614.3
+          },
+          "Sonstiges": {
+            "y": 635.3
+          },
+          "*": {
+            "y": 593.3
+          }
+        }
+      }
+    }
+  }
+}

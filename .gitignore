@@ -1,0 +1,58 @@
+# Betriebssystem, Editoren und lokale Assistenten
+.DS_Store
+**/.DS_Store
+.claude/
+.codex/
+.idea/
+.vscode/
+*.swp
+*~
+
+# Geheimnisse und lokale Konfiguration – Beispiele bleiben erlaubt
+.env
+.env.*
+**/.env
+**/.env.*
+!**/.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.enc
+
+# Laufzeitdaten, Datenbanken, Sitzungen, Dokumente und Sicherungen
+runtime/
+data/
+server/data/
+server/backups/
+server/_backups/
+server/_restore-rollback/
+server/extension-artifacts/
+*.sqlite
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+*.db
+*.db-wal
+*.db-shm
+
+# Installierte Abhängigkeiten und lokale Werkzeugumgebungen
+**/node_modules/
+server/fints/.venv/
+**/.venv/
+
+# Generierte Programm- und Prüfausgaben: Nur die ausgelieferte HTML-App gehört ins Repo
+outputs/*
+!outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html
+extension/dist/
+extension/ZIP/
+coverage/
+*.log
+
+# Lokal gepackte Server-/Dockge-Artefakte gehören später in GitHub Releases, nicht in Git
+deploy/*.tar.gz
+deploy/*.zip
+
+# Temporäre Office-Dateien
+~$*
+*.tmp

@@ -1,0 +1,20 @@
+{
+  "elementId": "tpl_v159_rent_certificate",
+  "reportId": "rent_certificate",
+  "einheit": "px",
+  "bildBreite": 1240,
+  "seitenBreitePt": 595.28,
+  "seitenHoehePt": 841.89,
+  "hinweis": "Koordinaten in Bildpixeln des 1240px-Renderings (rent_certificate_seite1_weiss.png); x/y = LINKE OBERE Ecke des Feldrechtecks in Bildkoordinaten, das Werkzeug rechnet in PDF-Punkte (Ursprung unten links) um. Nicht gemappte Schema-Felder (birth, reference, notes) haben keinen Slot auf dem Vermieter-Formular.",
+  "felder": {
+    "rent_certificate_name":     { "page": 0, "x": 292, "y": 172, "width": 800, "height": 26, "typ": "text", "groesse": 10 },
+    "rent_certificate_property": { "page": 0, "x": 292, "y": 222, "width": 800, "height": 26, "typ": "text", "groesse": 10 },
+    "rent_certificate_basic":    { "page": 0, "x": 900, "y": 404, "width": 150, "height": 24, "typ": "text", "groesse": 9, "transform": "money" },
+    "rent_certificate_service":  { "page": 0, "x": 978, "y": 482, "width": 78,  "height": 24, "typ": "text", "groesse": 8, "transform": "money" },
+    "rent_certificate_heating":  { "page": 0, "x": 978, "y": 561, "width": 78,  "height": 24, "typ": "text", "groesse": 8, "transform": "money" },
+    "rent_certificate_start":    { "page": 0, "x": 548, "y": 972, "width": 200, "height": 24, "typ": "text", "groesse": 9, "transform": "date" },
+    "rent_certificate_size":     { "page": 0, "x": 300, "y": 1024, "width": 155, "height": 24, "typ": "text", "groesse": 9 },
+    "rent_certificate_rooms":    { "page": 0, "x": 850, "y": 1024, "width": 125, "height": 24, "typ": "text", "groesse": 9 },
+    "rent_certificate_landlord": { "page": 0, "x": 116, "y": 1482, "width": 494, "height": 24, "typ": "text", "groesse": 8.5 }
+  }
+}

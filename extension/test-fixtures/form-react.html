@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="de">
+<head><meta charset="utf-8"><title>Controlled-Inputs Testformular</title></head>
+<body>
+<h1>Framework-kontrollierte Felder (Fixture)</h1>
+<p>Simuliert das React-Muster: Werte ohne input-Event werden vom "Framework" zurückgesetzt.</p>
+<label for="cname">Nachname</label>
+<input id="cname" name="nachname" type="text">
+<label for="cvorname">Vorname</label>
+<input id="cvorname" name="vorname" type="text">
+<div id="stateDump"></div>
+<script>
+// Mini-"Framework": Single Source of Truth im State; nur input-Events aktualisieren den State;
+// eine Enforcement-Schleife setzt DOM-Werte auf den State zurueck (wie controlled components).
+const state = { cname: '', cvorname: '' };
+for (const id of ['cname', 'cvorname']) {
+  const el = document.getElementById(id);
+  el.addEventListener('input', () => { state[id] = el.value; render(); });
+}
+function render() {
+  for (const id of ['cname', 'cvorname']) {
+    const el = document.getElementById(id);
+    if (el.value !== state[id]) el.value = state[id]; // enforce
+  }
+  document.getElementById('stateDump').textContent = 'STATE: ' + JSON.stringify(state);
+}
+setInterval(render, 100); // Enforcement-Loop
+render();
+</script>
+</body>
+</html>

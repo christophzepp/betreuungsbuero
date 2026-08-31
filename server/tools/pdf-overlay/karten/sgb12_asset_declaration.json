@@ -1,0 +1,19 @@
+{
+  "elementId": "tpl_v159_sgb12_asset_declaration",
+  "reportId": "sgb12_asset_declaration",
+  "einheit": "px",
+  "bildBreite": 1240,
+  "seitenBreitePt": 595.28,
+  "seitenHoehePt": 841.89,
+  "hinweis": "Koordinaten in Bildpixeln des 1240px-Renderings (tpl_v159_sgb12_asset_declaration_s1.png); x/y = LINKE OBERE Ecke, page 0-basiert. Vorlage ist ein SCAN (Anlage 3 zum Sozialhilfe-Fragebogen, 'Erklaerung ueber Vermoegen'). Gemappt: name+address in den Kopfkasten 'Familienname, Vorname(n), Wohnanschrift'; benefit als Radiogruppe auf die drei Leistungsart-Kaestchen (Optionswerte = gedruckte Beschriftungen; weicht der Editor-Freitext ab, bleibt die Gruppe leer); assets als Multiline auf die drei Antwortlinien unter 1.1 (einziger grosser Freitextbereich der Vermoegenserklaerung, Groesse 9 auf das Linienraster ~51px abgestimmt: gemessener pdf-lib-Zeilenvorschub ~27.5px, d.h. Textzeile 1 und 3 sitzen AUF den Scanlinien 413/465, Zeile 2 und 4 schweben im Zwischenraum). NICHT gemappt: birth und reference (kein Slot fuer Geburtsdatum/Aktenzeichen auf dem Formular), start (kein Feld fuer Leistungsbeginn/Zeitraum), household/income/needs/notes (Formular fragt ausschliesslich Vermoegen ab; alle uebrigen Leerbereiche gehoeren zu konkreten Vermoegenskategorien 1.2-1.7/3.1 bzw. zur Unterschriftszeile, fachlich kein passender Bereich). Kaestchen 1.1-1.7, 2, 3.1, 4 sowie 1.4-Tabelle und Unterschrift bleiben bewusst leer.",
+  "felder": {
+    "sgb12_asset_declaration_name":    { "page": 0, "x": 170, "y": 190, "width": 480, "height": 28, "typ": "text", "groesse": 10 },
+    "sgb12_asset_declaration_address": { "page": 0, "x": 170, "y": 224, "width": 720, "height": 28, "typ": "text", "groesse": 10 },
+    "sgb12_asset_declaration_benefit": { "page": 0, "typ": "radio", "optionen": {
+      "Hilfe zum Lebensunterhalt":                        { "x": 167, "y": 274, "width": 24, "height": 27 },
+      "Grundsicherung im Alter und bei Erwerbsminderung": { "x": 479, "y": 277, "width": 24, "height": 26 },
+      "Hilfe nach Kapitel 5 bis 9 des SGB XII":           { "x": 794, "y": 277, "width": 24, "height": 26 }
+    } },
+    "sgb12_asset_declaration_assets":  { "page": 0, "x": 245, "y": 380, "width": 920, "height": 131, "typ": "text", "multiline": true, "groesse": 9 }
+  }
+}

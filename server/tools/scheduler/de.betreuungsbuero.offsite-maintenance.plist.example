@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>de.betreuungsbuero.offsite-maintenance</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>__PROJECT_ROOT__/server/tools/offsite-maintenance.sh</string>
+    <string>--repository</string>
+    <string>__REMOTE_RESTIC_REPOSITORY__</string>
+    <string>--password-file</string>
+    <string>__MAINTENANCE_PASSWORD_FILE__</string>
+    <string>--credential-env-file</string>
+    <string>__MAINTENANCE_CREDENTIAL_ENV_FILE__</string>
+    <string>--status-dir</string>
+    <string>__MAINTENANCE_STATUS_DIR__</string>
+    <string>--job-id</string>
+    <string>__BACKUP_JOB_ID__</string>
+    <string>--tag</string>
+    <string>betreuungsbuero</string>
+    <string>--keep-daily</string>
+    <string>14</string>
+    <string>--keep-monthly</string>
+    <string>12</string>
+    <string>--keep-yearly</string>
+    <string>10</string>
+  </array>
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Weekday</key>
+    <integer>1</integer>
+    <key>Hour</key>
+    <integer>4</integer>
+    <key>Minute</key>
+    <integer>30</integer>
+  </dict>
+  <key>StandardOutPath</key>
+  <string>__MAINTENANCE_LOG_FILE__</string>
+  <key>StandardErrorPath</key>
+  <string>__MAINTENANCE_LOG_FILE__</string>
+  <key>ProcessType</key>
+  <string>Background</string>
+</dict>
+</plist>

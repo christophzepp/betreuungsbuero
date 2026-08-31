@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="de">
+<head><meta charset="utf-8"><title>Antrag auf Leistungen – Testformular</title>
+<style>body{font-family:Arial;max-width:700px;margin:20px auto}fieldset{margin:14px 0}label{display:block;margin:8px 0 2px}input,select,textarea{width:100%;padding:4px}</style>
+</head>
+<body>
+<h1>Antrag auf Leistungen (Testfixture)</h1>
+
+<fieldset>
+  <legend>Angaben zur betreuten Person</legend>
+  <label for="nachname">Name</label>
+  <input id="nachname" name="nachname" type="text" autocomplete="family-name">
+  <label for="vorname">Vorname</label>
+  <input id="vorname" name="vorname" type="text" autocomplete="given-name">
+  <label for="gebdat">Geburtsdatum</label>
+  <input id="gebdat" name="geburtsdatum" type="text" placeholder="TT.MM.JJJJ">
+  <label for="strasse">Straße und Hausnummer</label>
+  <input id="strasse" name="strasse" type="text">
+  <label for="plz">Postleitzahl</label>
+  <input id="plz" name="plz" type="text">
+  <label for="ort">Wohnort</label>
+  <input id="ort" name="ort" type="text">
+  <label for="famstand">Familienstand</label>
+  <select id="famstand" name="familienstand">
+    <option value="">bitte wählen</option>
+    <option value="ledig">ledig</option>
+    <option value="verheiratet">verheiratet</option>
+    <option value="geschieden">geschieden</option>
+    <option value="verwitwet">verwitwet</option>
+  </select>
+  <label for="rvnr">Rentenversicherungsnummer</label>
+  <input id="rvnr" name="rvnr" type="text">
+  <label for="iban">IBAN</label>
+  <input id="iban" name="iban" type="text">
+</fieldset>
+
+<fieldset>
+  <legend>Angaben zum gesetzlichen Vertreter / Betreuer</legend>
+  <label for="btr_name">Name</label>
+  <input id="btr_name" name="vertreter_name" type="text">
+  <label for="btr_vorname">Vorname</label>
+  <input id="btr_vorname" name="vertreter_vorname" type="text">
+  <label for="btr_plz">Postleitzahl</label>
+  <input id="btr_plz" name="vertreter_plz" type="text">
+  <label for="btr_ort">Ort</label>
+  <input id="btr_ort" name="vertreter_ort" type="text">
+  <label for="btr_az">Aktenzeichen des Betreuungsgerichts</label>
+  <input id="btr_az" name="aktenzeichen" type="text">
+</fieldset>
+
+<fieldset>
+  <legend>Erklärungen</legend>
+  <label><input id="zustimmung" type="checkbox" style="width:auto"> Ich stimme der Datenverarbeitung zu</label>
+  <label for="bemerkung">Bemerkungen / Begründung</label>
+  <textarea id="bemerkung" name="bemerkung" rows="3"></textarea>
+</fieldset>
+
+<button id="btnZurueck" type="button">Zurück</button>
+<button id="btnWeiter" type="button">Weiter</button>
+<button id="btnAbsenden" type="submit">Antrag verbindlich absenden</button>
+</body>
+</html>

@@ -1,0 +1,77 @@
+{
+ "elementId": "tpl_v159_alg1_health_questionnaire",
+ "reportId": "alg1_health_questionnaire",
+ "einheit": "px",
+ "bildBreite": 1240,
+ "seitenBreitePt": 597.6,
+ "seitenHoehePt": 841.68,
+ "hinweis": "Koordinaten in Bildpixeln der 1240px-Renderings (tpl_v159_alg1_health_questionnaire_s1/s3.png); x/y = LINKE OBERE Ecke, page 0-basiert. Die Vorlage ist ein bereits teilausgefuellter Scan (AM 6-AeD Gesundheitsfragebogen, S.1-6 Fragebogen, S.7-12 Schweigepflichtentbindungen). Gemappt sind nur die drei Freitexte, deren Antwortbereiche im Scan noch leer sind: household -> S.1 Frage 1 Leerbereich unter der Beschwerden-Antwortzeile; assets -> S.1 Frage 1 Leerbereich unter 'Bei welchen Arbeiten...'; income -> S.3 Frage 4 leerer Arzt-Slot a), einzeiliges Feld direkt AUF der Linie 'Vorname, Name der Aerztin/des Arztes' (einzeilig, weil die Quartz/pdf-lib-Darstellung einzeilige Felder automatisch auf Feldbreite verkleinert und so den ganzen Wert zeigt; Multiline haette hier nur 1 sichtbare Zeile und wuerde lange Werte abschneiden). NICHT gemappt: name/birth/address/reference (Kundendaten-Kasten S.1 und alle Ich,/wohnhaft-in-Zeilen S.7-12 sind im Scan bereits ausgefuellt, Overlay wuerde ueberdrucken); benefit und start (das Formular hat kein Feld fuer beantragte Leistung/Leistungsbeginn); needs und notes (kein passender Freibereich - alle leeren Zonen gehoeren zu konkreten anderen gedruckten Fragen, z. B. 'Falls Sie noch nie beruflich taetig waren'). Alle uebrigen Detailfragen bleiben bewusst leer (Kuratierung).",
+ "felder": {
+  "alg1_health_questionnaire_household": {
+   "page": 0,
+   "x": 205,
+   "y": 1098,
+   "width": 880,
+   "height": 80,
+   "typ": "text",
+   "multiline": true,
+   "groesse": 9
+  },
+  "alg1_health_questionnaire_assets": {
+   "page": 0,
+   "x": 205,
+   "y": 1253,
+   "width": 880,
+   "height": 75,
+   "typ": "text",
+   "multiline": true,
+   "groesse": 9
+  },
+  "alg1_health_questionnaire_income": {
+   "page": 2,
+   "x": 248,
+   "y": 291,
+   "width": 680,
+   "height": 26,
+   "typ": "text",
+   "groesse": 9
+  },
+  "alg1_health_questionnaire_name": {
+   "page": 0,
+   "x": 140,
+   "y": 602,
+   "width": 650,
+   "height": 26,
+   "typ": "text",
+   "groesse": 10
+  },
+  "alg1_health_questionnaire_birth": {
+   "page": 0,
+   "x": 140,
+   "y": 655,
+   "width": 400,
+   "height": 26,
+   "typ": "text",
+   "groesse": 10,
+   "transform": "date"
+  },
+  "alg1_health_questionnaire_address": {
+   "page": 0,
+   "x": 140,
+   "y": 709,
+   "width": 650,
+   "height": 26,
+   "typ": "text",
+   "groesse": 10
+  },
+  "alg1_health_questionnaire_reference": {
+   "page": 0,
+   "x": 140,
+   "y": 761,
+   "width": 650,
+   "height": 26,
+   "typ": "text",
+   "groesse": 10
+  }
+ }
+}

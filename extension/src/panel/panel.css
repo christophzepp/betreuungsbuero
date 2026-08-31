@@ -1,0 +1,152 @@
+/* Panel-Styles: kompakte, an die App angelehnte Optik (Blau #1f4e78, klare Karten). */
+* { box-sizing: border-box; }
+body { margin: 0; font: 13px/1.45 -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: #1c2b36; background: #f4f7fa; }
+header { display: flex; flex-direction: column; gap: 7px; padding: 10px 12px; background: #1f4e78; color: #fff; }
+.hrow { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.hrow select { flex: 1; min-width: 0; }
+header .hint { color: rgba(255,255,255,.78); font-size: 11.5px; }
+header button.icon { background: rgba(255,255,255,.16); border-color: transparent; color: #fff; }
+h1 { font-size: 14px; margin: 0; font-weight: 700; }
+h2 { font-size: 12.5px; margin: 0 0 6px; color: #1f4e78; text-transform: uppercase; letter-spacing: .04em; }
+section { background: #fff; border: 1px solid #d7e0e8; border-radius: 8px; margin: 8px; padding: 10px; }
+footer { padding: 6px 12px 12px; font-size: 12px; }
+footer a { color: #1f4e78; }
+.hidden { display: none !important; }
+.row { display: flex; gap: 6px; align-items: center; margin: 6px 0; flex-wrap: nowrap; }
+.row.wrap { flex-wrap: wrap; }
+.row.small { font-size: 12px; gap: 8px; }
+.hint { color: #5b7284; font-size: 12px; }
+.conn { font-size: 11px; padding: 3px 8px; border-radius: 10px; background: rgba(255,255,255,.15); white-space: nowrap; }
+.conn.ok { background: #2e7d32; }
+.conn.err { background: #b3261e; }
+.banner { margin: 8px; padding: 8px 10px; border-radius: 8px; background: #fff3cd; border: 1px solid #e0c96b; font-size: 12px; }
+.banner.warn { background: #fdecea; border-color: #d9a09a; }
+
+button { font: inherit; border-radius: 7px; border: 1px solid #c9d3dc; background: #eef4f9; color: #1c2b36; padding: 6px 10px; cursor: pointer; }
+button:hover { filter: brightness(.97); }
+button.primary { background: #1f4e78; border-color: #1f4e78; color: #fff; font-weight: 600; }
+button.light { background: #eef4f9; }
+button.danger { background: #b3261e; border-color: #b3261e; color: #fff; font-weight: 600; }
+button.danger-ghost { background: #fff; border-color: #d9a09a; color: #b3261e; }
+button.icon { padding: 6px 8px; }
+button:disabled { opacity: .5; cursor: default; }
+select, input[type="text"], input[type="number"], textarea { font: inherit; border: 1px solid #c9d3dc; border-radius: 7px; padding: 6px 8px; background: #fff; width: 100%; }
+.row select, .row input[type="text"] { flex: 1 1 auto; min-width: 0; }
+textarea { width: 100%; resize: vertical; }
+.checkline { display: flex; gap: 6px; align-items: center; font-size: 12px; }
+.checkline input { width: auto; }
+.consent { color: #8a5a00; }
+
+.reviewlist { max-height: 320px; overflow-y: auto; border: 1px solid #e3eaf0; border-radius: 7px; }
+.rev { display: grid; grid-template-columns: 18px 1fr; gap: 6px; padding: 6px 8px; border-bottom: 1px solid #eef2f6; align-items: start; }
+.rev:last-child { border-bottom: none; }
+.rev.off { opacity: .55; }
+.rev .fl { font-weight: 600; }
+.rev .kv { font-size: 12px; color: #34505f; word-break: break-word; }
+.rev .meta { font-size: 11px; color: #7c93a3; display: flex; gap: 6px; flex-wrap: wrap; }
+.badge { display: inline-block; border-radius: 8px; padding: 0 6px; font-size: 10.5px; line-height: 16px; background: #e8eef4; color: #33536b; }
+.badge.heuristik { background: #e8eef4; }
+.badge.profil { background: #e2f3e5; color: #1d5c27; }
+.badge.ki { background: #efe6f7; color: #5b2d83; }
+.badge.g-betreuer_buero { background: #fdf0d7; color: #7a5400; }
+.badge.g-betreute_person { background: #ddebf7; color: #1f4e78; }
+.badge.conf-low { background: #fdecea; color: #8f2b23; }
+
+.actionbar { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.actionbar button { background: #fff8e6; border-color: #e0c96b; }
+
+.keylist { max-height: 180px; overflow-y: auto; border: 1px solid #e3eaf0; border-radius: 7px; margin-top: 4px; }
+.keylist div { padding: 5px 8px; cursor: pointer; border-bottom: 1px solid #f0f4f7; font-size: 12px; }
+.keylist div:hover { background: #eef4f9; }
+.keylist .v { color: #7c93a3; }
+.copyrow { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.copyrow .v { color: #33536b; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 55%; }
+.copyrow.copied { background: #e2f3e5; }
+.copyrow.copied .v { color: #1d5c27; }
+.filelist { font-size: 12px; margin-top: 4px; }
+.fileitem { display: flex; align-items: center; gap: 8px; padding: 4px 6px; border-bottom: 1px solid #eef2f6; }
+.fileitem .fn { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fileitem .fmeta { color: #7c93a3; white-space: nowrap; font-size: 11px; }
+/* padding:0 zwingend - die globale button-Regel (6px 10px) sprengt sonst die feste 20px-Breite
+   und drueckt das Icon aus der Mitte (Anzeigebug 2026-07-18). Pin (in Ablage speichern) blau,
+   nur Entfernen/Loeschen rot. */
+.filex { border: none; padding: 0; display: inline-flex; align-items: center; justify-content: center; background: #e6bcbc; color: #7a1f1f; border-radius: 4px; width: 20px; height: 20px; font-size: 12px; line-height: 1; cursor: pointer; flex: 0 0 auto; }
+.filex[data-vault] { background: #dbe7f3; color: #1f4e78; }
+#aiFileList { margin: 4px 0; }
+#aiFileList .checkline { padding: 2px 0; }
+.picked { background: #eef4f9; border: 1px dashed #9db8cc; border-radius: 7px; padding: 6px 8px; font-size: 12px; margin: 6px 0; }
+.trainlist { font-size: 12px; margin: 6px 0; }
+.trainlist .t { display: flex; justify-content: space-between; gap: 6px; padding: 4px 6px; border-bottom: 1px solid #eef2f6; }
+.trainlist .t button { padding: 1px 7px; font-size: 11px; }
+
+.agentlog { max-height: 220px; overflow-y: auto; font-size: 11.5px; background: #10222f; color: #cfe3f0; border-radius: 7px; padding: 6px 8px; margin-top: 6px; white-space: pre-wrap; }
+.agentlog .err { color: #ff9d94; }
+.agentlog .act { color: #ffe28a; }
+
+.toast { position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); background: #1c2b36; color: #fff; padding: 8px 14px; border-radius: 8px; font-size: 12px; max-width: 92%; z-index: 99; box-shadow: 0 4px 14px rgba(0,0,0,.3); }
+
+/* Portal-Liste (2026-07-17), seit 2026-07-18 nach Traeger gruppiert */
+.portallist{display:flex;flex-direction:column;gap:6px}
+/* KEIN inneres Scrollfeld mehr (Nutzerbug 2026-07-18: liess sich nicht scrollen) - die Liste
+   waechst natuerlich mit, gescrollt wird das Panel selbst; Gruppen sind ohnehin zuklappbar. */
+.portalscroll{display:flex;flex-direction:column;gap:6px}
+.formsbar{align-items:center}
+.formsbar input{flex:1;min-width:0}
+.pgroup{border:1px solid #cfdbe6;border-radius:8px;overflow:hidden;background:#fff}
+.pgroup-head{display:flex;align-items:center;gap:7px;width:100%;border:none;border-radius:0;background:#eef3f8;padding:7px 10px;cursor:pointer;font-size:12.5px;color:#1f4e78;text-align:left}
+.pgroup-head .hint{margin-left:auto;font-size:11.5px}
+.pgroup-head .pg-caret{font-size:11px;color:#5b7284}
+.pgroup-body{display:flex;flex-direction:column;gap:6px;padding:8px}
+.portal-row{display:flex;align-items:center;gap:8px;border:1px solid var(--line,#cdd7e0);border-radius:8px;padding:7px 10px}
+.portal-row.open{border-bottom-left-radius:0;border-bottom-right-radius:0}
+.portal-row .portal-main{flex:1;min-width:0;display:flex;align-items:center;gap:6px}
+.portal-row .portal-main>div{min-width:0;display:flex;flex-direction:column;gap:1px}
+.portal-row .portal-main .hint{margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.portal-toggle{border:none;background:none;cursor:pointer;font-size:13px;padding:2px 4px;color:var(--muted,#5b6b7a)}
+.portal-details{border:1px solid var(--line,#cdd7e0);border-top:none;border-radius:0 0 8px 8px;padding:6px 10px 8px;margin-top:-6px;display:flex;flex-direction:column;gap:4px;background:var(--bg2,#f6f8fa)}
+.portal-details .hint{margin:0;white-space:normal}
+.portal-chips{display:flex;flex-wrap:wrap;gap:4px}
+
+/* Seiten-Chips (2026-07-17): erkannte Formularseiten zum Hin- und Herwechseln */
+.pagechips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.pagechip{border:1px solid var(--line,#cdd7e0);background:#fff;border-radius:20px;padding:3px 12px;font-size:12px;cursor:pointer;color:#33536b}
+.pagechip:hover{background:#eef4f9}
+.pagechip.active{background:#1f4e78;border-color:#1f4e78;color:#fff;font-weight:600}
+
+/* ===== Panel-Tabs + Aktionsleiste (Umbau 2026-07-18: Assistent | KI | Training) ===== */
+.ptabs{display:flex;gap:4px;margin:10px 10px 0;border-bottom:2px solid #d7dee6}
+.ptabs button{border:1px solid #d7dee6;border-bottom:none;background:#eef3f8;border-radius:8px 8px 0 0;padding:7px 14px;cursor:pointer;font-size:13px;color:#3c556b}
+.ptabs button.active{background:linear-gradient(90deg,#12314e,#1f4e78);color:#fff;font-weight:700;border-color:#1f4e78}
+body[data-tab] section[data-ptab],body[data-tab] [data-ptab]{display:none}
+body[data-tab="assistent"] [data-ptab="assistent"]:not(.hidden){display:block}
+body[data-tab="ki"] [data-ptab="ki"]:not(.hidden){display:block}
+body[data-tab="training"] [data-ptab="training"]:not(.hidden){display:block}
+/* Profil-Sektion (Name + "veraltet"-Warnung) auch waehrend des Trainings zeigen - sie traegt
+   data-ptab="assistent" und waere im Training-Tab sonst trotz remove('hidden') unsichtbar. */
+body[data-tab="training"] #secProfile:not(.hidden){display:block}
+.actiongrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 10px 0;padding:0}
+body[data-tab="assistent"] #actionGrid{display:grid}
+body[data-tab="ki"] #kiGrid{display:grid}
+body[data-tab="training"] #trainGrid{display:grid}
+.actiongrid button{aspect-ratio:1.25;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;border:1px solid #16324a;border-radius:10px;background:linear-gradient(160deg,#12314e,#1f4e78);color:#fff;font-size:20px;cursor:pointer;box-shadow:0 2px 6px rgba(18,49,78,.18);transition:transform .08s,box-shadow .08s}
+.actiongrid button svg{width:26px;height:26px;flex:0 0 auto}
+.actiongrid button span{font-size:10.5px;font-weight:700;letter-spacing:.01em}
+.actiongrid button:hover{transform:translateY(-1px);box-shadow:0 4px 10px rgba(18,49,78,.28)}
+.actiongrid button:disabled{opacity:.45;cursor:default;transform:none;box-shadow:none}
+
+/* Leerzustand-Anleitung (ohne gewaehlten Fall) */
+.introlist{margin:4px 0 6px 18px;padding:0;font-size:12.5px;display:flex;flex-direction:column;gap:4px}
+
+/* Werkzeug-Karten (Kopieren/Dateien/Formulare): per Klick auf die Ueberschrift auf-/zuklappbar */
+.tool > h2{cursor:pointer;user-select:none;display:flex;align-items:center;gap:6px}
+.tool > h2::before{content:'▾';font-size:10px;color:#7c93a3}
+.tool.closed > h2::before{content:'▸'}
+.tool.closed > h2{margin:0}
+.tool.closed > .tool-body{display:none}
+
+/* Selten genutzte Scan-Optionen eingeklappt */
+.scanopts{margin:6px 0 2px}
+.scanopts summary{cursor:pointer;font-size:12px;color:#5b7284;list-style:none;user-select:none}
+.scanopts summary::-webkit-details-marker{display:none}
+.scanopts summary::before{content:'▸ '}
+.scanopts[open] summary::before{content:'▾ '}

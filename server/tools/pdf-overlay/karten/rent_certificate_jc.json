@@ -1,0 +1,20 @@
+{
+  "elementId": "tpl_v159_rent_certificate_jc",
+  "reportId": "rent_certificate_jc",
+  "einheit": "px",
+  "bildBreite": 1240,
+  "seitenBreitePt": 595.28,
+  "seitenHoehePt": 841.89,
+  "hinweis": "Koordinaten in Bildpixeln der 1240px-Renderings (tpl_v159_rent_certificate_jc_s1/s2.png); x/y = LINKE OBERE Ecke, page 0-basiert. Nicht gemappt: birth und reference (das JC-Formular hat keinen Slot fuer Geburtsdatum/Aktenzeichen), address (das Formular kennt nur die Wohnungsanschrift-Zeile, die property belegt; bei einer Mietbescheinigung identisch mit der Anschrift der Person) und notes (kein Freitextbereich; Zeile 11 'Sonstige Wohnkosten' gehoert zu einer konkreten Betragsfrage). basic steht wie beim Pilot auf der Zeile 'Die Gesamtmiete betraegt ... monatlich ___ EUR' - einziger Miet-Slot des Formulars; Betreuer prueft, ob NK/Heizung enthalten sind. landlord steht auf der Name-Zeile der Vermieter-Einwilligungsbox auf Seite 2. Alle Ankreuzkaesten (Geschoss, moebliert, Mieterstatus, nein/ja, Beheizung, Warmwasser), 'betraegt seit', bezugsfertig/Baujahr, Kuechen/Baeder, Personenzahl, Datum und Unterschriften bleiben bewusst leer (fuellt Vermieter/Behoerde).",
+  "felder": {
+    "rent_certificate_jc_name":     { "page": 0, "x": 310, "y": 164, "width": 600, "height": 27, "typ": "text", "groesse": 10 },
+    "rent_certificate_jc_property": { "page": 0, "x": 310, "y": 216, "width": 600, "height": 27, "typ": "text", "groesse": 10 },
+    "rent_certificate_jc_basic":    { "page": 0, "x": 950, "y": 431, "width": 140, "height": 23, "typ": "text", "groesse": 9, "transform": "money" },
+    "rent_certificate_jc_service":  { "page": 0, "x": 986, "y": 509, "width": 80,  "height": 21, "typ": "text", "groesse": 8, "transform": "money" },
+    "rent_certificate_jc_heating":  { "page": 0, "x": 986, "y": 584, "width": 80,  "height": 21, "typ": "text", "groesse": 8, "transform": "money" },
+    "rent_certificate_jc_start":    { "page": 0, "x": 568, "y": 1018, "width": 150, "height": 23, "typ": "text", "groesse": 9, "transform": "date" },
+    "rent_certificate_jc_size":     { "page": 0, "x": 320, "y": 1069, "width": 150, "height": 22, "typ": "text", "groesse": 9 },
+    "rent_certificate_jc_rooms":    { "page": 0, "x": 864, "y": 1071, "width": 115, "height": 22, "typ": "text", "groesse": 9 },
+    "rent_certificate_jc_landlord": { "page": 1, "x": 124, "y": 773, "width": 430, "height": 26, "typ": "text", "groesse": 9 }
+  }
+}

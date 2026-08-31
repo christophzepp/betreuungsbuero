@@ -1,0 +1,127 @@
+{
+  "hinweis": "Kuratierte Stand-Angaben und Belegquellen, ermittelt durch Auslesen der PDFs selbst (Fußzeilenaufdruck, Formularnummer). Ein leeres Stand-Feld ist zweideutig: es kann heißen 'noch nicht geprüft' oder 'der Vordruck druckt keinen Stand auf'. Deshalb wird die Auskunft ausformuliert statt leer gelassen.",
+  "broadcast_registration": {
+    "templateDate": "01/2017",
+    "sourceUrl": "https://www.rundfunkbeitrag.de/pxy/assets/f7c918d184e4fd063a590f8ccba61506953fa3bf/Buergerinnen_und_Buerger_Neuanmeldung_Wohnung_0103.pdf",
+    "sourceLabel": "Formular 0103 des ARD ZDF Deutschlandradio Beitragsservice",
+    "beleg": "Fußzeilenaufdruck im PDF: '0103   01.2017'. Die Ziffernfolge im Dateinamen ist die Formularnummer, nicht der Stand."
+  },
+  "broadcast_change_notice": {
+    "templateDate": "01/2017",
+    "sourceUrl": "https://www.rundfunkbeitrag.de/pxy/assets/61fcc65e195d128683fc0908127b9cb5c3121ffe/Buergerinnen_und_Buerger_Kontoaenderung_0104.pdf",
+    "sourceLabel": "Formular 0104 des ARD ZDF Deutschlandradio Beitragsservice",
+    "beleg": "Fußzeilenaufdruck im PDF: '0104   01.2017'."
+  },
+  "broadcast_exemption_application": {
+    "templateDate": "kein Vordruck mehr – nur noch als Online-Formular",
+    "sourceUrl": "https://www.rundfunkbeitrag.de/buergerinnen-und-buerger/formulare/befreiung-oder-ermaessigung-beantragen",
+    "sourceLabel": "Online-Antrag des ARD ZDF Deutschlandradio Beitragsservice",
+    "beleg": "Der Beitragsservice bietet den Befreiungsantrag nicht mehr als PDF an. Die letzte gedruckte Fassung trug '7420   11.2013' und kursiert noch auf Kommunalseiten, ist aber nicht die geltende."
+  },
+  "naturalization_application": {
+    "templateDate": "regional unterschiedlich – kein bundesweiter Vordruck",
+    "sourceUrl": "https://bva.bund.de/DE/Services/Buerger/Ausweis-Dokumente-Recht/Staatsangehoerigkeit/Service/Zustaendigkeit/Zustaendigkeit_node.html",
+    "sourceLabel": "Zuständigkeitsübersicht des Bundesverwaltungsamts",
+    "beleg": "Für § 10 StAG gibt es keinen Bundesvordruck. NRW schreibt einen Landesvordruck vor (Stand 11.07.2024), Hessen 06/2024, Saarland 09/2024; Bayern, Baden-Württemberg und Brandenburg haben gar keinen. Kommunale Stände reichen von 2004 bis 2025."
+  },
+  "sgb12_initial_application": {
+    "templateDate": "regional unterschiedlich – bundesweites Muster: 27.04.2023",
+    "sourceUrl": "https://www.deutscher-verein.de/fileadmin/user_upload/dv/pdfs/Antraege/antragsformular_iv_kapitel_sgb_xii.pdf",
+    "sourceLabel": "Freiwilliges Muster des Deutschen Vereins für öffentliche und private Fürsorge",
+    "beleg": "Kein gesetzlicher Bundesvordruck. Das Muster des Deutschen Vereins trägt 'Stand: 27.04.2023'; die Vorfassung 26.04.2021 ist bei Trägern weiter im Umlauf, Berlin nutzt 'Soz III B 4 (05/13)'."
+  },
+  "sgb12_continuation_application": {
+    "templateDate": "regional unterschiedlich – bundesweites Muster: 27.04.2023",
+    "sourceUrl": "https://www.deutscher-verein.de/fileadmin/user_upload/dv/pdfs/Antraege/wba_sgb_xii_grundsicherung.pdf",
+    "sourceLabel": "Freiwilliges Muster des Deutschen Vereins für öffentliche und private Fürsorge",
+    "beleg": "Muster mit 'Stand: 27.04.2023', von Dresden übernommen. Andere Träger nutzen Eigenentwicklungen: Main-Kinzig-Kreis '01-011 08/2019', Berlin 'Soz III B 4.1 (04/14)', Wiesbaden ohne Stand."
+  },
+  "sgb12_social_assistance_application": {
+    "templateDate": "regional unterschiedlich – kein einheitlicher Stand",
+    "sourceUrl": "https://www.lkt-nrw.de/media/12801/antragsformular-sozialhilfe-sgb-xii-stand-2021.pdf",
+    "sourceLabel": "Muster von Landkreistag und Städtetag Nordrhein-Westfalen",
+    "beleg": "Belegte Stände streuen stark: NRW-Muster 02/2021, LRA München 11/2023, Bezirk Oberfranken 01.08.2026, LK Ludwigsburg Januar 2018, Berlin 'Soz III B 1 (01.14)'. Bezirk Oberbayern druckt gar keinen Stand."
+  },
+  "sgb12_asset_declaration": {
+    "templateDate": "regional unterschiedlich – meist ohne Standangabe",
+    "sourceUrl": "https://www.walldorf.de/fileadmin/import/formulare/Vermoegenserklaerung_zum_Antrag_auf_SGB_XII_Leistungen.pdf",
+    "sourceLabel": "Beispielvordruck der Stadt Walldorf",
+    "beleg": "Weder Bundes- noch Landesmuster. Von fünf geprüften Vermögenserklärungen trug nur eine überhaupt einen Aufdruck ('KFHD2003001 – Stand 03_2020'); auch der Titel variiert."
+  },
+  "sgb12_social_assistance_short": {
+    "templateDate": "12/2006 – Kurzantrag gibt es nur in Berlin",
+    "sourceUrl": "https://www.berlin.de/formularserver/formular.php?51254&typ=.pdf",
+    "sourceLabel": "Verkürzter Antrag auf Sozialhilfe, Antragsbogen B, Land Berlin",
+    "beleg": "Aufdruck 'Soz III B 2 (12/06)', seither unverändert. Außerhalb Berlins wurde in keinem Formularkatalog ein SGB-XII-Kurzantrag gefunden."
+  },
+  "sgb9_initial_application": {
+    "templateDate": "regional unterschiedlich – kein einheitlicher Stand",
+    "sourceUrl": "https://www.gesetze-im-internet.de/sgb_9_2018/__94.html",
+    "sourceLabel": "§ 94 SGB IX – die Länder bestimmen die zuständigen Träger",
+    "beleg": "§ 108 SGB IX schreibt nur 'auf Antrag' vor, keine Form. LWL, LWV Hessen, Bezirk Oberbayern, Bremen und Niedersachsen drucken keinen Stand; KSV Sachsen 26.08.2020, Berlin 'Version 1.0 – Stand: 05.2021'."
+  },
+  "sgb9_confidentiality_release": {
+    "templateDate": "regional unterschiedlich – kein einheitlicher Stand",
+    "sourceUrl": "https://www.bagues.de/de/veroeffentlichungen/orientierungshilfen-und-empfehlungen/",
+    "sourceLabel": "Veröffentlichungen der Bundesarbeitsgemeinschaft der überörtlichen Träger der Sozialhilfe",
+    "beleg": "Kein Muster der BAGüS für die Eingliederungshilfe (39 Veröffentlichungen geprüft). Reale Vordrucke: Mainz '50_0011 | Stand: 08.7.2024', Wiesbaden 17.02.2025, bayerische Bezirke 31.01.2024; LVR, LWV Hessen und Hamburg ohne Stand."
+  },
+  "discharge": {
+    "templateDate": "kein Stand aufgedruckt",
+    "template": "F 292 Entlastungserklärung.pdf",
+    "sourceLabel": "Landeseinheitlicher Vordruck F 292 der Justiz Mecklenburg-Vorpommern",
+    "beleg": "Das PDF druckt keinen Stand auf; auch die Formularseite der MV-Justiz weist keinen aus. Die Zahl 26104 aus dem bisherigen Dateinamen ist keine amtliche Formularnummer – die amtliche Bezeichnung ist F 292."
+  },
+  "housing_benefit_application": {
+    "templateDate": "kein Stand aufgedruckt",
+    "sourceUrl": "https://mkbwk.rlp.de/fileadmin/07/Bilder/Themen/Bauen_und_Wohnen/Wohngeld/Antrag_auf_Mietzuschuss.pdf",
+    "sourceLabel": "Antrag auf Mietzuschuss des Ministeriums für Klimaschutz, Bauen und Wohnen Rheinland-Pfalz",
+    "beleg": "Kein Aufdruck im PDF. Die bisher hinterlegte Adresse bei fm.rlp.de liefert 404 – die Zuständigkeit ist auf mkbwk.rlp.de übergegangen. Gegengeprüft am 24.08.2026: die eingebettete Fassung ist mit dem aktuellen Landesvordruck byte-identisch (11 Seiten, 408 Formularfelder, SHA-256 de54aded…). Der Vordruck druckt auch quer am Seitenrand keinen Stand auf – anders als die 2015er-Fassung, die manche Kommunen noch ausliefern."
+  },
+  "housing_entitlement_application": {
+    "templateDate": "kein Stand aufgedruckt – kommunal uneinheitlich",
+    "sourceUrl": "https://mkbwk.rlp.de/fileadmin/07/Bilder/Themen/Bauen_und_Wohnen/Wohnraumfoerderung/Landesverordnungen_und_Rundschreiben_zur_sozialen_Wohnraumfoerderung/Rundschreiben_zum_Vollzug_der_Bindungen_von_gefoerdertem_Wohnraum_vom_17.04.2025_mit_Anlagen.pdf",
+    "sourceLabel": "Anlage 3.1 zum Rundschreiben des Landes Rheinland-Pfalz vom 17.04.2025",
+    "beleg": "Der Landesvordruck selbst druckt keinen Stand auf. Kommunen weichen ab: Mainz 50_0009 Stand 15.12.2025, Trier und VG Freinsheim ohne Aufdruck."
+  },
+  "rent_certificate_jc": {
+    "templateDate": "regional unterschiedlich – kein bundeseinheitlicher Vordruck",
+    "sourceUrl": "https://jobcenterdortmund.de/media/FW_6_Bescheinigung_ueber_ein_Mietangebot_FW_6_Bescheinigung_ueber_ein_Mietangebot_322b46c945_0334f49c5a.pdf",
+    "sourceLabel": "Beispielvordruck des Jobcenters Dortmund",
+    "beleg": "Die Bundesagentur hat keinen einheitlichen Vermieterbogen. Jobcenter Dortmund 01.07.2026, Köln und MainArbeit Offenbach ohne Aufdruck. Die bundesweite Anlage KDU (ba032980, 04/2026) füllt die leistungsberechtigte Person aus, nicht der Vermieter – sie ersetzt die Mietbescheinigung nicht."
+  },
+  "disability_initial_application": {
+    "templateDate": "kein Stand aufgedruckt",
+    "sourceLabel": "Erst-Antrag nach § 152 SGB IX des Landesamts für Soziales, Jugend und Versorgung Rheinland-Pfalz",
+    "beleg": "Kein Aufdruck im PDF."
+  },
+  "disability_change_application": {
+    "templateDate": "kein Stand aufgedruckt",
+    "sourceLabel": "Änderungs-Antrag nach § 152 SGB IX des Landesamts für Soziales, Jugend und Versorgung Rheinland-Pfalz",
+    "beleg": "Kein Aufdruck im PDF."
+  },
+  "drv_confidentiality_release": {
+    "templateDate": "01.07.2026",
+    "template": "R210e Erklärung und Information zum Rentenantrag.pdf",
+    "sourceUrl": "https://www.deutsche-rentenversicherung.de/SharedDocs/Formulare/DE/_pdf/R210e.html",
+    "sourceLabel": "Vordruck R210e der Deutschen Rentenversicherung, Version 22",
+    "beleg": "Die eingebettete Fassung ist NICHT R0210 (15 Seiten), sondern die vierseitige Zweitausfertigung R210e mit 2 Formularfeldern, Fußzeile 'R0210-00 (eAntrag), Version 36022'. Das PDF druckt keinen Stand auf; die Katalogseite weist Version 22, Stand 01.07.2026 aus."
+  },
+  "alg1_health_questionnaire": {
+    "templateDate": "03/2019",
+    "sourceUrl": "https://media.frag-den-staat.de/files/foi/579491/GFB_SPE_Infoblatt_BKVorlagen.pdf",
+    "sourceLabel": "Gesundheitsfragebogen AM 6-ÄD der Bundesagentur für Arbeit (über eine Informationsfreiheitsanfrage veröffentlicht)",
+    "beleg": "Aufdruck AM 6-ÄD, 03/2019. Schwache Quellenlage: die Bundesagentur bietet den Bogen nicht frei an, sondern nur im angemeldeten eService oder auf Papier. Ob dort inzwischen eine neuere Fassung läuft, ließ sich nicht prüfen."
+  },
+  "alg1_initial_application": {
+    "templateDate": "kein Stand aufgedruckt – heute nur noch als Online-Antrag",
+    "sourceUrl": "https://web.arbeitsagentur.de/alg-prod/ui/pd/",
+    "sourceLabel": "Online-Antrag auf Arbeitslosengeld der Bundesagentur für Arbeit",
+    "beleg": "Die eingebettete Fassung ist ein echter Papiervordruck der Bundesagentur (3 Seiten, geprüft) ohne Standaufdruck. Die Bundesagentur veröffentlicht ihn nicht mehr als PDF, sondern führt den Antrag online."
+  },
+  "pension_application": {
+    "templateDate": "01.07.2026",
+    "sourceLabel": "Vordruck R0100 der Deutschen Rentenversicherung, Version 35",
+    "beleg": "KORREKTUR: Die bisherige Angabe 'eingebundene Fassung 02/2025' stammte aus einer Fehldeutung. Die Fußzeile lautet 'Version 50035 - ABF-FORTAQ 2/2025'; '2/2025' ist ein Auflagenzähler, kein Monat. Beweis: R0215 trägt 'Version 09009 - AGRTAQ 2/2018 - Stand 05.12.2018'. Die Katalogseite weist Version 35, Stand 01.07.2026 aus."
+  }
+}

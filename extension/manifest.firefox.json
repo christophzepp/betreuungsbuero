@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "Betreuungsbüro Formular-Assistent",
+  "version": "0.4.9",
+  "description": "Füllt Behörden-Webformulare mit Falldaten aus dem Betreuungsbüro-Dokumentenassistenten (Fallauswahl, Prüfliste, niemals automatisches Absenden).",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "formular-assistent@betreuungsbuero.local",
+      "strict_min_version": "140.0",
+      "data_collection_permissions": {
+        "required": ["websiteContent", "personallyIdentifyingInfo"]
+      }
+    },
+    "gecko_android": {
+      "strict_min_version": "142.0"
+    }
+  },
+  "background": { "scripts": ["common/browser-shim.js", "common/api.js", "background.js"] },
+  "action": {
+    "default_title": "Formular-Assistent öffnen"
+  },
+  "sidebar_action": {
+    "default_title": "Formular-Assistent",
+    "default_panel": "panel/panel.html"
+  },
+  "options_ui": { "page": "options/options.html", "open_in_tab": true },
+  "permissions": ["storage", "scripting", "activeTab", "tabs", "contextMenus"],
+  "optional_host_permissions": ["http://*/*", "https://*/*"],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

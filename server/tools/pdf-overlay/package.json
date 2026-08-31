@@ -1,0 +1,9 @@
+{
+  "name": "pdf-overlay-werkzeug",
+  "private": true,
+  "description": "AcroForm-Overlay-Werkzeugkette (PDF-Umbauplan Phase 3): flache Originalvorlagen einmalig mit echten Formularfeldern prägen.",
+  "type": "commonjs",
+  "dependencies": {
+    "pdf-lib": "1.17.1"
+  }
+}

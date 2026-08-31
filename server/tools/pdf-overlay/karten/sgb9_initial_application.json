@@ -1,0 +1,68 @@
+{
+ "elementId": "tpl_v159_sgb9_initial_application",
+ "reportId": "sgb9_initial_application",
+ "einheit": "px",
+ "bildBreite": 1240,
+ "seitenBreitePt": 595.28,
+ "seitenHoehePt": 841.89,
+ "hinweis": "EfA-RP-Ausdruck 'Antrag auf Leistungen der Eingliederungshilfe fuer Erwachsene' (Stadtverwaltung Koblenz, 10 Seiten). Die Vorlage ist ein bereits ausgefuellter Online-Antragsausdruck: Name, Geburtsdatum und Anschrift der hilfesuchenden Person (Abschnitt 1.2, S.2/3) sowie Haushalts-, Einkommens- und Vermoegensantworten (1.7-1.9, S.6-8) stehen fest eingedruckt im Dokument - Overlay-Felder dort wuerden den Druck doppeln. Gemappt sind daher nur die beiden leeren Freitext-Antwortbereiche: needs auf 'Bitte schildern Sie Ihre aktuelle Situation ... wobei Sie Hilfe benoetigen und welche Hilfen benoetigt werden' (S.4, letzter Kasten von 1.3) und notes auf 1.12 'Sonstiges/Ergaenzende Angaben' (S.10). Nicht gemappt: name/birth/address (in 1.2 bereits eingedruckt: Familienname, Vornamen, Geburtsdatum, Strasse/Hausnummer/PLZ/Ort), reference (nur eingedruckte EfA-Vorgangsnummer, kein Feld fuer ein Betreuer-/Behoerden-Aktenzeichen), benefit (1.3 erfasst die beantragte Leistung als Auswahlkaesten; der Ausdruck traegt bereits 'Ich moechte keine spezielle Leistungsform auswaehlen: Ja' - kein Freitext-Slot; das Anliegen gehoert in den Situationskasten, der fachlich dem Bedarfsfeld needs zugeordnet ist), start (das Formular fragt keinen Leistungsbeginn/Zeitraum ab), household (1.8/1.9.1 als strukturierte Einzelfelder bereits eingedruckt; die leeren Kaesten dort sind Geburtsname/Geburtsdatum der Ehepartnerin, keine Sammel-Textarea), income (Einkommensarten als Ja/Betrag-Einzelkaesten; aktuelles Einkommen im Ausdruck bewusst mit 'keine Angaben machen: Ja' beantwortet), assets (Vermoegen ebenso mit 'keine Angaben machen: Ja' beantwortet; Freitext wuerde dem Druck widersprechen). Alle uebrigen leeren Formularkaesten (Telefon, E-Mail, Nachweis-/Anlagenfelder usw.) bleiben bewusst leer.",
+ "felder": {
+  "sgb9_initial_application_needs": {
+   "page": 3,
+   "x": 102,
+   "y": 890,
+   "width": 1030,
+   "height": 33,
+   "typ": "text",
+   "multiline": true,
+   "groesse": 8
+  },
+  "sgb9_initial_application_notes": {
+   "page": 9,
+   "x": 102,
+   "y": 148,
+   "width": 1030,
+   "height": 31,
+   "typ": "text",
+   "multiline": true,
+   "groesse": 8
+  },
+  "sgb9_initial_application_reference": {
+   "page": 0,
+   "x": 412,
+   "y": 808,
+   "width": 480,
+   "height": 28,
+   "typ": "text",
+   "groesse": 9
+  },
+  "sgb9_initial_application_name": {
+   "page": 1,
+   "x": 102,
+   "y": 1452,
+   "width": 1030,
+   "height": 30,
+   "typ": "text",
+   "groesse": 9
+  },
+  "sgb9_initial_application_birth": {
+   "page": 2,
+   "x": 102,
+   "y": 246,
+   "width": 360,
+   "height": 30,
+   "typ": "text",
+   "groesse": 9,
+   "transform": "date"
+  },
+  "sgb9_initial_application_address": {
+   "page": 2,
+   "x": 102,
+   "y": 804,
+   "width": 1030,
+   "height": 30,
+   "typ": "text",
+   "groesse": 9
+  }
+ }
+}

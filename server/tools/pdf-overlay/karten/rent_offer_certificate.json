@@ -1,0 +1,21 @@
+{
+  "elementId": "tpl_v159_rent_offer_certificate",
+  "reportId": "rent_offer_certificate",
+  "einheit": "px",
+  "bildBreite": 1240,
+  "seitenBreitePt": 595.28,
+  "seitenHoehePt": 841.89,
+  "hinweis": "Koordinaten in Bildpixeln der 1240px-Renderings (tpl_v159_rent_offer_certificate_s1/s2.png); x/y = LINKE OBERE Ecke, page 0-basiert. Nicht gemappt: birth und reference (das Vermieter-Formular hat keinen Slot fuer Geburtsdatum/Aktenzeichen) sowie notes (kein freies Bemerkungsfeld; alle Leerzeilen des Formulars gehoeren zu konkreten gedruckten Fragen). Ankreuzfeld Mietangebotsbescheinigung, Anzahl Personen, Gesamtmiete, seit-Datum und alle Ja/Nein-Kaesten bleiben bewusst leer (fuellt Vermieter/Behoerde).",
+  "felder": {
+    "rent_offer_certificate_landlord": { "page": 0, "x": 156, "y": 142, "width": 870, "height": 60, "typ": "text", "multiline": true, "groesse": 9 },
+    "rent_offer_certificate_name":     { "page": 0, "x": 158, "y": 402, "width": 550, "height": 34, "typ": "text", "groesse": 10 },
+    "rent_offer_certificate_address":  { "page": 0, "x": 158, "y": 578, "width": 930, "height": 38, "typ": "text", "groesse": 10 },
+    "rent_offer_certificate_property": { "page": 0, "x": 158, "y": 672, "width": 615, "height": 38, "typ": "text", "groesse": 10 },
+    "rent_offer_certificate_basic":    { "page": 0, "x": 902, "y": 894, "width": 135, "height": 26, "typ": "text", "groesse": 9, "transform": "money" },
+    "rent_offer_certificate_service":  { "page": 0, "x": 902, "y": 931, "width": 135, "height": 26, "typ": "text", "groesse": 9, "transform": "money" },
+    "rent_offer_certificate_heating":  { "page": 0, "x": 902, "y": 967, "width": 135, "height": 26, "typ": "text", "groesse": 9, "transform": "money" },
+    "rent_offer_certificate_start":    { "page": 1, "x": 153, "y": 280, "width": 134, "height": 26, "typ": "text", "groesse": 8.5, "transform": "date" },
+    "rent_offer_certificate_size":     { "page": 1, "x": 300, "y": 278, "width": 70, "height": 26, "typ": "text", "groesse": 9 },
+    "rent_offer_certificate_rooms":    { "page": 1, "x": 674, "y": 278, "width": 100, "height": 26, "typ": "text", "groesse": 9 }
+  }
+}

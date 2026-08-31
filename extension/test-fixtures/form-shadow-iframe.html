@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="de">
+<head><meta charset="utf-8"><title>Shadow-DOM + iframe Testformular</title></head>
+<body>
+<h1>Shadow-DOM + same-origin iframe (Fixture)</h1>
+
+<div id="shadowHost"></div>
+<script>
+const root = document.getElementById('shadowHost').attachShadow({ mode: 'open' });
+root.innerHTML = `
+  <h2>Angaben zur betreuten Person (im Shadow DOM)</h2>
+  <label for="sname">Familienname</label>
+  <input id="sname" name="shadow_nachname" type="text">
+  <label for="sgeb">Geburtsdatum</label>
+  <input id="sgeb" name="shadow_geburtsdatum" type="text" placeholder="TT.MM.JJJJ">
+`;
+</script>
+
+<iframe id="innerFrame" style="width:100%;height:160px;border:1px solid #999" srcdoc='
+  <h2>Bankverbindung (im iframe)</h2>
+  <label for="fiban">IBAN</label>
+  <input id="fiban" name="iban" type="text" style="width:90%">
+'></iframe>
+</body>
+</html>

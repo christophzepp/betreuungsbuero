@@ -1,0 +1,15 @@
+{
+  "elementId": "tpl_v159_broadcast_exemption_application",
+  "reportId": "broadcast_exemption_application",
+  "einheit": "px",
+  "bildBreite": 1240,
+  "seitenBreitePt": 595.276,
+  "seitenHoehePt": 841.89,
+  "hinweis": "Rundfunkbeitrag-Befreiungs-/Ermaessigungsantrag (7420, 11.2013). Nur Seite 2 (page=1) traegt Formularfelder; Seiten 1/3/4 sind reine Informationsseiten. Koordinaten in Bildpixeln des 1240px-Renderings, x/y = linke obere Ecke. Nicht gemappt: reference (kein Feld fuer Betreuer-Aktenzeichen auf dem Behoerdenformular), reason (Formular verlangt nur die Grund-NUMMER in 3er-Kaestchen plus Kategorie-Kaestchen, Schema-Feld ist Freitext-Textarea, keine 1:1-Zuordnung), period (kein Zeitraum-Feld; 'Anmeldung zum' meint das Anmeldedatum der Wohnung, nicht den Befreiungszeitraum), evidence (Nachweis-Kaestchen sind 'Nur von der Behoerde auszufuellen'), notes (kein Freitextbereich vorhanden). Familienstand/Anrede/Grund-Kaestchen bleiben leer, da kein Schema-Select/Ja-Nein-Feld zuordenbar ist.",
+  "felder": {
+    "broadcast_exemption_application_number": { "page": 1, "x": 133, "y": 283, "width": 440, "height": 38, "typ": "text", "groesse": 10 },
+    "broadcast_exemption_application_name":   { "page": 1, "x": 76,  "y": 446, "width": 788, "height": 40, "typ": "text", "groesse": 10 },
+    "broadcast_exemption_application_birth":  { "page": 1, "x": 665, "y": 540, "width": 228, "height": 40, "typ": "text", "groesse": 9, "transform": "date" },
+    "broadcast_exemption_application_address": { "page": 1, "x": 76, "y": 729, "width": 788, "height": 40, "typ": "text", "groesse": 9.5 }
+  }
+}

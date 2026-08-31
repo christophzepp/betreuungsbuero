@@ -1,0 +1,15 @@
+{
+  "elementId": "tpl_v159_alg1_initial_application",
+  "reportId": "alg1_initial_application",
+  "einheit": "px",
+  "bildBreite": 1240,
+  "seitenBreitePt": 597.6,
+  "seitenHoehePt": 841.68,
+  "hinweis": "ERWEITERUNG nach Weissung (regionen/alg1_initial_application.regionen.json): diese Felder bekommen durch die Bereinigung einen FREIEN Slot und ergaenzen die bestehende Karte (dort bisher nur notes). name -> Zeile 'Familienname' S.1 (empfohlen: 'Nachname, Vorname', die Vorname-Zeile y458 bleibt frei); address -> Doppelslot Strasse (y542)/PLZ-Wohnort (y600) als multiline (Zeile 1 Strasse, Zeile 2 PLZ Ort); reference -> Kunden-Nr. S.1 (die mitgeweissten Kunden-Nr.-Koepfe auf Blatt 2 y30 x628 und Blatt 3 y44 x648 bleiben leer, da das Schema nur ein reference-Feld hat); start -> Datumsslot unter dem gedruckten 'mit Wirkung zum' S.1 (Arbeitslosmeldungs-Slot y280 daneben bleibt leer, kein zweites Schema-Datum). Weiterhin NICHT gemappt trotz freier Flaechen: benefit (Text-Feld, aber nur geweisstes Ankreuz-Kaestchen frei), birth (nur Kind-Geburtsdatum 5b frei, nicht das der antragstellenden Person), household (5b-Slots sind fragen-spezifisch), income (3a-Tabelle/3d/Abschnitt-4-Slots sind fragen-spezifisch), assets, needs (unveraendert kein Slot).",
+  "felder": {
+    "alg1_initial_application_name":      { "page": 0, "x": 285, "y": 424, "width": 235, "height": 26, "typ": "text", "groesse": 10 },
+    "alg1_initial_application_address":   { "page": 0, "x": 285, "y": 542, "width": 235, "height": 88, "typ": "text", "multiline": true, "groesse": 9 },
+    "alg1_initial_application_reference": { "page": 0, "x": 285, "y": 326, "width": 190, "height": 24, "typ": "text", "groesse": 10 },
+    "alg1_initial_application_start":     { "page": 0, "x": 565, "y": 350, "width": 170, "height": 26, "typ": "text", "groesse": 10, "transform": "date" }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "child_benefit_application": {
+    "template": "Kindergeldantrag.pdf"
+  },
+  "broadcast_exemption_application": {
+    "template": "Befreiungsantrag.pdf"
+  },
+  "letter_gkv_membership": {
+    "template": "260705 Mitgliedsbescheinigung GKV.docx"
+  }
+}

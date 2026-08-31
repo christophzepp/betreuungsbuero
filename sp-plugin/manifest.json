@@ -1,0 +1,11 @@
+{
+  "name": "Betreuungsbüro Sync",
+  "id": "betreuungsbuero-sync",
+  "manifestVersion": 1,
+  "version": "0.1.0",
+  "minSupVersion": "10.0.0",
+  "description": "Beidseitiger Aufgaben-Abgleich mit dem Betreuungsbüro-Dokumentenassistenten über dessen /api/ext-Fassade (Bearer-Token). Fristen kommen schreibgeschützt an.",
+  "hooks": ["taskComplete", "taskUpdate", "taskDelete"],
+  "permissions": [],
+  "iFrame": false
+}

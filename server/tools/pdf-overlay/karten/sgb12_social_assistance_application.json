@@ -1,0 +1,16 @@
+{
+  "elementId": "tpl_v159_sgb12_social_assistance_application",
+  "reportId": "sgb12_social_assistance_application",
+  "einheit": "px",
+  "bildBreite": 1240,
+  "seitenBreitePt": 595.28,
+  "seitenHoehePt": 841.89,
+  "hinweis": "Koordinaten in Bildpixeln der 1240px-Renderings (tpl_v159_sgb12_social_assistance_application_s1..s9.png); x/y = LINKE OBERE Ecke, page 0-basiert. Gemappt nur die fachlich eindeutigen Slots: name auf die Fuer-Zeile (S.1), birth/address in die Spalte Leistungsberechtigte(r) der Tabelle 1 (S.1; address einzeilig komplett in der Zeile Strasse/Hausnummer, da nur EIN kuratiertes Anschrift-Feld existiert - die Zeile PLZ/Wohnort bleibt bewusst leer), assets in den freien Bereich unter 5.2 Vermoegen (S.3), notes in die erste Schreibzeile von Sonstige Hinweise und Erlaeuterungen (S.8). NICHT gemappt: reference (kein Aktenzeichen-/Kundennummern-Feld auf dem Formular; Eingangsstempel gehoert der Behoerde), benefit (beantragte Leistung wird ausschliesslich ueber die drei Ankreuzfelder Eingliederungshilfe erfasst, Freitext hat keinen Slot), start (kein Feld Leistungsbeginn; Ort/Datum auf S.4 ist das Unterschriftsdatum), household (Haushalt/Bedarfsgemeinschaft wird nur strukturiert je Person in den Tabellen S.1/S.2 erfasst, kein Freitextbereich), income (Einkommen nur als strukturierte Betragstabelle 5.1 je Einkommensart/Person, kein Freitextbereich), needs (Behinderung/Bedarfe nur als Ankreuzfelder Abschnitt 4 bzw. Tabelle 6.4, die kurzen Zeilen sonstige Einschraenkung/Hilfsmittel passen fachlich nicht zu einem freien Bedarfs-Textfeld). Alle uebrigen Formularfelder bleiben bewusst leer.",
+  "felder": {
+    "sgb12_social_assistance_application_name":    { "page": 0, "x": 95,  "y": 140,  "width": 600,  "height": 24, "typ": "text", "groesse": 10 },
+    "sgb12_social_assistance_application_birth":   { "page": 0, "x": 322, "y": 692,  "width": 170,  "height": 26, "typ": "text", "groesse": 10, "transform": "date" },
+    "sgb12_social_assistance_application_address": { "page": 0, "x": 322, "y": 740,  "width": 275,  "height": 24, "typ": "text", "groesse": 8 },
+    "sgb12_social_assistance_application_assets":  { "page": 2, "x": 100, "y": 1556, "width": 1080, "height": 36, "typ": "text", "multiline": true, "groesse": 8 },
+    "sgb12_social_assistance_application_notes":   { "page": 7, "x": 75,  "y": 622,  "width": 1070, "height": 54, "typ": "text", "multiline": true, "groesse": 8 }
+  }
+}
