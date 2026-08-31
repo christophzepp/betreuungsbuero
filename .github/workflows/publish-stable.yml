@@ -11,7 +11,7 @@ concurrency:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: derzerpoo/betreuungsbuero
+  IMAGE_NAME: christophzepp/betreuungsbuero
 
 jobs:
   build-and-publish:

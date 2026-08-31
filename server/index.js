@@ -1,5 +1,5 @@
 // Betreuungsbuero - Bueroanwendung fuer rechtliche Betreuungen
-// Copyright (C) 2026 derzerpoo
+// Copyright (C) 2026 christophzepp
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Dieses Programm ist freie Software unter der GNU Affero General Public License v3 oder
 // spaeter; es kommt OHNE JEDE GEWAEHRLEISTUNG. Einzelheiten in LICENSE und

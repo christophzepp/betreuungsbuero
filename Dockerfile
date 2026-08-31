@@ -19,7 +19,7 @@ FROM node:22-bookworm-slim AS runtime
 
 LABEL org.opencontainers.image.title="Betreuungsbüro"
 LABEL org.opencontainers.image.description="Server und Web-App für rechtliche Betreuungen"
-LABEL org.opencontainers.image.source="https://github.com/derzerpoo/betreuungsbuero"
+LABEL org.opencontainers.image.source="https://github.com/christophzepp/betreuungsbuero"
 
 WORKDIR /app/server
 

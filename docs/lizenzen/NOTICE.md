@@ -2,7 +2,7 @@
 
 **Betreuungsbüro — Büroanwendung für rechtliche Betreuungen**
 
-Copyright (C) 2026 derzerpoo
+Copyright (C) 2026 christophzepp
 
 Dieses Programm ist freie Software: Sie können es unter den Bedingungen der
 **GNU Affero General Public License, Version 3** oder (nach Ihrer Wahl) einer

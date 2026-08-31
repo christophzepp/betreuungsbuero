@@ -2,7 +2,7 @@ name: betreuungsbuero
 
 services:
   betreuungsbuero:
-    image: ${APP_IMAGE:-ghcr.io/derzerpoo/betreuungsbuero:stable}
+    image: ${APP_IMAGE:-ghcr.io/christophzepp/betreuungsbuero:stable}
     pull_policy: always
     restart: unless-stopped
     init: true
@@ -20,7 +20,7 @@ services:
       MAILBOX_WATCH: ${MAILBOX_WATCH:-1}
       REQUEST_TIMEOUT_MS: ${REQUEST_TIMEOUT_MS:-3600000}
       ENABLE_DOCUMENT_MIGRATION: ${ENABLE_DOCUMENT_MIGRATION:-0}
-      APP_IMAGE_REFERENCE: ${APP_IMAGE:-ghcr.io/derzerpoo/betreuungsbuero:stable}
+      APP_IMAGE_REFERENCE: ${APP_IMAGE:-ghcr.io/christophzepp/betreuungsbuero:stable}
       OUTPUTS_DIR: /app/outputs
       APP_FILE: Betreuungsbuero_Dokumentenassistent_v0_7.html
       SP_PLUGIN_DIR: /app/sp-plugin

@@ -165,8 +165,8 @@ das Container-Image.
 
 | Kanal | Container-Image | Zweck |
 | --- | --- | --- |
-| Beta | `ghcr.io/derzerpoo/betreuungsbuero-beta:beta` | Interne Vorabversionen aus `develop` |
-| Stable | `ghcr.io/derzerpoo/betreuungsbuero:stable` | Freigegebene Versionen |
+| Beta | `ghcr.io/christophzepp/betreuungsbuero-beta:beta` | Interne Vorabversionen aus `develop` |
+| Stable | `ghcr.io/christophzepp/betreuungsbuero:stable` | Freigegebene Versionen |
 
 Änderungen am Branch `develop` erzeugen automatisch ein neues Beta-Image. Ein Versions-Tag wie
 `v0.8.0` erzeugt ein Stable-Image mit den Tags `stable`, `0.8.0` und `0.8`. Beide Images werden
@@ -192,13 +192,13 @@ openssl rand -hex 32
 Für eine freigegebene Version wird dieses Stable-Image verwendet:
 
 ```dotenv
-APP_IMAGE=ghcr.io/derzerpoo/betreuungsbuero:stable
+APP_IMAGE=ghcr.io/christophzepp/betreuungsbuero:stable
 ```
 
 Für den privaten Beta-Kanal kann stattdessen das Vorab-Image eingestellt werden:
 
 ```dotenv
-APP_IMAGE=ghcr.io/derzerpoo/betreuungsbuero-beta:beta
+APP_IMAGE=ghcr.io/christophzepp/betreuungsbuero-beta:beta
 ```
 
 ### 3. Container-Image abrufen
@@ -282,7 +282,7 @@ datenschutzrechtliche Prüfung der konkreten Installation.
 
 ## Lizenz
 
-Copyright (C) 2026 derzerpoo — **GNU Affero General Public License v3 oder später**
+Copyright (C) 2026 christophzepp — **GNU Affero General Public License v3 oder später**
 (`AGPL-3.0-or-later`), vollständiger Text in [`LICENSE`](LICENSE).
 
 Selbst hosten, prüfen und verändern ist ausdrücklich erlaubt. Wer die Software Dritten über ein
