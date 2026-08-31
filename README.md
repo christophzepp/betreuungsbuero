@@ -12,12 +12,9 @@ Die Anwendung wird auf der eigenen Infrastruktur betrieben. Falldaten werden gru
 auf dem eigenen Server gespeichert; externe Dienste wie Mail, Kalender, Banking oder KI werden
 nur genutzt, wenn sie ausdrücklich eingerichtet und aufgerufen werden.
 
-> **Stand:** Version 0.7 – noch nicht veröffentlicht und in aktiver Entwicklung. Das Repository
-> ist derzeit privat. Es gibt noch keine Zusage auf Abwärtskompatibilität oder Support.
+![Fallbezogene Stammdaten mit Personen- und Kontaktdaten](docs/screenshots/02-stammdaten.png)
 
-![Freidokument mit Fallbezug, Vorprüfung und Exportfunktionen](docs/screenshots/00-freidokument.png)
-
-*Freidokument in der Fallakte. Sämtliche abgebildeten Personen, Institutionen und Inhalte sind
+*Fallbezogene Stammdaten. Sämtliche abgebildeten Personen, Institutionen und Inhalte sind
 fiktive Vorführdaten.*
 
 ## Was die Software macht
@@ -83,7 +80,7 @@ die Anwendung nutzbar.
 <table>
   <tr>
     <td width="50%"><a href="docs/screenshots/01-dashboard.png"><img src="docs/screenshots/01-dashboard.png" alt="Konfigurierbares Dashboard"></a><br><sub>Konfigurierbares Dashboard</sub></td>
-    <td width="50%"><a href="docs/screenshots/02-stammdaten.png"><img src="docs/screenshots/02-stammdaten.png" alt="Fallbezogene Stammdaten"></a><br><sub>Fallbezogene Stammdaten</sub></td>
+    <td width="50%"><a href="docs/screenshots/00-freidokument.png"><img src="docs/screenshots/00-freidokument.png" alt="Freidokument mit Fallbezug, Vorprüfung und Exportfunktionen"></a><br><sub>Freidokument mit Fallbezug und Export</sub></td>
   </tr>
   <tr>
     <td><a href="docs/screenshots/03-kalender.png"><img src="docs/screenshots/03-kalender.png" alt="Kalender mit fallbezogenen Einträgen"></a><br><sub>Kalender, Termine und Wiedervorlagen</sub></td>
