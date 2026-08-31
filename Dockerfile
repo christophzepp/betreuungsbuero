@@ -39,7 +39,7 @@ COPY --from=dependencies /app/server/node_modules ./node_modules
 # Zielserver braucht daher weder den Quellcode noch einen outputs-Ordner.
 COPY server/ ./
 COPY outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html /app/outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html
-COPY sp-plugin/ /app/sp-plugin/
+COPY Super-Productivity-Plugin/ /app/sp-plugin/
 
 RUN mkdir -p \
       /app/state/data \

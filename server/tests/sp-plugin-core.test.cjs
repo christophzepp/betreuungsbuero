@@ -9,7 +9,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const path = require('path');
 
-const core = require(path.join(__dirname, '..', '..', 'sp-plugin', 'sync-core.js'));
+const core = require(path.join(__dirname, '..', '..', 'Super-Productivity-Plugin', 'sync-core.js'));
 
 const remoteTask = (over) => Object.assign({
   id: 'r1', title: 'Bericht', description: '', dueAt: '2026-08-20',

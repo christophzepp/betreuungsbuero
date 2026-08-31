@@ -18,7 +18,7 @@ const http = require('node:http');
 const zlib = require('node:zlib');
 const express = require('express');
 
-const echterOrdner = path.join(__dirname, '..', '..', 'sp-plugin');
+const echterOrdner = path.join(__dirname, '..', '..', 'Super-Productivity-Plugin');
 const leererOrdner = fs.mkdtempSync(path.join(os.tmpdir(), 'sp-plugin-leer-'));
 
 function baueApp(pluginDir) {

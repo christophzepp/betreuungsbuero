@@ -284,7 +284,7 @@ app.use('/api/ext-tokens', extRoutes.tokensRouter);
 // eingeloggte Nutzer installiert über „Erweiterungs-Zugänge").
 app.use('/api/ext-artifacts', require('./src/integrations/extensions/artifact-routes'));
 // Super-Productivity-Plugin „Betreuungsbüro Sync" (Nutzerwunsch 30.08.2026): wird aus dem
-// mitgelieferten Quellordner sp-plugin/ frisch gepackt und in den Einstellungen unter
+// mitgelieferten Quellordner Super-Productivity-Plugin/ frisch gepackt und in den Einstellungen unter
 // „Browser-Erweiterung" zum Download angeboten - es nutzt dieselben API-Tokens wie die Erweiterung.
 app.use('/api/sp-plugin', require('./src/integrations/sp-plugin/routes'));
 // Dokumente-Modul (Plan D1, Nutzerauftrag 2026-07-25): zentraler Dokumentenspeicher mit virtuellem

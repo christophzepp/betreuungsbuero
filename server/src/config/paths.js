@@ -51,7 +51,7 @@ const RUNTIME_SECRETS_ROOT = configuredPath(
    Serverfassung, statt als Kopie im Downloads-Ordner zu veralten). */
 const SP_PLUGIN_ROOT = configuredPath(
   process.env.SP_PLUGIN_DIR,
-  path.join(PROJECT_ROOT, 'sp-plugin')
+  path.join(PROJECT_ROOT, 'Super-Productivity-Plugin')
 );
 
 module.exports = Object.freeze({

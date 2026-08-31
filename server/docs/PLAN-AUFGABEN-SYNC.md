@@ -11,7 +11,7 @@ möglich, als die Aufzählung vermuten lässt).
 > (CalDAV-Feed unter `/dav-feed/<Token>/`), Fristen-Wächter + Export in
 > `server/src/modules/sync/runner.js`, `/api/ext/todos`-Fassade, Admin-Panel-Karten
 > (Provider, Fälle & Projekte, Statuszuordnung, Fristen-Export, Webhook, iCal-Abo,
-> Sync-Protokoll, Feed-Tokens), SP-Plugin unter `sp-plugin/`.
+> Sync-Protokoll, Feed-Tokens), SP-Plugin unter `Super-Productivity-Plugin/`.
 > Prüfstände: 6 neue Testdateien (39 Tests) — `tasks-openproject-adapter`, `tasks-vikunja-adapter`,
 > `sync-deadline-guard`, `feeds-dav`, `sync-hook-routes`, `sp-plugin-core`; Gesamtlauf 254 grün,
 > rot ausschließlich die elf vorbestehenden Blockzahl-Tests. Offen bleibt naturgemäß der
