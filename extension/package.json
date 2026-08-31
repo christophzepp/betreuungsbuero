@@ -3,6 +3,7 @@
   "version": "0.5.0",
   "private": true,
   "description": "Browser-Erweiterung „Formular-Assistent\" — Build + Signierung (Firefox/AMO).",
+  "license": "AGPL-3.0-or-later",
   "scripts": {
     "test": "node --test tests/*.test.cjs",
     "build": "node build.js",
