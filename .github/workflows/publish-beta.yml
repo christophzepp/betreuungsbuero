@@ -40,8 +40,8 @@ jobs:
           load: true
           push: false
           tags: betreuungsbuero-smoke:${{ github.sha }}
-          cache-from: type=gha,scope=beta
-          cache-to: type=gha,mode=max,scope=beta
+          cache-from: type=gha,scope=beta-smoke
+          cache-to: type=gha,mode=max,scope=beta-smoke
 
       - name: Container wirklich starten und prüfen
         shell: bash
