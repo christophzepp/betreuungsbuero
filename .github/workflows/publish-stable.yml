@@ -38,6 +38,65 @@ jobs:
       - name: Docker Buildx einrichten
         uses: docker/setup-buildx-action@v4
 
+      - name: Temporäres Starttest-Image bauen
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64
+          load: true
+          push: false
+          tags: betreuungsbuero-smoke:${{ github.sha }}
+          cache-from: type=gha,scope=stable
+          cache-to: type=gha,mode=max,scope=stable
+
+      - name: Container wirklich starten und prüfen
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+
+          session_secret="$(openssl rand -hex 32)"
+          encryption_key="$(openssl rand -hex 32)"
+          setup_token="$(openssl rand -hex 32)"
+
+          docker run --detach \
+            --name betreuungsbuero-smoke \
+            --publish 127.0.0.1:18935:8935 \
+            --env SESSION_SECRET="${session_secret}" \
+            --env ENCRYPTION_KEY="${encryption_key}" \
+            --env SETUP_TOKEN="${setup_token}" \
+            --env PUBLIC_BASE_URL="http://127.0.0.1:18935" \
+            --env COOKIE_SECURE="0" \
+            "betreuungsbuero-smoke:${GITHUB_SHA}"
+
+          for attempt in {1..30}; do
+            container_state="$(docker inspect --format '{{.State.Status}}' betreuungsbuero-smoke)"
+            health_state="$(docker inspect --format '{{.State.Health.Status}}' betreuungsbuero-smoke)"
+
+            if [[ "${health_state}" == "healthy" ]]; then
+              curl --fail --silent --show-error \
+                http://127.0.0.1:18935/api/setup/state >/dev/null
+              echo "Container und Setup-Endpunkt sind betriebsbereit."
+              exit 0
+            fi
+
+            if [[ "${container_state}" != "running" || "${health_state}" == "unhealthy" ]]; then
+              echo "Containerstatus: ${container_state}; Healthcheck: ${health_state}"
+              docker logs betreuungsbuero-smoke || true
+              exit 1
+            fi
+
+            sleep 3
+          done
+
+          echo "Der Container wurde nicht innerhalb von 90 Sekunden betriebsbereit."
+          docker logs betreuungsbuero-smoke || true
+          exit 1
+
+      - name: Starttest-Container aufräumen
+        if: always()
+        run: docker rm --force betreuungsbuero-smoke >/dev/null 2>&1 || true
+
       - name: Bei GitHub Container Registry anmelden
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
