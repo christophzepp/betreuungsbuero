@@ -135,7 +135,7 @@ test('Übungspostfach: neue Geschichten zu den fünf Fällen, keine Karteileiche
   assert.ok(anzahl >= 45, `Nur ${anzahl} Nachrichten im Übungspostfach (mindestens 45 erwartet)`);
 });
 
-test('Demo-Intro: eigene Variante, erscheint bei jeder Anmeldung, echte Marke getauscht', () => {
+test('Demo-Intro: eigene Variante, erscheint bei jeder Anmeldung, Mustermensch-Marke erzeugt', () => {
   /* Nutzerauftrag 30.08. (3. Runde): das Modus-Intro zeigte in der Vorführung den
      Lokal-Modus-Text - jetzt eigene Beschreibung, eigenes Badge, keine Gesehen-Merker. */
   assert.match(HTML, /const DEMO_DESC='Ein Vorführbetrieb zum gefahrlosen Kennenlernen/,
@@ -156,12 +156,18 @@ test('Demo-Intro: eigene Variante, erscheint bei jeder Anmeldung, echte Marke ge
     'Der Weiter-Klick merkt sich das Intro nicht');
   assert.match(HTML, /echtesSession\.removeItem\('betreuungsbuero\.demoIntroGesehen\.v1'\)/,
     'Das Abmelden setzt das Intro nicht zurück');
-  /* Briefkopf-Leck: #workspaceBrandSource trägt statisch den ECHTEN eingescannten
-     Briefkopf - die Vorführung muss ihn überall durch die Mustermensch-Marke ersetzen. */
+  /* Die öffentliche Programmdatei bleibt ohne statisches Bürologo; die Vorführung erzeugt
+     ihre rein fiktive Mustermensch-Marke selbst, auch wenn die beiden Logo-Hosts leer sind. */
+  assert.ok(HTML.includes('<div class="brand brand-source-hidden" id="workspaceBrandSource"></div>'),
+    'Die öffentliche Programmdatei enthält wieder eine statische Büromarke');
   assert.match(HTML, /var demoMarke='data:image\/svg\+xml;utf8,'\+encodeURIComponent\('<svg [^']*Max Mustermensch/,
     'Der gezeichnete Mustermensch-Briefkopf fehlt');
-  assert.ok(HTML.includes("document.querySelectorAll('#workspaceBrandSource img,#heroLogo img,#startTodayBrandLogo img,#loginGateAppBootMark img,.brand img')"),
-    'Der Marken-Tausch erreicht nicht mehr alle Ableger der echten App-Marke');
+  assert.ok(HTML.includes("['workspaceBrandSource','heroLogo'].forEach(function(id)"),
+    'Die Demo-Marke wird in leeren Logo-Hosts nicht mehr neu angelegt');
+  assert.ok(HTML.includes('window.bueroLocal.officeProfile.logoDataUrl=demoMarke'),
+    'Der anschließende Büroprofil-Abgleich würde die Demo-Marke wieder entfernen');
+  assert.ok(HTML.includes("document.querySelectorAll('#startTodayBrandLogo img,#loginGateAppBootMark img,.brand img')"),
+    'Der Marken-Tausch erreicht nicht mehr alle bereits vorhandenen Ableger');
 });
 
 test('Online-Grundlage (Nutzerentscheid 30.08., 4. Runde): Attrappen statt Lokal-Blockaden', () => {

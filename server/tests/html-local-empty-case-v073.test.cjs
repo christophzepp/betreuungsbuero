@@ -17,14 +17,105 @@ function section(start, end) {
   return html.slice(a, b);
 }
 
-test('0.7.4 bietet einen echten leeren lokalen Fall mit stabiler ID an', () => {
-  assert.match(html, /const APP_VERSION='0\.7\.4'/);
+test('0.7.5 bietet einen echten leeren lokalen Fall mit stabiler ID an', () => {
+  assert.match(html, /const APP_VERSION='0\.7\.5'/);
   assert.match(html, /id="startCreateEmptyCaseBtn"/);
   assert.match(html, /localCaseId:uuid\(\)/);
   assert.match(html, /globalThis\.crypto\?\.randomUUID/);
   const registry = section('<script id="case-registry-v161">', '</script>');
   assert.match(registry, /if\(s\?\.ui\?\.localCaseId\)return String\(s\.ui\.localCaseId\)/);
   assert.match(registry, /state\.ui\.localCaseId=/);
+});
+
+test('eine neue lokale Installation startet ohne eingebettetes Bürologo', () => {
+  assert.match(html, /<div class="brand brand-source-hidden" id="workspaceBrandSource"><\/div>/);
+  assert.doesNotMatch(html, /<div class="brand brand-source-hidden" id="workspaceBrandSource"><img/);
+  const branding = section('async function applyOfficeBranding(profile){', "window.addEventListener('officeProfileReady'");
+  assert.match(branding, /if\(profile\.logoUrl\)\{/);
+  assert.match(branding, /sourceHost\.replaceChildren\(logo\)/);
+  assert.match(branding, /sourceHost\.replaceChildren\(\)/);
+  assert.match(branding, /hero\.replaceChildren\(\)/);
+});
+
+test('Branding erzeugt ein Profil-Logo dynamisch und kehrt ohne Logo zum neutralen Zustand zurück', async () => {
+  const source = section('async function applyOfficeBranding(profile){', "window.addEventListener('officeProfileReady'");
+  const makeHost = () => ({
+    children: [],
+    replaceChildren(...children) { this.children = children; }
+  });
+  const sourceHost = makeHost();
+  const hero = makeHost();
+  const heroTitle = {textContent: ''};
+  const document = {
+    getElementById: id => id === 'workspaceBrandSource' ? sourceHost : id === 'heroLogo' ? hero : null,
+    querySelector: selector => selector === '.hero-copy h1' ? heroTitle : null,
+    createElement: () => ({
+      src: '', alt: '',
+      cloneNode() { return {src: this.src, alt: this.alt, cloneNode: this.cloneNode}; }
+    })
+  };
+  const context = {
+    window: {__officeProfile: {fetchBankAccounts: async () => []}},
+    document,
+    OFFICE: {},
+    console
+  };
+  vm.createContext(context);
+  vm.runInContext(`${source}\nwindow.__testApplyOfficeBranding=applyOfficeBranding;`, context);
+  await context.window.__testApplyOfficeBranding({companyName: 'Testbüro', logoUrl: 'data:image/png;base64,AAAA'});
+  assert.equal(sourceHost.children.length, 1);
+  assert.equal(hero.children.length, 1);
+  assert.equal(sourceHost.children[0].src, 'data:image/png;base64,AAAA');
+  assert.equal(heroTitle.textContent, 'Testbüro - Betreuungssoftware');
+  await context.window.__testApplyOfficeBranding({companyName: '', logoUrl: ''});
+  assert.equal(sourceHost.children.length, 0);
+  assert.equal(hero.children.length, 0);
+  assert.equal(heroTitle.textContent, 'Betreuungsbüro - Betreuungssoftware');
+});
+
+test('Bürostammdaten sind lokal editierbar und das optionale Logo wird verlustfrei restauriert', () => {
+  const shortcut = section('<script id="office-profile-shortcut-script-v1">', '</script>');
+  assert.match(shortcut, /window\.isBueroLocalMode&&window\.isBueroLocalMode\(\)/);
+  const settings = section('const EIN_EINBETT={', 'const EIN_STATUS={');
+  assert.match(settings, /!\(local\|\|u\.isAdmin\|\|u\.canManageOfficeProfile\)/);
+  const restore = section('async importBueroJsonText(text){', '// Moduldaten zurueckspielen');
+  assert.match(restore, /data\.officeProfile&&typeof data\.officeProfile==='object'/);
+  assert.match(restore, /L\.officeProfile=\{\.\.\.\(L\.officeProfile\|\|\{\}\),\.\.\.data\.officeProfile\}/);
+  assert.match(restore, /__officeProfile\?\.refreshCache/);
+});
+
+test('lokales Büroprofil speichert Felder und entfernt ein gelöschtes Logo sofort', async () => {
+  const script = section('<script id="office-profile-script-v1">', '</script>')
+    .replace(/^<script[^>]*>/, '');
+  let saves = 0;
+  const events = [];
+  const context = {
+    window: {
+      isBueroLocalMode: () => true,
+      bueroLocal: {officeProfile: {}, officeBankAccounts: [], officeEmployees: []},
+      saveBueroLocal: () => { saves++; },
+      addEventListener: (name, fn) => events.push({name, fn}),
+      dispatchEvent: () => {}
+    },
+    CustomEvent: class CustomEvent { constructor(type, init) { this.type = type; this.detail = init?.detail; } },
+    fetch: async () => { throw new Error('Im Lokalmodus darf kein Serverzugriff erfolgen'); },
+    FileReader: class FileReader {},
+    btoa: value => Buffer.from(value, 'binary').toString('base64'),
+    Uint8Array,
+    console
+  };
+  vm.createContext(context);
+  vm.runInContext(script, context);
+  const saved = await context.window.__officeProfile.saveProfile({companyName: 'Testbüro', city: 'Bonn'});
+  assert.equal(saved.ok, true);
+  assert.equal(context.window.bueroLocal.officeProfile.companyName, 'Testbüro');
+  assert.equal(context.window.bueroLocal.officeProfile.city, 'Bonn');
+  context.window.bueroLocal.officeProfile.logoDataUrl = 'data:image/png;base64,AAAA';
+  const removed = await context.window.__officeProfile.deleteLogo();
+  assert.equal(removed.ok, true);
+  assert.equal(context.window.bueroLocal.officeProfile.logoDataUrl, '');
+  assert.ok(saves >= 2);
+  assert.ok(events.some(event => event.name === 'appLoginReady'));
 });
 
 test('lokale Büroorganisation verwendet die eingebettete Vorlage ohne Serverzugriff', async () => {
