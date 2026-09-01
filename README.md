@@ -128,6 +128,13 @@ die Anwendung nutzbar.
 | **Außendienst** | Ein verschlüsseltes Fallpaket wird für einen Außentermin mitgenommen und anschließend zurückgespielt. |
 | **Demo** | Fiktive Vorführfälle werden getrennt von den Arbeitsdaten bereitgestellt. |
 
+Im lokalen Modus kann direkt über **„Leeren Fall anlegen“** begonnen werden. Externe Excel-
+Vorlagen sind dafür nicht erforderlich: Stammdatenblatt und Adressverzeichnis werden aus den
+integrierten Vorlagen erzeugt. Die lokale Gesamtsicherung enthält je Fall die JSON-
+Datensicherung sowie Stammdaten und Adressverzeichnis als XLSX; die Büroorganisation wird als
+JSON und XLSX mitgesichert. Damit kann der Arbeitsstand nach einem Browser- oder Gerätewechsel
+über Ordner-/ZIP-Import wiederhergestellt werden.
+
 Die Berechtigungen werden serverseitig kontrolliert und getrennt für Lokal- und Online-Modus
 verwaltet. Administrative Funktionen und besonders sensible Module wie Banking,
 Zugangsdatenverwaltung oder büroweite Einsicht besitzen eigene Rechte.
