@@ -17,8 +17,8 @@ function section(start, end) {
   return html.slice(a, b);
 }
 
-test('0.7.5 bietet einen echten leeren lokalen Fall mit stabiler ID an', () => {
-  assert.match(html, /const APP_VERSION='0\.7\.5'/);
+test('0.7.6 bietet einen echten leeren lokalen Fall mit stabiler ID an', () => {
+  assert.match(html, /const APP_VERSION='0\.7\.6'/);
   assert.match(html, /id="startCreateEmptyCaseBtn"/);
   assert.match(html, /localCaseId:uuid\(\)/);
   assert.match(html, /globalThis\.crypto\?\.randomUUID/);
@@ -116,6 +116,48 @@ test('lokales Büroprofil speichert Felder und entfernt ein gelöschtes Logo sof
   assert.equal(context.window.bueroLocal.officeProfile.logoDataUrl, '');
   assert.ok(saves >= 2);
   assert.ok(events.some(event => event.name === 'appLoginReady'));
+});
+
+test('lokale Bürostammdaten werden vor Seitenwechsel und Schließen aus dem Formular gesichert', async () => {
+  const source = section('  const OFFICE_PROFILE_FIELD_IDS={', '  async function uploadOfficeLogo')
+    + '\nwindow.__testFlushLocalOfficeProfile=flushLocalOfficeProfileAutosave;';
+  const values = {
+    opCompanyName: 'Betreuungsbüro Beispiel', opSalutation: 'Frau', opFirstName: 'Erika',
+    opLastName: 'Beispiel', opAcademicDegree: 'B.A.', opStreet: 'Testweg 3',
+    opPostalCode: '53111', opCity: 'Bonn', opCountry: 'Deutschland', opPhone: '0228 1',
+    opMobile: '0170 2', opEmail: 'post@example.test', opFax: '', opWebsite: 'example.test',
+    opTaxNumber: '12/345/67890', opVatId: ''
+  };
+  const root = {
+    querySelector(selector) {
+      const id = selector.slice(1);
+      return Object.hasOwn(values, id) ? {value: values[id]} : null;
+    }
+  };
+  let saved = null;
+  const context = {
+    window: {
+      isBueroLocalMode: () => true,
+      __officeProfile: {saveProfile: async payload => { saved = payload; return {ok: true}; }}
+    },
+    document: root,
+    setTimeout,
+    clearTimeout,
+    toast() {},
+    refreshOfficeProfileRender: async () => {},
+    console
+  };
+  vm.createContext(context);
+  vm.runInContext(source, context);
+  const result = await context.window.__testFlushLocalOfficeProfile(root);
+  assert.equal(result.ok, true);
+  assert.equal(saved.companyName, 'Betreuungsbüro Beispiel');
+  assert.equal(saved.city, 'Bonn');
+
+  const settings = section('function einRender(){', 'function einKopf(');
+  assert.match(settings, /await window\.__officeProfileForm\.flushLocal\(document\.getElementById\('einEinbettWirt'\)\)/);
+  const closeHook = section('// Beim Schließen den eigenen Dialoginhalt entfernen:', '// ---------- Umleitung:');
+  assert.match(closeHook, /window\.__officeProfileForm\.flushLocal\(document\.getElementById\('einEinbettWirt'\)\)/);
 });
 
 test('lokale Büroorganisation verwendet die eingebettete Vorlage ohne Serverzugriff', async () => {
