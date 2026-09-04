@@ -34,7 +34,7 @@ function forgotPasswordRateLimited(ip) {
 const getUserByUsername = db.prepare('SELECT * FROM users WHERE username = ?');
 const getUserById = db.prepare('SELECT * FROM users WHERE id = ?');
 const updatePasswordStmt = db.prepare('UPDATE users SET password_hash = ? WHERE id = ?');
-const listAiConfig = db.prepare('SELECT provider, api_key_encrypted, model, endpoint FROM office_ai_config');
+const listAiConfig = db.prepare('SELECT provider, api_key_encrypted, model, endpoint, allowed_models FROM office_ai_config');
 const listSendCredentials = db.prepare('SELECT service, username, password_encrypted, login_url, inbox_url, compose_url FROM office_send_credentials');
 
 // Effektive Rechte fuer EINEN Modus: Admin = alles erlaubt, sonst der Modus-Zweig der Matrix.
@@ -149,7 +149,11 @@ function applySessionPermissions(session, user, mode) {
 function officeAiConfig() {
   const ai = {};
   for (const row of listAiConfig.all()) {
-    ai[row.provider] = { apiKey: cryptoHelper.decrypt(row.api_key_encrypted), model: row.model, endpoint: row.endpoint };
+    /* allowedModels: Buerofreigabe, WELCHE Modelle ueberhaupt zur Auswahl stehen (04.09.2026).
+       Kein Geheimnis - reine Richtlinie; kaputtes JSON bedeutet "keine Einschraenkung". */
+    let erlaubt = [];
+    try { const l = JSON.parse(row.allowed_models || '[]'); if (Array.isArray(l)) erlaubt = l.filter((x) => typeof x === 'string' && x.trim()); } catch (_e) { erlaubt = []; }
+    ai[row.provider] = { apiKey: cryptoHelper.decrypt(row.api_key_encrypted), model: row.model, endpoint: row.endpoint, allowedModels: erlaubt };
   }
   return ai;
 }

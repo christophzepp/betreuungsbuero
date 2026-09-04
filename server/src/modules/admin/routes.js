@@ -477,16 +477,33 @@ router.delete('/users/:id', (req, res) => {
    konnte das Buero strukturell nie einen Schluessel hinterlegen. */
 const AI_PROVIDERS = ['openai', 'anthropic', 'gemini', 'ionos', 'poe', 'langdock', 'deutschlandgpt', 'ollama'];
 const getAiConfigStmt = db.prepare('SELECT * FROM office_ai_config WHERE provider = ?');
+/* Freigabeliste robust lesen/schreiben: Der Spaltenwert ist JSON, darf aber nie eine Route
+   umbringen - kaputter Inhalt bedeutet "keine Einschraenkung". Beim Schreiben werden nur
+   nichtleere Zeichenketten uebernommen, dedupliziert und auf 200 Eintraege begrenzt. */
+function parseAllowedModels(roh) {
+  try {
+    const list = JSON.parse(roh || '[]');
+    return Array.isArray(list) ? list.filter((x) => typeof x === 'string' && x.trim()) : [];
+  } catch (_e) { return []; }
+}
+function normalizeAllowedModels(roh) {
+  if (!Array.isArray(roh)) return [];
+  const sauber = roh.filter((x) => typeof x === 'string' && x.trim()).map((x) => x.trim());
+  return [...new Set(sauber)].slice(0, 200);
+}
 const upsertAiConfigStmt = db.prepare(`
-  INSERT INTO office_ai_config (provider, api_key_encrypted, model, endpoint) VALUES (@provider, @apiKeyEncrypted, @model, @endpoint)
+  INSERT INTO office_ai_config (provider, api_key_encrypted, model, endpoint, allowed_models)
+  VALUES (@provider, @apiKeyEncrypted, @model, @endpoint, @allowedModels)
   ON CONFLICT(provider) DO UPDATE SET api_key_encrypted = excluded.api_key_encrypted, model = excluded.model,
-    endpoint = excluded.endpoint, updated_at = datetime('now')
+    endpoint = excluded.endpoint, allowed_models = excluded.allowed_models, updated_at = datetime('now')
 `);
 
 router.get('/ai-config', (req, res) => {
-  const rows = db.prepare('SELECT provider, model, endpoint, updated_at FROM office_ai_config').all();
-  const byProvider = Object.fromEntries(rows.map((r) => [r.provider, { model: r.model, endpoint: r.endpoint, updatedAt: r.updated_at, hasKey: true }]));
-  res.json({ providers: AI_PROVIDERS.map((p) => ({ provider: p, ...(byProvider[p] || { model: '', endpoint: '', hasKey: false }) })) });
+  const rows = db.prepare('SELECT provider, model, endpoint, allowed_models, updated_at FROM office_ai_config').all();
+  const byProvider = Object.fromEntries(rows.map((r) => [r.provider, {
+    model: r.model, endpoint: r.endpoint, allowedModels: parseAllowedModels(r.allowed_models), updatedAt: r.updated_at, hasKey: true
+  }]));
+  res.json({ providers: AI_PROVIDERS.map((p) => ({ provider: p, ...(byProvider[p] || { model: '', endpoint: '', allowedModels: [], hasKey: false }) })) });
 });
 
 router.get('/ai-config/:provider/reveal', (req, res) => {
@@ -512,7 +529,7 @@ function kiPruefstatusLoeschen(provider) {
 router.put('/ai-config/:provider', (req, res) => {
   const { provider } = req.params;
   if (!AI_PROVIDERS.includes(provider)) return res.status(400).json({ error: 'Unbekannter Anbieter.' });
-  const { apiKey, model, endpoint } = req.body || {};
+  const { apiKey, model, endpoint, allowedModels } = req.body || {};
   // Leeres apiKey-Feld bedeutet "unveraendert lassen", NICHT "Key loeschen" - das Admin-Formular
   // zeigt den bestehenden Key aus Sicherheitsgruenden nicht standardmaessig im Klartext an, ein
   // leeres Feld beim Speichern (z.B. weil nur das Modell geaendert wurde) darf ihn daher nicht
@@ -522,14 +539,23 @@ router.put('/ai-config/:provider', (req, res) => {
   /* model/endpoint nur ueberschreiben, wenn der Body sie NENNT - die KI-Maske schickt seit dem
      Zusammenlegen (30.08.2026) nur apiKey+endpoint; ein fehlendes model darf den Bestand nicht
      leeren. */
+  /* allowedModels folgt derselben Regel wie model/endpoint: NUR ueberschreiben, wenn der Body
+     das Feld nennt. Die KI-Maske schickt je nach Zweig unterschiedliche Teilmengen; ein
+     fehlendes Feld darf den Bestand nicht leeren. */
   upsertAiConfigStmt.run({
     provider,
     apiKeyEncrypted,
     model: model !== undefined ? (model || '') : (existing ? existing.model : ''),
     endpoint: endpoint !== undefined ? (endpoint || '') : (existing ? existing.endpoint : ''),
+    allowedModels: allowedModels !== undefined
+      ? JSON.stringify(normalizeAllowedModels(allowedModels))
+      : (existing ? (existing.allowed_models || '[]') : '[]'),
   });
   if (apiKey) kiPruefstatusLoeschen(provider);
-  logAction(req, 'ai-config.update', 'ai-config', provider, { model: model || '', keyChanged: !!apiKey });
+  logAction(req, 'ai-config.update', 'ai-config', provider, {
+    model: model || '', keyChanged: !!apiKey,
+    freigegebeneModelle: allowedModels !== undefined ? normalizeAllowedModels(allowedModels).length : undefined
+  });
   res.json({ ok: true });
 });
 

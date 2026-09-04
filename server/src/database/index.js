@@ -1883,6 +1883,12 @@ addColumnIfMissing('users', 'ist_betreuer', 'ist_betreuer INTEGER NOT NULL DEFAU
 // Bewusst als LETZTE users-Spalte, damit der Recovery-Spaltenvertrag (portable-data.js)
 // die Schemareihenfolge weiter abbildet.
 addColumnIfMissing('users', 'is_demo', 'is_demo INTEGER NOT NULL DEFAULT 0');
+
+/* Buerofreigabe der KI-Modelle (Nutzerauftrag 04.09.2026): WELCHE Modelle stehen den Nutzern
+   ueberhaupt zur Auswahl, wenn das Buero kein festes Modell vorgibt. JSON-Array von Kennungen;
+   leeres Array = keine Einschraenkung (bisheriges Verhalten). Additive Spalte, damit
+   Bestandsinstallationen ohne Zutun weiterlaufen. */
+addColumnIfMissing('office_ai_config', 'allowed_models', "allowed_models TEXT NOT NULL DEFAULT '[]'");
 /* Einmalige Ableitung aus dem Bestand: genau die Regel, die bisher zur Laufzeit galt.
    Marker in office_json, damit ein spaeter bewusst ENTFERNTES Haekchen nicht beim naechsten
    Start zurueckkehrt. */
