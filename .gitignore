@@ -56,3 +56,6 @@ deploy/*.zip
 # Temporäre Office-Dateien
 ~$*
 *.tmp
+
+# Entwürfe/Mockups nur für die Entwicklung, nie ins Repo (Nutzerentscheidung 04.09.2026)
+mockups/
