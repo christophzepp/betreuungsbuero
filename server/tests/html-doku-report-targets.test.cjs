@@ -21,8 +21,8 @@ test('Berichtsrelevanz ist berichtsübergreifend beschriftet und erklärt', () =
   assert.ok(!html.includes('automatisch in den Anfangsbericht übernommen; manuelle Berichtstexte bleiben geschützt'), 'alter Profiltext noch vorhanden');
 });
 
-test('Berichtsfreigabe verwendet den vorhandenen Vorgangstext ohne zweites Textfeld', () => {
-  assert.match(html, /<label>Vorgangstext<\/label><textarea id="dokuFreeDetail"/);
+test('Berichtsfreigabe verwendet den vorhandenen Inhalt (Vorgangstext) ohne zweites Textfeld', () => {
+  assert.match(html, /<label>(?:Vorgangstext|Inhalt)(?:<span class="pflicht">\*<\/span>)?<\/label>\s*<textarea id="dokuFreeDetail"/); // Wording „Inhalt“ beschlossen am 05.09.2026; alte Beschriftung bleibt bis zum Umbau zulässig
   assert.ok(!html.includes('Geprüfte Berichtszusammenfassung'));
   assert.ok(!html.includes('id="dokuReportSummaryV255"'));
   assert.match(html, /reportText=t\(document\.getElementById\('dokuFreeDetail'\)\?\.value\)/);
