@@ -17,7 +17,10 @@
    Dazu: die DejaVu-Schriftblöcke (Phase 5.2) hängen an keinem Dokument und wurden seit
    der schlanken Auslieferung nie nachgeladen - jede seither erzeugte Außendienst-Datei
    reiste ohne eingebettete Schrift, der PDF-Bau unterwegs fiel still auf Helvetica
-   zurück. Sie sind jetzt Pflichtblöcke des Exports.
+   zurück. Sie sind jetzt Pflichtblöcke des Exports. Nacharbeit 06.09.2026 P1 (Fund 14): auch
+   die Kursivschnitte tpl_font_dejavu_oblique/_bold_oblique reisen mit - sonst fiele Kursiv im
+   Briefkopf unterwegs auf Helvetica-Oblique zurück; der Server-Liefertest unten führt dazu den
+   Vorlagen-Handler der schlanken Auslieferung gegen die echte App-Datei aus.
 
    Die Prüfung wird hier AUSGEFÜHRT (vm), nicht nur gepinnt. */
 const test = require('node:test');
@@ -109,8 +112,8 @@ test('Sammler: entfernte (stillgelegte) Originale werden nicht mehr verlangt', (
 });
 
 test('Pflichtblöcke: die DejaVu-Schriften reisen wieder in jeder Außendienst-Datei', () => {
-  assert.match(HTML, /var AD_PFLICHT_VORLAGEN=\['tpl_font_dejavu_regular','tpl_font_dejavu_bold'\];/,
-    'Die Pflichtblock-Liste fehlt');
+  assert.match(HTML, /var AD_PFLICHT_VORLAGEN=\['tpl_font_dejavu_regular','tpl_font_dejavu_bold','tpl_font_dejavu_oblique','tpl_font_dejavu_bold_oblique'\];/,
+    'Die Pflichtblock-Liste fehlt oder nennt die Kursivschnitte (Nacharbeit 06.09.2026 P1, Fund 14) nicht');
   assert.match(HTML, /return \(!!mitVorlagenIds\[x\.id\]\|\|adPflicht\[x\.id\]\)&&!x\.textContent\.trim\(\);/,
     'Das Nachladen holt die Schriftblöcke nicht mehr');
   assert.match(HTML, /Object\.keys\(mitVorlagenIds\)\.concat\(AD_PFLICHT_VORLAGEN\)/,
@@ -118,6 +121,51 @@ test('Pflichtblöcke: die DejaVu-Schriften reisen wieder in jeder Außendienst-D
   /* Der Leser, dessen stiller Helvetica-Rückfall das Loch verdeckte: */
   assert.match(HTML, /Eigene Schrift nicht verfügbar – Helvetica-Fallback/,
     'Der Rückfall-Warnhinweis in unifiedDocumentFonts ist weg - dann bitte neu prüfen, wie ein Schriftverlust auffällt');
+});
+
+test('Pflichtblöcke: der Server kann alle vier Schriftblöcke einzeln liefern (schlanke Auslieferung)', () => {
+  /* Nacharbeit 06.09.2026 P1 (Fund 14): der Export holt jeden Pflichtblock per
+     GET /api/pdf-vorlagen/<id>?format=base64 und bricht fail-closed ab, sobald der Server 404
+     liefert. Bisher pinnte kein Test createSlimDelivery - hier wird der Handler AUSGEFÜHRT, und
+     zwar gegen die Liste aus der App-Datei, damit Client-Liste und Server-Map nicht
+     auseinanderlaufen können (Restrisiko der Lesekarte: Server mit älterer App-Datei). */
+  const { createSlimDelivery } = require('../src/app-slim-delivery.js');
+  const sd = createSlimDelivery(path.join(__dirname, '..', '..', 'outputs', 'Betreuungsbuero_Dokumentenassistent_v0_7.html'));
+  const liste = (HTML.match(/var AD_PFLICHT_VORLAGEN=\[([^\]]*)\];/) || [])[1];
+  assert.ok(liste, 'Die Pflichtblock-Liste fehlt');
+  const ids = liste.split(',').map((x) => x.trim().replace(/^'|'$/g, ''));
+  assert.deepStrictEqual(ids, ['tpl_font_dejavu_regular', 'tpl_font_dejavu_bold', 'tpl_font_dejavu_oblique', 'tpl_font_dejavu_bold_oblique'],
+    'Die Pflichtblock-Liste nennt nicht genau die vier DejaVu-Schnitte');
+  function antwort() {
+    const r = { status: 200, body: '', headers: {} };
+    const res = {
+      setHeader(k, v) { r.headers[k] = v; },
+      type() { return res; },
+      status(s) { r.status = s; return res; },
+      json(j) { r.body = JSON.stringify(j); return res; },
+      send(b) { r.body = Buffer.isBuffer(b) ? b.toString('utf8') : String(b); return res; },
+    };
+    return { r, res };
+  }
+  for (const id of ids) {
+    const { r, res } = antwort();
+    sd.vorlagenHandler({ params: { elementId: id }, query: { format: 'base64' } }, res);
+    assert.strictEqual(r.status, 200, `${id} nicht lieferbar - der Export würde fail-closed abbrechen: ${r.body}`);
+    assert.ok(r.body.length > 100000 && /^[A-Za-z0-9+/=]+$/.test(r.body), `${id}: kein Base64-Schriftblock`);
+    assert.ok(r.body.startsWith('AAEAAA'), `${id}: kein TrueType-Anfang (AAEAAA)`);
+  }
+  /* Die schlank ausgelieferte Datei trägt alle vier Blöcke GELEERT mit Marker - genau deshalb
+     muss der Export sie nachladen (unter file:// reisen sie befüllt mit). */
+  const { r: app, res: appRes } = antwort();
+  sd.appHandler({}, appRes, (e) => { throw e; });
+  for (const id of ids) {
+    assert.ok(app.body.includes(`<script id="${id}" type="application/pdf-base64" data-server-template="1"></script>`),
+      `${id} wird nicht schlank (geleert + Marker) ausgeliefert`);
+  }
+  /* Unbekannte id → 404; der Export bricht dann mit Nennung der Block-id ab. */
+  const { r: nix, res: nixRes } = antwort();
+  sd.vorlagenHandler({ params: { elementId: 'tpl_gibt_es_nicht' }, query: {} }, nixRes);
+  assert.strictEqual(nix.status, 404, 'Unbekannte Vorlagen müssen 404 liefern');
 });
 
 test('Jeder Abbruch schließt die Fortschrittsanzeige - kein hängendes „Bitte warten" mehr', () => {

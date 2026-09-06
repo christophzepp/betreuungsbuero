@@ -98,13 +98,28 @@ test('Lokal-Nutzer ohne Rechte: Gates wirken zusätzlich zur Modus-Matrix', () =
   });
   assert.ok(!sichtbar.includes('karten') && !sichtbar.includes('stammdaten') && !sichtbar.includes('aussendienst'),
     'Entzogene Rechte wirken lokal nicht mehr');
-  /* 06.09.2026: der Briefkopf haengt am selben Recht wie die Buerostammdaten. */
-  assert.ok(!sichtbar.includes('briefkopf'), 'Ohne menuSettingsOfficeProfile darf der Briefkopf nicht erscheinen');
+  /* Nacharbeit 06.09.2026 P3: der Briefkopf ist fuer ALLE angemeldeten Personen sichtbar - ohne das
+     Buerostammdaten-Recht in der Nur-Lese-Ansicht mit dem bedienbaren Abschnitt „Meine Anpassung“. */
+  assert.ok(sichtbar.includes('briefkopf'), 'Der Briefkopf muss auch ohne menuSettingsOfficeProfile erscheinen (Nur-Lese-Ansicht)');
   assert.ok(!sichtbar.includes('lokal') && !sichtbar.includes('datenschutz') && !sichtbar.includes('vorschlaege'),
     'admin-Bereiche erscheinen für Nicht-Admins');
   assert.ok(sichtbar.includes('ki') && sichtbar.includes('datenadmin') && sichtbar.includes('diagnose'),
     'Erlaubte Bereiche fehlen');
   assert.ok(!nurOnline.includes('mail') || true, 'nurOnline-Berechnung lief');
+});
+
+test('Online-Person ohne jedes Recht: der Briefkopf bleibt sichtbar (Nur-Lese), die Buerostammdaten nicht (Nacharbeit P3)', () => {
+  /* Nacharbeit 06.09.2026 P3: der EIN_NAV-Eintrag traegt kein recht:-Gate mehr; __menuPermissionAllowed
+     antwortet hier auf JEDES Recht mit false. Die Buerostammdaten bleiben hinter ihrem Menuerecht. */
+  const { sichtbar, nurOnline } = sichtbareBereiche({ modus: 'online', nutzer: { isAdmin: false, canManageOfficeProfile: false }, rechte: {} });
+  assert.ok(sichtbar.includes('briefkopf'), 'Der Briefkopf muss fuer jede angemeldete Person sichtbar sein');
+  assert.ok(!sichtbar.includes('stammdaten'), 'Die Buerostammdaten haengen weiter am Menuerecht');
+  assert.ok(sichtbar.includes('konto') && sichtbar.includes('unterschriften'), 'ungegatete Bereiche fehlen');
+  assert.deepStrictEqual(nurOnline, [], 'Online darf es keinen Sammelhinweis geben');
+  const navA = HTML.indexOf('const EIN_NAV=[');
+  const nav = HTML.slice(navA, HTML.indexOf('\n];', navA));
+  assert.ok(nav.includes("{id:'briefkopf',name:'Briefkopf',lokal:true,datei:true},"), 'EIN_NAV-Eintrag ohne recht:');
+  assert.ok(!nav.includes("{id:'briefkopf',name:'Briefkopf',recht:"), 'das alte recht:-Gate ist zurueck');
 });
 
 test('Der Kern des Umbaus: AD-Gate, Ladepfad, Sammelhinweis, Datei-Einstieg', () => {

@@ -278,6 +278,35 @@ test('online: persoenliche Abweichung end-to-end - Name/Titel/Funktionszeile im 
   assert.equal(g.__briefkopfEigen(), null, 'nach dem Entfernen ist der Personen-Speicher leer');
 });
 
+/* Nacharbeit 06.09.2026 P2 (Fund 12): im fremden Fall ruht die Abweichung, im eigenen wirkt sie. */
+test('online: fremder Fall -> Abweichung ruht (Betreuer:in des Falls, Buerovorgabe); eigener Fall -> wirkt', async () => {
+  const a = sandbox();
+  await a.__briefkopfLaden();
+  await a.__briefkopfEigenSpeichern({ name: 'Erika Test', titel: 'M.A.', funktion: 'Fachkraft Rechtliche Betreuung' });
+  const b = sandbox();
+  b.__currentUser = { id: 2, firstName: 'Erika', lastName: 'Test' };
+  b.__activeServerCaseId = 'c1';
+  b.__sigStore = { caregiverCached: () => ({ caseId: 'c1', caregiver: { userId: 5, name: 'Sabine Kraft' } }) };
+  await b.__briefkopfLaden();
+  assert.equal(b.__briefkopfEigen().name, 'Erika Test', 'gespeichert bleibt sie');
+  assert.equal(b.__briefkopfEigenErlaubt(), true, 'Buero-Erlaubnis unberuehrt');
+  assert.equal(b.__briefkopfEffektiv().eigen, null, 'im fremden Fall nicht wirksam');
+  assert.equal(b.__briefkopfWert('BETREUER'), 'Sabine Kraft');
+  assert.deepEqual(kopfTexte(b).slice(0, 2).map(x => [x.text, x.y, x.size]), [['Sabine Kraft', 800, 11.5], ['Rechtliche Betreuungen', 788, 8.5]], 'Buerovorgabe ohne Titel/Funktionszeile der Person');
+  assert.equal(b.__briefkopfStatus().text, 'Standard-Briefkopf · Ihre Anpassung ruht (Betreuung: Sabine Kraft)');
+  /* Betreuer-Cache nachgeladen - jetzt eigener Fall: ohne Neuladen und ohne Invalidieren wirksam, weil der
+     Cache-Schluessel den Fallbezug traegt (das Ereignis caseCaregiverReady ist in dieser Sandbox ein No-op). */
+  b.__sigStore = { caregiverCached: () => ({ caseId: 'c1', caregiver: { userId: 2, name: 'Erika Test' } }) };
+  assert.equal(b.__briefkopfEffektiv().eigen.name, 'Erika Test');
+  assert.deepEqual(kopfTexte(b).slice(0, 2).map(x => [x.text, x.y, x.size]), [['Erika Test, M.A.', 800, 11.5], ['Fachkraft Rechtliche Betreuung', 788, 8.5]]);
+  assert.equal(b.__briefkopfStatus().text, 'Standard-Briefkopf · mit Ihrer Anpassung');
+  /* Fall geschlossen: ohne Fallbezug gilt die Anpassung weiter */
+  b.__activeServerCaseId = null;
+  assert.equal(b.__briefkopfEffektiv().eigen.name, 'Erika Test');
+  await b.__briefkopfEigenSpeichern(null);   // Personen-Speicher wieder leeren (Folge-Tests)
+  assert.equal(sandbox().__briefkopfEigen(), null);
+});
+
 /* ═══════════════════ 2. Lokal-Rundlauf ═══════════════════ */
 
 test('lokal: Speichern in bueroLocal (saveBueroLocal) -> Neuladen aus demselben Speicher -> PDF-Kopf; Abweichung ebenso', async () => {
@@ -310,6 +339,24 @@ test('lokal: Speichern in bueroLocal (saveBueroLocal) -> Neuladen aus demselben 
   await c.__briefkopfZuruecksetzen();
   assert.equal(speicher.briefkopf, null);
   assert.equal(sandbox({ modus: 'lokal', bueroLocal: speicher }).__briefkopfEffektiv().gepflegt, false);
+});
+
+/* Nacharbeit 06.09.2026 (Befunde 1/3): lokal liefert der Unterschriftenspeicher immer die angemeldete Person -
+   im fremden Fall muss der PDF-Kopf trotzdem die Betreuer:in des Falls (Fallfeld) zeigen. */
+test('lokal: fremder Fall -> PDF-Kopf zeigt die Betreuer:in des Falls (nicht die angemeldete Person), Anpassung ruht', async () => {
+  const speicher = { briefkopfEigen: { version: 1, name: 'Erika Test', titel: 'M.A.', funktion: 'Fachkraft Rechtliche Betreuung' } };
+  const s = sandbox({ modus: 'lokal', bueroLocal: speicher });
+  s.__currentUser = { id: 1, firstName: 'Erika', lastName: 'Test' };
+  s.__activeServerCaseId = 'c1';
+  s.__sigStore = { caregiverCached: () => ({ caseId: 'c1', caregiver: { userId: 1, name: 'Erika Test' } }) };   // lokaler Speicher = angemeldete Person
+  assert.equal(s.__briefkopfEffektiv().eigen.name, 'Erika Test', 'ohne Fallbezug wirkt die Anpassung');
+  assert.deepEqual(kopfTexte(s).slice(0, 2).map(x => [x.text, x.y, x.size]), [['Erika Test, M.A.', 800, 11.5], ['Fachkraft Rechtliche Betreuung', 788, 8.5]]);
+  s.state.caseData.rechtlicherBetreuer = 'sabine kraft';
+  assert.equal(s.__briefkopfEffektiv().eigen, null, 'fremder Fall: Anpassung ruht');
+  assert.deepEqual(kopfTexte(s).slice(0, 2).map(x => [x.text, x.y, x.size]), [['Sabine Kraft', 800, 11.5], ['Rechtliche Betreuungen', 788, 8.5]], 'Betreuer:in des Falls, Buerovorgabe');
+  assert.equal(s.__briefkopfStatus().text, 'Standard-Briefkopf · Ihre Anpassung ruht (Betreuung: Sabine Kraft)');
+  s.state.caseData.rechtlicherBetreuer = 'erika test';
+  assert.equal(kopfTexte(s)[0].text, 'Erika Test, M.A.', 'eigener Fall: Anpassung wirkt wieder (Cache-Schluessel)');
 });
 
 /* ═══════════════════ 3. Eigen-Anwendung als EINE Funktion ═══════════════════ */
@@ -443,6 +490,39 @@ test('Editor: Abschnitt „Meine Anpassung“, Buerovorgabe ohne Abweichung auf 
   assert.ok(!ed.includes("typeof W.__unifiedLetterSenderLine==='function'"), 'keine Kopie der Absenderzeile mehr');
   assert.ok(html.includes('.bk-eigen{border:1px solid var(--line)'), 'CSS hell');
   assert.ok(html.includes('#modal:has(.set-app) .set-inhalt .bk-eigen{'), 'CSS dunkel');
+});
+
+test('Nur-Lese-Ansicht: „Meine Anpassung“ steht ganz oben in der Eigenschaftenspalte, die Eigen-Felder bleiben bedienbar (Nacharbeit P3)', () => {
+  /* Kein DOM-Pruefstand fuer den Editor (mount braucht root/ResizeObserver) - deshalb String-Pins auf die
+     Render-Reihenfolge im Quelltext: in der Nur-Lese-Ansicht rendert propsHTML den Abschnitt VOR dem
+     Bausteinkopf und VOR den Zeilen/Bausteinen, unabhaengig von S.sel; der kopfLinks-Zweig laesst ihn
+     dort weg (keine Doppelung). Die Eigen-Eingaben tragen nie disabled, die Baustein-Texte (.bk-txt) schon. */
+  const a = html.indexOf('/* ═══ BRIEFKOPF-EDITOR');
+  const ed = html.slice(a, html.indexOf('/* ═══ BRIEFKOPF-EDITOR: ENDE ═══ */'));
+  const p = ed.slice(ed.indexOf('  function propsHTML(){'), ed.indexOf('  /* ── Werkzeugzeile ── */'));
+  assert.ok(p.length > 0 && p.length < 40000, 'propsHTML-Schnitt');
+  assert.ok(p.includes(`const eigenOben=S.readOnly?'<div class="bk-pp-body bk-pp-eigen-oben">'+eigenHTML()+'</div>':'';`), 'eigenOben nur in der Nur-Lese-Ansicht');
+  assert.ok(p.includes(`if(!meta)return eigenOben+'<div class="bk-pp-leer">'`), 'auch ohne gewaehlten Baustein ganz oben');
+  assert.ok(p.includes(`return eigenOben+kopf+'<div class="bk-pp-body">'+body+global+'</div>'+foot;`), 'vor Bausteinkopf, Zeilen und Buerovorgabe');
+  assert.ok(p.indexOf('const eigenOben=') < p.indexOf("if(meta.art==='zeilen')body=zeilenPropsHTML(zid);"), 'Reihenfolge im Quelltext');
+  assert.ok(ed.includes("BÜRO ist der Firmenname.</div></div>'+(S.readOnly?'':eigenHTML());}"), 'kopfLinks-Zweig ohne Doppelung');
+  /* Nacharbeit (Befund 9): kein Zaehlpin auf „eigenHTML()“ mehr (Kommentare duerfen das Wort nennen) - die beiden
+     Aufrufstellen sind oben woertlich gepinnt, hier nur noch die eine Definition. */
+  assert.equal((ed.match(/\n  function eigenHTML\(\)\{/g) || []).length, 1, 'genau eine Definition von eigenHTML');
+  /* Bearbeitungsmodus unveraendert: Abschnitt am Ende des kopfLinks-Zweigs, nicht oben */
+  assert.ok(!p.includes("eigenHTML()+'</div>'+kopf"), 'im Bearbeitungsmodus nicht oben');
+  /* Eigen-Eingaben ohne disabled, Baustein-Texte mit */
+  const eh = ed.slice(ed.indexOf('  function eigenHTML(){'), ed.indexOf('  async function eigenSpeichern('));
+  assert.ok(eh.includes(`maxlength="'+max+'" aria-label="'+l+'"></div>'`), 'Eigen-Felder ohne dis');
+  assert.ok(!eh.includes('+dis') && !eh.includes('disabled'), 'kein disabled im Abschnitt Meine Anpassung');
+  assert.ok(ed.includes(`aria-label="Text Zeile '+(i+1)+'"'+dis+'></div>'`), '.bk-txt traegt dis');
+  /* Klick und Eingabe der Eigen-Felder liegen VOR der readOnly-Schranke */
+  assert.ok(ed.indexOf('if(t.dataset&&t.dataset.eigen){') < ed.indexOf("if(S.readOnly)return;\n    if(t.classList&&t.classList.contains('bk-txt'))"), 'Eingabe vor der Schranke');
+  assert.ok(ed.indexOf("if(d.act==='eigen-speichern')") < ed.indexOf('if(S.readOnly)return;\n    if(d.fmt)'), 'Klick vor der Schranke');
+  /* Nur-Lese-Karte nennt den Weg; CSS setzt den oberen Abschnitt ab (hell und dunkel) */
+  assert.ok(ed.includes('passen Sie rechts unter „Meine Anpassung“ an.</p></div>'), 'RO_KARTE');
+  assert.ok(html.includes('.bk-pp-eigen-oben{border-bottom:1px solid var(--line)}'), 'CSS hell');
+  assert.ok(html.includes(':is(.bk-pp-sec,.bk-pp-kopf,.bk-pp-foot,.bk-pp-eigen-oben,.bk-fmt .sep){border-color:var(--set-dm-line)!important}'), 'CSS dunkel');
 });
 
 test('keine Platzhaltertexte mehr: „folgt in Paket P2“, „erst in P3“', () => {

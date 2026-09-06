@@ -54,8 +54,11 @@ router.put('/theme', (req, res) => {
 // Konto ohne Fallansicht darf deshalb sein Dashboard konfigurieren und den einmalig bestätigten
 // Intro-Status speichern. Die Fachrouten prüfen ihre Rechte weiterhin selbst.
 // Fallübersicht/mobile Navigation behalten den bisherigen Fall-Sichtschutz.
+// briefkopf-eigen (Nacharbeit 06.09.2026 P4): die persönliche Anpassung von Name/Titel/Funktionszeile
+// gehört jeder angemeldeten Person - die Briefkopf-Seite ist seit P3 für alle da, die Bürovorgabe
+// ist ebenfalls mit reiner Anmeldung lesbar; ein Konto ohne Fallansicht darf sie deshalb pflegen.
 router.use('/:key', (req, res, next) => {
-  if (req.params.key === 'dashboard' || req.params.key === 'mode-intro') return next();
+  if (req.params.key === 'dashboard' || req.params.key === 'mode-intro' || req.params.key === 'briefkopf-eigen') return next();
   return requireViewCases(req, res, next);
 });
 

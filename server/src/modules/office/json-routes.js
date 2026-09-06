@@ -38,8 +38,8 @@ router.use(require('./events').middleware('officeJson'));
 // betroffener Personen, deshalb reicht das Fall-Sichtrecht hier NICHT (siehe LESE_SCHRANKEN).
 // 'briefkopf': die Buero-Vorgabe des Briefkopf-Editors (06.09.2026) - EINE Karte (version:1) mit
 // Kopfzeilen, Band, Absenderzeile, Infoblock, Fusszeile und Folgeseite. Reiner Text, kein Logo.
-// Lesen jede angemeldete Person mit Fall-Sichtrecht (Vorgabe), Schreiben Admin oder Buerostammdaten-
-// Recht (SCHREIB_SCHRANKEN) - wer den Briefkopf gestaltet, verwaltet das Buero.
+// Lesen jede angemeldete Person (LESE_SCHRANKEN, Nacharbeit 06.09.2026 P3), Schreiben Admin oder
+// Buerostammdaten-Recht (SCHREIB_SCHRANKEN) - wer den Briefkopf gestaltet, verwaltet das Buero.
 const KEYS = new Set(['ai_chats', 'case_intakes', 'case_outtakes', 'ui_prefs', 'suggestion_registry', 'mailx_case_links', 'mailx-labels', 'kontaktmonitor', 'qualifikationen', 'aussendienst_ledger', 'custom_forms', 'vertretungsplan', 'datenschutz', 'einstellungs_vorgaben', 'rollen', 'mail_signaturen_abgeloest', 'briefkopf']);
 
 /* Lese- und Schreib-Schranken JE SCHLUESSEL (25.08.2026).
@@ -65,6 +65,15 @@ const LESE_SCHRANKEN = new Map([
   }],
   ['rollen', {
     erlaubt: (session) => !!session,
+    fehler: 'Nicht angemeldet.'
+  }],
+  // Briefkopf-Vorgabe (Nacharbeit 06.09.2026 P3, Befund 7): die Seite Einstellungen -> Buero -> Briefkopf
+  // ist fuer JEDE angemeldete Person sichtbar (Nur-Lese-Ansicht mit „Meine Anpassung“). Die Karte
+  // enthaelt nur Aufbau, Farben und Bausteine - keine Personendaten -, deshalb reicht die Anmeldung
+  // (wie router.use(requireAuth)). Mit der Vorgabe requireViewCases saehe eine Person ohne Fall-
+  // Sichtrecht stumm die Standardkarte statt der Buerovorgabe. Schreiben: Admin/Buerostammdaten-Recht.
+  ['briefkopf', {
+    erlaubt: (session) => !!(session && session.userId),
     fehler: 'Nicht angemeldet.'
   }],
   // 'datenschutz' fuehrt Auskunftsersuchen und Datenpannen. Beide nennen die NAMEN betroffener
@@ -108,8 +117,8 @@ const SCHREIB_SCHRANKEN = new Map([
   }],
   // Briefkopf-Vorgabe (06.09.2026): Schreiben wie bei den uebrigen Buerostammdaten - Admin oder
   // Buerostammdaten-Recht, BEWUSST ohne Fall-Bearbeitungsrecht davor (eine Person, die nur das
-  // Buero verwaltet, soll den Briefkopf gestalten koennen). Lesen bleibt bei der Vorgabe
-  // requireViewCases: die Zeichner jeder Person mit Fallsicht brauchen die Karte.
+  // Buero verwaltet, soll den Briefkopf gestalten koennen). Lesen: jede angemeldete Person
+  // (LESE_SCHRANKEN oben, Nacharbeit 06.09.2026 P3) - die Zeichner und die Nur-Lese-Seite brauchen die Karte.
   ['briefkopf', {
     erlaubt: (session) => !!(session && (session.isAdmin || session.canManageOfficeProfile)),
     fehler: 'Keine Berechtigung, den Briefkopf des Büros zu ändern.'
