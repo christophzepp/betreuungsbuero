@@ -16,10 +16,18 @@ const path = require('node:path');
 const APP_HTML = path.join(__dirname, '..', '..', 'outputs', 'Betreuungsbuero_Dokumentenassistent_v0_7.html');
 const html = fs.readFileSync(APP_HTML, 'utf8');
 
-test('Die Ursache steht noch im Quelltext - deshalb bleibt die Gegenregel noetig', () => {
+test('Die globale Dunkelmodus-Regel setzt nur noch die Farbe, nicht die Kurzschreibweise', () => {
   assert.ok(html.includes('html[data-theme="dark"] select,'), 'Die globale Dunkelmodus-Regel fehlt');
-  assert.ok(html.includes('background:#111c25!important;color:var(--ink)!important;border-color:var(--line)!important;'),
-    'Die Kurzschreibweise der globalen Regel hat sich geaendert - die Gegenregel bitte pruefen');
+  assert.ok(html.includes('background-color:#111c25!important;color:var(--ink)!important;border-color:var(--line)!important;'),
+    'Die globale Regel muss background-COLOR setzen, sonst faellt der Auswahlpfeil wieder weg');
+  /* Nur diese eine Regelgruppe pruefen: dieselbe Farbe steht auch in unbeteiligten Regeln
+     (Tabellen, Kalenderleiste), die kein Hintergrundbild tragen. */
+  const gruppe = html.slice(html.indexOf('html[data-theme="dark"] select,'),
+    html.indexOf('}', html.indexOf('html[data-theme="dark"] .review-field textarea{')) + 1);
+  assert.ok(!/background:#111c25/.test(gruppe),
+    'Die Kurzschreibweise ist zurueck - sie setzt Bild, Wiederholung, Lage und Groesse zurueck');
+  assert.ok(/html\[data-theme="dark"\] select,[\s\S]*\.review-field textarea\{/.test(gruppe),
+    'Die Regelgruppe wurde umgebaut - bitte den Pruefstand nachziehen');
 });
 
 test('Beide Auswahlfelder mit eigenem Pfeil bekommen ihn im Dunkelmodus zurueck', () => {
