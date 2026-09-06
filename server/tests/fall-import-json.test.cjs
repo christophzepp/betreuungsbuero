@@ -115,6 +115,7 @@ test('Der Datei-Weg bietet die JSON als eigenstaendigen Weg an', () => {
     'die alte Sackgassen-Meldung lebt noch');
 });
 
-test('Blockzahl bleibt bei 309', () => {
-  assert.equal((html.match(/\n<script/g) || []).length, 309);
+/* 06.09.2026 Briefkopf-Editor P3: zwei neue Schriftblöcke (tpl_font_dejavu_oblique, tpl_font_dejavu_bold_oblique) für Kursiv im Briefkopf - Nutzerentscheidung, 309 + 2 = 311; JS-Blöcke bleiben 229. */
+test('Blockzahl bleibt bei 311', () => {
+  assert.equal((html.match(/\n<script/g) || []).length, 311);
 });

@@ -4,7 +4,12 @@ const { requireAuth, requireViewCases } = require('../../middleware/authenticati
 const themePrefs = require('./theme-preferences');
 
 const router = express.Router();
-const ALLOWED_KEYS = new Set(['case-overview', 'mobile-navigation', 'dashboard', 'mode-intro']);
+// 'briefkopf-eigen' (06.09.2026): persoenliche Abweichung vom Buero-Briefkopf - nur Name, Titel und
+// Funktionszeile (Nutzerentscheidung). Ob sie wirkt, entscheidet der Sperrschalter des Bueros im
+// Client (briefkopf.eigeneErlaubt); gespeichert werden darf sie immer.
+const ALLOWED_KEYS = new Set(['case-overview', 'mobile-navigation', 'dashboard', 'mode-intro', 'briefkopf-eigen']);
+const BRIEFKOPF_EIGEN_FELDER = ['version', 'name', 'titel', 'funktion'];
+const BRIEFKOPF_EIGEN_MAX = { name: 120, titel: 120, funktion: 160 };
 const MAX_PREFS_BYTES = 32 * 1024;
 const DASHBOARD_CARD_SIZES = new Set(['compact', 'normal']);
 const DASHBOARD_PANEL_SIZES = new Set([
@@ -95,6 +100,16 @@ function modeIntroPrefsValid(prefs) {
   return Object.keys(prefs).every((key) => ['version', 'localSeen', 'onlineSeen'].includes(key));
 }
 
+function briefkopfEigenPrefsValid(prefs) {
+  if (!prefs || typeof prefs !== 'object' || Array.isArray(prefs)) return false;
+  if (prefs.version !== 1) return false;
+  if (!Object.keys(prefs).every((key) => BRIEFKOPF_EIGEN_FELDER.includes(key))) return false;
+  return ['name', 'titel', 'funktion'].every((feld) => {
+    if (prefs[feld] === undefined) return true;
+    return typeof prefs[feld] === 'string' && prefs[feld].length <= BRIEFKOPF_EIGEN_MAX[feld];
+  });
+}
+
 router.get('/:key', (req, res) => {
   const key = validKey(req, res);
   if (!key) return;
@@ -119,6 +134,9 @@ router.put('/:key', (req, res) => {
   }
   if (key === 'mode-intro' && !modeIntroPrefsValid(prefs)) {
     return res.status(400).json({ error: 'Der Modus-Intro-Status ist ungueltig.' });
+  }
+  if (key === 'briefkopf-eigen' && !briefkopfEigenPrefsValid(prefs)) {
+    return res.status(400).json({ error: 'Die persoenliche Briefkopf-Abweichung ist ungueltig (erlaubt: name, titel, funktion).' });
   }
   const data = JSON.stringify(prefs);
   if (Buffer.byteLength(data, 'utf8') > MAX_PREFS_BYTES) {

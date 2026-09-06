@@ -9,7 +9,11 @@ const html = fs.readFileSync(htmlPath, 'utf8');
 test('Briefkopf führt das fremde Aktenzeichen rechtsbündig über Ort/Datum (zentraler Infoblock)', () => {
   /* Seit dem einheitlichen Briefkopf (14.08.2026): „Ihr Zeichen“ + Ort/Datum gestapelt rechts. */
   assert.match(html, /function unifiedLetterInfoBlock\(page,fonts,optionen\)/);
-  assert.match(html, /'Ihr Zeichen: '\+fremd/);
+  /* 06.09.2026 Briefkopf-Editor P3: „Ihr Zeichen“ ist eine Zeile der Briefkopf-Karte
+     ('Ihr Zeichen: IHR ZEICHEN', 9,3 pt); der Zeichner reicht optionen.fremdesZeichen als
+     Baustein in den Resolver - das Literal 'Ihr Zeichen: '+fremd gibt es nicht mehr. */
+  assert.match(html, /\{t:'Ihr Zeichen: IHR ZEICHEN',size:9\.3,color:'schwarz',an:true\}/);
+  assert.match(html, /if\(o\.fremdesZeichen!==undefined\)k\.fremdesZeichen=o\.fremdesZeichen;/);
   assert.match(html, /window\.__unifiedLetterInfoBlock\(page,__fonts,\{fremdesZeichen:reference,ortDatum:placeDate\}\)/);
   assert.match(html, /y=pdfDrawWrapped\(page,subject,/);
   assert.doesNotMatch(html, /\$\{subject\}\$\{reference\?` · Ihr Zeichen:/);

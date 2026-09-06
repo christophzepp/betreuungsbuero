@@ -47,17 +47,21 @@ function sichtbareBereiche(welt) {
   return { sichtbar: [...ctx.__sichtbar], nurOnline: [...ctx.__nurOnline] };
 }
 
-test('Online-Admin sieht alle 29 Bereiche - der Umbau hat online nichts weggenommen', () => {
-  /* 30.08.2026: 28 + der neue Bereich „Demo-Modus" (Nutzerauftrag Vorführbetrieb). */
+test('Online-Admin sieht alle 30 Bereiche - der Umbau hat online nichts weggenommen', () => {
+  /* 30.08.2026: 28 + der neue Bereich „Demo-Modus" (Nutzerauftrag Vorführbetrieb).
+     06.09.2026: 29 + der Bereich „Briefkopf" (Briefkopf-Editor, Gruppe Büro hinter den
+     Bürostammdaten; bewusste Erweiterung, kein Verlust). */
   const { sichtbar, nurOnline } = sichtbareBereiche({ modus: 'online', nutzer: { isAdmin: true } });
-  assert.strictEqual(sichtbar.length, 29, `Online-Admin sieht ${sichtbar.length} statt 29 Bereiche: ${sichtbar}`);
+  assert.strictEqual(sichtbar.length, 30, `Online-Admin sieht ${sichtbar.length} statt 30 Bereiche: ${sichtbar}`);
   assert.deepStrictEqual(nurOnline, [], 'Online darf es keinen Sammelhinweis geben');
 });
 
 test('Lokal-Admin: die tragfähigen Bereiche erscheinen, die Server-Bereiche wandern in den Sammelhinweis', () => {
   const { sichtbar, nurOnline } = sichtbareBereiche({ modus: 'local', nutzer: { isAdmin: true } });
+  /* 06.09.2026: 'briefkopf' kommt lokal dazu - die Karte lebt in bueroLocal.briefkopf und
+     traegt ohne Server (Briefkopf-Editor, lokal:true). */
   assert.deepStrictEqual(sichtbar.sort(), [
-    'aussendienst', 'darstellung', 'datenadmin', 'datenschutz', 'dateinamen', 'diagnose',
+    'aussendienst', 'briefkopf', 'darstellung', 'datenadmin', 'datenschutz', 'dateinamen', 'diagnose',
     'herkunft', 'karten', 'ki', 'konto', 'lokal', 'stammdaten', 'unterschriften',
     'versand', 'vorschlaege',
   ].sort(), 'Die lokal sichtbare Bereichsliste stimmt nicht mit der geprüften Matrix überein');
@@ -72,8 +76,10 @@ test('Datei-Betrieb (kein Konto): fail-closed trotz permissionValue(null)=true',
   /* Ohne Konto beantwortet permissionValue JEDES Recht mit true - die Modus-Flags sind dort
      die einzige Schranke. Genau das prüft dieser Fall. */
   const { sichtbar, nurOnline } = sichtbareBereiche({ modus: 'local', nutzer: null });
+  /* 06.09.2026: 'briefkopf' auch im Datei-Betrieb (datei:true) - dieselbe Ablage wie die
+     Buerostammdaten, ohne Konto fuer jede Person bearbeitbar. */
   assert.deepStrictEqual(sichtbar.sort(), [
-    'darstellung', 'datenadmin', 'dateinamen', 'diagnose', 'herkunft', 'karten', 'ki',
+    'briefkopf', 'darstellung', 'datenadmin', 'dateinamen', 'diagnose', 'herkunft', 'karten', 'ki',
     'stammdaten', 'unterschriften', 'versand',
   ].sort(), 'Die Datei-Betrieb-Bereichsliste stimmt nicht');
   assert.ok(sichtbar.includes('unterschriften'),
@@ -92,6 +98,8 @@ test('Lokal-Nutzer ohne Rechte: Gates wirken zusätzlich zur Modus-Matrix', () =
   });
   assert.ok(!sichtbar.includes('karten') && !sichtbar.includes('stammdaten') && !sichtbar.includes('aussendienst'),
     'Entzogene Rechte wirken lokal nicht mehr');
+  /* 06.09.2026: der Briefkopf haengt am selben Recht wie die Buerostammdaten. */
+  assert.ok(!sichtbar.includes('briefkopf'), 'Ohne menuSettingsOfficeProfile darf der Briefkopf nicht erscheinen');
   assert.ok(!sichtbar.includes('lokal') && !sichtbar.includes('datenschutz') && !sichtbar.includes('vorschlaege'),
     'admin-Bereiche erscheinen für Nicht-Admins');
   assert.ok(sichtbar.includes('ki') && sichtbar.includes('datenadmin') && sichtbar.includes('diagnose'),

@@ -123,7 +123,9 @@ test('Druck- und Briefkopfversion verwenden den eigentlichen Betreuerantrag', ()
   assert.match(html, /Die betroffene Person ist mir bekannt\./);
   assert.match(html, /mein Einverständnis derzeit nicht vorliegt/);
   assert.match(html, /dieselbe Geschäftsbrief-Geometrie wie beim Freidokument/);
-  assert.match(html, /x:80,y:724,size:senderSize/);
+  /* 06.09.2026 Briefkopf-Editor P3: die Absenderzeile zeichnet unifiedLetterSenderLine aus der
+     Briefkopf-Karte auf der Rückgabe-Grundlinie des Kopfs (Standardkarte 724) - kein Literal mehr. */
+  assert.match(html, /window\.__unifiedLetterSenderLine\(page,__fonts,__kopfY,\{tinte:ink\}\)/);
   /* Seit dem einheitlichen Briefkopf (14.08.2026) stehen Ort/Datum rechtsbuendig im zentralen Infoblock. */
   assert.match(html, /window\.__unifiedLetterInfoBlock\(page,__fonts,\{ortDatum:/);
   assert.match(html, /Übernahmebereitschaft zur rechtlichen Betreuung/);

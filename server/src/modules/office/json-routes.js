@@ -36,7 +36,11 @@ router.use(require('./events').middleware('officeJson'));
 // zum Verantwortlichen, zur/zum Datenschutzbeauftragten und zur Aufsichtsbehoerde. Der Schluessel
 // ist der EINZIGE mit einer eigenen LESE-Schranke: Auskuenfte und Pannen nennen Klarnamen
 // betroffener Personen, deshalb reicht das Fall-Sichtrecht hier NICHT (siehe LESE_SCHRANKEN).
-const KEYS = new Set(['ai_chats', 'case_intakes', 'case_outtakes', 'ui_prefs', 'suggestion_registry', 'mailx_case_links', 'mailx-labels', 'kontaktmonitor', 'qualifikationen', 'aussendienst_ledger', 'custom_forms', 'vertretungsplan', 'datenschutz', 'einstellungs_vorgaben', 'rollen', 'mail_signaturen_abgeloest']);
+// 'briefkopf': die Buero-Vorgabe des Briefkopf-Editors (06.09.2026) - EINE Karte (version:1) mit
+// Kopfzeilen, Band, Absenderzeile, Infoblock, Fusszeile und Folgeseite. Reiner Text, kein Logo.
+// Lesen jede angemeldete Person mit Fall-Sichtrecht (Vorgabe), Schreiben Admin oder Buerostammdaten-
+// Recht (SCHREIB_SCHRANKEN) - wer den Briefkopf gestaltet, verwaltet das Buero.
+const KEYS = new Set(['ai_chats', 'case_intakes', 'case_outtakes', 'ui_prefs', 'suggestion_registry', 'mailx_case_links', 'mailx-labels', 'kontaktmonitor', 'qualifikationen', 'aussendienst_ledger', 'custom_forms', 'vertretungsplan', 'datenschutz', 'einstellungs_vorgaben', 'rollen', 'mail_signaturen_abgeloest', 'briefkopf']);
 
 /* Lese- und Schreib-Schranken JE SCHLUESSEL (25.08.2026).
    WARUM eine Tabelle statt einer weiteren if-Kette in den Routen: In diesem einen Topf liegt sehr
@@ -101,6 +105,14 @@ const SCHREIB_SCHRANKEN = new Map([
   ['datenschutz', {
     erlaubt: (session) => !!(session && (session.isAdmin || session.canManageOfficeProfile)),
     fehler: 'Keine Berechtigung, die Datenschutz-Nachweise zu ändern.'
+  }],
+  // Briefkopf-Vorgabe (06.09.2026): Schreiben wie bei den uebrigen Buerostammdaten - Admin oder
+  // Buerostammdaten-Recht, BEWUSST ohne Fall-Bearbeitungsrecht davor (eine Person, die nur das
+  // Buero verwaltet, soll den Briefkopf gestalten koennen). Lesen bleibt bei der Vorgabe
+  // requireViewCases: die Zeichner jeder Person mit Fallsicht brauchen die Karte.
+  ['briefkopf', {
+    erlaubt: (session) => !!(session && (session.isAdmin || session.canManageOfficeProfile)),
+    fehler: 'Keine Berechtigung, den Briefkopf des Büros zu ändern.'
   }],
   /* Einmalige Merkzeile fuer die abgeloesten Konto-Signaturen (28.08.2026). Sie enthaelt
      Klartext aus fremden Postfaechern - deshalb NUR fuer Verwaltende, lesend wie schreibend.

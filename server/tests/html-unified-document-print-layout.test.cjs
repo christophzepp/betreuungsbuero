@@ -30,7 +30,9 @@ test('die eingebettete Schrift ist als Vorlagen-Block samt fontkit verfügbar', 
   assert.match(html, /<script id="tpl_font_dejavu_regular" type="application\/pdf-base64">/);
   assert.match(html, /<script id="tpl_font_dejavu_bold" type="application\/pdf-base64">/);
   assert.match(html, /@pdf-lib\/fontkit 1\.1\.1 UMD/);
-  assert.match(html, /async function unifiedDocumentFonts\(pdf\)/);
+  /* 06.09.2026 Briefkopf-Editor P3: zweiter Parameter optionen ({kursiv:true} erzwingt die
+     Oblique-Schnitte; sonst nur, wenn die Briefkopf-Karte Kursiv benutzt). */
+  assert.match(html, /async function unifiedDocumentFonts\(pdf,optionen\)/);
   assert.match(html, /embeddedPdfBytes\('tpl_font_dejavu_regular'\)/);
   assert.match(html, /pdf\.registerFontkit\(window\.fontkit\)/);
   assert.match(html, /PDFLib\.StandardFonts\.Helvetica/); // Fallback bleibt
@@ -44,7 +46,10 @@ test('AcroForm-Befüllung erzeugt Appearance-Streams mit der eigenen Schrift', (
 
 test('der CI-Kopf trägt Band, Fallbezugskasten und schlanke Folgeseiten-Kopfzeile', () => {
   assert.match(html, /function drawFirstHeader\(\)/);
-  assert.match(html, /drawRight\(bandText,bold,12\.5,PAGE_WIDTH-RIGHT-12/);
+  /* 06.09.2026 Briefkopf-Editor P3: der Kopf des Berichtsdrucks kommt aus der Briefkopf-Karte
+     (unifiedLetterHead mit bericht:true zeichnet Band 24 pt / Text 12,5 pt im Raster 48..547,28);
+     das frühere Literal drawRight(bandText,bold,12.5,…) gibt es deshalb nicht mehr. */
+  assert.match(html, /y=unifiedLetterHead\(page,fonts,\{bericht:true,reportId,palette:\{ci:blue,grau:muted,weiss:white,schwarz:ink\}\}\)/);
   assert.match(html, /\['Betreute Person',fullName\(\)\]/);
   assert.match(html, /\['Erstellt am',todayDE\(\)\]/);
   assert.match(html, /function drawContinuationHeader\(sectionTitle='',continued=false\)/);

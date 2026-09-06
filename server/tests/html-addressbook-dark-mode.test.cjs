@@ -35,7 +35,8 @@ assert(block.includes('.addressbook-editor-grid input'), 'Die Felder des Kontakt
 
 for (const [index, html] of htmls.entries()) {
   const scripts = scriptsOf(html);
-  assert.equal(scripts.length, 309, `${files[index]}: Scriptblockzahl hat sich verändert.`);
+  /* 06.09.2026 Briefkopf-Editor P3: zwei neue Schriftblöcke (tpl_font_dejavu_oblique, tpl_font_dejavu_bold_oblique) für Kursiv im Briefkopf - Nutzerentscheidung, 309 + 2 = 311; JS-Blöcke bleiben 229. */
+  assert.equal(scripts.length, 311, `${files[index]}: Scriptblockzahl hat sich verändert.`);
   let js = 0;
   scripts.forEach((script, scriptIndex) => {
     if (/\btype\s*=\s*(['"]?)(?!text\/javascript|application\/javascript|module)\w/i.test(script.attrs)) return;

@@ -494,6 +494,7 @@ test('Server: Dokumentart wird nur der FORM nach geprueft', () => {
   assert.ok(dbjs.includes('idx_outgoing_invoices_case_id'), 'Index auf die Fallkennung fehlt');
 });
 
-test('Blockzahl bleibt bei 309', () => {
-  assert.equal((html.match(/\n<script/g) || []).length, 309, 'Blockzahl veraendert');
+/* 06.09.2026 Briefkopf-Editor P3: zwei neue Schriftblöcke (tpl_font_dejavu_oblique, tpl_font_dejavu_bold_oblique) für Kursiv im Briefkopf - Nutzerentscheidung, 309 + 2 = 311; JS-Blöcke bleiben 229. */
+test('Blockzahl bleibt bei 311', () => {
+  assert.equal((html.match(/\n<script/g) || []).length, 311, 'Blockzahl veraendert');
 });

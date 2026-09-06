@@ -11,7 +11,7 @@
      4. Dateinamen: lokal wortgleich weiter "Lokaler Arbeitsdatenexport.zip", online der neue Name.
      5. WAS-FEHLT.txt liegt im Ordner Büroorganisation und benennt die Kernluecken.
      6. Die Pins aus html-runtime-modes.test.cjs gelten weiter (Sektion ohne /api/admin/).
-     7. Die Blockzahl bleibt bei 309.
+     7. Die Blockzahl bleibt bei 311.
      8. Wurzelbehebung 25.08.2026 (Nutzerlauf 20:58): alte 21-Blatt-Servervorlagen im
         OpenXML-SDK-Stil (<x:sheet ...>, xmlns:r nur je Element) muessen durch
         boNormalizeTemplateWorkbookXml praefixfrei und mit Root-xmlns:r laufen - sonst warf
@@ -655,9 +655,10 @@ test('Auslieferung: __workToast traegt die Warnform (type warn, .work-toast.warn
 
 /* ═══════════════════ 7. Blockzahl ═══════════════════ */
 
-test('Auslieferung: die Blockzahl bleibt bei 309', () => {
+/* 06.09.2026 Briefkopf-Editor P3: zwei neue Schriftblöcke (tpl_font_dejavu_oblique, tpl_font_dejavu_bold_oblique) für Kursiv im Briefkopf - Nutzerentscheidung, 309 + 2 = 311; JS-Blöcke bleiben 229. */
+test('Auslieferung: die Blockzahl bleibt bei 311', () => {
   const bloecke = (html.match(/\n<script/g) || []).length;
-  assert.equal(bloecke, 309, 'Scriptblockzahl hat sich veraendert.');
+  assert.equal(bloecke, 311, 'Scriptblockzahl hat sich veraendert.');
 });
 
 /* ─── Nachtrag 25.08. ~22:00: der v255-Blatt-Injektor verseuchte fremde Mappen ───

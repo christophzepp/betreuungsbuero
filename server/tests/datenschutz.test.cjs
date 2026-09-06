@@ -805,10 +805,11 @@ test('Lokalsicherung: die Datenschutz-Dokumentation wird gesammelt UND zurueckge
 
 /* ════════════════════════ 9. Auslieferungsdatei unversehrt ════════════════════════ */
 
-test('Auslieferung: die Blockzahl bleibt bei 309', () => {
+/* 06.09.2026 Briefkopf-Editor P3: zwei neue Schriftblöcke (tpl_font_dejavu_oblique, tpl_font_dejavu_bold_oblique) für Kursiv im Briefkopf - Nutzerentscheidung, 309 + 2 = 311; JS-Blöcke bleiben 229. */
+test('Auslieferung: die Blockzahl bleibt bei 311', () => {
   const bloecke = (html.match(/\n<script/g) || []).length;
-  assert.equal(bloecke, 309,
-    `Die Auslieferungsdatei hat ${bloecke} <script>-Bloecke statt 309 - neuer Code gehoert in einen vorhandenen Block.`);
+  assert.equal(bloecke, 311,
+    `Die Auslieferungsdatei hat ${bloecke} <script>-Bloecke statt 311 - neuer Code gehoert in einen vorhandenen Block.`);
 });
 
 test('Auslieferung: der Datenschutz-Baustein haengt an denselben Rechten wie der Server', () => {

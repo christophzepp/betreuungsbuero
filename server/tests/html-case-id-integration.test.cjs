@@ -25,7 +25,8 @@ function scripts(source) {
   const expression = /<script\b([^>]*)>([\s\S]*?)<\/script>/gi;
   let match;
   while ((match = expression.exec(source))) blocks.push({ attributes: match[1], body: match[2] });
-  assert.equal(blocks.length, 309, 'Scriptblockzahl');
+  /* 06.09.2026 Briefkopf-Editor P3: zwei neue Schriftblöcke (tpl_font_dejavu_oblique, tpl_font_dejavu_bold_oblique) für Kursiv im Briefkopf - Nutzerentscheidung, 309 + 2 = 311; JS-Blöcke bleiben 229. */
+  assert.equal(blocks.length, 311, 'Scriptblockzahl');
   let javascript = 0;
   const failures = [];
   blocks.forEach((block, index) => {

@@ -657,7 +657,8 @@ function EIN_KAT_KEYS() {
 }
 
 test('Struktur: Blockzahl unverändert (NEUER script-Block ist verboten)', () => {
-  assert.equal((html.match(/\n<script/g) || []).length, 309,
+  /* 06.09.2026 Briefkopf-Editor P3: zwei neue Schriftblöcke (tpl_font_dejavu_oblique, tpl_font_dejavu_bold_oblique) für Kursiv im Briefkopf - Nutzerentscheidung, 309 + 2 = 311; JS-Blöcke bleiben 229. */
+  assert.equal((html.match(/\n<script/g) || []).length, 311,
     'Die Zahl der script-Blöcke hat sich verändert - neuer Code gehört in bestehende Blöcke.');
 });
 
@@ -1656,8 +1657,10 @@ test('Reine Vorgabe-Regeln sagen, wo man sie umstellt', () => {
   /* Links stand „erlaubt", rechts im selben Feld „ein" - dieselbe Sache, zwei Wörter. */
   assert.ok(html.includes("const w=kat.worte||['ein','aus'];return wert===false?w[1]:wert===true?w[0]:'—';"),
     'Die Beschriftung links folgt nicht der Wortwahl des Eintrags');
-  assert.equal((html.match(/nurVorgabe:true,worte:\['erlaubt','gesperrt'\]/g) || []).length, 2,
-    'Nicht beide Erlaubnis-Regeln sprechen dieselbe Sprache');
+  /* 06.09.2026: drei statt zwei - der Sperrschalter des Briefkopf-Editors (briefkopf.eigeneErlaubt)
+     spricht dieselbe Sprache wie Dateinamen und Betreff. */
+  assert.equal((html.match(/nurVorgabe:true,worte:\['erlaubt','gesperrt'\]/g) || []).length, 3,
+    'Nicht alle Erlaubnis-Regeln sprechen dieselbe Sprache');
 });
 
 test('Datenadministration: fünf gleich gebaute Karten über die volle Breite (Variante B)', () => {
