@@ -1,0 +1,42 @@
+PASS Liste zeigt offene Aufgaben und Wiedervorlagen
+PASS Details mit Anlage und festen Aktionen
+PASS Originalfelder und Datei-Explorer bleiben vollständig erhalten
+PASS Realtime-Aktualisierung erhält Original-DOM und Entwurf
+PASS Anlage hinzufügen erhält ungespeicherte Eingaben
+PASS Anlagenübertragung verwendet die bestehende Verknüpfung
+PASS Fehlgeschlagenes Entfernen behält Anlage und Formular
+PASS Escape und Bereichswechsel fragen bei geändertem Entwurf nach
+PASS Chats und KI-Rückweg bewahren den Formular-DOM
+PASS Fehlgeschlagenes Speichern behält Eingaben und zeigt Fehler
+PASS Ausgeschaltete Wiederholung blockiert das Speichern nicht
+PASS Bearbeiten speichert bestehende Felder ohne Verlust
+PASS Datumsprüfung verhindert Fälligkeit vor Bearbeitungsstart
+PASS Teilweise gespeicherte Aufgabe behält fehlgeschlagene Dateien zur Wiederholung
+PASS Wiederholung erzeugt keine doppelte Aufgabe und speichert alle Zuordnungen
+PASS Serienaufgabe rückt auf nächste Fälligkeit und bleibt offen
+PASS Statuswechsel erledigt und wieder offen
+PASS Suche reduziert Ergebnisse, Löschen stellt sie wieder her
+PASS Fälligkeit und Priorität lassen sich kombinieren
+PASS Listen-Sichtbarkeit speichert bestehende Präferenz
+PASS Listenfarbe erscheint im Aufgabenpunkt
+PASS Manuelles Verschieben per Touch ändert Reihenfolge
+PASS ICS-Gesamtexport erreicht Browserdownload
+PASS ICS-Import verwendet vorhandenen Parser und Speicherung
+PASS Synchronisierung bleibt erreichbar
+PASS Einzelexport bleibt erreichbar
+PASS Löschen entfernt ausschließlich ausgewählte Aufgabe
+PASS Layout 320px hell
+PASS Layout 320px dunkel
+PASS Layout 360px hell
+PASS Layout 360px dunkel
+PASS Layout 390px hell
+PASS Layout 390px dunkel
+PASS Layout 430px hell
+PASS Layout 430px dunkel
+PASS Ladefehler zeigen vorhandene Aufgaben mit erneutem Ladezugang
+PASS Verwerfen schließt den Entwurf ohne neue Aufgabe
+PASS Formular 320px erhält Felder, Datum und feste Aktionen
+PASS Formular 430px erhält Felder, Datum und feste Aktionen
+PASS Formularaktionen bleiben bei geringer Höhe erreichbar
+PASS Desktop verwendet weiterhin die ursprüngliche Aufgabenansicht
+PASS Keine JavaScript-Laufzeitfehler

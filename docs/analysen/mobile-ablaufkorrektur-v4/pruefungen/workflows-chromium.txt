@@ -1,0 +1,32 @@
+PASS Wiedervorlagen → Übersicht über header
+PASS Wiedervorlagen → Übersicht über navigation
+PASS KI-Zugang ohne Scrollen über der Navigation
+PASS Lange Mail hat eine echte Scrollposition
+PASS Mail-Aktionen folgen ausgeblendeter Navigation zum Bildschirmrand
+PASS Ein Senden-Knopf und getrennte Werkzeugzeile
+PASS Werkzeug erreichbar: Fall- und Bürodaten neu laden
+PASS Werkzeug erreichbar: Gespräch in die Falldokumentation übernehmen
+PASS Werkzeug erreichbar: Diktat (Spracheingabe)
+PASS Werkzeug erreichbar: Unterlagen für das Gespräch anhängen
+PASS Werkzeug erreichbar: Senden
+PASS Werkzeug erreichbar: Hell/Dunkel umschalten
+PASS Werkzeug erreichbar: KI-Einstellungen und Modell
+PASS Mail kehrt an ihre Leseposition zurück
+PASS Nachricht und Anlagen bleiben erhalten
+PASS Ungesendete KI-Frage überlebt den Ansichtswechsel
+PASS Chats-Rückkehr bewahrt KI-Eingabe ohne doppelte Assistenten
+PASS Schnellaktionen haben verständliche Beschriftungen
+PASS Alle Schnellprompts und Verwaltung bleiben erreichbar
+PASS KI-Ansicht ohne Überlauf bei 320 / false
+PASS KI-Ansicht ohne Überlauf bei 320 / true
+PASS KI-Ansicht ohne Überlauf bei 390 / false
+PASS KI-Ansicht ohne Überlauf bei 390 / true
+PASS KI-Ansicht ohne Überlauf bei 570 / false
+PASS KI-Ansicht ohne Überlauf bei 570 / true
+PASS KI-Eingabe und Senden bei Tastatur vollständig sichtbar
+PASS Weitere Eingabe bleibt während laufender KI-Anfrage erhalten
+PASS Antwort-Neuzeichnen bewahrt die nächste Frage
+PASS KI-Anfrage enthält die richtige E-Mail und Frage
+PASS Auch Schnellaktionen außerhalb der ersten fünf starten im Mail-Assistenten
+PASS KI-Antwort bleibt als E-Mail-Entwurf übernehmbar
+PASS Keine Laufzeitfehler

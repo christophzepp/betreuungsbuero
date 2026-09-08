@@ -79,10 +79,10 @@ const output=process.env.MOBILE_QA_OUTPUT||'/tmp/mobile-mail-qa';fs.mkdirSync(ou
  await page.waitForTimeout(180);await page.screenshot({path:path.join(output,'mail-liste.png')});
  await page.getByRole('button',{name:'E-Mails filtern',exact:true}).click();await page.getByLabel('Lesestatus',{exact:true}).selectOption('unseen');await page.getByLabel('Anlagen',{exact:true}).selectOption('yes');await page.waitForTimeout(180);await page.screenshot({path:path.join(output,'mail-filter.png')});await page.getByRole('button',{name:'Anwenden',exact:true}).click();await check('Lesestatus und Anlagen lassen sich kombinieren',async()=>assert.equal(await page.locator('.mx-mobile-view .mx-msg').count(),2));
  await page.locator('.mx-mobile-view .mx-msg[data-uid="1"]').click();await page.waitForTimeout(300);await page.waitForTimeout(180);await page.screenshot({path:path.join(output,'mail-nachricht.png')});
- await page.locator('[data-rai="toggle"]').click();await page.locator('[data-rai-input]').waitFor();
- await check('KI-Assistent zeigt seine Eingabe und bewahrt Nachricht und Anlagen',async()=>{assert.ok(await page.locator('[data-rai-input]').isVisible());assert.ok(await page.locator('.mx-read-body').isVisible());assert.ok(await page.locator('.mx-read .mx-atts').isVisible());assert.ok(await page.locator('#mxReadAiHost .mx-ai-body').evaluate(e=>e.getBoundingClientRect().height>=320))});
+ await page.getByRole('button',{name:'KI-Assistent',exact:true}).click();await page.locator('[data-rai-input]').waitFor();
+ await check('KI-Assistent zeigt seine Eingabe und bewahrt Nachricht und Anlagen',async()=>{assert.ok(await page.locator('[data-rai-input]').isVisible());assert.equal(await page.locator('.mx-read-body').count(),1);assert.equal(await page.locator('.mx-read .mx-atts').count(),1);assert.ok(await page.locator('#mxReadAiHost .mx-ai-body').evaluate(e=>e.getBoundingClientRect().height>=320))});
  await page.locator('[data-rai-input]').scrollIntoViewIfNeeded();await page.waitForTimeout(200);await page.screenshot({path:path.join(output,'mail-ki-assistent.png')});
- await page.locator('[data-rai="toggle"]').click();
+ await page.getByRole('button',{name:'Zurück',exact:true}).click();
  await page.getByRole('button',{name:'Antworten',exact:true}).click();await page.locator('#mxBody').waitFor();await page.waitForTimeout(300);await page.waitForTimeout(180);await page.screenshot({path:path.join(output,'mail-verfassen.png')});
  await check('Antwort enthält ursprünglichen Empfänger und Betreff',async()=>{assert.match(await page.locator('#mxToChips').innerText(),/Sozialamt/);assert.match(await page.locator('#mxSubject').inputValue(),/Re: Ihr Antrag/)});
 

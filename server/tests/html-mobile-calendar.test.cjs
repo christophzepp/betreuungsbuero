@@ -3,13 +3,13 @@ const test=require('node:test'),assert=require('node:assert/strict'),fs=require(
 const html=fs.readFileSync(path.resolve(__dirname,'../../outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html'),'utf8');
 function source(name,next){const start=html.indexOf('function '+name+'('),end=html.indexOf('function '+next+'(',start);assert.ok(start>=0&&end>start);return html.slice(start,end)}
 function context(){
- const ctx={Date,calFullFilter:'__all__',calMobile:{type:'all',calendar:'all'},itemMatchesCase:(e,id)=>id==='__all__'||e.caseId===id,calPseudoVisible:e=>!e.hidden,calEventVisible:e=>!e.hidden,calEventMatchesSearch:()=>true,calEventMatchesKeyword:()=>true,dateToLocalIso:date=>{const pad=n=>String(n).padStart(2,'0');return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`}};
+ const ctx={Date,calFullFilter:'__all__',calMobile:{types:['events','tasks','fristen','followups'],calendar:'all'},itemMatchesCase:(e,id)=>id==='__all__'||e.caseId===id,calPseudoVisible:e=>!e.hidden,calEventVisible:e=>!e.hidden,calEventMatchesSearch:()=>true,calEventMatchesKeyword:()=>true,dateToLocalIso:date=>{const pad=n=>String(n).padStart(2,'0');return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`}};
  vm.createContext(ctx);vm.runInContext(source('calMobileFiltered','calMobileOpen').replace(/async\s*$/,'')+source('calMobileRangeEvents','calMobileMove'),ctx);return ctx;
 }
 test('Kalenderfilter kombiniert Fall-ID, Kalender und Eintragsart mit persönlichen Sichtbarkeiten',()=>{
  const ctx=context(),rows=[{id:'a',caseId:'a',calendarRef:'office',startAt:'2026-09-07T10:00:00'},{id:'b',caseId:'b',calendarRef:'office',startAt:'2026-09-07T11:00:00'},{id:'hidden',caseId:'a',calendarRef:'office',hidden:true,startAt:'2026-09-07T12:00:00'},{id:'task',caseId:'a',__calItemKind:'todo',__pseudoList:'tasks',calendarRef:'office',startAt:'2026-09-07T00:00:00'}];
- const filter=extra=>Array.from(ctx.calMobileFiltered(rows,{caseId:'__all__',calendar:'all',type:'all',...extra}),e=>e.id);
- assert.deepEqual(filter({caseId:'a',calendar:'office'}),['a']);assert.deepEqual(filter({type:'tasks'}),['task']);assert.deepEqual(filter({caseId:'b',type:'events'}),['b']);assert.deepEqual(filter({caseId:'a',calendar:'office',type:'tasks'}),[]);
+ const filter=extra=>Array.from(ctx.calMobileFiltered(rows,{caseId:'__all__',calendar:'all',types:['events','tasks','fristen','followups'],...extra}),e=>e.id);
+ assert.deepEqual(filter({caseId:'a',calendar:'office'}),['a']);assert.deepEqual(filter({types:['tasks']}),['task']);assert.deepEqual(filter({caseId:'b',types:['events']}),['b']);assert.deepEqual(filter({caseId:'a',calendar:'office',types:['tasks']}),[]);assert.deepEqual(filter({types:['events','tasks']}),['task','a','b']);assert.deepEqual(filter({types:[]}),[]);
 });
 test('Agenda schließt die vorherige Ganztagsbuchung am exklusiven Ende aus, zeigt aber den gesamten Endtag',()=>{
  const ctx=context(),range={start:new Date('2026-09-07T00:00:00'),end:new Date('2026-09-08T00:00:00')};
@@ -23,4 +23,9 @@ test('Verschieben erhält Termindauer und Abstand der Erinnerung',()=>{
 test('Mehrtagstermine behalten beim Verschieben die Anzahl ganzer Kalendertage über Zeitumstellungen',()=>{
  const previous=process.env.TZ;process.env.TZ='Europe/Berlin';
  try{const ctx=context(),patch=ctx.calMobileMovePatch({startAt:'2026-03-28T00:00:00',endAt:'2026-03-31T00:00:00',allDay:true},'2026-10-24','12:00');assert.equal(patch.startAt,'2026-10-24T00:00:00');assert.equal(patch.endAt,'2026-10-27T00:00:00');assert.equal(patch.allDay,true)}finally{if(previous===undefined)delete process.env.TZ;else process.env.TZ=previous}
+});
+
+test('Mobile Wochenüberschrift zeigt ISO-KW auch am Jahreswechsel',()=>{
+ const ctx={Date,calFullViewMode:'week'};vm.createContext(ctx);const iso=html.slice(html.indexOf('function isoWeekNumber('),html.indexOf('// Klick = Tag auswaehlen',html.indexOf('function isoWeekNumber(')));vm.runInContext(iso+source('calMobileHeading','calMobileNavigate'),ctx);
+ for(const [date,week] of [['2026-09-07',37],['2025-12-29',1],['2026-12-28',53],['2027-01-04',1]]){ctx.calFullWeekStart=new Date(date+'T00:00:00');ctx.addDays=(d,n)=>{const copy=new Date(d);copy.setDate(copy.getDate()+n);return copy};assert.match(ctx.calMobileHeading(),new RegExp('^KW '+week+' · '))}
 });

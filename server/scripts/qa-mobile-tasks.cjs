@@ -1,8 +1,7 @@
 'use strict';
 // Runs the real shipped app with synthetic tasks and an intercepted backend; no external writes.
-const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
+const chromium=require(process.env.PLAYWRIGHT_MODULE||'playwright')[process.env.MOBILE_QA_BROWSER||'chromium'];
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
-const {pathToFileURL}=require('node:url');
 const output=process.env.MOBILE_QA_OUTPUT||'/tmp/mobile-tasks-qa';fs.mkdirSync(output,{recursive:true});
 (async()=>{
  const browser=await chromium.launch({headless:true});
@@ -10,7 +9,10 @@ const output=process.env.MOBILE_QA_OUTPUT||'/tmp/mobile-tasks-qa';fs.mkdirSync(o
  const page=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true,timezoneId:'Europe/Berlin',locale:'de-DE',userAgent:'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Version/18.0 Mobile/15E148 Safari/604.1'});
  const errors=[];page.on('pageerror',e=>{errors.push(e.message);console.log('PAGEERROR',e.message)});
  await page.route('https://**/*',r=>r.abort());await page.route('http://**/*',r=>r.abort());
- await page.goto(pathToFileURL(path.resolve(__dirname,'../../outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html')).href,{waitUntil:'domcontentloaded',timeout:90000});
+ await page.addInitScript(()=>{window.__onlineInitialCaseNativeFetch=async(url)=>new Response(JSON.stringify(String(url)==='/api/cases'?{cases:[{id:'case-a',label:'Mara Hoffmann'},{id:'case-b',label:'Jonas Weber'}]}:{}),{headers:{'Content-Type':'application/json'}})});
+ await page.route('http://mobile-qa.invalid/api/**',r=>r.fulfill({contentType:'application/json',body:'{}'}));
+ await page.route('http://mobile-qa.invalid/',r=>r.fulfill({contentType:'text/html',body:fs.readFileSync(path.resolve(__dirname,'../../outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html'))}));
+ await page.goto('http://mobile-qa.invalid/',{waitUntil:'domcontentloaded',timeout:90000});
  await page.evaluate(()=>{
    const day=new Date(),today=[day.getFullYear(),String(day.getMonth()+1).padStart(2,'0'),String(day.getDate()).padStart(2,'0')].join('-');
    window.__qaRequests=[];window.__qaTodos=[
@@ -69,6 +71,7 @@ const output=process.env.MOBILE_QA_OUTPUT||'/tmp/mobile-tasks-qa';fs.mkdirSync(o
  });
  await check('Anlagenübertragung verwendet die bestehende Verknüpfung',async()=>{
   await page.locator('.attach-row').filter({hasText:'Anlage.txt'}).getByTitle('Diese Anlage zur verknüpften Vikunja-/OpenProject-Aufgabe übertragen').click();
+  await page.waitForFunction(()=>__qaRequests.some(r=>r.url.endsWith('send-remote')&&r.method==='POST'));
   assert.equal(await page.evaluate(()=>__qaRequests.some(r=>r.url.endsWith('send-remote')&&r.method==='POST')),true);
  });
  await check('Fehlgeschlagenes Entfernen behält Anlage und Formular',async()=>{
