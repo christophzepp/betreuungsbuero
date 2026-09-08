@@ -199,16 +199,16 @@ fs.mkdirSync(output, { recursive: true });
       await page.getByRole('button', { name: 'Anwenden', exact: true }).click();
       assert.equal(await page.locator('#mobileOnlineSheet').getAttribute('aria-hidden'), 'true');
     });
-    await check('Acht Favoriten bleiben neben Start, Chats und Mehr erreichbar und werden kompatibel gespeichert', async () => {
+    await check('Acht Favoriten bleiben zusammen mit Start, Chats und Mehr erreichbar und werden kompatibel gespeichert', async () => {
       await page.locator('[data-mobile-more]').click();
       assert.equal(await page.locator('.mobile-more-item').count(), 31);
       await page.locator('[data-mobile-edit-navigation]').click();
       for (const id of ['master-data', 'calendar', 'tasks', 'contacts', 'deadlines']) await page.locator(`[data-editor-id="${id}"] .mobile-pin-toggle`).click();
       await page.locator('[data-mobile-editor-save]').click();
       await page.keyboard.press('Escape');
-      assert.equal(await page.locator('.mobile-nav-favorites [data-mobile-action]').count(), 8);
+      assert.equal(await page.locator('.mobile-nav-favorites [data-mobile-action]:not([data-mobile-action="start"])').count(), 8);
       assert.equal(await page.locator('#mobileOnlineShell .mobile-nav-action').count(), 11);
-      for (const button of await page.locator('.mobile-nav-favorites [data-mobile-action]').all()) {
+      for (const button of await page.locator('.mobile-nav-favorites [data-mobile-action]:not([data-mobile-action="start"])').all()) {
         await button.scrollIntoViewIfNeeded();
         const box = await button.boundingBox(); assert.ok(box.width >= 44);
       }

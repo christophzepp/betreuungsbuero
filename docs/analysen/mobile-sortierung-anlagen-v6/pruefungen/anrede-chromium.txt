@@ -1,0 +1,19 @@
+PASS 1366: Kontaktfeld behält die Briefanrede-Liste
+PASS 1366: Vorhandene Briefanrede bleibt erhalten
+PASS 1366: Richtige Vorschläge schon ohne vorherigen Adressbuchaufruf
+PASS 1366: Keine persönlichen Anreden in der Vorschlagsliste
+PASS 1366: Vorschlagsauswahl schreibt den gewählten Wert
+PASS 1366: Freie Briefanrede wird unverändert gespeichert
+PASS 1366: Übernahme aus dem Adressbuch erhält die Briefanrede
+PASS 390: Kontaktfeld behält die Briefanrede-Liste
+PASS 390: Vorhandene Briefanrede bleibt erhalten
+PASS 390: Richtige Vorschläge schon ohne vorherigen Adressbuchaufruf
+PASS 390: Keine persönlichen Anreden in der Vorschlagsliste
+PASS 390: Vorschlagsauswahl schreibt den gewählten Wert
+PASS 390: Freie Briefanrede wird unverändert gespeichert
+PASS 390: Übernahme aus dem Adressbuch erhält die Briefanrede
+PASS Gepflegte Adressbuch-Vorschläge werden auch im sozialen Netzwerk verwendet
+PASS Personenanrede bleibt fachlich getrennt
+PASS Posteingang verwendet für soziale Kontakte dieselbe Briefanrede-Liste
+PASS Posteingang verwendet für die betreute Person weiterhin die Personenanrede
+PASS Keine JavaScript-Laufzeitfehler

@@ -1,0 +1,27 @@
+✔ alle Felder „Die Person ist mir bekannt“ nutzen dieselbe Ableitungsregel (35.064416ms)
+✔ Hausbesuch und persönliches Gespräch mit der betreuten Person belegen „bekannt“ (38.485958ms)
+✔ Telefonate und Kontakte mit Dritten belegen „bekannt“ nicht (30.034ms)
+✔ ohne Kontaktnachweis wird kein automatisches „nein“ gesetzt (20.09475ms)
+✔ ein positiver Nachweis aktualisiert auch einen älteren Nein-Wert (9.561875ms)
+✔ Wohnen fordert den first-class Katalog sd_wohneinrichtung mit der Feldbeschriftung Einrichtung an (105.945083ms)
+✔ sd_wohneinrichtung übernimmt nur Wohnquellen und schließt fachfremde oder inaktive Institutionen aus (56.738875ms)
+✔ ohne gespeicherte Einrichtungsnamen bleibt ein wohnfachlicher Basiskatalog sichtbar (54.275125ms)
+✔ der serverseitige Override von sd_wohneinrichtung ersetzt die dynamische Softwareliste (57.510167ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ Rollen-Vorlagen: 8 Rollen, jede an-Liste besteht nur aus ECHTEN Rechte-Keys (41.797542ms)
+✔ Rollen-Vorlagen: Übernahme + Bearbeiten sind verdrahtet (53.801584ms)
+✔ Kontakt-Rückweg: Außendienst-Kontakte werden automatisch ins Büro zurückgeschrieben (58.717584ms)
+✔ Umbau: Rollen-Wahl sitzt bei der Person, der Rollen-Reiter pflegt nur den Katalog (102.984833ms)
+✔ Funktion vs. Rolle: getrennte Felder, Betreuer per Häkchen statt Textraten (160.317041ms)
+✔ Personen-Profil: gegliedert, ohne doppelte Darstellungsfelder (226.808708ms)
+✔ KI-Fernzugriff: Verbindungs-Karte mit kopierbarer Adresse statt doppeltem Fließtext (87.859375ms)
+✔ Nutzer löschen: alle users-Fremdschlüssel aus dem Schema, ehrliche Absage statt 500er (672.483709ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1630.211167

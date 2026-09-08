@@ -1,0 +1,28 @@
+PASS Sechs Standardzugänge einschließlich Start und echter Unread-Badge
+PASS Auswahlblatt schließt mit Escape ohne Dokumentation zu schließen
+PASS Dokumentation: drei Exporte und alle fünf spezifischen Filter bleiben erreichbar
+PASS Chat-Liste liest keine verborgene Unterhaltung
+PASS Öffnen einer Unterhaltung aktualisiert Badge
+PASS Entwürfe bleiben je Unterhaltung getrennt
+PASS Erwähnen, Verknüpfen, KI und Anlagen bleiben bedienbar
+PASS Fehlgeschlagenes Senden bewahrt Eingabe
+PASS Senden nutzt bestehenden REST-Payload
+PASS Mitarbeiterchat kehrt zum unveränderten Formular zurück
+PASS Auch ein Chat-Aufruf aus einem Hinweis kehrt über den Doku-Tab zum Entwurf zurück
+PASS KI-Chat erhält unabhängigen Dialog ohne doppelte IDs
+PASS KI-Rückweg erhält Formular, Listener und Formularzustand
+PASS Auswahl 320px light: keine Überbreite, Navigation erreichbar
+PASS Auswahl 320px dark: keine Überbreite, Navigation erreichbar
+PASS Auswahl 360px light: keine Überbreite, Navigation erreichbar
+PASS Auswahl 360px dark: keine Überbreite, Navigation erreichbar
+PASS Auswahl 390px light: keine Überbreite, Navigation erreichbar
+PASS Auswahl 390px dark: keine Überbreite, Navigation erreichbar
+PASS Auswahl 430px light: keine Überbreite, Navigation erreichbar
+PASS Auswahl 430px dark: keine Überbreite, Navigation erreichbar
+PASS Neue gemeinsame Formularansicht behält echte Feldknoten und ihre Listener
+PASS Gemeinsames Filterblatt führt Apply aus und lässt sich bei Validierungsfehler weiter bearbeiten
+PASS Acht Favoriten bleiben zusammen mit Start, Chats und Mehr erreichbar und werden kompatibel gespeichert
+PASS Kleine Bildschirmhöhe: Eingabe, Senden und Navigation überdecken sich nicht
+PASS Ohne Mitarbeiterkonto ist der Teamchat klar als nicht verfügbar gekennzeichnet
+PASS Desktop behält verschiebbaren Chat-Knopf und beide Chatspalten
+PASS Browserprüfung abgeschlossen: /tmp/mobile-v6-foundation

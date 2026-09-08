@@ -1,0 +1,19 @@
+PASS Anzahl und Dateinamen sind vor dem ersten Scrollen sichtbar
+PASS Anlagenzugang bleibt beim Lesen langer Nachrichten sichtbar
+PASS Anlagenblatt erhält sämtliche Original-Downloadziele und Dateinamen
+PASS Datei wird vollständig heruntergeladen
+PASS Download verwendet richtigen Account, Ordner, UID und Anlagenindex
+PASS Dateiliste mit langem Namen passt 320 / false
+PASS Dateiliste mit langem Namen passt 320 / true
+PASS Dateiliste mit langem Namen passt 390 / false
+PASS Dateiliste mit langem Namen passt 390 / true
+PASS Dateiliste mit langem Namen passt 570 / false
+PASS Dateiliste mit langem Namen passt 570 / true
+PASS Schließen des Anlagenblatts erhält die Leseposition
+PASS Anlagenzugang bleibt nach KI-Rückkehr erhalten
+PASS Nachricht ohne Anlagen zeigt keinen alten Hinweis
+PASS Auch HTML-Mail zeigt den Anlagenzugang sofort
+PASS HTML-Mail behält ihre Sandbox
+PASS Nachrichtenwechsel zeigt ausschließlich die aktuelle Anlage
+PASS Desktop erhält keine zusätzliche mobile Anlagenleiste
+PASS Keine JavaScript-Laufzeitfehler

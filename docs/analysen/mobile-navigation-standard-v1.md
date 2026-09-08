@@ -11,9 +11,13 @@ Die gemeinsame Regel gilt auch in Formularen und im Mitarbeiterchat. Sie wird ze
 
 ## Menübelegung – Korrektur vom 08.09.2026
 
-Start, Chats und Mehr sind feste Zugänge. Standardmäßig lautet die Leiste: **Start · Chats · Übersicht · Doku · E-Mail · Mehr**. Bis zu acht persönliche Favoriten bleiben zusätzlich möglich; bei Platzmangel scrollt nur ihre Reihe. Start belegt keinen Favoritenplatz. Der KI-Fallchat ist ausschließlich über Chats erreichbar und entfällt als separater Menü- und Editor-Eintrag. Gespeicherte Profile werden beim Laden bereinigt, ohne die übrige Favoritenauswahl zurückzusetzen. Die oben beschriebenen Regeln zum Ein- und Ausblenden bleiben unverändert.
+Start und Chats bleiben angeheftet und sind wie die persönlichen Favoriten frei sortierbar. **Nur Mehr bleibt rechts.** Standardmäßig lautet die Leiste: **Start · Chats · Übersicht · Doku · E-Mail · Mehr**. Bis zu acht persönliche Favoriten bleiben zusätzlich möglich; bei Platzmangel lässt sich die gesamte Reihe vor Mehr seitlich wischen. Start und Chats belegen keinen Favoritenplatz. In der Vorschau werden alle Zugänge außer Mehr durch Ziehen oder mit den Pfeiltasten links/rechts umsortiert. Die Pfeile in der Liste darunter ändern die Reihenfolge im Mehr-Menü. Die Belegung und die Reihenfolge der Leiste werden getrennt gespeichert und beim erneuten Laden wiederhergestellt.
+
+Der KI-Fallchat ist ausschließlich über Chats erreichbar und entfällt als separater Menü- und Editor-Eintrag. Gespeicherte Profile werden beim Laden bereinigt, ohne die übrige Favoritenauswahl zurückzusetzen. Alte Start-/KI-Fallchat-Pins werden in die gemeinsame Reihenfolge übernommen; der KI-Fallchat-Pin wird dabei zum Chats-Zugang. Die oben beschriebenen Regeln zum Ein- und Ausblenden bleiben unverändert.
 
 [Prüfung und Screenshots der Menükorrektur](mobile-menuekorrektur-v5.md)
+
+[Nachfolgende Korrektur: freie Sortierung und sofort sichtbare Mail-Anlagen](mobile-sortierung-anlagen-v6.md)
 
 ## Verhalten im Detail
 

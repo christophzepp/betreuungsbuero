@@ -47,6 +47,7 @@ test('sanitizePreferences: Deckel 8, Verstecktes fliegt auch aus alten Speichers
     schneiden('function mobileVisible(', '{', '}'),
     schneiden('const MOBILE_CASE_DOMAIN_ORDER = ', '[', ']') + ';',
     schneiden('function normalizeMobileCaseDomainOrder(', '{', '}'),
+    schneiden('function normalizeMobileNavigationOrder(', '{', '}'),
     schneiden('function sanitizePreferences(', '{', '}')
   ].join('\n');
   const sandbox = {
@@ -56,6 +57,11 @@ test('sanitizePreferences: Deckel 8, Verstecktes fliegt auch aus alten Speichers
   vm.createContext(sandbox);
   vm.runInContext(quelle + '\nthis.sanitize = sanitizePreferences; this.MAX = MAX_PINNED;', sandbox);
 
+  const custom = sandbox.sanitize({pinned:['a1','a2'],navOrder:['a2','chats','a1','start','chats','online-forms']});
+  assert.deepEqual(Array.from(custom.navOrder),['a2','chats','a1','start'],'Explizite Reihenfolge bleibt mit Start und Chats erhalten, Duplikate entfallen.');
+  assert.deepEqual(Array.from(sandbox.sanitize(custom).navOrder),Array.from(custom.navOrder),'Erneutes Laden verändert die Belegung nicht.');
+  const migrated=sandbox.sanitize({pinned:['a1','case-chat','start','a2']});
+  assert.deepEqual(Array.from(migrated.navOrder),['a1','chats','start','a2'],'Alte Chat- und Startpositionen bleiben beim Umstieg erhalten.');
   assert.equal(sandbox.MAX, 8, 'Der Deckel muss bei acht liegen.');
 
   const voll = sandbox.sanitize({
@@ -106,6 +112,7 @@ test('Gespeicherte Nutzerreihenfolge bleibt erhalten; die Fallmodule werden fach
     schneiden('function mobileVisible(', '{', '}'),
     schneiden('const MOBILE_CASE_DOMAIN_ORDER = ', '[', ']') + ';',
     schneiden('function normalizeMobileCaseDomainOrder(', '{', '}'),
+    schneiden('function normalizeMobileNavigationOrder(', '{', '}'),
     schneiden('function sanitizePreferences(', '{', '}')
   ].join('\n');
   const sandbox = {

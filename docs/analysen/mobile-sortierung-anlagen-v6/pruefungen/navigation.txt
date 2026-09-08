@@ -1,0 +1,24 @@
+PASS Neue Aufgabenansicht startet mit sichtbarer Navigation
+PASS Abwärtsscrollen blendet Navigation aus und entfernt unsichtbare Fokusziele
+PASS Ausgeblendete Navigation gibt keine dahinterliegende Startseite frei
+PASS Kleine Richtungswechsel lassen die Leiste ruhig
+PASS Aufwärtsscrollen blendet Navigation wieder ein
+PASS Am Seitenanfang erscheint die Leiste wieder
+PASS Am Listenende bleibt die Navigation trotz größerer Arbeitsfläche ruhig
+PASS Mehr-Menü bleibt beim Scrollen seines Blatts sichtbar
+PASS Öffnen eines Formulars zeigt Navigation wieder
+PASS Auch lange Formulare verwenden die Scrollregel, ihre Aktionen rücken an den unteren Bildschirmrand
+PASS Bildschirmtastatur blendet Navigation vollständig aus
+PASS Speichern und Abbrechen liegen oberhalb der Tastatur
+PASS Tastatur gewinnt gegen Seitenanfang und ältere Einblend-Aufrufe
+PASS Nach Tastaturschluss wird Navigation automatisch sichtbar
+PASS Pinch-Zoom wird nicht als Tastatur behandelt
+PASS Auch Android mit verkleinertem Layout-Viewport wird erkannt
+PASS Dokumentationsliste verwendet denselben Standard
+PASS Auch Dokumentationsformulare überschreiben die Scrollregel nicht mehr
+PASS Dokumentation behält ihre Formularaktionen über der Tastatur
+PASS Mitarbeiterchat folgt derselben Scrollregel
+PASS Chat-Tastatur blendet Navigation aus und lässt den Nachrichtenversand erreichbar
+PASS Chat-Rückkehr zeigt die Navigation wieder
+PASS Desktop erhält weder mobile Tastaturklasse noch mobile Navigation
+PASS Keine JavaScript-Laufzeitfehler
