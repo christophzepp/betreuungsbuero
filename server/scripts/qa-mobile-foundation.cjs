@@ -1,11 +1,10 @@
 'use strict';
 // Executes the shipped HTML, with synthetic case data and a fully intercepted chat backend.
 // Run: PLAYWRIGHT_MODULE=/absolute/path/to/playwright node server/scripts/qa-mobile-foundation.cjs
-const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const chromium = require(process.env.PLAYWRIGHT_MODULE || 'playwright')[process.env.MOBILE_QA_BROWSER || 'chromium'];
 const fs = require('node:fs');
 const path = require('node:path');
 const assert = require('node:assert/strict');
-const { pathToFileURL } = require('node:url');
 const app = path.resolve(__dirname, '../../outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html');
 const output = process.env.MOBILE_QA_OUTPUT || '/tmp/mobile-foundation-qa';
 fs.mkdirSync(output, { recursive: true });
@@ -19,7 +18,9 @@ fs.mkdirSync(output, { recursive: true });
     page.on('pageerror', error => errors.push(error.message));
     await page.route('https://**/*', route => route.abort());
     await page.route('http://**/*', route => route.abort());
-    await page.goto(pathToFileURL(app).href, { waitUntil: 'domcontentloaded', timeout: 90000 });
+    await page.route('http://foundation.invalid/api/**', route => route.fulfill({contentType:'application/json',body:'{}'}));
+    await page.route('http://foundation.invalid/', route => route.fulfill({contentType:'text/html',body:fs.readFileSync(app)}));
+    await page.goto('http://foundation.invalid/', { waitUntil: 'domcontentloaded', timeout: 90000 });
     await page.evaluate(() => {
       // No network request leaves this fixture. Real chat functions call the normal REST contract.
       window.__qaRequests = [];
@@ -64,8 +65,8 @@ fs.mkdirSync(output, { recursive: true });
     await page.waitForSelector('.fd-shell');
     await page.waitForTimeout(300);
     const check = async (name, test) => { await test(); console.log('PASS ' + name); };
-    await check('Fünf feste Standardzugänge und echter Unread-Badge', async () => {
-      assert.equal(await page.locator('#mobileOnlineShell .mobile-nav-action').count(), 5);
+    await check('Sechs Standardzugänge einschließlich Start und echter Unread-Badge', async () => {
+      assert.equal(await page.locator('#mobileOnlineShell .mobile-nav-action').count(), 6);
       assert.match(await page.locator('[data-mobile-chats]').getAttribute('aria-label'), /3 ungelesene/);
     });
     await page.locator('[data-mobile-chats]').click();
@@ -198,15 +199,15 @@ fs.mkdirSync(output, { recursive: true });
       await page.getByRole('button', { name: 'Anwenden', exact: true }).click();
       assert.equal(await page.locator('#mobileOnlineSheet').getAttribute('aria-hidden'), 'true');
     });
-    await check('Acht Favoriten bleiben neben Chats und Mehr erreichbar und werden kompatibel gespeichert', async () => {
+    await check('Acht Favoriten bleiben neben Start, Chats und Mehr erreichbar und werden kompatibel gespeichert', async () => {
       await page.locator('[data-mobile-more]').click();
-      assert.equal(await page.locator('.mobile-more-item').count(), 32);
+      assert.equal(await page.locator('.mobile-more-item').count(), 31);
       await page.locator('[data-mobile-edit-navigation]').click();
-      for (const id of ['start', 'master-data', 'calendar', 'tasks', 'contacts']) await page.locator(`[data-editor-id="${id}"] .mobile-pin-toggle`).click();
+      for (const id of ['master-data', 'calendar', 'tasks', 'contacts', 'deadlines']) await page.locator(`[data-editor-id="${id}"] .mobile-pin-toggle`).click();
       await page.locator('[data-mobile-editor-save]').click();
       await page.keyboard.press('Escape');
       assert.equal(await page.locator('.mobile-nav-favorites [data-mobile-action]').count(), 8);
-      assert.equal(await page.locator('#mobileOnlineShell .mobile-nav-action').count(), 10);
+      assert.equal(await page.locator('#mobileOnlineShell .mobile-nav-action').count(), 11);
       for (const button of await page.locator('.mobile-nav-favorites [data-mobile-action]').all()) {
         await button.scrollIntoViewIfNeeded();
         const box = await button.boundingBox(); assert.ok(box.width >= 44);

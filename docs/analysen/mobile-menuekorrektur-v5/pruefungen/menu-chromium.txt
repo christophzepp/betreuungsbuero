@@ -1,0 +1,82 @@
+PASS neu: Start genau einmal fest außerhalb der Favoriten
+PASS neu: Persönliche Favoriten bleiben in Reihenfolge erhalten
+PASS neu: Kein veralteter KI-Chat im Mehr-Menü
+PASS neu: Editor ohne alten Chat und mit festem Start
+PASS neu: Vorschau zeigt Start, Chats und Mehr
+PASS neu: Abbrechen erhält die Favoriten
+PASS lokales-altprofil: Start genau einmal fest außerhalb der Favoriten
+PASS lokales-altprofil: Persönliche Favoriten bleiben in Reihenfolge erhalten
+PASS lokales-altprofil: Kein veralteter KI-Chat im Mehr-Menü
+PASS lokales-altprofil: Editor ohne alten Chat und mit festem Start
+PASS lokales-altprofil: Vorschau zeigt Start, Chats und Mehr
+PASS lokales-altprofil: Abbrechen erhält die Favoriten
+PASS server-altprofil: Start genau einmal fest außerhalb der Favoriten
+PASS server-altprofil: Persönliche Favoriten bleiben in Reihenfolge erhalten
+PASS server-altprofil: Kein veralteter KI-Chat im Mehr-Menü
+PASS server-altprofil: Editor ohne alten Chat und mit festem Start
+PASS server-altprofil: Vorschau zeigt Start, Chats und Mehr
+PASS server-altprofil: Abbrechen erhält die Favoriten
+PASS Start öffnet Tagesüberblick und markiert den richtigen Tab
+PASS Auch ohne Favoriten bleiben drei feste Zugänge
+PASS Start belegt keinen der acht Favoritenplätze
+PASS Server-Payload enthält genau die acht Favoriten ohne Start oder alten Chat
+PASS Feste Zugänge bleiben sichtbar bei 320 / hell
+PASS Favorit calendar erreichbar bei 320 / false
+PASS Favorit tasks erreichbar bei 320 / false
+PASS Favorit documentation erreichbar bei 320 / false
+PASS Favorit mail erreichbar bei 320 / false
+PASS Favorit case-overview erreichbar bei 320 / false
+PASS Favorit contacts erreichbar bei 320 / false
+PASS Favorit deadlines erreichbar bei 320 / false
+PASS Favorit master-data erreichbar bei 320 / false
+PASS Feste Zugänge bleiben sichtbar bei 320 / dunkel
+PASS Favorit calendar erreichbar bei 320 / true
+PASS Favorit tasks erreichbar bei 320 / true
+PASS Favorit documentation erreichbar bei 320 / true
+PASS Favorit mail erreichbar bei 320 / true
+PASS Favorit case-overview erreichbar bei 320 / true
+PASS Favorit contacts erreichbar bei 320 / true
+PASS Favorit deadlines erreichbar bei 320 / true
+PASS Favorit master-data erreichbar bei 320 / true
+PASS Feste Zugänge bleiben sichtbar bei 390 / hell
+PASS Favorit calendar erreichbar bei 390 / false
+PASS Favorit tasks erreichbar bei 390 / false
+PASS Favorit documentation erreichbar bei 390 / false
+PASS Favorit mail erreichbar bei 390 / false
+PASS Favorit case-overview erreichbar bei 390 / false
+PASS Favorit contacts erreichbar bei 390 / false
+PASS Favorit deadlines erreichbar bei 390 / false
+PASS Favorit master-data erreichbar bei 390 / false
+PASS Feste Zugänge bleiben sichtbar bei 390 / dunkel
+PASS Favorit calendar erreichbar bei 390 / true
+PASS Favorit tasks erreichbar bei 390 / true
+PASS Favorit documentation erreichbar bei 390 / true
+PASS Favorit mail erreichbar bei 390 / true
+PASS Favorit case-overview erreichbar bei 390 / true
+PASS Favorit contacts erreichbar bei 390 / true
+PASS Favorit deadlines erreichbar bei 390 / true
+PASS Favorit master-data erreichbar bei 390 / true
+PASS Feste Zugänge bleiben sichtbar bei 570 / hell
+PASS Favorit calendar erreichbar bei 570 / false
+PASS Favorit tasks erreichbar bei 570 / false
+PASS Favorit documentation erreichbar bei 570 / false
+PASS Favorit mail erreichbar bei 570 / false
+PASS Favorit case-overview erreichbar bei 570 / false
+PASS Favorit contacts erreichbar bei 570 / false
+PASS Favorit deadlines erreichbar bei 570 / false
+PASS Favorit master-data erreichbar bei 570 / false
+PASS Feste Zugänge bleiben sichtbar bei 570 / dunkel
+PASS Favorit calendar erreichbar bei 570 / true
+PASS Favorit tasks erreichbar bei 570 / true
+PASS Favorit documentation erreichbar bei 570 / true
+PASS Favorit mail erreichbar bei 570 / true
+PASS Favorit case-overview erreichbar bei 570 / true
+PASS Favorit contacts erreichbar bei 570 / true
+PASS Favorit deadlines erreichbar bei 570 / true
+PASS Favorit master-data erreichbar bei 570 / true
+PASS Chats bietet beide Gesprächsarten und den Mitarbeiter-Badge
+PASS Mitarbeiterchat bleibt über Chats erreichbar
+PASS KI-Fallchat öffnet aus Chats mit bestehendem Rückweg
+PASS Start-Zugang schützt ungespeicherte Formulare
+PASS Desktop blendet die mobile Navigation weiterhin aus
+PASS Keine JavaScript-Laufzeitfehler

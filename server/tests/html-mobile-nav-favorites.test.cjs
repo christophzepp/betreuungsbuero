@@ -19,7 +19,7 @@ const html = fs.readFileSync(htmlPath, 'utf8');
    Datei-Explorer - alles, was mit den Papieren eines Falls zu tun hat, beieinander. Bewusst
    NICHT auf den vorderen Plätzen: die wandern als Favoriten in die untere Leiste. */
 const expectedDefaultOrder = [
-  'start', 'case-chat', 'master-data', 'case-overview', 'documentation', 'calendar',
+  'start', 'master-data', 'case-overview', 'documentation', 'calendar',
   'tasks', 'deadlines', 'followups', 'contacts', 'mail', 'documents',
   'case-archive', 'send-history',
   'banking', 'cash',
@@ -50,7 +50,7 @@ test('sanitizePreferences: Deckel 8, Verstecktes fliegt auch aus alten Speichers
     schneiden('function sanitizePreferences(', '{', '}')
   ].join('\n');
   const sandbox = {
-    ACTIONS: ['a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9', 'online-forms'].map((id) => ({ id })),
+    ACTIONS: ['a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9', 'online-forms', 'case-chat', 'start'].map((id) => ({ id })),
     DEFAULT_PINNED: ['a1', 'a2']
   };
   vm.createContext(sandbox);
@@ -66,13 +66,16 @@ test('sanitizePreferences: Deckel 8, Verstecktes fliegt auch aus alten Speichers
 
   // Online-Formulare: selbst wenn ein alter Speicherstand sie noch trägt, kommen sie weder in
   // die Leiste noch in die Mehr-Reihenfolge.
-  const alt = sandbox.sanitize({ pinned: ['online-forms', 'a1'], order: ['online-forms', 'a2'] });
+  const alt = sandbox.sanitize({ pinned: ['online-forms', 'case-chat', 'start', 'a1'], order: ['online-forms', 'case-chat', 'a2'] });
   assert.ok(!Array.from(alt.pinned).includes('online-forms'), 'Versteckte Bereiche dürfen nicht angeheftet bleiben.');
   assert.ok(!Array.from(alt.order).includes('online-forms'), 'Versteckte Bereiche gehören nicht in die Reihenfolge.');
+  assert.deepEqual(Array.from(alt.pinned), ['a1'], 'Start und der alte Chat belegen keinen Favoritenplatz.');
+  assert.ok(!Array.from(alt.order).includes('case-chat'), 'Der alte Chat-Eintrag darf nicht im Mehr-Menü zurückkommen.');
+  assert.deepEqual(Array.from(sandbox.sanitize({pinned:[]}).pinned), [], 'Eine bewusst leere Favoritenauswahl bleibt beim Laden leer.');
   assert.ok(Array.from(alt.order).includes('a3'), 'Fehlende sichtbare Bereiche werden weiterhin ergänzt.');
 });
 
-test('Die mobile Standardreihenfolge enthält alle 32 freigegebenen Bereiche', () => {
+test('Die Menüfolge enthält 31 Bereiche; KI-Fallchat bleibt ausschließlich unter Chats', () => {
   const defaultQuelle = schneiden('const DEFAULT_ORDER = ', '[', ']') + ';';
   const actionQuelle = schneiden('const ACTIONS = ', '[', ']');
   const registeredIds = Array.from(actionQuelle.matchAll(/\{\s*id:\s*'([^']+)'/g), (match) => match[1]);
@@ -84,7 +87,7 @@ test('Die mobile Standardreihenfolge enthält alle 32 freigegebenen Bereiche', (
     'Die Reihenfolge muss exakt den drei freigegebenen Screenshots folgen.');
   assert.equal(new Set(expectedDefaultOrder).size, expectedDefaultOrder.length,
     'Der mobile Standard darf keinen Bereich doppelt enthalten.');
-  assert.deepEqual([...expectedDefaultOrder].sort(), registeredIds.filter((id) => id !== 'online-forms').sort(),
+  assert.deepEqual([...expectedDefaultOrder].sort(), registeredIds.filter((id) => !['online-forms', 'case-chat'].includes(id)).sort(),
     'Der Standard muss jeden mobil sichtbaren Registry-Bereich genau einmal enthalten.');
   assert.ok(html.includes('order: [...DEFAULT_ORDER]'),
     'Auch der erste Render vor dem Laden der Präferenzen muss die neue Standardfolge verwenden.');
@@ -106,8 +109,8 @@ test('Gespeicherte Nutzerreihenfolge bleibt erhalten; die Fallmodule werden fach
     schneiden('function sanitizePreferences(', '{', '}')
   ].join('\n');
   const sandbox = {
-    ACTIONS: [...expectedDefaultOrder, 'online-forms'].map((id) => ({ id })),
-    DEFAULT_PINNED: ['case-chat', 'case-overview', 'documentation', 'mail']
+    ACTIONS: [...expectedDefaultOrder, 'online-forms', 'case-chat'].map((id) => ({ id })),
+    DEFAULT_PINNED: ['case-overview', 'documentation', 'mail']
   };
   vm.createContext(sandbox);
   vm.runInContext(quelle + '\nthis.sanitize = sanitizePreferences;', sandbox);
@@ -200,7 +203,7 @@ test('Mehr-Menü und Editor blenden Online-Formulare aus, die Erkennung bleibt',
   assert.ok(more.includes('state.order.filter(mobileVisible)'), 'Das Mehr-Menü muss versteckte Bereiche auslassen.');
   const editor = schneiden('function openNavigationEditor(', '{', '}');
   assert.ok(editor.includes('workingOrder.filter(mobileVisible)'), 'Der Anpassen-Dialog muss versteckte Bereiche auslassen.');
-  assert.ok(html.includes("MOBILE_HIDDEN_ACTIONS = new Set(['online-forms'])"), 'Online-Formulare sind der versteckte Bereich.');
+  assert.ok(html.includes("MOBILE_HIDDEN_ACTIONS = new Set(['online-forms', 'case-chat'])"), 'Online-Formulare und der alte separate Chat-Zugang sind im Menü ausgeblendet.');
   // Die Registry behält den Eintrag - eine trotzdem geöffnete Ansicht wird weiter erkannt/formatiert.
   assert.ok(html.includes("id: 'online-forms'"), 'Der Registry-Eintrag muss erhalten bleiben (Ansichtserkennung).');
 });

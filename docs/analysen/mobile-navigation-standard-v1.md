@@ -9,6 +9,12 @@ Umgesetzt am 07.09.2026. Diese Regeln ersetzen die zwischenzeitlich dauerhaft si
 
 Die gemeinsame Regel gilt auch in Formularen und im Mitarbeiterchat. Sie wird zentral in der mobilen Shell umgesetzt. Bestehende Favoriten, Chats und Mitarbeiterchat-Badges bleiben erhalten. Bereits eigenständig im Vollbild laufende Oberflächen erhalten dadurch keine zusätzliche Navigation.
 
+## Menübelegung – Korrektur vom 08.09.2026
+
+Start, Chats und Mehr sind feste Zugänge. Standardmäßig lautet die Leiste: **Start · Chats · Übersicht · Doku · E-Mail · Mehr**. Bis zu acht persönliche Favoriten bleiben zusätzlich möglich; bei Platzmangel scrollt nur ihre Reihe. Start belegt keinen Favoritenplatz. Der KI-Fallchat ist ausschließlich über Chats erreichbar und entfällt als separater Menü- und Editor-Eintrag. Gespeicherte Profile werden beim Laden bereinigt, ohne die übrige Favoritenauswahl zurückzusetzen. Die oben beschriebenen Regeln zum Ein- und Ausblenden bleiben unverändert.
+
+[Prüfung und Screenshots der Menükorrektur](mobile-menuekorrektur-v5.md)
+
 ## Verhalten im Detail
 
 - Abwärts werden 40 px Bewegung gesammelt; ausgeblendet wird erst außerhalb des Anfangsbereichs. Aufwärts reichen 18 px. Richtungswechsel setzen die gesammelte Strecke zurück.
