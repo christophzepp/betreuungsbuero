@@ -1,0 +1,16 @@
+{
+  "start_sha256": "0bb72ef8f7b61a128f7f622845ff2b51253304391e2f469895259bc5ec403cca",
+  "result_sha256": "81927c1c3613f5f5a30410ce95d502319cb1b2a93ac9bb8b9ef8e49e4fce1bab",
+  "script_blocks": 311,
+  "executable_scripts": 229,
+  "unchanged_data_blocks": 82,
+  "nul_bytes": 1,
+  "changed_scripts": [
+    " id=\"schuldenregulierung-script-v1\"",
+    " id=\"lebensunterhalt-script-v1\""
+  ],
+  "changed_styles": [
+    " id=\"mobile-phone-curation-v2\""
+  ],
+  "all_other_bytes_unchanged": true
+}

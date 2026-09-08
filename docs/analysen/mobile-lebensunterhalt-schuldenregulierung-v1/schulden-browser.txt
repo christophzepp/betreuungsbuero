@@ -1,0 +1,54 @@
+PASS Forderungsliste berechnet Kosten, Zahlungen, Restschuld und laufende Rate vollständig
+PASS Hinweise behalten die Warnung vor einem aktiven Dauerauftrag bei erledigter Schuld
+PASS Stadium und Zahlungsstand begrenzen Liste und gekennzeichnete Auswahlsummen
+PASS Forderungsdetails enthalten sämtliche Kosten, Bankdaten, Kennungen und Notizen
+PASS Forderungsformular enthält alle 19 vorhandenen Bearbeitungsfelder
+PASS Bearbeitung verändert weder Forderung noch Spiegelungen vor Speichern
+PASS Aktualisierung erhält denselben Forderungsentwurf
+PASS Chatwechsel erhält den vollständigen Forderungsentwurf
+PASS Tastatur blendet Navigation aus und hält Formularaktionen erreichbar
+PASS Forderungsspeicherung erhält Metadaten und aktualisiert Vermögen, Rate und Handkasse
+PASS Zahlung bleibt bis zur Bestätigung ein Entwurf
+PASS Neue Barzahlung vermindert Restschuld und erzeugt genau eine zugehörige Kassenbuchung
+PASS Zahlungskorrektur behält die Kennung und entfernt nur ihre aufgehobene Barspiegelung
+PASS Abgebrochenes Zahlungslöschen erhält die Zahlung
+PASS Bestätigtes Zahlungslöschen berechnet die Restschuld erneut
+PASS Pausieren setzt das Datum und entfernt die laufende Rate im Lebensunterhalt
+PASS Fortsetzen aktiviert die Rate wieder
+PASS Erledigen benötigt die vorhandene ausdrückliche Bestätigung
+PASS Erledigen setzt das Datum und bewahrt den Dauerauftragshinweis
+PASS Fristenverknüpfung nutzt die vorhandene Kalender- und Aufgabenverbindung
+PASS Fristenverknüpfung kann wieder entfernt werden
+PASS Konkurrierende Änderungen werden nicht überschrieben
+PASS Zahlungsdialog erhält alle Empfänger-, Auftraggeber-, Intervall- und Dokumentationsfelder
+PASS Zahlungsintervall steuert Monatstag und Enddatum weiterhin korrekt
+PASS Giro-Code wird mit dem ursprünglichen EPC-Generator erzeugt
+PASS SEPA-Ausgabe erzeugt eine echte Datei mit unveränderten Zahlungsdaten
+PASS Bestätigung speichert die Zahlung vor AutoDoku und sperrt doppelte Bedienung
+PASS Überweisungsbestätigung nutzt AutoDoku und verändert die Handkasse nur bei gewählter Barzahlung
+PASS Banking-Übergabe öffnet den ursprünglichen Intervallentwurf mit allen übertragenen Werten
+PASS Neuanlage speichert erst nach Bestätigung und bleibt vollständig bearbeitbar
+PASS Forderungslöschen entfernt die zugehörigen Spiegelungen und erhält andere Forderungen
+PASS Gläubigerschreiben wird tatsächlich ausgelesen und als ungespeicherter prüfbarer Entwurf angezeigt
+PASS Bestätigte Auswertung übernimmt Kosten, Bankdaten, Ratenplan und erkannte Zahlungen
+PASS Zahlungsliste enthält sämtliche Einzelzahlungen über alle Forderungen
+PASS Zahlungsfilter verwendet Jahr und Handkassenbezug
+PASS Büroweite Übersicht trennt gleiche Forderungskennungen anhand des Falls
+PASS Fremder Fall bleibt lesbar und kann nicht ohne Öffnen bearbeitet werden
+PASS Laufender Fallwechsel verhindert Doppelbedienung und Schließen
+PASS Geöffneter Zielfall zeigt ausschließlich dessen Forderungen
+PASS Größenwechsel bewahrt den tatsächlichen Formularentwurf
+PASS Große Forderungsbestände sind vollständig nachladbar
+PASS Abwärtsscrollen verbirgt die Navigation
+PASS Aufwärtsscrollen zeigt die Navigation
+PASS Schulden 320px hell ohne Überlauf
+PASS Schulden 320px dunkel ohne Überlauf
+PASS Schulden 360px hell ohne Überlauf
+PASS Schulden 360px dunkel ohne Überlauf
+PASS Schulden 390px hell ohne Überlauf
+PASS Schulden 390px dunkel ohne Überlauf
+PASS Schulden 430px hell ohne Überlauf
+PASS Schulden 430px dunkel ohne Überlauf
+PASS Leseberechtigte behalten alle Angaben ohne Zahlungs- oder Bearbeitungsaktionen
+PASS Desktop erhält Originaltabelle, Aktionen, Filter und Dokumentauswertung
+PASS Keine JavaScript-Laufzeitfehler

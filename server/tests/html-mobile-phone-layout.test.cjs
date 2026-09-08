@@ -205,10 +205,10 @@ assert(
   '„Übernehmen“ muss bei abgeleiteten Fristen mobil rechtsbündig stehen.'
 );
 assert(
-  scripts[0].includes("const deadlineScroller = workspaceView.querySelector('.fr-view #frList');") &&
-    scripts[0].includes("return { mode: 'gate', scroller: deadlineScroller || workspaceView.querySelector('#modalBody.mobile-top-view-body-v171') };") &&
-    scripts[0].includes('} else if (delta > 10 && current > 72) {') &&
-    scripts[0].includes('if (current < 28 || delta < -8) {'),
+  scripts[0].includes("root: document.getElementById('modalBody')") &&
+    scripts[0].includes('probe.root?.contains(target)') &&
+    scripts[0].includes('movement.travel >= 40') &&
+    scripts[0].includes('movement.travel >= 18'),
   'Die mobile Navigation muss dem eigenen Fristen-Scroller folgen: abwärts ausblenden, aufwärts einblenden.'
 );
 assert(
@@ -403,10 +403,10 @@ assert(
   'Das geöffnete mobile Kontaktmenü muss Scroll-Chaining auf den verdeckten Arbeitsbereich sperren.'
 );
 assert(
-  css.includes('html.mobile-online-active:has(#modal:not(.hidden) .social-network-editor-shell) .mobile-online-shell.is-hidden') &&
-  scripts[0].includes("document.querySelector('#modal:not(.hidden) :is(.social-network-editor-shell, .cc2)')") &&
-  scripts[0].includes("shell.classList.remove('is-hidden');"),
-  'Beim Scrollen im Sozialen Netzwerk muss die untere mobile Hauptnavigation sichtbar bleiben.'
+  source.includes('html.mobile-online-active #mobileOnlineShell#mobileOnlineShell.is-hidden') &&
+  scripts[0].includes('probe.root?.contains(target)') &&
+  !scripts[0].includes("probe.mode === 'editor'"),
+  'Auch im Sozialen Netzwerk gilt die gemeinsame Scrollregel ohne Formularausnahme.'
 );
 assert(
   source.includes('class="cc2-icon cc2-close"') &&
@@ -423,10 +423,10 @@ assert(
   'Der Datenschutz-Erklärtext unter der KI-Eingabe muss auf Smartphones ausgeblendet sein.'
 );
 assert(
-  css.includes('html.mobile-online-active:has(#modal:not(.hidden) .cc2) .mobile-online-shell.is-hidden') &&
-  scripts[0].includes(':is(.social-network-editor-shell, .cc2)') &&
-  scripts[0].includes("shell.classList.remove('is-hidden');"),
-  'Beim Scrollen im KI-Fallchat muss die untere mobile Hauptnavigation sichtbar bleiben.'
+  source.includes('html.mobile-online-active #mobileOnlineShell#mobileOnlineShell.is-hidden') &&
+  scripts[0].includes('probe.root?.contains(target)') &&
+  !scripts[0].includes("probe.mode === 'editor'"),
+  'Auch im KI-Fallchat gilt die gemeinsame Scrollregel ohne Formularausnahme.'
 );
 assert(
   css.includes('html.mobile-online-active .cc2-main > .ai-prompt-wrap .ai-prompt-chips') &&
@@ -460,11 +460,11 @@ assert(
   css.includes('html.mobile-online-active .cov-footer') &&
   css.includes('.cov-shell[data-mobile-tab="quick"]) .mobile-online-shell.is-hidden') &&
   css.includes('Der Abstand der\n     Betreuungsübersicht bleibt konstant.') &&
-  scripts[0].includes("const overview = document.querySelector('#modal:not(.hidden) .cov-shell');") &&
-  scripts[0].includes("if (tab === 'quick')") &&
-  scripts[0].includes("tab === 'followups' ? '.cov-follow-list' : '.cov-main'") &&
+  scripts[0].includes('probe.root?.contains(target)') &&
+  scripts[0].includes('view?.dataset?.mobileTab') &&
+  scripts[0].includes('revealMobileNavigation()') &&
   source.includes("mobileShell.classList.remove('is-hidden');"),
-  'Liste und Wiedervorlagen der mobilen Fallübersicht müssen die Navigation richtungsabhängig ausblenden; in Schnellaktionen bleibt sie sichtbar.'
+  'Alle Tabs der Fallübersicht verwenden die gemeinsame Scrollregel; beim Tabwechsel wird die Navigation eingeblendet.'
 );
 assert(
   css.includes('html.mobile-online-active .cov-shell[data-mobile-tab="list"] .cov-main') &&
@@ -554,14 +554,14 @@ assert(
   css.includes('flex: 1 1 0 !important;') &&
   css.includes('html.mobile-online-active .doku-mobile-scroll-v170 .doku-list-v161') &&
   css.includes('max-height: none !important;') &&
-  scripts[0].includes("const documentation = document.querySelector('#modal:not(.hidden) .doku-mobile-list-shell-v170');") &&
-  scripts[0].includes("documentation.querySelector('.doku-mobile-scroll-v170')"),
+  scripts[0].includes("root: document.getElementById('modalBody')") &&
+  scripts[0].includes('probe.root?.contains(target)'),
   'Die mobile Falldokumentation muss einen einzigen Vollhöhen-Scroller für Suche, Filter, Klappwerkzeuge und Liste verwenden.'
 );
 assert(
   css.includes('html.mobile-online-active #modal:has(.doku-mobile-list-shell-v170) > .modal-box > .modal-actions') &&
   css.includes('calc(76px + env(safe-area-inset-bottom, 0px)) !important;') &&
-  scripts[0].includes("if (probe.mode === 'gate' && (!probe.scroller || target !== probe.scroller)) return;"),
+  scripts[0].includes('probe.root?.contains(target)'),
   'Die mobile Falldokumentation darf keinen Schließen-Fuß zeigen und muss die Navigation richtungsabhängig ein-/ausblenden.'
 );
 assert(
@@ -618,10 +618,6 @@ assert(
 ].forEach(contract => html.forEach((document, index) => assert(document.includes(contract), `${files[index]}: Mobiler Menüeintrag fehlt: ${contract}`)));
 
 [
-  ['calendar', '.cal-toolbar-main'],
-  ['tasks', '.todo-full-list'],
-  ['deadlines', '.fr-view'],
-  ['contacts', '.addressbook-list,.addressbook-editor-grid'],
   ['cash', '.hk-view'],
   ['assets', '.va-view'],
   ['livelihood', '.lu-view'],
@@ -644,6 +640,10 @@ assert(
   scripts[0].includes(`mobileProfile: 'workspace', mobileRoot: '${root}'`),
   `${id} benötigt ein explizites, ausschließlich mobiles Arbeitsansicht-Profil.`
 ));
+assert(scripts[0].includes("fns: ['openCalendarFullView'], mobileProfile: 'bespoke', mobileRoot: '.cal-mobile-view,.cal-toolbar-main'"), 'Kalender nutzt den eigenen mobilen Terminablauf.');
+assert(scripts[0].includes("fns: ['showImportedAddressbook'], mobileProfile: 'bespoke', mobileRoot: '.addressbook-list,.addressbook-editor-grid'"), 'Adressbuch nutzt das eigene mobile Modulpaket.');
+assert(scripts[0].includes("fns: ['openFristenModal'], mobileProfile: 'bespoke', mobileRoot: '.fr-view'"), 'Fristen nutzt das eigene mobile Modulpaket.');
+assert(scripts[0].includes("fns: ['openTodoFullView'], mobileProfile: 'bespoke', mobileRoot: '.todo-full-list'"), 'Aufgaben nutzt das eigene mobile Pilotlayout.');
 
 assert(
   scripts[0].includes('function adaptMobileTopLevelView(root)') &&
@@ -665,8 +665,8 @@ assert(
   css.includes('#modalBody.mobile-top-view-body-v171 :is(\n    .modal-scroll,') &&
   css.includes('.caltime-scroll') &&
   css.includes('overflow: visible !important;') &&
-  scripts[0].includes('const workspaceView = document.querySelector(\'#modal[data-mobile-view-profile="workspace"]:not(.hidden)\');') &&
-  scripts[0].includes("workspaceView.querySelector('#modalBody.mobile-top-view-body-v171')"),
+  scripts[0].includes("root: document.getElementById('modalBody')") &&
+  scripts[0].includes('probe.root?.contains(target)'),
   'Verschachtelte Modul-Scroller müssen mobil in den einzigen Dialog-Scroller überführt werden.'
 );
 assert(

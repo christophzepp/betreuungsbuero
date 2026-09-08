@@ -17,7 +17,7 @@ test('Wohnen und Fähigkeiten sind als getrennte mobile Bereiche registriert', (
 
 test('Fähigkeiten wechselt sauber zwischen eigenständigem Overlay und gemeinsamen Modulen', () => {
   assert.match(html, /function openMobileAbilities\(\)[\s\S]*?window\.closeModal\(\)[\s\S]*?window\.openFunctionalProfileHubV255\(\)/);
-  assert.match(html, /function invokeAction\(id\)[\s\S]*?closeMobileStandaloneViews\(id\);/,
+  assert.match(html, /function invokeAction\(id(?:, guarded = false)?\)[\s\S]*?closeMobileStandaloneViews\(id\);/,
     'Beim Wechsel zu einem anderen mobilen Menü muss das Fähigkeiten-Overlay geschlossen werden.');
   assert.match(html, /functionalProfileHubOverlayV255[\s\S]*?mutation\.removedNodes[\s\S]*?queueMobileAdaptation\(\)/,
     'Öffnen und Schließen des eigenständigen Overlays muss die mobile Zustandsanpassung auslösen.');
@@ -150,7 +150,7 @@ test('Fähigkeiten mobil: jeder Weg in einen Bereich öffnet die Vollansicht', (
      Telefon nicht erreichbar (die alte Fassung stieg bei bereich===fpHubSelV260 sofort aus). */
   assert.match(html, /window\.__fpHubWaehleV260=function\(bereich\)\{[\s\S]{0,700}?fpHubEbeneV262\(true\);\s*\n\s*if\(bereich===fpHubSelV260\)return;/,
     'Ein Tipp auf den bereits gewählten Bereich muss die Vollansicht öffnen.');
-  assert.match(html, /window\.__fpHubEditV255=function\(bereich\)\{\s*\n\s*bereich=bereich\|\|keys\[0\];\s*\n\s*fpHubEbeneV262\(true\);/,
+  assert.match(html, /window\.__fpHubEditV255=function\(bereich\)\{if\(window\.__mobileCompletion\?\.active\(\)\)\{fpMobileRender\(\);fpMobile\.edit\(bereich\|\|keys\[0\]\);return\}/,
     '„Bearbeiten" muss ebenfalls ganzseitig öffnen.');
   assert.match(html, /window\.__fpHubZurueckV262=function\(\)\{fpHubEbeneV262\(false\)\};/,
     'Der Rückweg zur Übersicht fehlt.');

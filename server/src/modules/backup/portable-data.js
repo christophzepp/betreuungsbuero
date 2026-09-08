@@ -248,7 +248,7 @@ const RECOVERY_SCHEMA_COLUMNS = Object.freeze({
     contacts_sync_mode deadline_export task_status_open task_status_done ical_url webhook_secret
   `),
   caldav_config: recoveryColumns('id username password_encrypted calendar_url todo_url updated_at'),
-  office_ai_config: recoveryColumns('provider api_key_encrypted model endpoint updated_at'),
+  office_ai_config: recoveryColumns('provider api_key_encrypted model endpoint updated_at allowed_models'),
   office_send_credentials: recoveryColumns(`
     service username password_encrypted login_url inbox_url compose_url updated_at
   `),

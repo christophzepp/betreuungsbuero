@@ -16,15 +16,15 @@ test('Chat füllt auf dem Telefon die Fläche über der Mobilnavigation', () => 
   /* Nutzerfund 30.08. abends: Ein freier Streifen UNTER dem Panel zeigte die Startseite -
      und die ließ sich wegscrollen. Das Panel deckt den ganzen Schirm ab und hält den Platz
      für die Navigationsleiste als eigene Polsterung frei. */
-  assert.match(html, /html\.mobile-online-active \.uchat-panel\{position:fixed;inset:0;width:auto;height:auto;max-height:none;border:0;border-radius:0;box-shadow:none;padding-bottom:env\(safe-area-inset-bottom,0px\);overscroll-behavior:contain\}/,
-    'Das Chat-Panel muss den ganzen Bildschirm abdecken - kein Streifen, keine Reserve.');
+  assert.match(html, /html\.mobile-online-active \.uchat-panel\{position:fixed;inset:0 0 var\(--mobile-nav-space\);width:auto;height:auto;max-height:none;border:0;border-radius:0;box-shadow:none;padding-bottom:0;overscroll-behavior:contain\}/,
+    'Das Chat-Panel endet genau über der dauerhaft erreichbaren Navigation.');
   assert.match(html, /html\.mobile-online-active \.uchat-log,\s*\n\s*html\.mobile-online-active \.uchat-side-list\{overscroll-behavior:contain\}/,
     'Am Ende des Verlaufs darf die Seite dahinter nicht mitscrollen.');
   /* Nutzerwunsch 30.08. abends: Im ganzseitigen Chat braucht es die untere Menüleiste gar
      nicht - sie tauchte beim Scrollen der Seite dahinter auf und wieder ab. Solange das Panel
      offen ist, ist sie weg UND die Seite dahinter steht fest. */
-  assert.match(html, /html\.mobile-online-active\.uchat-voll-v262 \.mobile-online-shell\{display:none!important\}/,
-    'Im Vollbild-Chat darf die Mobilnavigation nicht erscheinen.');
+  assert.match(html, /html\.mobile-online-active\.uchat-voll-v262 \.mobile-online-shell\{display:grid!important\}/,
+    'Der freigegebene Chats-Entwurf vom 07.09. erhält die untere Navigation auch im Chat.');
   assert.match(html, /html\.mobile-online-active\.uchat-voll-v262,\s*\n\s*html\.mobile-online-active\.uchat-voll-v262 body\{overflow:hidden!important;overscroll-behavior:none!important\}/,
     'Die Seite hinter dem Chat muss festgestellt sein.');
   assert.match(html, /vollScrollY=window\.scrollY\|\|wurzel\.scrollTop\|\|0;\s*\n\s*wurzel\.classList\.add\('uchat-voll-v262'\);/,
@@ -37,7 +37,7 @@ test('Chat füllt auf dem Telefon die Fläche über der Mobilnavigation', () => 
     'Auch beim Abbau des Chats (Abmelden) muss die Leiste zurückkommen.');
   /* Die Regel muss NACH der alten Breitenregel stehen, sonst gewinnt calc(100vw - 16px). */
   assert.ok(html.indexOf('html.mobile-online-active .uchat-panel{width:calc(100vw - 16px)}')
-    < html.indexOf('html.mobile-online-active .uchat-panel{position:fixed;inset:0;'),
+    < html.indexOf('html.mobile-online-active .uchat-panel{position:fixed;inset:0 0 var(--mobile-nav-space);'),
     'Die Vollflächen-Regel steht vor der alten Breitenregel und würde überschrieben.');
   /* Der Umbruchpunkt ist derselbe, an dem die linke Spalte verschwindet (900px). */
   assert.match(html, /@media\(max-width:900px\)\{\.uchat-body\{grid-template-columns:1fr\}\.uchat-side\{display:none\}\}/,
@@ -65,7 +65,7 @@ test('Genau eine Ebene je Bildschirm: Übersicht ODER Unterhaltung', () => {
 test('Jeder Weg in eine Unterhaltung schaltet die Telefonansicht um', () => {
   /* Liste, Kontakt, neue Gruppe und Hinweisfenster laufen alle über selectConv - deshalb
      genügt dort EIN Schalter. Bricht das auseinander, führt ein Weg ins Leere. */
-  assert.match(html, /async function selectConv\(id\)\{activeConvId=id;[\s\S]{0,400}?const pnl=\$\('uchatPanel'\);if\(pnl\)pnl\.classList\.add\('uchat-thread-v262'\);/,
+  assert.match(html, /async function selectConv\(id\)\{[\s\S]{0,550}?activeConvId=id;[\s\S]{0,400}?const pnl=\$\('uchatPanel'\);if\(pnl\)pnl\.classList\.add\('uchat-thread-v262'\);/,
     'selectConv muss auf die Unterhaltungsebene schalten.');
   const wege = html.match(/selectConv\(/g) || [];
   assert.ok(wege.length >= 6, `Erwartet mehrere Einstiege über selectConv, gefunden: ${wege.length}`);

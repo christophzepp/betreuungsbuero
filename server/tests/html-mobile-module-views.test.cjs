@@ -247,7 +247,7 @@ test('Die Module hängen weiterhin im gemeinsamen Smartphone-Profil', () => {
   // Der Feinschliff ergänzt das Profil, er ersetzt es nicht - sonst fehlten Vollbildrahmen,
   // Karten-Tabellen und der einzelne Inhaltsscroller.
   const erwartet = {
-    documents: 'bespoke', cash: 'workspace', assets: 'workspace', calendar: 'workspace',
+    documents: 'bespoke', cash: 'workspace', assets: 'workspace', calendar: 'bespoke',
     livelihood: 'workspace', debts: 'workspace', banking: 'workspace', health: 'workspace',
     housing: 'workspace', abilities: 'standalone', needs: 'workspace'
   };
@@ -419,8 +419,8 @@ test('Ein Ordnerklick schließt den Baum auf schmalen Geräten wieder', () => {
 test('Die Auslösebedingung der mobilen Ansicht bleibt unverändert', () => {
   // Ausdrücklicher Wunsch: die mobile Ansicht darf NUR auf Telefonen und grob auflösenden
   // Tablets greifen. Weder die Breitenschwelle noch die Klasse dürfen sich verschieben.
-  // Zwei 1024-px-Abfragen sind der gewachsene Bestand (Grundlayout und Modulprofile).
-  assert.equal(html.split('@media (max-width: 1024px) {').length - 1, 2,
+  // Grundlayout, Modulprofile und der Aufgaben-Pilot verwenden dieselbe unveränderte Schwelle.
+  assert.equal(html.split('@media (max-width: 1024px) {').length - 1, 3,
     'Die Zahl der 1024-px-Mobilabfragen hat sich verändert - die Auslöseschwelle wurde angefasst.');
   assert(html.includes('mobile-online-active'), 'Die Mobil-Klasse fehlt.');
   // Der Feinschliff bringt genau eine zusätzliche, engere Abfrage mit - und die sitzt INNERHALB

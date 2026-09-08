@@ -1,0 +1,31 @@
+✔ portables Schema 3 wickelt interne Secrets auf einen neuen ENCRYPTION_KEY um (187.317ms)
+✔ kaputtes internes Secret verhindert ein halbfertiges portables Abbild (1.099083ms)
+✔ Büro-JSON entfernt Mount-Secrets und den historischen Maps-Ciphertext (4.948917ms)
+✔ Recovery-Bundle ist disjunkt und bindet beide Artefakte an dieselbe DB-Revision (4.064292ms)
+✔ Generator und Recovery-Prüfung teilen dieselbe Registrierung verschlüsselter Felder (0.887292ms)
+✔ portable Generatoren und Validatoren arbeiten bei fehlenden Pflichttabellen/-spalten fail-closed (15.477ms)
+✔ portabler Security-Restore enthält und ersetzt das Audit-Protokoll nicht (2.0595ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ gemeinsame Registrierung klassifiziert jede Anwendungstabelle oder schließt sie begründet aus (213.33625ms)
+✔ Büro-/Modulabbild enthält OCR verlustfrei, aber keine Intake- oder Signaturbytes (200.427083ms)
+✔ Büroabbild normalisiert volatile Laufzustände, vollständige Modulregistrierung behält sie (161.7615ms)
+✔ Fallsicherung nimmt sichere direkte und indirekte Fallbezüge aus der Registrierung mit (122.594833ms)
+✔ Overlay-Probe-Renderings entsprechen den abgenommenen Golden-Referenzen (7946.684ms)
+✔ v230-Druck des Vermögensverzeichnisses entspricht den Golden-Referenzen (6263.6765ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ MCP-Module mit DB-Bereinigungstimer werden in Recovery nicht geladen (3.802417ms)
+✔ neuer ENCRYPTION_KEY erzwingt Admin-Quarantäne und atomaren Schema-3-Doppelrestore (2978.119375ms)
+✔ ein verlinkter oder beschädigter Restore-Marker öffnet den Server niemals (139.580334ms)
+✔ ein langlebiger Restore-Fortschrittsmarker sperrt auch das SIGKILL-Fenster vor dem Datentausch (360.137125ms)
+✔ ein Dateisystemfehler bei der Freigabe lässt die DB in Quarantäne und die geprüfte Generation erhalten (201.191ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8013.012208

@@ -1,0 +1,49 @@
+PASS Rechnungslegung öffnet mit Konten und sechs erreichbaren Schritten
+PASS Zeitraum bleibt bis zum Speichern ein Entwurf
+PASS Zeitraum speichert auch die vorhandenen Berichtsdaten
+PASS Kontodetail enthält Kontoauszug-Abgleich, IBAN, BIC und alle Salden
+PASS Kontoname wird erst beim Speichern geändert
+PASS Kontobearbeitung erhält automatischen Endbestand
+PASS Neuanlage schreibt erst nach Bestätigung und enthält Saldo sowie Stammdatenfelder
+PASS Vermögenswerte, Verbindlichkeiten und Schenkungen bleiben vollständig erreichbar
+PASS Bankimport enthält Dateiimport, Banking-Übernahme und Quelldatei-Aktionen
+PASS Buchungssuche erhält Fokus und filtert den vollständigen Zweck
+PASS Statusfilter zeigt unsichere Buchungen
+PASS Buchungsdetail erhält Wertstellung, Quelle, Belege und vollständigen Zweck
+PASS Neuzeichnen schützt offene Buchungsentwürfe
+PASS KI-Chat erhält denselben Rechnungslegungs-Formularknoten
+PASS Tastatur blendet Navigation aus und hält Speichern oberhalb der Tastatur
+PASS Buchungsbearbeitung verwendet die bisherigen Normalisierungs- und Saldenfunktionen
+PASS Neue manuelle Buchung landet im ausdrücklich ausgewählten Konto
+PASS Belegliste bietet Auswahl, Suche und einen eigenen Fehlerfilter
+PASS Belegdetails enthalten Nummer, IBAN, Kundenreferenz und Originalverfügbarkeit
+PASS Belegformular enthält alle sieben ursprünglichen Angaben
+PASS Belegbearbeitung erhält Metadaten und aktualisiert ausschließlich die geänderte Angabe
+PASS Sammelerkennung und Auswahlaktionen bleiben erreichbar
+PASS Belegzuordnung bleibt bis zur Bestätigung unverändert
+PASS Zuordnung nutzt ursprüngliche Kennungen, Betrag und Belegnummern
+PASS Sammelzuordnung enthält Umfang, Zuordnungsregel, lokale und KI-Zuordnung
+PASS Prüfansicht enthält Saldenabgleich, gebündelte Hinweise und Ausgaben
+PASS Vollständiger Exportdialog bleibt mobil einschließlich Empfängern, Anlagen und Signaturen erhalten
+PASS Kontenexport erzeugt eine tatsächliche PDF mit dem vorhandenen Generator
+PASS Auch Buchungen jenseits der früheren 500er-Grenze bleiben erreichbar
+PASS Scrollen im Rechnungslegungseditor blendet Navigation aus
+PASS Aufwärtsscrollen zeigt die Navigation wieder
+PASS Größenwechsel erhält den offenen Rechnungslegungsentwurf
+PASS Rechnungslegung 320px hell ohne Überlauf
+PASS Rechnungslegung 320px dunkel ohne Überlauf
+PASS Rechnungslegung 360px hell ohne Überlauf
+PASS Rechnungslegung 360px dunkel ohne Überlauf
+PASS Rechnungslegung 390px hell ohne Überlauf
+PASS Rechnungslegung 390px dunkel ohne Überlauf
+PASS Rechnungslegung 430px hell ohne Überlauf
+PASS Rechnungslegung 430px dunkel ohne Überlauf
+PASS Echter CSV-Dateiimport erreicht die ursprüngliche Erkennung und Speicherung
+PASS Erneutes Auswählen bindet die Originaldatei ohne doppelte Buchung wieder an
+PASS Banking-Import zeigt den bestätigten Berichtszeitraum vor dem Lesen
+PASS Banking-Vorschau erhält Vorzeichen und ruft ausschließlich den offenen Fall sowie Zeitraum ab
+PASS Bestätigte Banking-Übernahme schreibt Originalkennung und Quelle
+PASS Rechnungslegung überschreibt keine zwischenzeitlich bearbeitete Buchung
+PASS Leseberechtigte können Details öffnen und erhalten keine Bearbeitungsaktion
+PASS Desktop kehrt zur vollständigen bisherigen Rechnungslegung zurück
+PASS Keine JavaScript-Laufzeitfehler

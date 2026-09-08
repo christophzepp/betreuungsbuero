@@ -40,15 +40,17 @@ test('neuer ENCRYPTION_KEY erzwingt Admin-Quarantäne und atomaren Schema-3-Dopp
   const secureJson = require('../src/security/secure-json');
   const adminPassword = 'Wiederanlauf-Admin-2026!';
   const passwordHash = await bcrypt.hash(adminPassword, 4);
+  const allowedModels = JSON.stringify(['test-model-a', 'test-model-b']);
   db.prepare(`
     INSERT INTO users (id,username,password_hash,display_name,is_admin,allow_online)
     VALUES (1,'recovery-admin',?,'Recovery Admin',1,1)
   `).run(passwordHash);
   db.prepare(`
-    INSERT INTO office_ai_config(provider,api_key_encrypted,model,endpoint)
-    VALUES ('openai',?,'test','')
-    ON CONFLICT(provider) DO UPDATE SET api_key_encrypted=excluded.api_key_encrypted
-  `).run(cryptoHelper.encrypt('altes-portables-ai-geheimnis'));
+    INSERT INTO office_ai_config(provider,api_key_encrypted,model,endpoint,allowed_models)
+    VALUES ('openai',?,'test','',?)
+    ON CONFLICT(provider) DO UPDATE SET
+      api_key_encrypted=excluded.api_key_encrypted, allowed_models=excluded.allowed_models
+  `).run(cryptoHelper.encrypt('altes-portables-ai-geheimnis'), allowedModels);
   db.prepare(`
     INSERT INTO api_tokens(id,user_id,token_hash,label)
     VALUES ('alter-browser-token',1,'alter-token-hash','Altgerät')
@@ -67,6 +69,10 @@ test('neuer ENCRYPTION_KEY erzwingt Admin-Quarantäne und atomaren Schema-3-Dopp
   const wrongBundle = backupData.createPortableRecoveryBundle(db, cryptoHelper, {
     generationId: '117c515d-6476-4b9b-991f-017973a6860c'
   });
+  assert.equal(sourceBundle.credentials.officeAiConfig[0].allowed_models, allowedModels);
+  // Der Restore muss die Freigabe aus der Sicherung zurückbringen, auch wenn
+  // die wiederherzustellende Datenbank inzwischen einen anderen Wert enthält.
+  db.prepare("UPDATE office_ai_config SET allowed_models='[]' WHERE provider='openai'").run();
   const recoveryKey = 'extern-verwahrter-bootstrap-schluessel-2026';
   const envelope = (payload, schema, bundle) => secureJson.encryptJson(payload, recoveryKey, schema, {
     keyId: 'drk_563579c0-5a72-41f3-9ec6-031fb272a407',
@@ -196,6 +202,11 @@ test('neuer ENCRYPTION_KEY erzwingt Admin-Quarantäne und atomaren Schema-3-Dopp
 
   result = await previewAndRestore(credentialsEnvelope);
   assert.equal(result.response.status, 200, JSON.stringify(result.body));
+  assert.equal(
+    db.prepare("SELECT allowed_models FROM office_ai_config WHERE provider='openai'").get().allowed_models,
+    allowedModels,
+    'die KI-Modellfreigaben müssen den vollständigen Recovery-Rundlauf überstehen'
+  );
   assert.equal(
     db.prepare('SELECT maps_api_key_encrypted FROM office_profile WHERE id=1').get().maps_api_key_encrypted,
     '',

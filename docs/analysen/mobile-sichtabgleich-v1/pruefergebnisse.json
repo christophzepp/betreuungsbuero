@@ -1,0 +1,275 @@
+[
+  {
+    "package": "foundation",
+    "pass_lines": 28,
+    "failure_lines": 0,
+    "log": "nachher/foundation/qa.log"
+  },
+  {
+    "package": "navigation",
+    "pass_lines": 23,
+    "failure_lines": 0,
+    "log": "nachher/navigation/qa.log"
+  },
+  {
+    "package": "tasks",
+    "pass_lines": 42,
+    "failure_lines": 0,
+    "log": "nachher/tasks/qa.log"
+  },
+  {
+    "package": "modules",
+    "pass_lines": 61,
+    "failure_lines": 0,
+    "log": "nachher/modules/qa.log"
+  },
+  {
+    "package": "calendar",
+    "pass_lines": 46,
+    "failure_lines": 0,
+    "log": "nachher/calendar/qa.log"
+  },
+  {
+    "package": "mail",
+    "pass_lines": 52,
+    "failure_lines": 0,
+    "log": "nachher/mail/qa.log"
+  },
+  {
+    "package": "explorer",
+    "pass_lines": 56,
+    "failure_lines": 0,
+    "log": "nachher/explorer/qa.log"
+  },
+  {
+    "package": "banking",
+    "pass_lines": 64,
+    "failure_lines": 0,
+    "log": "nachher/banking/qa.log"
+  },
+  {
+    "package": "accounting",
+    "pass_lines": 49,
+    "failure_lines": 0,
+    "log": "nachher/accounting/qa.log"
+  },
+  {
+    "package": "handkasse",
+    "pass_lines": 42,
+    "failure_lines": 0,
+    "log": "nachher/handkasse/qa.log"
+  },
+  {
+    "package": "assets",
+    "pass_lines": 46,
+    "failure_lines": 0,
+    "log": "nachher/assets/qa.log"
+  },
+  {
+    "package": "livelihood",
+    "pass_lines": 39,
+    "failure_lines": 0,
+    "log": "nachher/livelihood/qa.log"
+  },
+  {
+    "package": "debts",
+    "pass_lines": 54,
+    "failure_lines": 0,
+    "log": "nachher/debts/qa.log"
+  },
+  {
+    "package": "finance",
+    "pass_lines": 73,
+    "failure_lines": 0,
+    "log": "nachher/finance/qa.log"
+  },
+  {
+    "package": "invoices",
+    "pass_lines": 59,
+    "failure_lines": 0,
+    "log": "nachher/invoices/qa.log"
+  },
+  {
+    "package": "mileage",
+    "pass_lines": 55,
+    "failure_lines": 0,
+    "log": "nachher/mileage/qa.log"
+  },
+  {
+    "package": "completion",
+    "checks": 143,
+    "pass_lines": 171,
+    "failure_lines": 0,
+    "log": "nachher/completion/qa.log"
+  },
+  {
+    "package": "supplemental",
+    "checks": [
+      {
+        "name": "Chat-Eingabe nutzt die volle Breite 320",
+        "pass": true
+      },
+      {
+        "name": "Chat-Kopf und Werkzeuge passen 320",
+        "pass": true
+      },
+      {
+        "name": "Chat-Eingabe nutzt die volle Breite 390",
+        "pass": true
+      },
+      {
+        "name": "Chat-Kopf und Werkzeuge passen 390",
+        "pass": true
+      },
+      {
+        "name": "Chat-Eingabe nutzt die volle Breite 430",
+        "pass": true
+      },
+      {
+        "name": "Chat-Kopf und Werkzeuge passen 430",
+        "pass": true
+      },
+      {
+        "name": "Gespeicherte Besprechung öffnet die freie Nachrichtenansicht",
+        "pass": true
+      },
+      {
+        "name": "Start-Kopf nutzt die Kartenbreite",
+        "pass": true
+      },
+      {
+        "name": "Stammdaten zeigen den echten Fall als Identitätskopf",
+        "pass": true
+      },
+      {
+        "name": "Profil und Fallauswahl sind sichtbar",
+        "pass": true
+      },
+      {
+        "name": "Darstellung Dunkel wird im bestehenden Modell gespeichert",
+        "pass": true
+      },
+      {
+        "name": "Darstellung Nachts dunkel wird im bestehenden Modell gespeichert",
+        "pass": true
+      },
+      {
+        "name": "Darstellung Hell wird im bestehenden Modell gespeichert",
+        "pass": true
+      },
+      {
+        "name": "Favoriten öffnen den vorhandenen Menüeditor",
+        "pass": true
+      },
+      {
+        "name": "health hat erreichbare Bereichsreiter",
+        "pass": true
+      },
+      {
+        "name": "Medikationsreiter grenzt Fachdatensätze ein",
+        "pass": true
+      },
+      {
+        "name": "health Filterfelder sind touchgerecht",
+        "pass": true
+      },
+      {
+        "name": "housing hat erreichbare Bereichsreiter",
+        "pass": true
+      },
+      {
+        "name": "Wohnkostenreiter zeigt ausschließlich Wohnkosten",
+        "pass": true
+      },
+      {
+        "name": "housing Filterfelder sind touchgerecht",
+        "pass": true
+      },
+      {
+        "name": "abilities hat erreichbare Bereichsreiter",
+        "pass": true
+      },
+      {
+        "name": "abilities Filterfelder sind touchgerecht",
+        "pass": true
+      },
+      {
+        "name": "needs hat erreichbare Bereichsreiter",
+        "pass": true
+      },
+      {
+        "name": "needs Filterfelder sind touchgerecht",
+        "pass": true
+      },
+      {
+        "name": "approvals hat erreichbare Bereichsreiter",
+        "pass": true
+      },
+      {
+        "name": "approvals Filterfelder sind touchgerecht",
+        "pass": true
+      },
+      {
+        "name": "contact-monitor hat erreichbare Bereichsreiter",
+        "pass": true
+      },
+      {
+        "name": "contact-monitor Filterfelder sind touchgerecht",
+        "pass": true
+      },
+      {
+        "name": "supervision hat erreichbare Bereichsreiter",
+        "pass": true
+      },
+      {
+        "name": "supervision Filterfelder sind touchgerecht",
+        "pass": true
+      },
+      {
+        "name": "inbox hat erreichbare Bereichsreiter",
+        "pass": true
+      },
+      {
+        "name": "Erledigt zeigt keine unverarbeiteten Eingänge",
+        "pass": true
+      },
+      {
+        "name": "inbox Filterfelder sind touchgerecht",
+        "pass": true
+      },
+      {
+        "name": "qualifications hat erreichbare Bereichsreiter",
+        "pass": true
+      },
+      {
+        "name": "qualifications Filterfelder sind touchgerecht",
+        "pass": true
+      },
+      {
+        "name": "case-archive Filterfelder sind touchgerecht",
+        "pass": true
+      },
+      {
+        "name": "send-history Filterfelder sind touchgerecht",
+        "pass": true
+      },
+      {
+        "name": "case-overview hat erreichbare Bereichsreiter",
+        "pass": true
+      },
+      {
+        "name": "case-overview Filterfelder sind touchgerecht",
+        "pass": true
+      },
+      {
+        "name": "Schnellnotiz nutzt den ganzen mobilen Arbeitsbereich",
+        "pass": true
+      },
+      {
+        "name": "Keine JavaScript-Laufzeitfehler",
+        "pass": true
+      }
+    ],
+    "errors": []
+  }
+]

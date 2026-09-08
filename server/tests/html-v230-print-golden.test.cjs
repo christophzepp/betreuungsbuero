@@ -9,7 +9,8 @@
    Golden bewusst AKTUALISIEREN (nur nach Sichtpruefung!):
      GOLDEN_AKTUALISIEREN=1 node --test tests/html-v230-print-golden.test.cjs
 
-   Voraussetzungen wie html-overlay-golden: macOS (sips), python3+PIL. */
+   Voraussetzungen wie html-overlay-golden: macOS (sips), python3+PIL,
+   Entwicklungsabhängigkeiten aus server/package.json (npm ci --include=dev). */
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -26,6 +27,10 @@ const SEITEN = { 1: 'v230_annual_assets_s1.png', 3: 'v230_annual_assets_s3.png',
 function verfuegbar() {
   try { execFileSync('sips', ['--help'], { stdio: 'ignore' }); } catch (_e) { return 'sips fehlt (kein macOS)'; }
   try { execFileSync('python3', ['-c', 'import PIL'], { stdio: 'ignore' }); } catch (_e) { return 'python3/PIL fehlt'; }
+  assert.doesNotThrow(
+    () => require.resolve('pdf-lib', { paths: [WERKZEUG] }),
+    'PDF-Testbibliothek fehlt: im Verzeichnis server npm ci --include=dev ausführen'
+  );
   return null;
 }
 
@@ -164,7 +169,9 @@ state.reports.annual_assets={fields};
 
   const pdfPfad = path.join(WERKZEUG, 'vorlagen', 'v230-golden.pdf');
   fs.writeFileSync(pdfPfad, fertigBytes);
-  execFileSync('node', ['seiten-rendern.js', pdfPfad], { cwd: WERKZEUG, stdio: 'ignore' });
+  execFileSync(process.execPath, ['seiten-rendern.js', pdfPfad], {
+    cwd: WERKZEUG, stdio: ['ignore', 'ignore', 'inherit']
+  });
 
   for (const [seite, goldenName] of Object.entries(SEITEN)) {
     const istPfad = path.join(WERKZEUG, 'vorlagen', 'render', `v230-golden_s${seite}.png`);

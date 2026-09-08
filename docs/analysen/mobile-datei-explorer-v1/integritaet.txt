@@ -1,0 +1,5 @@
+311 Script-Blöcke insgesamt.
+Geänderte Scripts: id="dokumente-modul-v1", id="mobile-online-shell-v1-js"
+Unveränderte eingebettete Datenblöcke: 82
+NUL-Bytes unverändert: 1
+SHA256: d26825cddb6e00f94e9ae3b10799cadc0ba2a3e44f1556734178e2cd43777e2b

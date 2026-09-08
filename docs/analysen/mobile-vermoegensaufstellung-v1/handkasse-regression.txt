@@ -1,0 +1,42 @@
+PASS Handkasse öffnet mit Kassenbestand, Segmenten und vollständigen Buchungen
+PASS Jahresfilter erhält Vorjahresübertrag und trennt Bewegung vom Gesamtbestand
+PASS Buchungsart und Jahr kombinieren sich
+PASS Suche findet vollständigen Zweck und erhält den Eingabefokus
+PASS Detail enthält alle ursprünglichen Buchungsangaben und den laufenden Saldo
+PASS Formular schreibt weder halbe Buchungen noch vorzeitige AutoDoku
+PASS Aktualisierung erhält tatsächlichen Formularknoten und Entwurf
+PASS Chatwechsel erhält den Handkassenentwurf
+PASS Tastatur blendet Navigation aus und hält Speichern erreichbar
+PASS Speichern übernimmt alle Angaben und erzeugt genau eine vollständige AutoDoku
+PASS Neue Buchung bleibt bis zum Speichern außerhalb des Kassenbuchs
+PASS Neue Einnahme speichert und öffnet ihre Details
+PASS Gespiegelte Schuldenzahlung bleibt lesbar und schreibgeschützt
+PASS Serien werden wie bisher bis heute materialisiert
+PASS Serienvorlage bietet sämtliche sechs Intervalle
+PASS Beenden einer Serie erhält bereits erzeugte Buchungen
+PASS Folgebuchung kann bearbeitet werden, ohne eine neue Serienvorlage zu erzeugen
+PASS Gleichzeitige Änderung wird erkannt und nicht überschrieben
+PASS Menü enthält vollständige Exporte und Rechnungslegungsübernahme mit klarem Umfang
+PASS PDF-Export verwendet den tatsächlichen Kassenbuch-Generator
+PASS Excel enthält ein echtes XLSX mit vollständigem Kassenbuch
+PASS Übernahme enthält alle Jahre, stabile Buchungskennungen und korrekte Vorzeichen
+PASS Wiederholte Übernahme aktualisiert dasselbe Konto ohne Doppelbuchungen
+PASS Löschen ist bis zur ausdrücklichen Bestätigung reversibel
+PASS Bestätigtes Löschen entfernt genau die gewählte Buchung
+PASS Fallwechsel lädt die andere Handkasse ohne Vermischen
+PASS Schließen stellt den ursprünglichen Fall wieder her
+PASS Größenwechsel erhält den offenen Entwurf
+PASS Große Kassenbücher werden in erreichbaren Seiten angezeigt
+PASS Abwärtsscrollen blendet die Navigation aus
+PASS Aufwärtsscrollen zeigt die Navigation
+PASS Handkasse 320px hell ohne Überlauf
+PASS Handkasse 320px dunkel ohne Überlauf
+PASS Handkasse 360px hell ohne Überlauf
+PASS Handkasse 360px dunkel ohne Überlauf
+PASS Handkasse 390px hell ohne Überlauf
+PASS Handkasse 390px dunkel ohne Überlauf
+PASS Handkasse 430px hell ohne Überlauf
+PASS Handkasse 430px dunkel ohne Überlauf
+PASS Leseberechtigte behalten die Details ohne Schreibaktionen
+PASS Desktop behält ursprüngliche Tabelle, Fallwahl, Serienfelder und Exporte
+PASS Keine JavaScript-Laufzeitfehler

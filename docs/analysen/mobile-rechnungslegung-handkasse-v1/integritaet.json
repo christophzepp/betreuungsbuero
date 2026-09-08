@@ -1,0 +1,31 @@
+{
+  "start_sha256": "bfd71ed61190e79855034d6671b962d3fc6e62f8dc1452a3c169b230da788507",
+  "result_sha256": "65c42f55d7dbefdc6b2f3f83f6974cb786fb679b485e9010e26bd66d5ed3d668",
+  "script_blocks": 311,
+  "executable_scripts": 229,
+  "unchanged_data_blocks": 82,
+  "unchanged_pdf_blocks": 76,
+  "unchanged_json_blocks": 6,
+  "nul_bytes": 1,
+  "changed_scripts": [
+    {
+      "index": 24,
+      "attributes": ""
+    },
+    {
+      "index": 66,
+      "attributes": " id=\"accounting-v157-script\""
+    },
+    {
+      "index": 229,
+      "attributes": " id=\"handkasse-script-v1\""
+    },
+    {
+      "index": 291,
+      "attributes": " id=\"mobile-online-shell-v1-js\""
+    }
+  ],
+  "changed_styles": [
+    " id=\"mobile-phone-curation-v2\""
+  ]
+}

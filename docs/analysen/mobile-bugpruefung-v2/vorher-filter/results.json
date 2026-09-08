@@ -1,0 +1,14 @@
+[
+  {
+    "name": "posteingang-filter-abbrechen",
+    "pass": false,
+    "error": "Schließen ohne Anwenden behält die ursprüngliche Auswahl\n\n1 !== 2\n",
+    "errors": []
+  },
+  {
+    "name": "posteingang-filter-anwenden",
+    "pass": false,
+    "error": "Bereichsreiter zeigt den angewendeten Status\n\n'false' !== 'true'\n",
+    "errors": []
+  }
+]

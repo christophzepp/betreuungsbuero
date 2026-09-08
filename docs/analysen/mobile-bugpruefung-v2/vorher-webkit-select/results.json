@@ -1,0 +1,8 @@
+[
+  {
+    "name": "auswahlfelder-touchgroesse",
+    "pass": false,
+    "error": "Auswahlfeld bei 320 Pixeln: {\"height\":23,\"font\":16}",
+    "errors": []
+  }
+]

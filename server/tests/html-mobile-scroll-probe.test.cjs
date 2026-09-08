@@ -1,170 +1,31 @@
-/* Scroll-Prüf-Zwischenspeicher der Mobil-Schale (Nutzerfund 03.08.2026: "Finanzen hängt sich
- * beim Scrollen auf").
- *
- * Ursache: handleScroll lief bei JEDEM Scroll-Ereignis durch bis zu sechs
- * document.querySelector-Kaskaden über das gesamte Dokument (darunter ein 14-teiliges :is()).
- * Bei langen Listen fror die Seite. Die Antworten hängen aber nur vom Fensteraufbau ab.
- *
- * Dieser Prüfstand führt die ECHTEN eingebauten Funktionen aus (per Klammerzählung
- * geschnitten) und misst das Leistungsversprechen direkt: viele Scroll-Ereignisse,
- * EIN Kaskadenlauf.
- */
+/* Execute the shipped navigation policy: directional hysteresis, keyboard priority and
+ * bounded DOM access. Synthetic geometry covers both visual and layout viewport resizing. */
 'use strict';
-
-const assert = require('node:assert/strict');
-const fs = require('node:fs');
-const path = require('node:path');
-const test = require('node:test');
-const vm = require('node:vm');
-
-const htmlPath = path.join(__dirname, '..', '..', 'outputs', 'Betreuungsbuero_Dokumentenassistent_v0_7.html');
-const html = fs.readFileSync(htmlPath, 'utf8');
-
-function schneiden(startMarke) {
-  const start = html.indexOf(startMarke);
-  assert.notStrictEqual(start, -1, `${startMarke} fehlt.`);
-  let depth = 0;
-  for (let i = html.indexOf('{', start); i < html.length; i++) {
-    if (html[i] === '{') depth++;
-    else if (html[i] === '}' && --depth === 0) return html.slice(start, i + 1);
-  }
-  throw new Error(`${startMarke} ist nicht geschlossen.`);
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),test=require('node:test'),vm=require('node:vm');
+const html=fs.readFileSync(path.resolve(__dirname,'../../outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html'),'utf8');
+function source(name){const a=html.indexOf('function '+name+'(');assert.ok(a>=0);let depth=0;for(let i=html.indexOf('{',a);i<html.length;i++){if(html[i]==='{')depth++;else if(html[i]==='}'&&!--depth)return html.slice(a,i+1)}throw Error(name)}
+function element(extra={}){const attrs={},classes=new Set();return {hidden:false,inert:false,classes,style:{setProperty(k,v){this[k]=v}},classList:{contains:k=>classes.has(k),add:k=>classes.add(k),remove:k=>classes.delete(k),toggle(k,v){v?v=classes.add(k):classes.delete(k)}},getAttribute:k=>attrs[k],setAttribute:(k,v)=>attrs[k]=v,contains:e=>e.owner===this,matches:()=>false,closest:()=>null,...extra}}
+function fixture(){
+ const body=element(),view=element({dataset:{mobileScreen:'list'}}),scroller=element({scrollHeight:2400,clientHeight:600}),inputScroller=element({scrollHeight:900,clientHeight:100,matches:()=>true});
+ body.querySelector=()=>view;body.contains=e=>e===scroller||e===inputScroller;
+ const root=element({scrollHeight:3000}),modal=element(),shell=element(),timers=new Map();let now=100000,sequence=0;
+ const state={mobile:true,chat:false,probeCalls:0};
+ const ctx={window:{innerWidth:390,innerHeight:844,scrollY:0,visualViewport:{height:844,width:390,scale:1,offsetTop:0},setTimeout:(fn,delay)=>{const id=++sequence;timers.set(id,{fn,at:now+delay});return id}},clearTimeout:id=>timers.delete(id),document:{documentElement:root,activeElement:null,body:element(),getElementById:id=>({modal,modalBody:body,uchatDock:state.chat?body:null,workspace:body,startPage:body})[id]},shell,sheet:null,isMobileActive:()=>state.mobile,chatState:()=>({open:state.chat}),Date:{now:()=>now},state};
+ const policy=html.slice(html.indexOf('  // Gemeinsame Navigationsregel:'),html.indexOf('\n  window.__mobileUI = Object.freeze'));
+ vm.createContext(ctx);vm.runInContext('let shellToggleAt=0,scrollProbe=null,activeMobileActionId="tasks";\n'+policy+'\n'+source('computeScrollProbe')+'\n'+source('handleScroll')+'\nconst computeOriginal=computeScrollProbe;computeScrollProbe=()=>{state.probeCalls++;return computeOriginal()};this.scroll=handleScroll;this.sync=syncMobileViewport;this.reveal=revealMobileNavigation;this.viewSync=syncMobileNavigationView;',ctx);
+ const tick=ms=>{now+=ms;for(const [id,t] of [...timers])if(t.at<=now){timers.delete(id);t.fn()}};
+ const scroll=y=>ctx.scroll(scroller,y),hidden=()=>shell.classes.has('is-hidden');
+ return {ctx,root,shell,state,view,scroller,inputScroller,modal,tick,scroll,hidden,hide(){scroll(0);scroll(100);scroll(150);tick(300)}};
 }
-
-function fakeShell() {
-  const classes = new Set();
-  return { classes, classList: { add: (c) => classes.add(c), remove: (c) => classes.delete(c), contains: (c) => classes.has(c) } };
-}
-
-function bauSandbox() {
-  const modal = { classes: new Set(), classList: null };
-  modal.classList = { add: (c) => modal.classes.add(c), remove: (c) => modal.classes.delete(c), contains: (c) => modal.classes.has(c) };
-  const zustand = {
-    queryCount: 0,
-    // Was die Kaskade "sieht": je Prüfschlüssel eine Antwort (null = kein Treffer).
-    antworten: {},
-    workspaceScroller: { id: 'body-scroller' }
-  };
-  const workspaceView = {
-    querySelector: (sel) => (sel === '.fr-view #frList' ? null : zustand.workspaceScroller)
-  };
-  const sandbox = {
-    document: {
-      getElementById: (id) => (id === 'modal' ? modal : null),
-      querySelector: (sel) => {
-        zustand.queryCount += 1;
-        if (sel.includes('data-mobile-view-profile="workspace"')) return zustand.antworten.workspace ? workspaceView : null;
-        for (const key of Object.keys(zustand.antworten)) {
-          if (zustand.antworten[key] && sel.includes(key)) return {};
-        }
-        return null;
-      }
-    },
-    isMobileActive: () => true,
-    shell: fakeShell(),
-    sheet: null,
-    window: {}, // handleScroll unterscheidet Fenster- von inneren Rollern per Identität
-    // Steuerbare Uhr: die Wechsel-Sperrfrist (250 ms) wird im Rückkopplungstest exakt gestellt.
-    __jetzt: 100000
-  };
-  sandbox.Date = { now: () => sandbox.__jetzt };
-  const quelle = [
-    'let scrollProbe = null; let lastWindowScroll = 0; let shellToggleAt = 0; const nestedScrollState = new Map();',
-    schneiden('function computeScrollProbe()'),
-    schneiden('function handleScroll(target, current)'),
-    'this.handleScroll = handleScroll; this.setProbe = (v) => { scrollProbe = v; };'
-  ].join('\n');
-  vm.createContext(sandbox);
-  vm.runInContext(quelle, sandbox);
-  return { sandbox, zustand, modal };
-}
-
-test('Viele Scroll-Ereignisse, EIN Kaskadenlauf (das war der Finanzen-Hänger)', () => {
-  const { sandbox, zustand } = bauSandbox();
-  zustand.antworten = { workspace: true };
-  const scroller = zustand.workspaceScroller;
-  for (let y = 0; y <= 600; y += 12) sandbox.handleScroll(scroller, y);
-  assert.ok(zustand.queryCount <= 6,
-    `Die Selektor-Kaskade darf je Aufbau nur EINMAL laufen (gemessen: ${zustand.queryCount} Abfragen für 51 Scroll-Ereignisse).`);
-  assert.equal(sandbox.shell.classes.has('is-hidden'), true,
-    'Stetiges Herunterrollen muss die Leiste weiterhin ausblenden.');
-  sandbox.handleScroll(scroller, 0);
-  assert.equal(sandbox.shell.classes.has('is-hidden'), false,
-    'Zurück an den Anfang muss die Leiste weiterhin einblenden.');
-});
-
-test('Fremde Roller bleiben ausgesperrt, offene Editoren halten die Leiste sichtbar', () => {
-  const { sandbox, zustand } = bauSandbox();
-  zustand.antworten = { workspace: true };
-  sandbox.handleScroll({ id: 'anderer' }, 500);
-  assert.equal(sandbox.shell.classes.has('is-hidden'), false,
-    'Nur der aktive Arbeitsflächen-Roller darf die Leiste steuern.');
-
-  const editor = bauSandbox();
-  editor.zustand.antworten = { 'finance-form': true };
-  editor.sandbox.shell.classes.add('is-hidden');
-  editor.sandbox.handleScroll(editor.zustand.workspaceScroller, 400);
-  assert.equal(editor.sandbox.shell.classes.has('is-hidden'), false,
-    'Bei offenem Editor muss die Leiste sichtbar werden (unverändertes Verhalten).');
-});
-
-test('Fenster zu (nur Klassenwechsel!) wird ohne Beobachter erkannt und rechnet genau einmal neu', () => {
-  const { sandbox, zustand, modal } = bauSandbox();
-  zustand.antworten = { workspace: true };
-  sandbox.handleScroll(zustand.workspaceScroller, 100);
-  const nachAufbau = zustand.queryCount;
-
-  // Fenster schließen:在 der Anwendung nur classList.add('hidden') - kein childList-Ereignis.
-  modal.classes.add('hidden');
-  zustand.antworten = {};
-  sandbox.handleScroll(sandbox, 0); // beliebiges Ziel: freier Modus rechnet einmal neu
-  assert.ok(zustand.queryCount > nachAufbau, 'Der Sichtbarkeits-Stempel muss den Wechsel bemerken.');
-  const nachSchliessen = zustand.queryCount;
-  for (let y = 0; y <= 240; y += 12) sandbox.handleScroll(sandbox, y);
-  assert.equal(zustand.queryCount, nachSchliessen,
-    'Nach der einmaligen Neuberechnung darf wieder keine Kaskade je Ereignis laufen.');
-});
-
-test('Die Verdrahtung: jeder Neuaufbau verwirft den Zwischenspeicher', () => {
-  const queue = schneiden('function queueMobileAdaptation()');
-  assert.ok(queue.includes('scrollProbe = null'),
-    'queueMobileAdaptation muss den Scroll-Prüf-Zwischenspeicher verwerfen - sonst steuert ein alter Aufbau die Leiste.');
-});
-
-test('Rückkopplung gekappt: ein Umschalt-Echo kippt die Leiste nicht mehr zurück (der Finanzen-Hänger, 2. Wurzel)', () => {
-  const { sandbox, zustand } = bauSandbox();
-  zustand.antworten = { workspace: true };
-  const scroller = zustand.workspaceScroller;
-
-  // Nutzer rollt herunter -> Leiste blendet aus (erster Wechsel, Sperrfrist frei).
-  sandbox.handleScroll(scroller, 100);
-  sandbox.handleScroll(scroller, 200);
-  assert.equal(sandbox.shell.classes.has('is-hidden'), true);
-
-  // 10 ms später: das Layout-Echo des Umschaltens (Scrollposition nachgezogen, Delta umgekehrt).
-  sandbox.__jetzt += 10;
-  sandbox.handleScroll(scroller, 188);
-  assert.equal(sandbox.shell.classes.has('is-hidden'), true,
-    'Das Echo (Gegen-Delta innerhalb der Sperrfrist) darf die Leiste NICHT zurückkippen - genau das war die Endlosschleife.');
-
-  // Nach Ablauf der Sperrfrist gewinnt echtes Hochrollen wieder.
-  sandbox.__jetzt += 300;
-  sandbox.handleScroll(scroller, 170);
-  assert.equal(sandbox.shell.classes.has('is-hidden'), false,
-    'Echtes Hochrollen nach der Sperrfrist muss die Leiste einblenden.');
-
-  // Der Seitenanfang blendet IMMER ein, auch mitten in der Sperrfrist.
-  sandbox.__jetzt += 300; // Sperrfrist des letzten Wechsels ablaufen lassen
-  sandbox.handleScroll(scroller, 400);
-  sandbox.handleScroll(scroller, 520);
-  assert.equal(sandbox.shell.classes.has('is-hidden'), true);
-  sandbox.__jetzt += 10;
-  sandbox.handleScroll(scroller, 0);
-  assert.equal(sandbox.shell.classes.has('is-hidden'), false,
-    'Der Seitenanfang ist die Ausnahme von der Sperrfrist.');
-});
-
-test('Die 1. Wurzel ist wirklich entfernt: kein :has koppelt mehr an die versteckte Leiste', () => {
-  assert.ok(!html.includes(':has(.mobile-online-shell.is-hidden)'),
-    'Eine :has(.mobile-online-shell.is-hidden)-Regel würde jeden Leisten-Wechsel wieder zu einem Reflow der Modul-Liste machen (78px-Sprung -> Scroll-Echo -> Endlosschleife).');
-});
+test('Stetiges Scrollen in kleinen Schritten blendet aus; keine Selektorkaskade je Ereignis',()=>{const f=fixture();for(let y=0;y<=300;y+=3)f.scroll(y);assert.equal(f.hidden(),true);assert.equal(f.state.probeCalls,1);f.scroll(0);assert.equal(f.hidden(),false)});
+test('Kleine Gegenbewegungen flackern nicht, bewusster Richtungswechsel blendet wieder ein',()=>{const f=fixture();f.hide();for(const y of [147,150,146,149])f.scroll(y);f.tick(300);assert.equal(f.hidden(),true);f.scroll(125);f.tick(300);assert.equal(f.hidden(),false)});
+test('Ein schneller abgeschlossener Richtungswechsel wird nach der Sperrfrist übernommen',()=>{const f=fixture();f.scroll(0);f.scroll(100);f.scroll(160);f.tick(10);f.scroll(130);assert.equal(f.hidden(),true);f.tick(250);assert.equal(f.hidden(),false)});
+test('Der Seitenanfang gewinnt sofort gegen die Sperrfrist',()=>{const f=fixture();f.hide();f.scroll(0);assert.equal(f.hidden(),false);assert.equal(f.shell.inert,false);assert.equal(f.shell.getAttribute('aria-hidden'),'false')});
+test('Fremde Hintergrundroller, Eingabefelder und horizontale Bewegung schalten nicht um',()=>{const f=fixture();const other=element({scrollHeight:2400,clientHeight:600});f.ctx.scroll(other,200);f.ctx.scroll(other,500);f.ctx.scroll(f.inputScroller,200);f.ctx.scroll(f.inputScroller,500);f.scroll(100);f.scroll(100);assert.equal(f.hidden(),false)});
+test('Neue Ansicht zeigt die Navigation und verwirft einen ausstehenden Richtungswechsel',()=>{const f=fixture();f.hide();f.scroll(120);f.view.dataset.mobileScreen='form';f.ctx.viewSync();f.tick(300);assert.equal(f.hidden(),false)});
+test('Modal- und Chatwechsel erneuern die Scrollprüfung nur einmal',()=>{const f=fixture();f.scroll(0);f.scroll(150);assert.equal(f.state.probeCalls,1);f.modal.classes.add('hidden');f.ctx.scroll(f.ctx.window,100);assert.equal(f.state.probeCalls,2);f.ctx.scroll(f.ctx.window,200);assert.equal(f.state.probeCalls,2);f.state.chat=true;f.scroll(250);assert.equal(f.state.probeCalls,3)});
+test('Tastatur hat Vorrang vor Scrollen, Seitenanfang und Menüöffnung; Schließen zeigt wieder an',()=>{const f=fixture();f.ctx.sync();f.ctx.document.activeElement={tagName:'TEXTAREA'};f.ctx.window.visualViewport.height=500;f.ctx.sync();assert.equal(f.root.classes.has('mobile-keyboard-open'),true);f.scroll(0);f.ctx.reveal();assert.equal(f.hidden(),true);assert.equal(f.shell.inert,true);f.ctx.window.visualViewport.height=844;f.ctx.sync();assert.equal(f.hidden(),false);assert.equal(f.root.classes.has('mobile-keyboard-open'),false)});
+test('Android mit verkleinertem innerHeight bleibt über die gemerkte Höhe erkennbar',()=>{const f=fixture();f.ctx.sync();f.ctx.document.activeElement={tagName:'INPUT',type:'text'};f.ctx.window.innerHeight=500;f.ctx.window.visualViewport.height=500;f.ctx.sync();assert.equal(f.hidden(),true)});
+test('Browserleisten, Pinch-Zoom und eine Hardwaretastatur sind keine Bildschirmtastatur',()=>{const f=fixture();f.ctx.sync();f.ctx.window.visualViewport.height=760;f.ctx.sync();assert.equal(f.hidden(),false);f.ctx.document.activeElement={tagName:'INPUT',type:'text'};f.ctx.sync();assert.equal(f.hidden(),false);f.ctx.window.visualViewport.height=450;f.ctx.window.visualViewport.scale=1.8;f.ctx.sync();assert.equal(f.hidden(),false)});
+test('Offene Auswahlblätter und Desktop werden nicht vom Scrollen umgeschaltet',()=>{const f=fixture();f.ctx.sheet=element();f.ctx.sheet.classes.add('is-open');f.scroll(0);f.scroll(200);f.scroll(400);assert.equal(f.hidden(),false);f.ctx.sheet=null;f.state.mobile=false;f.scroll(500);assert.equal(f.hidden(),false)});
+test('Navigation verändert beim Scrollen keine Modulhöhe und respektiert reduzierte Bewegung',()=>{assert.ok(!html.includes(':has(.mobile-online-shell.is-hidden)'));assert.match(html,/\[?prefers-reduced-motion:reduce[\s\S]*?#mobileOnlineShell#mobileOnlineShell/);const a=html.indexOf('html.mobile-online-active #mobileOnlineShell#mobileOnlineShell.is-hidden');const css=html.slice(a,html.indexOf('}',a));assert.ok(!/height:|padding:|margin:/.test(css));assert.match(html,/mobile-keyboard-open #mobileOnlineShell#mobileOnlineShell\{display:none!important/)});

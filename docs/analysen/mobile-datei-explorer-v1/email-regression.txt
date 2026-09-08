@@ -1,0 +1,52 @@
+PASS Mobile Postfachliste startet mit vier Nachrichten
+PASS Lesestatus und Anlagen lassen sich kombinieren
+PASS Antwort enthält ursprünglichen Empfänger und Betreff
+PASS Cc/Bcc und erneuter Formularaufbau erhalten Text und Betreff
+PASS Absenderwechsel erhält Empfänger und Nachricht
+PASS Dateianlage wird vollständig eingelesen
+PASS Datei-Explorer liefert eine Anlage an den unveränderten Nachrichteneditor zurück
+PASS Fallzuordnung aktiviert Dokumentation und erhält Anlagen
+PASS Erneutes Öffnen ersetzt keinen aktiven E-Mail-Entwurf
+PASS Chat-Rückkehr stellt den tatsächlichen Nachrichteneditor wieder her
+PASS Fehlgeschlagenes Entwurfspeichern lässt alle Eingaben geöffnet
+PASS Auch Zurück schließt bei Speicherfehler keinen Entwurf
+PASS Entwurf speichert Konto, Cc/Bcc, Anlage und Fallkontext
+PASS Laufendes Speichern sperrt Chatwechsel und doppeltes Sichern
+PASS Entwurfsfilter berücksichtigt tatsächliches Konto und gespeicherten Fall
+PASS Gesicherter Entwurf öffnet mit demselben Fall und allen Empfängern
+PASS Versand- und Postausgangsfehler bewahren den vollständigen Entwurf
+PASS Erneutes Senden verwendet den ursprünglichen Versandweg samt Anlagen
+PASS Suche filtert den vorhandenen Serverabruf
+PASS Ladefehler werden angezeigt und behalten die zuvor geladene Liste
+PASS Eine verspätete Suchantwort überschreibt keine neuere Suche
+PASS Nachladen erreicht passende Nachrichten auch bei zunächst leerem Filterergebnis
+PASS Zurück während des Ladens bleibt in der Nachrichtenliste
+PASS Sammelauswahl bietet Lesen, Verschieben, Spam, Archivieren und Löschen
+PASS HTML-Nachricht bleibt in einem abgeschotteten Iframe und blockiert externe Bilder
+PASS Alle ursprünglichen Nachrichtenwerkzeuge bleiben erreichbar
+PASS Fehlende Weiterleitungsanlagen verhindern unvollständigen Versand
+PASS Weiterleitungsanlagen lassen sich am selben Entwurf nachladen
+PASS Kontenverwaltung verwendet den gemeinsamen mobilen Rahmen
+PASS Kontobearbeitung erhält Verbindungs-, Signatur- und Speicheroptionen
+PASS Kontoeingaben werden vor versehentlichem Verwerfen geschützt
+PASS Später senden übernimmt den gewählten Zeitpunkt in den Entwurf
+PASS Ein gesicherter Entwurf behält den geplanten Versandzeitpunkt
+PASS Geplanter Versand übergibt sendAt an den vorhandenen Serverablauf
+PASS Abgelehnte Zeitplanaufhebung öffnet keinen irreführenden Editor
+PASS Bestätigte Zeitplanaufhebung öffnet die Nachricht als Entwurf
+PASS Sendeverzögerung lässt sich rückgängig machen und stellt den Entwurf wieder her
+PASS Postfach 320px hell
+PASS Postfach 320px dunkel
+PASS Postfach 360px hell
+PASS Postfach 360px dunkel
+PASS Postfach 390px hell
+PASS Postfach 390px dunkel
+PASS Postfach 430px hell
+PASS Postfach 430px dunkel
+PASS Abwärtsscrollen im E-Mail-Formular blendet die Navigation aus
+PASS Aufwärtsscrollen im E-Mail-Formular zeigt die Navigation wieder
+PASS Nachrichtenformular 320px ohne horizontales Überlaufen
+PASS Nachrichtenformular 430px ohne horizontales Überlaufen
+PASS Tastatur blendet Navigation aus und hält Senden/Entwurf erreichbar
+PASS Desktop behält Postfachspalten und ursprüngliche Darstellung
+PASS Keine JavaScript-Laufzeitfehler

@@ -1,0 +1,98 @@
+--- betreuungsuebersicht-script-v1 (vorher)
++++ betreuungsuebersicht-script-v1 (korrigiert)
+@@ -322,5 +322,5 @@
+ let buMobile=null;
+ async function buMobileOpen(){const C=window.__mobileCompletion;if(!C?.active())return false;
+- if(buMobile?.state.guard){buMobile.state.pending=true;return true}
++ if(buMobile?.state.guard&&!buMobile.state.guard.released){buMobile.state.pending=true;return true}
+  if(!buMobile)buMobile=C.collection({id:'supervision',title:'Betreuungsübersicht',rowKind:'person',tabs:()=>[['active','Aktuell'],...((window.isBueroLocalMode?.())?[]:[['archived','Archiv']])].map(([value,label])=>({label,selected:buScope===value,onClick:()=>{buScope=value;buMobile.state.screen='list';buMobileOpen()}})),subtitle:()=>`${buScope==='archived'?'Archiv':'Aktuelle Fälle'} · ${buPeriodStart} – ${buPeriodEnd}`,unit:'Fällen',records:()=>buItems.map(r=>({id:r.caseId,raw:r,title:[r.firstName,r.lastName].filter(Boolean).join(' ')||r.caseId,meta:[r.court,r.fileNumber,r.aenderungsart].filter(Boolean).join(' · '),entries:[['Amts-/Betreuungsgericht',r.court],['Aktenzeichen',r.fileNumber],['Vorname',r.firstName],['Nachname',r.lastName],['Betreuungsbehörde',r.authority],['Einstweilige Anordnung',r.preliminaryOrderDate],['Heimunterbringung',r.homePlacement],['Beginn',r.startDate],['Übernahme',r.takeoverDate],['Abrechnung',r.nextAccountingDue],['Änderungsart',r.aenderungsart],['Übergabe an',r.uebergabeAn]]})),filters:[{key:'court',label:'Gericht',options:()=>[...new Set(buItems.map(r=>r.court).filter(Boolean))],match:(r,v)=>r.raw.court===v},{key:'change',label:'Änderungsart',options:AENDERUNGSART_OPTIONS.filter(Boolean),match:(r,v)=>r.raw.aenderungsart===v},{key:'home',label:'Heimunterbringung',options:()=>[...new Set(buItems.map(r=>r.homePlacement).filter(Boolean))],match:(r,v)=>r.raw.homePlacement===v}],
+  edit:r=>({title:'Meldeangaben bearbeiten',fields:[{key:'aenderungsart',label:'Änderungsart',options:AENDERUNGSART_OPTIONS},{key:'uebergabeAn',label:'Übergabe an'}],values:r.raw,commit:async v=>{await window.__buSaveValues({...v,caseId:r.id,periodStart:buPeriodStart});Object.assign(buItems.find(x=>x.caseId===r.id),v)}}),
+--- kontaktmonitor-script-v1 (vorher)
++++ kontaktmonitor-script-v1 (korrigiert)
+@@ -424,5 +424,5 @@
+ let kmMobile=null;
+ async function kmMobileOpen(){const C=window.__mobileCompletion;if(!C?.active())return false;
+- if(kmMobile?.state.guard){kmMobile.state.pending=true;return true}
++ if(kmMobile?.state.guard&&!kmMobile.state.guard.released){kmMobile.state.pending=true;return true}
+  if(!kmMobile)kmMobile=C.collection({id:'contact-monitor',title:'Kontaktmonitor',rowKind:'person',tabs:[{label:'Alle Fälle',key:'status',value:''},{label:'Überfällig',key:'status',value:'over'},{label:'Bald fällig',key:'status',value:'soon'}],subtitle:'Alle betreuten Fälle',unit:'Fällen',records:()=>kmStatusList.map(r=>({id:r.caseId,raw:r,title:r.label,meta:[{over:'Überfällig',soon:'Bald fällig',ok:'Im Turnus',unknown:'Noch offen'}[r.status.k],r.nextDue?deOf(isoOf(r.nextDue)):''].filter(Boolean).join(' · '),entries:[['Turnus',r.turnus+' Tage'],['Letzter Kontakt',r.lastD?deOf(isoOf(r.lastD)):'Noch keiner'],['Kontaktart',r.lastArt],['Nächste Fälligkeit',r.nextDue?deOf(isoOf(r.nextDue)):''],...(r.docs||[]).map(d=>[deOf(isoOf(d.date))+' · '+d.art,d.note||''])]})),filters:[{key:'status',label:'Kontaktbedarf',options:[['over','Überfällig'],['soon','In sieben Tagen'],['ok','Im Turnus'],['unknown','Noch offen']],match:(r,v)=>r.raw.status.k===v},{key:'turnus',label:'Turnus',options:TURNI.map(t=>[String(t[0]),t[1]]),match:(r,v)=>String(r.raw.turnus)===v},{key:'case',label:'Fall',options:()=>kmStatusList.map(r=>[r.caseId,r.label]),match:(r,v)=>String(r.id)===v}],
+  edit:r=>({title:'Kontaktturnus ändern',fields:[{key:'turnus',label:'Turnus',options:TURNI.map(t=>[String(t[0]),t[1]])}],values:r.raw,commit:async v=>{await window.__kmSetTurnus(r.id,v.turnus);kmStatusList=await kmAllCasesStatus()}}),actions:(r,api)=>[{label:'Kontakt eintragen',icon:'plus',onClick:()=>api.edit(r.id,{title:'Kontakt dokumentieren',fields:[{key:'date',label:'Datum',type:'date',required:true},{key:'art',label:'Kontaktart',combo:'km_art',required:true},{key:'note',label:'Notiz',type:'textarea',combo:'km_notiz'}],values:{date:isoOf(today0()),art:kmArten()[0]},commit:async v=>{await kmLogContact(r.id,r.title,v.date,v.art,v.note);kmStatusList=await kmAllCasesStatus()}})},{label:'Kontaktprofil',icon:'contacts',onClick:()=>window.openContactProfileV255(r.id,r.title)}],tools:()=>[{label:'Kontaktübersicht (PDF)',onClick:()=>window.__kmExport('casePdf')},{label:'Kontaktübersicht (Excel)',onClick:()=>window.__kmExport('caseXlsx')},{label:'Gesamtübersicht (PDF)',onClick:()=>window.__kmExport('allPdf')},{label:'Gesamtübersicht (Excel)',onClick:()=>window.__kmExport('allXlsx')},{label:'Aktualisieren',onClick:()=>kmMobileOpen()}]});
+--- mobile-phone-curation-v2 (vorher)
++++ mobile-phone-curation-v2 (korrigiert)
+@@ -8049,5 +8049,7 @@
+ html.mobile-online-active .mobile-nav-symbol .mobile-chat-badge{position:absolute;top:-7px;left:14px;min-width:19px;height:19px;font-size:11px;padding:0 5px;border:2px solid var(--mobile-paper)}
+ html.mobile-online-active .mobile-online-sheet{bottom:var(--mobile-nav-space);overscroll-behavior:contain}
+-html.mobile-online-active .mobile-online-sheet:not(.is-open){visibility:hidden}
++html.mobile-online-active .mobile-online-sheet:not(.is-open),html.mobile-online-active .mobile-online-sheet:not(.is-open)>.mobile-sheet-panel{visibility:hidden}
++/* Explicit panel visibility avoids stale inherited visibility after reopening in WebKit. */
++html.mobile-online-active .mobile-online-sheet.is-open>.mobile-sheet-panel{visibility:visible}
+ html.mobile-online-active .mobile-sheet-panel.mobile-ui-sheet{display:flex;flex-direction:column;max-height:calc(100% - 12px);padding:10px 16px 16px;border:0;border-radius:22px 22px 0 0;overflow:hidden;background:var(--mobile-paper);color:var(--mobile-ink)}
+ html.mobile-online-active .mobile-ui-sheet .mobile-sheet-head{position:static;flex:none;min-height:56px;padding:0 0 8px;background:var(--mobile-paper);border:0}
+@@ -9446,2 +9448,16 @@
+ html.mobile-online-active #modal .mc-native-selected :is(.archive-summary-title-v152,.archive-summary-meta-v152)>*{white-space:normal!important;text-overflow:clip!important;overflow:visible!important}
+ }
++
++/* WebKit paints native menu controls at desktop height even with min-height.
++   Keep the native select/picker, but draw its field and chevron ourselves.
++   Important layer rules protect the chevron from module background shorthands. */
++html.mobile-online-active{--mobile-select-chevron:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2320567e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")}
++html.mobile-online-active[data-theme="dark"]{--mobile-select-chevron:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b4d6f0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")}
++html.mobile-online-active select:not([multiple]):is(:not([size]),[size="1"]){box-sizing:border-box;min-height:44px!important;font-size:16px!important}
++@layer mobile-select-touch-v2{
++ html.mobile-online-active select:not([multiple]):is(:not([size]),[size="1"]){
++  -webkit-appearance:none!important;appearance:none!important;
++  background-image:var(--mobile-select-chevron)!important;background-repeat:no-repeat!important;
++  background-position:right 12px center!important;background-size:16px 16px!important;padding-right:36px!important;
++ }
++}
+--- mobile-online-shell-v1-js (vorher)
++++ mobile-online-shell-v1-js (korrigiert)
+@@ -466,4 +466,5 @@
+     let baseline=snapshot(),released=false;
+     const guard={root,busy:false,active:()=>!released&&root.isConnected&&!!root.closest('#modal:not(.hidden),#startPage:not(.hidden),#workspace:not(.hidden)'),dirty:()=>!released&&snapshot()!==baseline,
++      get released(){return released},
+       release(){released=true;if(mobileModuleGuard===guard)mobileModuleGuard=null},
+       activate(){if(!released)mobileModuleGuard=guard},
+@@ -841,4 +842,5 @@
+     sheet.id = 'mobileOnlineSheet';
+     sheet.className = 'mobile-online-sheet';
++    sheet.inert = true;
+     sheet.setAttribute('aria-hidden', 'true');
+     sheet.addEventListener('click', event => {
+@@ -914,8 +916,9 @@
+     sheet.classList.add('is-open');
+     sheet.setAttribute('aria-hidden', 'false');
++    sheet.inert = false;
+     sheetInertNodes = [...document.body.children].filter(node => node !== sheet && node !== shell && !['SCRIPT', 'STYLE', 'LINK'].includes(node.tagName)).map(node => [node, node.inert]);
+     sheetInertNodes.forEach(([node]) => { node.inert = true; });
+     revealMobileNavigation();
+-    requestAnimationFrame(() => panel.querySelector('button, input, select, textarea')?.focus({ preventScroll: true }));
++    requestAnimationFrame(() => { if (sheet.classList.contains('is-open') && panel.parentElement === sheet) panel.querySelector('button, input, select, textarea')?.focus({ preventScroll: true }); });
+   }
+ 
+@@ -929,4 +932,5 @@
+     sheet.classList.remove('is-open');
+     sheet.setAttribute('aria-hidden', 'true');
++    sheet.inert = true;
+     sheetInertNodes.forEach(([node, inert]) => { node.inert = inert; });
+     sheetInertNodes = [];
+@@ -2051,5 +2055,5 @@
+  const fs=()=>typeof c.filters==='function'?c.filters():c.filters||[];
+  const recs=()=>c.records(), find=key=>recs().find(r=>text(r.id)===text(key));
+- const filtered=()=>recs().filter(r=>(!s.query||text(r.search||[r.title,r.meta,...(r.entries||[]).map(e=>e.join(' '))].join(' ')).toLocaleLowerCase('de').includes(s.query.toLocaleLowerCase('de')))&&fs().every(f=>!s.filters[f.key]||f.match(r,s.filters[f.key])));
++ const filtered=()=>recs().filter(r=>(!s.query||text(r.search||[r.title,r.meta,r.preview,...(r.entries||[]).map(e=>e.join(' '))].join(' ')).toLocaleLowerCase('de').includes(s.query.toLocaleLowerCase('de')))&&fs().every(f=>!s.filters[f.key]||f.match(r,s.filters[f.key])));
+  const sub=()=>typeof c.subtitle==='function'?c.subtitle():c.subtitle||'Aktueller Fall';
+  const mount=(kind,title,body,footer=[],actions=[],back)=>{s.view=U().mount(c.id,U().createView({kind,title,subtitle:sub(),body,footer,actions,onBack:back}),'mc-view '+(c.marker||''));return s.view};
+@@ -2083,5 +2087,5 @@
+ const states=new Map();let timer=null;
+ window.addEventListener('mobileCaseChatReturned',()=>{for(const s of states.values())if(s.guard?.root.isConnected)s.guard.activate()});
+-function movedSheet(title,nodes,filter){const U=window.__mobileUI;nodes=nodes.filter(Boolean);const slots=[];const cleanup=()=>slots.forEach(([n,slot,hidden])=>{n.hidden=hidden;if(slot.parentNode)slot.replaceWith(n)});U.openSheet(title,(body,panel)=>{body.classList.add('mc-tools');if(filter){panel.classList.add('mobile-filter-sheet');panel.querySelector('.mobile-sheet-title').textContent='Filter'}for(const n of nodes){const slot=document.createComment('mobile sheet return');n.before(slot);slots.push([n,slot,n.hidden]);n.hidden=false;body.append(n)}if(filter){const actions=U.node('footer','mobile-ui-actions');actions.append(U.button({label:'Anwenden',primary:true,onClick:()=>{U.closeSheet();schedule()}}));panel.append(actions)}},{cleanup})}
++function movedSheet(title,nodes,filter,onApply){const U=window.__mobileUI;nodes=nodes.filter(Boolean);const slots=[];const cleanup=()=>slots.forEach(([n,slot,hidden])=>{n.hidden=hidden;if(slot.parentNode)slot.replaceWith(n)});U.openSheet(title,(body,panel)=>{body.classList.add('mc-tools');if(filter){panel.classList.add('mobile-filter-sheet');panel.querySelector('.mobile-sheet-title').textContent='Filter'}for(const n of nodes){const slot=document.createComment('mobile sheet return');n.before(slot);slots.push([n,slot,n.hidden]);n.hidden=false;body.append(n)}if(filter){const actions=U.node('footer','mobile-ui-actions');actions.append(U.button({label:'Anwenden',primary:true,onClick:()=>{U.closeSheet();onApply?.();schedule()}}));panel.append(actions)}},{cleanup})}
+ function adopt(c){const C=window.__mobileCompletion,U=window.__mobileUI,mb=document.getElementById('modalBody'),list=mb?.querySelector(c.list);if(!list||!C?.active())return;let s=states.get(c.id);if(!s||s.list!==list){const old=s;s={list,cards:[],source:C.node('div','mc-source mc-native-content'),query:old?.query||'',status:old?.status||'',year:old?.year||'',selected:old?.selected||'',search:old?.search||false};states.set(c.id,s);s.source.dataset.sourceModule=c.id;while(mb.firstChild)s.source.append(mb.firstChild);s.new=true}
+  let added=false;for(const n of [...mb.children]){if(n===s.view?.root)continue;if(n.id==='modalCaseSwitcher'||n.id==='exaEinstieg'){s.source.prepend(n);added=true}}
+@@ -2096,5 +2100,5 @@
+  function listEmpty(){return s.cards.length?'Keine passenden Einträge.':s.list.textContent.trim()||'Noch keine Einträge.'}
+  inp.oninput=()=>{s.query=inp.value;renderRows()};renderRows();
+- const filter=()=>{const parts=[...s.source.querySelectorAll(c.tools)];let fields=C.node('div');if(c.id==='inbox'){const el=C.input(fields,{label:'Bearbeitungsstand',options:[['','Alle'],['__open','Offen'],['neu','Neu'],['ocr','Text erkannt'],['analysiert','Analysiert'],['verarbeitet','Verarbeitet']]},s.status);el.onchange=()=>{s.status=el.value;renderRows()}}else{const years=[...new Set(s.cards.flatMap(el=>el.textContent.match(/\b20\d{2}\b/g)||[]))].sort().reverse();const el=C.input(fields,{label:'Jahr',options:[['','Alle Jahre'],...years]},s.year);el.onchange=()=>{s.year=el.value;renderRows()}}movedSheet(c.title+' filtern',[fields,...parts.filter(el=>el.matches('.archive-toolbar,.phase4-history-toolbar,#modalCaseSwitcher,.cov-filterbox,.cov-mobile-case-row')||c.id==='inbox'&&el.matches('.inbox-toolbar'))],true)};
++ const filter=()=>{const draft={status:s.status,year:s.year},parts=[...s.source.querySelectorAll(c.tools)];let fields=C.node('div');if(c.id==='inbox'){const el=C.input(fields,{label:'Bearbeitungsstand',options:[['','Alle'],['__open','Offen'],['neu','Neu'],['ocr','Text erkannt'],['analysiert','Analysiert'],['verarbeitet','Verarbeitet']]},s.status);el.onchange=()=>{draft.status=el.value}}else{const years=[...new Set(s.cards.flatMap(el=>el.textContent.match(/\b20\d{2}\b/g)||[]))].sort().reverse();const el=C.input(fields,{label:'Jahr',options:[['','Alle Jahre'],...years]},s.year);el.onchange=()=>{draft.year=el.value}}movedSheet(c.title+' filtern',[fields,...parts.filter(el=>el.matches('.archive-toolbar,.phase4-history-toolbar,#modalCaseSwitcher,.cov-filterbox,.cov-mobile-case-row')||c.id==='inbox'&&el.matches('.inbox-toolbar'))],true,()=>{const live=states.get(c.id);if(live?.view.root.isConnected){live.status=draft.status;live.year=draft.year;draw(c,live)}})};
+  const more=()=>{const nodes=s.edit?[...selected.querySelectorAll(c.actions+' button')].filter(b=>/Lokaler Vorschlag|KI-Zusammenfassung/.test(b.textContent)):selected?[...selected.querySelectorAll(c.actions)]:[...s.source.querySelectorAll(c.tools)];movedSheet(selected?'Eintragsaktionen':c.title+' – Werkzeuge',nodes,false)};
+  const actions=selected?[{label:'Weitere Eintragsaktionen',icon:'more',iconOnly:true,onClick:more}]:[{label:c.title+' durchsuchen',icon:'search',iconOnly:true,onClick:()=>{s.search=!s.search;search.hidden=!s.search;if(s.search)inp.focus()}},{label:c.title+' filtern',icon:'filter',iconOnly:true,onClick:filter},{label:'Weitere Aktionen: '+c.title,icon:'more',iconOnly:true,onClick:more}];

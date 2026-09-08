@@ -1,0 +1,16 @@
+{
+  "before_bytes": 74960306,
+  "after_bytes": 75007771,
+  "before_sha256": "03af2e8c4da94ff24e9543f8cf7801b6ea5d89e380cdcfdce1f971d14d4e7c99",
+  "after_sha256": "f6085d02e422feab2a64f747fd13bf990f2abafde6010298ba5fcd30b925b44d",
+  "script_blocks": 311,
+  "preserved_data_blocks": 82,
+  "changed_scripts": [
+    "mileage-script-v1"
+  ],
+  "changed_styles": [
+    "mobile-phone-curation-v2"
+  ],
+  "nul_bytes": 1,
+  "all_other_bytes_identical": true
+}

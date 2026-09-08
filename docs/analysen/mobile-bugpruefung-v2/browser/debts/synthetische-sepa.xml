@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <CstmrCdtTrfInitn>
+  <GrpHdr>
+   <MsgId>SR20260908100603KU412A</MsgId>
+   <CreDtTm>2026-09-08T10:06:03</CreDtTm>
+   <NbOfTxs>1</NbOfTxs>
+   <CtrlSum>50.00</CtrlSum>
+   <InitgPty><Nm>Mara Hoffmann</Nm></InitgPty>
+  </GrpHdr>
+  <PmtInf>
+   <PmtInfId>SR20260908100603KU412A</PmtInfId>
+   <PmtMtd>TRF</PmtMtd>
+   <BtchBookg>false</BtchBookg>
+   <NbOfTxs>1</NbOfTxs>
+   <CtrlSum>50.00</CtrlSum>
+   <PmtTpInf><SvcLvl><Cd>SEPA</Cd></SvcLvl></PmtTpInf>
+   <ReqdExctnDt>2026-09-08</ReqdExctnDt>
+   <Dbtr><Nm>Mara Hoffmann</Nm></Dbtr>
+   <DbtrAcct><Id><IBAN>DE89370400440532013000</IBAN></Id></DbtrAcct>
+   <DbtrAgt><FinInstnId><BIC>COBADEFFXXX</BIC></FinInstnId></DbtrAgt>
+   <ChrgBr>SLEV</ChrgBr>
+   <CdtTrfTxInf>
+    <PmtId><EndToEndId>E2E20260908100603KU412A</EndToEndId></PmtId>
+    <Amt><InstdAmt Ccy="EUR">50.00</InstdAmt></Amt>
+    <CdtrAgt><FinInstnId><BIC>COBADEFFXXX</BIC></FinInstnId></CdtrAgt>
+    <Cdtr><Nm>Kreditbank AG</Nm></Cdtr>
+    <CdtrAcct><Id><IBAN>DE12500105170648489890</IBAN></Id></CdtrAcct>
+    <RmtInf><Ustrd>Ratenkredit · vollständiger Verwendungszweck · Az KB-2026-42</Ustrd></RmtInf>
+   </CdtTrfTxInf>
+  </PmtInf>
+ </CstmrCdtTrfInitn>
+</Document>

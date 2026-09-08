@@ -1,0 +1,280 @@
+{
+  "date": "2026-09-08",
+  "release_basis": "v0.7.7",
+  "release_commit": "9b28c434343743b116da66f37cb88d0b7cbc2019",
+  "delivery": "Lokaler Arbeitsstand, nicht veröffentlicht",
+  "main_module_count": 32,
+  "remaining_main_modules": 0,
+  "counting_rule": "Die 32 aktivierten Hauptmodule der ursprünglichen Bestandsaufnahme; Rechnungslegung ist zusätzlich über eine Schnellaktion erreichbar. Verfügbare Funktionen hängen weiterhin von vorhandenen Benutzerrechten und angebundenen Diensten ab.",
+  "modules": [
+    {
+      "id": "start",
+      "label": "Start",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "Bereits in vorherigem Paket umgesetzt",
+      "opener": "openMobileStartPage"
+    },
+    {
+      "id": "case-chat",
+      "label": "KI-Fallchat",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "Bereits in vorherigem Paket umgesetzt",
+      "opener": "openCaseChat"
+    },
+    {
+      "id": "master-data",
+      "label": "Stammdaten",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "Bereits in vorherigem Paket umgesetzt",
+      "opener": "openMobileStartPage"
+    },
+    {
+      "id": "case-overview",
+      "label": "Fallübersicht",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "In diesem Paket umgesetzt bzw. vervollständigt",
+      "opener": "openCaseOverview"
+    },
+    {
+      "id": "documentation",
+      "label": "Falldokumentation",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "Bereits in vorherigem Paket umgesetzt",
+      "opener": "openDocumentationView"
+    },
+    {
+      "id": "calendar",
+      "label": "Kalender",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "Bereits in vorherigem Paket umgesetzt",
+      "opener": "openCalendarFullView"
+    },
+    {
+      "id": "tasks",
+      "label": "Aufgaben",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "Bereits in vorherigem Paket umgesetzt",
+      "opener": "openTodoFullView"
+    },
+    {
+      "id": "deadlines",
+      "label": "Fristen",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "Bereits in vorherigem Paket umgesetzt",
+      "opener": "openFristenModal"
+    },
+    {
+      "id": "followups",
+      "label": "Wiedervorlagen",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "Bereits in vorherigem Paket umgesetzt",
+      "opener": "openFollowups"
+    },
+    {
+      "id": "contacts",
+      "label": "Adressbuch",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "Bereits in vorherigem Paket umgesetzt",
+      "opener": "showImportedAddressbook"
+    },
+    {
+      "id": "mail",
+      "label": "E-Mail",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "Bereits in vorherigem Paket umgesetzt",
+      "opener": "openMailApp"
+    },
+    {
+      "id": "documents",
+      "label": "Datei-Explorer",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "Bereits in vorherigem Paket umgesetzt",
+      "opener": "openDokumenteModal"
+    },
+    {
+      "id": "case-archive",
+      "label": "Archivierte Formulare",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "In diesem Paket umgesetzt bzw. vervollständigt",
+      "opener": "openArchiveView"
+    },
+    {
+      "id": "send-history",
+      "label": "Export- und Versandhistorie",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "In diesem Paket umgesetzt bzw. vervollständigt",
+      "opener": "showExportHistory"
+    },
+    {
+      "id": "banking",
+      "label": "Banking",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "Bereits in vorherigem Paket umgesetzt",
+      "opener": "openBankingModal"
+    },
+    {
+      "id": "cash",
+      "label": "Handkasse",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "Bereits in vorherigem Paket umgesetzt",
+      "opener": "openHandkasseModal"
+    },
+    {
+      "id": "assets",
+      "label": "Vermögensaufstellung",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "Bereits in vorherigem Paket umgesetzt",
+      "opener": "openVermoegenModal"
+    },
+    {
+      "id": "livelihood",
+      "label": "Lebensunterhalt",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "Bereits in vorherigem Paket umgesetzt",
+      "opener": "openLebensunterhaltModal"
+    },
+    {
+      "id": "debts",
+      "label": "Schuldenregulierung",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "Bereits in vorherigem Paket umgesetzt",
+      "opener": "openSchuldenModal"
+    },
+    {
+      "id": "health",
+      "label": "Gesundheit",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "In diesem Paket umgesetzt bzw. vervollständigt",
+      "opener": "openHealthModal"
+    },
+    {
+      "id": "housing",
+      "label": "Wohnen",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "In diesem Paket umgesetzt bzw. vervollständigt",
+      "opener": "openHousingModal"
+    },
+    {
+      "id": "abilities",
+      "label": "Fähigkeiten & Alltag",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "In diesem Paket umgesetzt bzw. vervollständigt",
+      "opener": "openMobileAbilities"
+    },
+    {
+      "id": "needs",
+      "label": "Wünsche und Bedarfe",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "In diesem Paket umgesetzt bzw. vervollständigt",
+      "opener": "openGoalDecisionPlanning"
+    },
+    {
+      "id": "approvals",
+      "label": "Genehmigungen",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "In diesem Paket umgesetzt bzw. vervollständigt",
+      "opener": "openApprovalsModal"
+    },
+    {
+      "id": "contact-monitor",
+      "label": "Kontaktmonitor",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "In diesem Paket umgesetzt bzw. vervollständigt",
+      "opener": "openKontaktMonitor"
+    },
+    {
+      "id": "supervision",
+      "label": "Betreuungsübersicht",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "In diesem Paket umgesetzt bzw. vervollständigt",
+      "opener": "openBetreuungsuebersichtModal"
+    },
+    {
+      "id": "inbox",
+      "label": "Posteingang",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "In diesem Paket umgesetzt bzw. vervollständigt",
+      "opener": "openInboxModal"
+    },
+    {
+      "id": "finance",
+      "label": "Finanzen",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "Bereits in vorherigem Paket umgesetzt",
+      "opener": "openFinanceModal"
+    },
+    {
+      "id": "invoices",
+      "label": "Ausgangsrechnungen",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "Bereits in vorherigem Paket umgesetzt",
+      "opener": "openInvoiceModal"
+    },
+    {
+      "id": "mileage",
+      "label": "Fahrtkosten",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "Bereits in vorherigem Paket umgesetzt",
+      "opener": "openMileageModal"
+    },
+    {
+      "id": "qualifications",
+      "label": "Qualifikationsmanager",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "In diesem Paket umgesetzt bzw. vervollständigt",
+      "opener": "openQualifikationsManager"
+    },
+    {
+      "id": "user",
+      "label": "Benutzermenü",
+      "mobile_enabled": true,
+      "implementation": "Gemeinsame mobile Darstellung vorhanden",
+      "stage": "Bereits in vorherigem Paket umgesetzt",
+      "opener": "openUserMenu"
+    }
+  ],
+  "additional_enabled_flows": [
+    {
+      "id": "accounting",
+      "label": "Rechnungslegung",
+      "entry": "Fallübersicht → Schnellaktionen → Rechnungslegung",
+      "status": "Bereits umgesetzt"
+    },
+    {
+      "id": "quick-actions",
+      "label": "30 Schnellaktionen",
+      "status": "Alle 30 Zugänge in der Fallübersicht erhalten"
+    }
+  ]
+}

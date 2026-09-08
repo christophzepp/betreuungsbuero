@@ -1,0 +1,3 @@
+XLSX und ODS: ZIP-Struktur und Prüfsummen gültig.
+XLSX: echter Fahrtinhalt, duplizierte Fahrt und Fahrzeugkennung vorhanden.
+ODS: korrekter MIME-Typ, duplizierte Fahrt im Inhalt vorhanden.

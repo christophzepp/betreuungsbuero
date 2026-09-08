@@ -212,17 +212,12 @@ test('Kalender-Vollmaske: Formular markiert den Pfad, CSS blendet den Rest aus (
     'Bewusst ohne :has() - der Safari-Scrollbefund aus den Finanzen gilt auch hier.');
 });
 
-test('Benutzermenü: Hell/Dunkel-Wechsel und Abmelden (Nutzerwunsch 03.08.2026)', () => {
+test('Benutzermenü: explizite Darstellung, Zeitplan und Abmelden', () => {
   const menue = schneiden('function openUserMenu(', '{', '}');
-  assert.ok(menue.includes('data-mobile-logout'), 'Abmelden muss im Benutzermenü bleiben.');
-  assert.ok(menue.includes('data-mobile-theme'), 'Der Darstellungs-Wechsel fehlt im Benutzermenü.');
-  assert.ok(menue.includes('AppTheme.togglePreference'),
-    'Der Wechsel muss über AppTheme laufen (persistiert serverseitig und stellt den Zeitplan ab).');
-  assert.ok(menue.includes('data-theme-icon') && menue.includes('data-theme-state'),
-    'Symbol und Zustandstext sollen von AppTheme selbst gepflegt werden (refreshControls).');
-  assert.ok(menue.includes('themeBtn.remove()'),
-    'Ohne AppTheme (Altbestand) darf kein toter Knopf stehen bleiben.');
-
-  // Und die genutzte AppTheme-Schnittstelle existiert wirklich:
-  assert.ok(html.includes('togglePreference:async function'), 'AppTheme.togglePreference fehlt.');
+  assert.ok(menue.includes("label:'Abmelden'") && menue.includes('__performLogout'), 'Abmelden verwendet die bestehende Sitzung.');
+  assert.ok(menue.includes("AppTheme.setPreference(value==='night'?'light':value)") && menue.includes('AppTheme.save()'), 'Darstellung wird über AppTheme gespeichert.');
+  assert.ok(menue.includes("setScheduleEnabled(value==='night')"), 'Hell und Dunkel müssen den Zeitplan ausschalten.');
+  assert.ok(menue.includes('AppTheme.getState()') && menue.includes("setAttribute('aria-pressed'"), 'Auswahl folgt dem tatsächlichen Darstellungszustand.');
+  assert.ok(menue.includes('if (window.AppTheme?.setPreference)'), 'Ohne AppTheme keine toten Darstellungsaktionen.');
+  assert.ok(menue.includes('api.selectStartCase(select.value)') && menue.includes('onClick:openNavigationEditor'), 'Fall und Favoriten nutzen die vorhandenen Abläufe.');
 });

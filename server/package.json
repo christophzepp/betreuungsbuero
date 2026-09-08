@@ -23,5 +23,8 @@
     "mailparser": "^3.7.4",
     "nodemailer": "^9.0.3",
     "ws": "^8.21.0"
+  },
+  "devDependencies": {
+    "pdf-lib": "1.17.1"
   }
 }

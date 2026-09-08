@@ -1,0 +1,23 @@
+HTML-Audit: Betriebsarten, echte Ordner, OCR, Wartung, Restore und Fall-ID-Integration; 289 Blöcke, 0 Syntaxfehler
+✔ server/tests/html-final-audit-patch.test.cjs (464.194541ms)
+✔ Schulden: alle Kosten und Zahlungen gehen in Forderung und Restschuld ein (1.292667ms)
+✔ Schulden: Historie, Stadium, Gläubiger, Zahlungsstand und Suche kombinieren sich (1.602583ms)
+✔ Schulden: büroweite Treffer behalten Fallkennung bei gleichen Forderungskennungen (0.498125ms)
+✔ Schulden: Zahlungsjahr und Handkassenfilter arbeiten auf Einzelzahlungen (0.436917ms)
+✔ Schulden: Bearbeitung erhält Metadaten und spiegelt Forderung, Restschuld, Rate und Bargeld korrekt (1.487125ms)
+✔ Schulden: neue Forderung übernimmt alle Kosten und Bankfelder ohne vorzeitige Mutation (0.56375ms)
+✔ Schulden: neue Barzahlung spiegelt sich exakt einmal in Vermögen und Handkasse (0.486959ms)
+✔ Schulden: Bearbeitung einer Zahlung erhält deren Kennung und entfernt eine aufgehobene Barspiegelung (0.431333ms)
+✔ Schulden: Statuswechsel setzt und entfernt Erledigungs- und Pausendaten (0.614417ms)
+✔ Schulden: Fallwechsel, entfernte Forderung und konkurrierende Zahlungen blockieren ältere Entwürfe (1.428791ms)
+✔ Schulden: Speicherfehler rollt sämtliche Finanzspiegelungen zurück (0.659041ms)
+✔ Schulden: Leseberechtigte und ungültige Beträge schreiben nichts (0.710917ms)
+✔ Schulden: Zahlungssuche findet nur die passende Einzelzahlung statt aller Zahlungen derselben Forderung (0.476459ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 468.488583

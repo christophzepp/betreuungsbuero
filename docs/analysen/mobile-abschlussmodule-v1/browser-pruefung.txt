@@ -1,0 +1,172 @@
+PASS Gesundheit schreibt erst beim Speichern
+PASS Gesundheitsentwurf übersteht den echten Chatwechsel
+PASS Diagnose und ICD bleiben im Fachmodell
+PASS Medikationsfilter grenzt exakt ein
+PASS Alle drei Gesundheitsausgaben bleiben erreichbar
+PASS WORKFLOW health
+PASS Genehmigung hat alle acht Originalfelder
+PASS Beschluss, Wille und Status gespeichert
+PASS WORKFLOW approvals
+PASS Unterstützung wird als echter Verlaufseintrag angelegt
+PASS Adressformular enthält auch Auslandsadresse und sämtliche Wohnkosten
+PASS Adresse und Wohnkosten verwenden bestehende Speicherung
+PASS WORKFLOW housing
+PASS Alle elf Lebensbereiche erreichbar
+PASS Leere Fähigkeitsfelder haben sichtbare Umrandungen
+PASS Ressourcen in Originalmodell übernommen
+PASS WORKFLOW abilities
+PASS Typwechsel erhält Titel und Wortlaut
+PASS SMART-Felder und Verknüpfungen bleiben erreichbar
+PASS Planungsformular hält Kopf und Speichern innerhalb des Moduls
+PASS Planungsentwurf und SMART-Felder überstehen den Chatwechsel
+PASS Tastatur blendet Navigation aus und erhält erreichbares Speichern
+PASS Planungseintrag im Originalmodell gespeichert
+PASS WORKFLOW needs
+PASS Abgelehnte Meldespeicherung erhält den Entwurf
+PASS Meldeangaben speichern mit Fall-ID und Meldezeitraum
+PASS WORKFLOW supervision
+PASS Kontakt wird mit Fall-ID in den Betreuungsverlauf gespiegelt
+PASS WORKFLOW monitor
+PASS Fortbildung erhält ungespeicherte Qualifikation
+PASS Nachweis-Upload erhält auch begonnene Fortbildung
+PASS Qualifikation und Nachweis überstehen Chat-Rückkehr
+PASS Qualifikationsfehler bleibt sichtbar
+PASS Qualifikation einschließlich Nachweisen gespeichert
+PASS WORKFLOW qualifications
+PASS Archiv listet echte Fassungen
+PASS Archivvorlage, JSON und Löschen erreichbar
+PASS Archiv hat Dokument- und Fallauswahl
+PASS WORKFLOW archive
+PASS Sämtliche Versandwege bleiben erreichbar
+PASS Versandbestätigung schreibt in die Historie
+PASS WORKFLOW history
+PASS Posteingang hat zwei Dokumente
+PASS Einzelprüfung erhält Vorschläge und OCR
+PASS Übernahme beginnt ohne Auswahl gesperrt
+PASS Vorschlagsauswahl aktiviert feste Übernahmeaktion
+PASS KI-Zugang bietet Direkt- und JSON-Analyse
+PASS Datei-, OCR-, KI-, Übernahme- und Löschaktionen erreichbar
+PASS Posteingangsfilter grenzt Bearbeitungsstand ein
+PASS Sammel-KI bleibt mit Direkt- und JSON-Weg erreichbar
+PASS WORKFLOW inbox
+PASS Fallübersicht verwendet gemeinsamen Kopf
+PASS Alle 30 Schnellaktionen bleiben erreichbar
+PASS WORKFLOW overview
+PASS Diagnosen hat seine vollständige Fachmaske und erreichbare Aktionen
+PASS Medikation hat seine vollständige Fachmaske und erreichbare Aktionen
+PASS Ärzte / Behandler hat seine vollständige Fachmaske und erreichbare Aktionen
+PASS Notfallkontakte hat seine vollständige Fachmaske und erreichbare Aktionen
+PASS Arzttermine hat seine vollständige Fachmaske und erreichbare Aktionen
+PASS Krankenhaus / Pflege hat seine vollständige Fachmaske und erreichbare Aktionen
+PASS Eingriffe / Behandlungen hat seine vollständige Fachmaske und erreichbare Aktionen
+PASS Alle 16 Verfügungen mit Status und Aufbewahrungsort
+PASS Nicht erfasste Verfügungen zeigen wie bisher unbekannt
+PASS WORKFLOW health-all-forms
+PASS Planung bietet alle sechs Eintragsarten
+PASS Wunsch bleibt als vollständiges Formular bedienbar
+PASS Ziel bleibt als vollständiges Formular bedienbar
+PASS Bedarf bleibt als vollständiges Formular bedienbar
+PASS Maßnahme bleibt als vollständiges Formular bedienbar
+PASS Entscheidung bleibt als vollständiges Formular bedienbar
+PASS Prüfung bleibt als vollständiges Formular bedienbar
+PASS WORKFLOW planning-all-types
+PASS Zusatzbereich 9 erhält seine eigenen Felder
+PASS Zusatzbereich 10 erhält seine eigenen Felder
+PASS WORKFLOW abilities-special-forms
+PASS Büroarchiv zeigt Notizen zunächst als Lesedetail
+PASS Archivname bleibt bei Chat-Rückkehr als Entwurf erhalten
+PASS Büroarchiv speichert über den ursprünglichen Bürospeicher
+PASS Büroversand schreibt ausschließlich in die Bürohistorie
+PASS WORKFLOW office-archive-history
+PASS health passt 320 hell
+PASS health passt 320 dunkel
+PASS health passt 390 hell
+PASS health passt 390 dunkel
+PASS health passt 430 hell
+PASS health passt 430 dunkel
+PASS WORKFLOW width-health
+PASS approvals passt 320 hell
+PASS approvals passt 320 dunkel
+PASS approvals passt 390 hell
+PASS approvals passt 390 dunkel
+PASS approvals passt 430 hell
+PASS approvals passt 430 dunkel
+PASS WORKFLOW width-approvals
+PASS housing passt 320 hell
+PASS housing passt 320 dunkel
+PASS housing passt 390 hell
+PASS housing passt 390 dunkel
+PASS housing passt 430 hell
+PASS housing passt 430 dunkel
+PASS WORKFLOW width-housing
+PASS abilities passt 320 hell
+PASS abilities passt 320 dunkel
+PASS abilities passt 390 hell
+PASS abilities passt 390 dunkel
+PASS abilities passt 430 hell
+PASS abilities passt 430 dunkel
+PASS WORKFLOW width-abilities
+PASS needs passt 320 hell
+PASS needs passt 320 dunkel
+PASS needs passt 390 hell
+PASS needs passt 390 dunkel
+PASS needs passt 430 hell
+PASS needs passt 430 dunkel
+PASS WORKFLOW width-needs
+PASS qualifications passt 320 hell
+PASS qualifications passt 320 dunkel
+PASS qualifications passt 390 hell
+PASS qualifications passt 390 dunkel
+PASS qualifications passt 430 hell
+PASS qualifications passt 430 dunkel
+PASS WORKFLOW width-qualifications
+PASS inbox passt 320 hell
+PASS inbox passt 320 dunkel
+PASS inbox passt 390 hell
+PASS inbox passt 390 dunkel
+PASS inbox passt 430 hell
+PASS inbox passt 430 dunkel
+PASS WORKFLOW width-inbox
+PASS case-archive passt 320 hell
+PASS case-archive passt 320 dunkel
+PASS case-archive passt 390 hell
+PASS case-archive passt 390 dunkel
+PASS case-archive passt 430 hell
+PASS case-archive passt 430 dunkel
+PASS WORKFLOW width-case-archive
+PASS send-history passt 320 hell
+PASS send-history passt 320 dunkel
+PASS send-history passt 390 hell
+PASS send-history passt 390 dunkel
+PASS send-history passt 430 hell
+PASS send-history passt 430 dunkel
+PASS WORKFLOW width-send-history
+PASS supervision passt 320 hell
+PASS supervision passt 320 dunkel
+PASS supervision passt 390 hell
+PASS supervision passt 390 dunkel
+PASS supervision passt 430 hell
+PASS supervision passt 430 dunkel
+PASS WORKFLOW width-supervision
+PASS contact-monitor passt 320 hell
+PASS contact-monitor passt 320 dunkel
+PASS contact-monitor passt 390 hell
+PASS contact-monitor passt 390 dunkel
+PASS contact-monitor passt 430 hell
+PASS contact-monitor passt 430 dunkel
+PASS WORKFLOW width-contact-monitor
+PASS openHealthModal nutzt am Desktop weiterhin die vorhandene Fachansicht
+PASS openApprovalsModal nutzt am Desktop weiterhin die vorhandene Fachansicht
+PASS openHousingModal nutzt am Desktop weiterhin die vorhandene Fachansicht
+PASS openFunctionalProfileHubV255 nutzt am Desktop weiterhin die vorhandene Fachansicht
+PASS openGoalDecisionPlanning nutzt am Desktop weiterhin die vorhandene Fachansicht
+PASS openQualifikationsManager nutzt am Desktop weiterhin die vorhandene Fachansicht
+PASS openInboxModal nutzt am Desktop weiterhin die vorhandene Fachansicht
+PASS openArchiveView nutzt am Desktop weiterhin die vorhandene Fachansicht
+PASS showExportHistory nutzt am Desktop weiterhin die vorhandene Fachansicht
+PASS openBetreuungsuebersichtModal nutzt am Desktop weiterhin die vorhandene Fachansicht
+PASS openKontaktMonitor nutzt am Desktop weiterhin die vorhandene Fachansicht
+PASS openCaseOverview nutzt am Desktop weiterhin die vorhandene Fachansicht
+PASS WORKFLOW desktop
+PASS Keine JavaScript-Laufzeitfehler
+{"checks":143,"failures":0,"errors":[]}

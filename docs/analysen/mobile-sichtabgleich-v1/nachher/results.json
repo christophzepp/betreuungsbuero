@@ -1,0 +1,70 @@
+[
+  {
+    "name": "navigation",
+    "code": 0
+  },
+  {
+    "name": "foundation",
+    "code": 0
+  },
+  {
+    "name": "tasks",
+    "code": 0
+  },
+  {
+    "name": "modules",
+    "code": 0
+  },
+  {
+    "name": "calendar",
+    "code": 0
+  },
+  {
+    "name": "mail",
+    "code": 0
+  },
+  {
+    "name": "explorer",
+    "code": 0
+  },
+  {
+    "name": "banking",
+    "code": 0
+  },
+  {
+    "name": "accounting",
+    "code": 0
+  },
+  {
+    "name": "handkasse",
+    "code": 0
+  },
+  {
+    "name": "assets",
+    "code": 0
+  },
+  {
+    "name": "livelihood",
+    "code": 0
+  },
+  {
+    "name": "debts",
+    "code": 0
+  },
+  {
+    "name": "invoices",
+    "code": 0
+  },
+  {
+    "name": "finance",
+    "code": 0
+  },
+  {
+    "name": "mileage",
+    "code": 0
+  },
+  {
+    "name": "completion",
+    "code": 0
+  }
+]

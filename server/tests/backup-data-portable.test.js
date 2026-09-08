@@ -201,14 +201,16 @@ test('portable Generatoren und Validatoren arbeiten bei fehlenden Pflichttabelle
   );
   db.close();
 
-  db = recoverySchemaDb({ omitColumnTable: 'office_ai_config', omitColumn: 'updated_at' });
-  assert.throws(
-    () => backupData.portableCredentialsData(db, cryptoHelper),
-    (error) => error.code === 'BACKUP_REQUIRED_COLUMNS_MISMATCH'
-      && error.table === 'office_ai_config'
-      && error.missingColumns.includes('updated_at')
-  );
-  db.close();
+  for (const column of ['updated_at', 'allowed_models']) {
+    db = recoverySchemaDb({ omitColumnTable: 'office_ai_config', omitColumn: column });
+    assert.throws(
+      () => backupData.portableCredentialsData(db, cryptoHelper),
+      (error) => error.code === 'BACKUP_REQUIRED_COLUMNS_MISMATCH'
+        && error.table === 'office_ai_config'
+        && error.missingColumns.includes(column)
+    );
+    db.close();
+  }
 
   db = recoverySchemaDb();
   db.prepare(`
@@ -229,12 +231,14 @@ test('portable Generatoren und Validatoren arbeiten bei fehlenden Pflichttabelle
     () => backupData.validatePortableRecoveryPayload(incompleteColumns, 'credentials'),
     /Spaltenvertrag für office_ai_config/
   );
-  const incompleteRow = JSON.parse(JSON.stringify(bundle.credentials));
-  delete incompleteRow.officeAiConfig[0].updated_at;
-  assert.throws(
-    () => backupData.validatePortableRecoveryPayload(incompleteRow, 'credentials'),
-    /Pflichttabelle office_ai_config.*vollständigen Spaltenvertrag/
-  );
+  for (const column of ['updated_at', 'allowed_models']) {
+    const incompleteRow = JSON.parse(JSON.stringify(bundle.credentials));
+    delete incompleteRow.officeAiConfig[0][column];
+    assert.throws(
+      () => backupData.validatePortableRecoveryPayload(incompleteRow, 'credentials'),
+      /Pflichttabelle office_ai_config.*vollständigen Spaltenvertrag/
+    );
+  }
   db.close();
 });
 

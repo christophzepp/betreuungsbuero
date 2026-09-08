@@ -1,0 +1,64 @@
+PASS Banking startet mit Kontostand, drei Reitern und 80 von 94 erreichbaren Umsätzen
+PASS Weitere Buchungen sind ohne das bisherige stille Zeilenlimit erreichbar
+PASS Suche filtert live und erhält den Eingabefokus
+PASS Umsatzfilter trennt Einnahmen und Ausgaben
+PASS Umsatzdetail enthält vollen Zweck, beide Konten, Wertstellung und Saldo
+PASS Freigabe ändert nur den Status und reicht noch keinen Auftrag ein
+PASS Abgebrochene Einreichung sendet keinen Auftrag
+PASS Einreichung nutzt die bestehende Zahlungsroute
+PASS Giro-Code verwendet den echten EPC-QR-Baustein
+PASS Überweisungsformular bewahrt sämtliche ursprünglichen Eingabefelder
+PASS Abbrechen erhält ungespeicherte Zahlungsangaben
+PASS Speicherfehler bleibt am Formular sichtbar und erhält die Werte
+PASS Laufendes Speichern sperrt Eingaben und verhindert doppelte Entwürfe
+PASS Entwurf speichert Betrag in Cent sowie alle Zahlungsdaten
+PASS Intervallzahlung kann pausiert werden
+PASS Intervallformular enthält Rhythmus, Tag, Beginn, Ende und BIC
+PASS Wöchentliche Zahlungen blenden den Monatstag aus
+PASS Intervallfilter bietet aktiv und pausiert statt Umsatzrichtung
+PASS Sammeleinreichung zeigt exakt die sichtbaren freigegebenen Aufträge
+PASS Sammelroute erhält keine ausgefilterten Aufträge
+PASS Teilabruf-Fehler wird als unvollständig und nicht als Nullsaldo ausgewiesen
+PASS Serverkappung bleibt ausdrücklich sichtbar
+PASS Verspätete Umsätze überschreiben keinen neu gewählten Fall
+PASS Büroübersicht verändert den geöffneten Banking-Fall nicht
+PASS Handkassenübernahme schreibt im Alle-Fälle-Modus in den zugehörigen Fall
+PASS Ohne Zahlungsrecht gibt es keinen Zugang zum Anlegen von Überweisungen
+PASS CSV-Export enthält die vollständige Umsatzliste einschließlich nachgeladener Zeilen
+PASS PDF-Export erzeugt eine tatsächliche PDF-Umsatzübersicht
+PASS Saldoverlauf, Monatssummen und Empfängerauswertung bleiben erreichbar
+PASS Abwärtsscrollen blendet die Navigation aus
+PASS Aufwärtsscrollen zeigt die Navigation wieder
+PASS Rückkehr aus dem KI-Chat erhält dieselben Zahlungsfelder und ihre Werte
+PASS Tastatur blendet Navigation aus und hält Speichern oberhalb der Tastatur
+PASS Adressbuch nutzt Kontakte des angezeigten Fremdfalls und übernimmt IBAN und BIC
+PASS Rechnungsauswahl bietet Kamera, Galerie, Dateien und Explorer ohne Mikrofon
+PASS Laufende Rechnungsanalyse schützt den aktuellen Zahlungsbereich
+PASS Rechnungserkennung füllt einen prüfbaren Entwurf ohne Zahlungsauftrag anzulegen
+PASS Neue Intervallzahlung speichert Rhythmus und Betrag über den bestehenden Vertrag
+PASS Fällige Entwürfe bleiben über den ursprünglichen Intervalllauf erreichbar
+PASS Einstellungen enthalten Verbindung, Abruf, Dateiimport, Kontozuordnung und Büroimport
+PASS Zurück schützt noch nicht gespeicherte Banking-Einstellungen
+PASS Einstellungen speichern nutzt das vorhandene Konfigurationsformat
+PASS Kontozuordnung behält die Originalroute und erhält offene Verbindungseingaben
+PASS Banking-Einstellungen passen auf 320 px
+PASS Büro-Banking zeigt ausschließlich Bürokonten und keine Fall-Handkassenaktion
+PASS Fehler beim Öffnen bietet einen erneuten Abruf an
+PASS Kontoauszug-Auswahl bietet ausschließlich Dateien und Explorer
+PASS Kontoauszug verwendet den ursprünglichen Import samt Dateiinhalt
+PASS Büroimport übergibt das ausgewählte Bürokonto und die Buchungsart
+PASS Fallauswahl aktualisiert die verfügbaren Konten bereits im Filterblatt
+PASS Filter zurücksetzen stellt auch die Konten des geöffneten Falls wieder her
+PASS Desktopwechsel erhält offene Überweisungsangaben
+PASS Rückkehr zur mobilen Ansicht erhält den Entwurf und seinen Verwerfschutz
+PASS Auch Umsätze jenseits des früheren 400-Zeilen-Limits bleiben zugänglich
+PASS Banking 320px hell ohne horizontalen Überlauf
+PASS Banking 320px dunkel ohne horizontalen Überlauf
+PASS Banking 360px hell ohne horizontalen Überlauf
+PASS Banking 360px dunkel ohne horizontalen Überlauf
+PASS Banking 390px hell ohne horizontalen Überlauf
+PASS Banking 390px dunkel ohne horizontalen Überlauf
+PASS Banking 430px hell ohne horizontalen Überlauf
+PASS Banking 430px dunkel ohne horizontalen Überlauf
+PASS Desktop erhält die ursprünglichen Tabellen und Diagramme
+PASS Keine JavaScript-Laufzeitfehler

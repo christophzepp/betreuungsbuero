@@ -1,0 +1,42 @@
+[
+  {
+    "name": "supervision-menuewechsel-unveraendert",
+    "pass": true
+  },
+  {
+    "name": "supervision-menuewechsel-entwurf",
+    "pass": true
+  },
+  {
+    "name": "contact-monitor-menuewechsel-unveraendert",
+    "pass": true
+  },
+  {
+    "name": "contact-monitor-menuewechsel-entwurf",
+    "pass": true
+  },
+  {
+    "name": "posteingang-filter-abbrechen",
+    "pass": true
+  },
+  {
+    "name": "posteingang-filter-anwenden",
+    "pass": true
+  },
+  {
+    "name": "faehigkeiten-suche-inhalt",
+    "pass": true
+  },
+  {
+    "name": "archiv-jahresfilter",
+    "pass": true
+  },
+  {
+    "name": "auswahlfelder-touchgroesse",
+    "pass": true
+  },
+  {
+    "name": "filterblaetter-wiederholen",
+    "pass": true
+  }
+]

@@ -1,0 +1,59 @@
+PASS Offene Rechnungen starten mit 60 Zeilen und Nachladen
+PASS Alle 67 offenen Rechnungen sind erreichbar
+PASS Bezahlt zeigt nur vollständig bezahlte Rechnungen
+PASS Gesamtbestand enthält auch stornierte Rechnungen
+PASS Live-Suche erhält den Fokus und findet den Zweck
+PASS Statusfilter verwendet die berechnete Überfälligkeit
+PASS Excel exportiert genau die gefilterte Rechnung mit Status und Zahlbetrag
+PASS PDF-Listenexport erzeugt eine echte PDF
+PASS Detail zeigt vollen Zweck, Zeitraum, Fälligkeit, Eingang und Differenz
+PASS Bewilligung speichert Datum ohne Zahlung und bleibt bei Überfälligkeit sichtbar
+PASS Formular enthält alle elf Originalfelder und normalisiert ISO-Daten
+PASS Abbrechen schützt ungespeicherte Eingaben
+PASS Chat-Rückkehr erhält denselben Formular-DOM-Knoten und Inhalt
+PASS Büroereignisse überschreiben den offenen Entwurf nicht
+PASS Tastatur blendet die Navigation aus und lässt Speichern erreichbar
+PASS Speicherfehler erhält den Entwurf und erscheint im Formular
+PASS Doppeltippen und Schließen während Speichern erzeugen keine zweite Änderung
+PASS Speichern erhält reportId und Bewilligung
+PASS Archivierte Fallzuordnung wird ausdrücklich erhalten
+PASS Speichern einer verwaisten Rechnung löscht weder Fallkennung noch Herkunft
+PASS Entwurfstatus im Altbestand bleibt auswählbar
+PASS Teilzahlung nutzt die tatsächlichen Eingangs- und Statusfelder
+PASS Vergütungsvorschau zeigt alle 44 Fristen ohne altes 40er-Limit
+PASS Gleichnamiger anderer Fall wird nicht durch fremde Rechnung als abgerechnet markiert
+PASS Zahlungsabgleich zeigt alle 28 Vorschläge statt der früheren ersten 25
+PASS Zuordnungsblatt erklärt Addition und verbleibenden Eingang
+PASS Bestätigung der Zahlungszuordnung bleibt ohne Scrollen erreichbar
+PASS Zuordnung addiert Teilzahlung, erhält erstes Eingangsdatum und entfernt verbrauchten Vorschlag
+PASS Erneutes Laden bietet dieselbe bereits übernommene Buchung in dieser Sitzung nicht erneut an
+PASS Fehlgeschlagener Zahlungsabgleich erscheint nicht als leerer Bestand
+PASS Fehlgeschlagene Fristenabfrage wird gesondert angezeigt
+PASS Vollständiger Eingang setzt Betrag, Datum und Status
+PASS Neue Rechnung erhält eine vorgeschlagene Nummer
+PASS Erfolgreiche Neuanlage mit anschließendem Lesefehler bleibt gespeichert und wird nicht erneut angeboten
+PASS Desktopwechsel erhält offene Rechnungsfelder
+PASS Zurück auf dem Smartphone bleiben Entwurf und Verwerfschutz erhalten
+PASS Verspätete Nummernvergabe verändert kein später geöffnetes Formular
+PASS Leseberechtigung zeigt keine Neuanlage
+PASS Leseberechtigung zeigt keine Bearbeitung oder Zahlungsaktion
+PASS Fehlendes Finanzrecht wird im Zahlungsabgleich erklärt
+PASS Abgebrochenes Löschen bewahrt die Rechnung
+PASS Bestätigtes Löschen nutzt die bestehende DELETE-Route
+PASS Abwärtsscrollen blendet die Navigation aus
+PASS Aufwärtsscrollen zeigt die Navigation
+PASS Rechnungen 320px hell ohne horizontalen Überlauf
+PASS Rechnungen 320px dunkel ohne horizontalen Überlauf
+PASS Rechnungen 360px hell ohne horizontalen Überlauf
+PASS Rechnungen 360px dunkel ohne horizontalen Überlauf
+PASS Rechnungen 390px hell ohne horizontalen Überlauf
+PASS Rechnungen 390px dunkel ohne horizontalen Überlauf
+PASS Rechnungen 430px hell ohne horizontalen Überlauf
+PASS Rechnungen 430px dunkel ohne horizontalen Überlauf
+PASS Desktop zeigt weiterhin die ursprüngliche Rechnungstabelle
+PASS Am Desktop geänderte Datumsfelder bleiben beim ersten mobilen Öffnen erhalten
+PASS Auch vor dem mobilen Wechsel begonnene Änderungen besitzen Verwerfschutz
+PASS Fehlerhafte Fallliste bleibt im Formular sichtbar und schützt alte Zuordnung
+PASS Verspätete Rechnungsliste überschreibt kein inzwischen geöffnetes anderes Modul
+PASS Lokaler Modus speichert Teilzahlung unter Erhalt von Archivfall und Herkunft
+PASS Keine JavaScript-Laufzeitfehler

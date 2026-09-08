@@ -1,0 +1,13 @@
+✖ gemeinsame Registrierung klassifiziert jede Anwendungstabelle oder schließt sie begründet aus (212.144166ms)
+✖ v230-Druck des Vermögensverzeichnisses entspricht den Golden-Referenzen (1103.491334ms)
+✖ neuer ENCRYPTION_KEY erzwingt Admin-Quarantäne und atomaren Schema-3-Doppelrestore (120.501541ms)
+ℹ tests 1221
+ℹ pass 1217
+ℹ fail 3
+ℹ skipped 1
+✖ failing tests:
+✖ gemeinsame Registrierung klassifiziert jede Anwendungstabelle oder schließt sie begründet aus (212.144166ms)
+✖ v230-Druck des Vermögensverzeichnisses entspricht den Golden-Referenzen (1103.491334ms)
+✖ neuer ENCRYPTION_KEY erzwingt Admin-Quarantäne und atomaren Schema-3-Doppelrestore (120.501541ms)
+
+Die drei Fehler entsprechen den bereits im unveränderten Release nachgewiesenen Fehlern. Siehe ../mobile-fundament-v1/baseline-fehler.txt.

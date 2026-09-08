@@ -1,0 +1,337 @@
+{
+  "date": "2026-09-08",
+  "source_sha256": "b3540da9f70e0860c92239e264da79172a6c878942989b0641c2f7fb0229fdf7",
+  "main_menus": 32,
+  "code_tests": {
+    "passed": 204,
+    "failed": 0
+  },
+  "chromium_packages": [
+    {
+      "name": "navigation",
+      "code": 0
+    },
+    {
+      "name": "foundation",
+      "code": 0
+    },
+    {
+      "name": "tasks",
+      "code": 0
+    },
+    {
+      "name": "modules",
+      "code": 0
+    },
+    {
+      "name": "calendar",
+      "code": 0
+    },
+    {
+      "name": "mail",
+      "code": 0
+    },
+    {
+      "name": "explorer",
+      "code": 0
+    },
+    {
+      "name": "banking",
+      "code": 0
+    },
+    {
+      "name": "accounting",
+      "code": 0
+    },
+    {
+      "name": "handkasse",
+      "code": 0
+    },
+    {
+      "name": "assets",
+      "code": 0
+    },
+    {
+      "name": "livelihood",
+      "code": 0
+    },
+    {
+      "name": "debts",
+      "code": 0
+    },
+    {
+      "name": "finance",
+      "code": 0
+    },
+    {
+      "name": "invoices",
+      "code": 0
+    },
+    {
+      "name": "mileage",
+      "code": 0
+    },
+    {
+      "name": "completion",
+      "code": 0
+    }
+  ],
+  "chromium_new_regressions": [
+    {
+      "name": "supervision-menuewechsel-unveraendert",
+      "pass": true
+    },
+    {
+      "name": "supervision-menuewechsel-entwurf",
+      "pass": true
+    },
+    {
+      "name": "contact-monitor-menuewechsel-unveraendert",
+      "pass": true
+    },
+    {
+      "name": "contact-monitor-menuewechsel-entwurf",
+      "pass": true
+    },
+    {
+      "name": "posteingang-filter-abbrechen",
+      "pass": true
+    },
+    {
+      "name": "posteingang-filter-anwenden",
+      "pass": true
+    },
+    {
+      "name": "faehigkeiten-suche-inhalt",
+      "pass": true
+    },
+    {
+      "name": "archiv-jahresfilter",
+      "pass": true
+    },
+    {
+      "name": "auswahlfelder-touchgroesse",
+      "pass": true
+    },
+    {
+      "name": "filterblaetter-wiederholen",
+      "pass": true
+    }
+  ],
+  "webkit_new_regressions": [
+    {
+      "name": "supervision-menuewechsel-unveraendert",
+      "pass": true
+    },
+    {
+      "name": "supervision-menuewechsel-entwurf",
+      "pass": true
+    },
+    {
+      "name": "contact-monitor-menuewechsel-unveraendert",
+      "pass": true
+    },
+    {
+      "name": "contact-monitor-menuewechsel-entwurf",
+      "pass": true
+    },
+    {
+      "name": "posteingang-filter-abbrechen",
+      "pass": true
+    },
+    {
+      "name": "posteingang-filter-anwenden",
+      "pass": true
+    },
+    {
+      "name": "faehigkeiten-suche-inhalt",
+      "pass": true
+    },
+    {
+      "name": "archiv-jahresfilter",
+      "pass": true
+    },
+    {
+      "name": "auswahlfelder-touchgroesse",
+      "pass": true
+    },
+    {
+      "name": "filterblaetter-wiederholen",
+      "pass": true
+    }
+  ],
+  "webkit_completion": {
+    "checks": 143,
+    "failures": 0,
+    "errors": []
+  },
+  "supplemental": {
+    "checks": [
+      {
+        "name": "Chat-Eingabe nutzt die volle Breite 320",
+        "pass": true
+      },
+      {
+        "name": "Chat-Kopf und Werkzeuge passen 320",
+        "pass": true
+      },
+      {
+        "name": "Chat-Eingabe nutzt die volle Breite 390",
+        "pass": true
+      },
+      {
+        "name": "Chat-Kopf und Werkzeuge passen 390",
+        "pass": true
+      },
+      {
+        "name": "Chat-Eingabe nutzt die volle Breite 430",
+        "pass": true
+      },
+      {
+        "name": "Chat-Kopf und Werkzeuge passen 430",
+        "pass": true
+      },
+      {
+        "name": "Gespeicherte Besprechung öffnet die freie Nachrichtenansicht",
+        "pass": true
+      },
+      {
+        "name": "Start-Kopf nutzt die Kartenbreite",
+        "pass": true
+      },
+      {
+        "name": "Stammdaten zeigen den echten Fall als Identitätskopf",
+        "pass": true
+      },
+      {
+        "name": "Profil und Fallauswahl sind sichtbar",
+        "pass": true
+      },
+      {
+        "name": "Darstellung Dunkel wird im bestehenden Modell gespeichert",
+        "pass": true
+      },
+      {
+        "name": "Darstellung Nachts dunkel wird im bestehenden Modell gespeichert",
+        "pass": true
+      },
+      {
+        "name": "Darstellung Hell wird im bestehenden Modell gespeichert",
+        "pass": true
+      },
+      {
+        "name": "Favoriten öffnen den vorhandenen Menüeditor",
+        "pass": true
+      },
+      {
+        "name": "health hat erreichbare Bereichsreiter",
+        "pass": true
+      },
+      {
+        "name": "Medikationsreiter grenzt Fachdatensätze ein",
+        "pass": true
+      },
+      {
+        "name": "health Filterfelder sind touchgerecht",
+        "pass": true
+      },
+      {
+        "name": "housing hat erreichbare Bereichsreiter",
+        "pass": true
+      },
+      {
+        "name": "Wohnkostenreiter zeigt ausschließlich Wohnkosten",
+        "pass": true
+      },
+      {
+        "name": "housing Filterfelder sind touchgerecht",
+        "pass": true
+      },
+      {
+        "name": "abilities hat erreichbare Bereichsreiter",
+        "pass": true
+      },
+      {
+        "name": "abilities Filterfelder sind touchgerecht",
+        "pass": true
+      },
+      {
+        "name": "needs hat erreichbare Bereichsreiter",
+        "pass": true
+      },
+      {
+        "name": "needs Filterfelder sind touchgerecht",
+        "pass": true
+      },
+      {
+        "name": "approvals hat erreichbare Bereichsreiter",
+        "pass": true
+      },
+      {
+        "name": "approvals Filterfelder sind touchgerecht",
+        "pass": true
+      },
+      {
+        "name": "contact-monitor hat erreichbare Bereichsreiter",
+        "pass": true
+      },
+      {
+        "name": "contact-monitor Filterfelder sind touchgerecht",
+        "pass": true
+      },
+      {
+        "name": "supervision hat erreichbare Bereichsreiter",
+        "pass": true
+      },
+      {
+        "name": "supervision Filterfelder sind touchgerecht",
+        "pass": true
+      },
+      {
+        "name": "inbox hat erreichbare Bereichsreiter",
+        "pass": true
+      },
+      {
+        "name": "Erledigt zeigt keine unverarbeiteten Eingänge",
+        "pass": true
+      },
+      {
+        "name": "inbox Filterfelder sind touchgerecht",
+        "pass": true
+      },
+      {
+        "name": "qualifications hat erreichbare Bereichsreiter",
+        "pass": true
+      },
+      {
+        "name": "qualifications Filterfelder sind touchgerecht",
+        "pass": true
+      },
+      {
+        "name": "case-archive Filterfelder sind touchgerecht",
+        "pass": true
+      },
+      {
+        "name": "send-history Filterfelder sind touchgerecht",
+        "pass": true
+      },
+      {
+        "name": "case-overview hat erreichbare Bereichsreiter",
+        "pass": true
+      },
+      {
+        "name": "case-overview Filterfelder sind touchgerecht",
+        "pass": true
+      },
+      {
+        "name": "Schnellnotiz nutzt den ganzen mobilen Arbeitsbereich",
+        "pass": true
+      },
+      {
+        "name": "Keine JavaScript-Laufzeitfehler",
+        "pass": true
+      }
+    ],
+    "errors": []
+  }
+}

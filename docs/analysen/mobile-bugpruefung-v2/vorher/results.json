@@ -1,0 +1,44 @@
+[
+  {
+    "name": "supervision-menuewechsel-unveraendert",
+    "pass": false,
+    "error": "locator.waitFor: Timeout 4000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-mobile-module=\"supervision\"]') to be visible\u001b[22m\n",
+    "errors": []
+  },
+  {
+    "name": "supervision-menuewechsel-entwurf",
+    "pass": false,
+    "error": "locator.waitFor: Timeout 4000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-mobile-module=\"supervision\"]') to be visible\u001b[22m\n",
+    "errors": []
+  },
+  {
+    "name": "contact-monitor-menuewechsel-unveraendert",
+    "pass": false,
+    "error": "locator.waitFor: Timeout 4000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-mobile-module=\"contact-monitor\"]') to be visible\u001b[22m\n",
+    "errors": []
+  },
+  {
+    "name": "contact-monitor-menuewechsel-entwurf",
+    "pass": false,
+    "error": "locator.waitFor: Timeout 4000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-mobile-module=\"contact-monitor\"]') to be visible\u001b[22m\n",
+    "errors": []
+  },
+  {
+    "name": "posteingang-filter-abbrechen",
+    "pass": false,
+    "error": "Expected values to be strictly equal:\n\n0 !== 2\n",
+    "errors": []
+  },
+  {
+    "name": "posteingang-filter-anwenden",
+    "pass": false,
+    "error": "Bereichsreiter zeigt den angewendeten Status\n\n'false' !== 'true'\n",
+    "errors": []
+  },
+  {
+    "name": "faehigkeiten-suche-inhalt",
+    "pass": false,
+    "error": "Suche findet den sichtbaren Inhalt eines Bereichs\n\n0 !== 1\n",
+    "errors": []
+  }
+]

@@ -1,0 +1,46 @@
+PASS Anfangsvermögen und Anfangsschulden erscheinen mit korrekter Nettosumme
+PASS Abschluss zeigt eigenständige Vermögens- und Schuldenpositionen
+PASS Positions- und Herkunftsfilter kombinieren sich ohne die Gesamtsummen zu ändern
+PASS Gespiegelte Schulden sind vollständig lesbar und behalten den Schreibschutz
+PASS Suche findet vollständige Details und behält den Fokus
+PASS Details enthalten alle vier Felder, Stand und Herkunft
+PASS Bearbeiten ändert bis zur Bestätigung weder Daten noch Summen
+PASS Neuzeichnen und Remote-Refresh erhalten denselben Formularentwurf
+PASS Chatwechsel erhält Feldknoten und ungespeicherte Werte
+PASS Tastatur blendet Navigation aus und hält Speichern erreichbar
+PASS Speichern erhält Kennungen und Metadaten und trifft nur den gewählten Stand
+PASS Neuanlage begin bleibt zunächst ein Entwurf
+PASS Neuanlage speichert vollständig in begin
+PASS Neuanlage end bleibt zunächst ein Entwurf
+PASS Neuanlage speichert vollständig in end
+PASS Neuanlage debtsBegin bleibt zunächst ein Entwurf
+PASS Neuanlage speichert vollständig in debtsBegin
+PASS Neuanlage debtsEnd bleibt zunächst ein Entwurf
+PASS Neuanlage speichert vollständig in debtsEnd
+PASS Gleichzeitige Änderung wird angezeigt und nicht überschrieben
+PASS Abgebrochenes Löschen erhält die Position
+PASS Bestätigtes Löschen entfernt genau diese Position
+PASS Schuldenübernahme verlangt die vorhandene ausdrückliche Bestätigung
+PASS Migration erhält Forderung und Zahlung sowie beide schreibgeschützten Spiegelungen
+PASS Berichtsmenü enthält die ursprünglichen Ziele Jahresbericht und Rechnungslegung
+PASS Laufender Fallwechsel sperrt Doppelbedienung und Navigation
+PASS Fallwechsel zeigt nur die Vermögensdaten des gewählten Falls
+PASS Schließen stellt den Ursprungsfall wieder her
+PASS Fehlgeschlagener Fallwechsel erhält Daten und gibt Bedienung frei
+PASS Berichtsübergabe bleibt im gewählten Fall und übernimmt dessen Werte in die Rechnungslegung
+PASS Jahresbericht erhält die Abschlusswerte aus dem richtigen Fall
+PASS Größenwechsel erhält den tatsächlichen Formularentwurf
+PASS Große Bestände lassen sich vollständig nachladen
+PASS Abwärtsscrollen blendet die Navigation aus
+PASS Aufwärtsscrollen zeigt die Navigation wieder
+PASS Vermögen 320px hell ohne horizontalen Überlauf
+PASS Vermögen 320px dunkel ohne horizontalen Überlauf
+PASS Vermögen 360px hell ohne horizontalen Überlauf
+PASS Vermögen 360px dunkel ohne horizontalen Überlauf
+PASS Vermögen 390px hell ohne horizontalen Überlauf
+PASS Vermögen 390px dunkel ohne horizontalen Überlauf
+PASS Vermögen 430px hell ohne horizontalen Überlauf
+PASS Vermögen 430px dunkel ohne horizontalen Überlauf
+PASS Leseberechtigte behalten vollständige Details ohne Schreibaktionen
+PASS Desktop erhält die vier ursprünglichen Tabellen und Berichtsschaltflächen
+PASS Keine JavaScript-Laufzeitfehler

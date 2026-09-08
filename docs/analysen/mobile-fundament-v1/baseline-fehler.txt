@@ -1,0 +1,89 @@
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✖ gemeinsame Registrierung klassifiziert jede Anwendungstabelle oder schließt sie begründet aus (87.511084ms)
+✔ Büro-/Modulabbild enthält OCR verlustfrei, aber keine Intake- oder Signaturbytes (77.0845ms)
+✔ Büroabbild normalisiert volatile Laufzustände, vollständige Modulregistrierung behält sie (76.901834ms)
+✔ Fallsicherung nimmt sichere direkte und indirekte Fallbezüge aus der Registrierung mit (73.619625ms)
+✖ v230-Druck des Vermögensverzeichnisses entspricht den Golden-Referenzen (685.279625ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ MCP-Module mit DB-Bereinigungstimer werden in Recovery nicht geladen (0.844458ms)
+✖ neuer ENCRYPTION_KEY erzwingt Admin-Quarantäne und atomaren Schema-3-Doppelrestore (85.761375ms)
+✔ ein verlinkter oder beschädigter Restore-Marker öffnet den Server niemals (108.013292ms)
+✔ ein langlebiger Restore-Fortschrittsmarker sperrt auch das SIGKILL-Fenster vor dem Datentausch (275.117083ms)
+✔ ein Dateisystemfehler bei der Freigabe lässt die DB in Quarantäne und die geprüfte Generation erhalten (147.743125ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 7
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 734.479666
+
+✖ failing tests:
+
+test at tests/backup-table-registry.test.js:11:1
+✖ gemeinsame Registrierung klassifiziert jede Anwendungstabelle oder schließt sie begründet aus (87.511084ms)
+  AssertionError [ERR_ASSERTION]: credentials-Recovery-Vertrag für office_ai_config muss dem aktuellen App-Schema entsprechen
+  + actual - expected
+  
+    [
+      'provider',
+      'api_key_encrypted',
+      'model',
+      'endpoint',
+      'updated_at',
+  +   'allowed_models'
+    ]
+  
+      at TestContext.<anonymous> (/private/tmp/mobile-foundation-baseline/server/tests/backup-table-registry.test.js:42:14)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [ 'provider', 'api_key_encrypted', 'model', 'endpoint', 'updated_at', 'allowed_models' ],
+    expected: [ 'provider', 'api_key_encrypted', 'model', 'endpoint', 'updated_at' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/html-v230-print-golden.test.cjs:43:1
+✖ v230-Druck des Vermögensverzeichnisses entspricht den Golden-Referenzen (685.279625ms)
+  Error: Command failed: node seiten-rendern.js /private/tmp/mobile-foundation-baseline/server/tools/pdf-overlay/vorlagen/v230-golden.pdf
+      at genericNodeError (node:internal/errors:985:15)
+      at wrappedFn (node:internal/errors:539:14)
+      at checkExecSyncError (node:child_process:925:11)
+      at execFileSync (node:child_process:961:15)
+      at TestContext.<anonymous> (/private/tmp/mobile-foundation-baseline/server/tests/html-v230-print-golden.test.cjs:167:3)
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    status: 1,
+    signal: null,
+    output: [ null, null, null ],
+    pid: 56557,
+    stdout: null,
+    stderr: null
+  }
+
+test at tests/recovery-bootstrap.test.js:25:1
+✖ neuer ENCRYPTION_KEY erzwingt Admin-Quarantäne und atomaren Schema-3-Doppelrestore (85.761375ms)
+  Error: Das Schema der Recovery-Tabelle office_ai_config weicht vom vollständigen Sicherungsvertrag ab.
+      at assertRecoveryTableSchema (/private/tmp/mobile-foundation-baseline/server/src/modules/backup/portable-data.js:426:19)
+      at readRegisteredTable (/private/tmp/mobile-foundation-baseline/server/src/modules/backup/portable-data.js:441:21)
+      at credentialsData (/private/tmp/mobile-foundation-baseline/server/src/modules/backup/portable-data.js:536:24)
+      at portableCredentialsData (/private/tmp/mobile-foundation-baseline/server/src/modules/backup/portable-data.js:603:26)
+      at build (/private/tmp/mobile-foundation-baseline/server/src/modules/backup/portable-data.js:635:25)
+      at sqliteTransaction (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+      at Object.createPortableRecoveryBundle (/private/tmp/mobile-foundation-baseline/server/src/modules/backup/portable-data.js:649:79)
+      at TestContext.<anonymous> (/private/tmp/mobile-foundation-baseline/server/tests/recovery-bootstrap.test.js:64:35)
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    code: 'BACKUP_REQUIRED_COLUMNS_MISMATCH',
+    table: 'office_ai_config',
+    missingColumns: [],
+    unexpectedColumns: [ 'allowed_models' ]
+  }

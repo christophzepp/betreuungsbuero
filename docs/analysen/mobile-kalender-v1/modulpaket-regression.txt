@@ -1,0 +1,61 @@
+PASS Fristenliste nutzt eigenes mobiles Layout mit Fristen und abgeleiteten Terminen
+PASS Fristenfilter kombiniert Kategorie, Fälligkeit und Priorität
+PASS Fristenformular enthält alle ursprünglichen Felder
+PASS Fristen-Entwurf übersteht Aktualisierung und Chats
+PASS Frist speichern erhält Kategorie, Routing und Erinnerung
+PASS Alle Fälle zeigt auch fremde eigene Fristen
+PASS Fristabschluss legt den nächsten Serientermin an
+PASS Schuldenfristen behalten ihre Herkunft und erlauben nur Routing
+PASS Wiedervorlagen beginnen mit fälligen Vorgängen
+PASS Geplant zeigt spätere Wiedervorlagen anderer Fälle
+PASS Wiedervorlagen-Formular schützt Eingaben beim Schließen
+PASS Fehlgeschlagene Wiedervorlage-Speicherung erhält den Entwurf
+PASS Bearbeiten speichert mit unveränderter Ursprungsreferenz
+PASS Verlängern setzt Fälligkeit 14 Tage nach dem späteren Datum
+PASS Wiedervorlage lässt sich beenden und erneut öffnen
+PASS Neue Wiedervorlage verlangt weiterhin einen konkreten Ursprung
+PASS Neue Wiedervorlage speichert Quelle und Fall
+PASS Adressbuch listet aktive Kontakte im neuen Stil
+PASS Adressbuchfilter übernimmt Status und Ort in die bestehende Ansicht
+PASS Adressbuch behält Import, Excel, vCard, Duplikate und Sammelaktionen
+PASS Kontaktseite enthält Anruf, E-Mail, Bearbeiten und Referenzen
+PASS Kontakteditor bewahrt getrennte Telefonfelder und Bankreferenzen
+PASS Kontakt speichern kehrt zur Liste zurück und bewahrt Referenzen
+PASS Neue Kontakte erhalten nach Kategorienwahl alle Originalfelder
+PASS Kontaktstatus kehrt zu einer aktualisierten Liste zurück
+PASS Sammelauswahl lässt sich über wiederholt geöffnete Aktionen steuern
+PASS Wechsel zu Bürokontakten schließt das Filterblatt ohne doppelte Felder
+PASS Stammdaten stellt sämtliche 13 vorhandenen Datenabschnitte bereit
+PASS Stammdaten verwendet weiterhin die Originalfelder mit laufender Übernahme
+PASS Kontaktdateneditor schreibt getrennte Anschrift und kehrt zu Stammdaten zurück
+PASS Wiedervorlagenlayout 320px hell
+PASS Wiedervorlagenlayout 320px dunkel
+PASS Wiedervorlagenlayout 360px hell
+PASS Wiedervorlagenlayout 360px dunkel
+PASS Wiedervorlagenlayout 390px hell
+PASS Wiedervorlagenlayout 390px dunkel
+PASS Wiedervorlagenlayout 430px hell
+PASS Wiedervorlagenlayout 430px dunkel
+PASS Fristen Layout 320px hell
+PASS Fristen Layout 320px dunkel
+PASS Fristen Layout 390px hell
+PASS Fristen Layout 390px dunkel
+PASS Fristen Layout 430px hell
+PASS Fristen Layout 430px dunkel
+PASS Adressbuch Layout 320px hell
+PASS Adressbuch Layout 320px dunkel
+PASS Adressbuch Layout 390px hell
+PASS Adressbuch Layout 390px dunkel
+PASS Adressbuch Layout 430px hell
+PASS Adressbuch Layout 430px dunkel
+PASS Stammdaten Layout 320px hell
+PASS Stammdaten Layout 320px dunkel
+PASS Stammdaten Layout 390px hell
+PASS Stammdaten Layout 390px dunkel
+PASS Stammdaten Layout 430px hell
+PASS Stammdaten Layout 430px dunkel
+PASS Fristenaktionen bleiben bei geöffneter Tastatur erreichbar
+PASS Bürokontakt bleibt bei Speicherfehler als Entwurf erhalten
+PASS Bürokontakt lässt sich nach einem Fehler erneut speichern
+PASS Desktop-Fristen behalten ihre ursprüngliche Ansicht
+PASS Keine JavaScript-Laufzeitfehler

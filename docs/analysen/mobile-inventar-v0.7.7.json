@@ -1,0 +1,574 @@
+{
+  "meta": {
+    "repository": "christophzepp/betreuungsbuero",
+    "release": "v0.7.7",
+    "commit": "9b28c434343743b116da66f37cb88d0b7cbc2019",
+    "commit_date": "2026-09-06T22:11:26+02:00",
+    "analysis_date": "2026-09-06",
+    "source": "/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html",
+    "method": "Statische Quellcodeanalyse, bereitgestellte Screenshots und bestehende Prüfungen. Kein vollständiger Browser-/Gerätetest und kein kontospezifischer Rechteabgleich.",
+    "main_count": 32,
+    "quick_count": 30,
+    "profiles": {
+      "page": 2,
+      "bespoke": 6,
+      "workspace": 22,
+      "standalone": 1,
+      "sheet": 1
+    },
+    "tests": {
+      "passed": 70,
+      "failed": 0
+    }
+  },
+  "main_navigation": [
+    {
+      "id": "start",
+      "label": "Start",
+      "short": "Start",
+      "profile": "page",
+      "root": null,
+      "opener": "openMobileStartPage",
+      "line": 128699,
+      "visible": true,
+      "order": 1,
+      "views": "Tagesübersicht; Dieser Fall/Alle Fälle; Fallauswahl; Schnellaktionen."
+    },
+    {
+      "id": "case-chat",
+      "label": "KI-Fallchat",
+      "short": "KI-Chat",
+      "profile": "bespoke",
+      "root": ".cc2",
+      "opener": "openCaseChat",
+      "line": 128700,
+      "visible": true,
+      "order": 2,
+      "views": "Unterhaltungen, einblendbare Seitenleiste, Chatverlauf, Eingabe und Anlagen."
+    },
+    {
+      "id": "master-data",
+      "label": "Stammdaten",
+      "short": "Stammdaten",
+      "profile": "page",
+      "root": null,
+      "opener": "openMobileStartPage",
+      "line": 128702,
+      "visible": true,
+      "order": 3,
+      "views": "Personen-, Kontakt- und Betreuungsdaten; Karten; Kontaktdaten und soziales Netzwerk bearbeiten."
+    },
+    {
+      "id": "case-overview",
+      "label": "Fallübersicht",
+      "short": "Übersicht",
+      "profile": "bespoke",
+      "root": ".cov-shell",
+      "opener": "openCaseOverview",
+      "line": 128701,
+      "visible": true,
+      "order": 4,
+      "views": "Mobile Reiter Liste, Wiedervorlagen und Schnellaktionen; Fallauswahl, Filter und Details."
+    },
+    {
+      "id": "documentation",
+      "label": "Falldokumentation",
+      "short": "Doku",
+      "profile": "bespoke",
+      "root": ".doku-mobile-list-shell-v170,.doku-entry-form-shell-v170",
+      "opener": "openDocumentationView",
+      "line": 128704,
+      "visible": true,
+      "order": 5,
+      "views": "Liste, Lesen, Neu/Bearbeiten, Filterblatt; Wochen-/Monatskalender; Medien und Excel-Zeile."
+    },
+    {
+      "id": "calendar",
+      "label": "Kalender",
+      "short": "Kalender",
+      "profile": "workspace",
+      "root": ".cal-toolbar-main",
+      "opener": "openCalendarFullView",
+      "line": 128705,
+      "visible": true,
+      "order": 6,
+      "views": "Monat, Woche, Tag, Liste; Kalenderauswahl, Ansichtsmenü und ganzseitige Terminmaske."
+    },
+    {
+      "id": "tasks",
+      "label": "Aufgaben",
+      "short": "Aufgaben",
+      "profile": "workspace",
+      "root": ".todo-full-list",
+      "opener": "openTodoFullView",
+      "line": 128706,
+      "visible": true,
+      "order": 7,
+      "views": "Aufgabenliste, Filter, Zeilenaktionen, eigener Editor und Anlagen."
+    },
+    {
+      "id": "deadlines",
+      "label": "Fristen",
+      "short": "Fristen",
+      "profile": "workspace",
+      "root": ".fr-view",
+      "opener": "openFristenModal",
+      "line": 128707,
+      "visible": true,
+      "order": 8,
+      "views": "Fristenliste, Filter, eigener Editor und Vergütungsfristen."
+    },
+    {
+      "id": "followups",
+      "label": "Wiedervorlagen",
+      "short": "Vorlagen",
+      "profile": "bespoke",
+      "root": ".cov-shell",
+      "opener": "openFollowups",
+      "line": 128703,
+      "visible": true,
+      "order": 9,
+      "views": "Wiedervorlagen der Fallübersicht; anlegen, bearbeiten, verlängern und abschließen."
+    },
+    {
+      "id": "contacts",
+      "label": "Adressbuch",
+      "short": "Kontakte",
+      "profile": "workspace",
+      "root": ".addressbook-list,.addressbook-editor-grid",
+      "opener": "showImportedAddressbook",
+      "line": 128708,
+      "visible": true,
+      "order": 10,
+      "views": "Kontaktliste, Suche, aufklappbare Filter, Kontaktkarten und Editor; Import/Export."
+    },
+    {
+      "id": "mail",
+      "label": "E-Mail",
+      "short": "E-Mail",
+      "profile": "bespoke",
+      "root": ".mx-app",
+      "opener": "openMailApp",
+      "line": 128709,
+      "visible": true,
+      "order": 11,
+      "views": "Postfächer/Ordner, Nachrichtenliste, Lesen, Verfassen/Antworten und Anlagen."
+    },
+    {
+      "id": "documents",
+      "label": "Datei-Explorer",
+      "short": "Dateien",
+      "profile": "bespoke",
+      "root": ".dok-app,.dok-lese",
+      "opener": "openDokumenteModal",
+      "line": 128710,
+      "visible": true,
+      "order": 12,
+      "views": "Liste/Kacheln, Suche, Ordnerbaum-Overlay, Kontextmenü, Upload und Datei-/PDF-Leseansicht."
+    },
+    {
+      "id": "case-archive",
+      "label": "Archivierte Formulare",
+      "short": "Archiv",
+      "profile": "workspace",
+      "root": "#archiveViewBody",
+      "opener": "openArchiveView",
+      "line": 128735,
+      "visible": true,
+      "order": 13,
+      "views": "Gespeicherte Formulare/Berichtsfassungen; Filter und Datensatzaktionen."
+    },
+    {
+      "id": "send-history",
+      "label": "Export- und Versandhistorie",
+      "short": "Versand",
+      "profile": "workspace",
+      "root": "#phase4HistoryList",
+      "opener": "showExportHistory",
+      "line": 128736,
+      "visible": true,
+      "order": 14,
+      "views": "Export-/Versandverlauf; Filter, Details und dateibezogene Aktionen."
+    },
+    {
+      "id": "banking",
+      "label": "Banking",
+      "short": "Banking",
+      "profile": "workspace",
+      "root": ".bk2",
+      "opener": "openBankingModal",
+      "line": 128715,
+      "visible": true,
+      "order": 15,
+      "views": "Konten, Umsätze, Filter, Zahlungsaufträge und wiederkehrende Zahlungen."
+    },
+    {
+      "id": "cash",
+      "label": "Handkasse",
+      "short": "Kasse",
+      "profile": "workspace",
+      "root": ".hk-view",
+      "opener": "openHandkasseModal",
+      "line": 128711,
+      "visible": true,
+      "order": 16,
+      "views": "Fall/Jahr, Buchungskarten, Saldo; neue Buchung, PDF, Excel und Rechnungslegung."
+    },
+    {
+      "id": "assets",
+      "label": "Vermögensaufstellung",
+      "short": "Vermögen",
+      "profile": "workspace",
+      "root": ".va-view",
+      "opener": "openVermoegenModal",
+      "line": 128712,
+      "visible": true,
+      "order": 17,
+      "views": "Anfangs-/Abschlussvermögen; Schulden Anfang/Ende; Positionen und Berichtsanbindung."
+    },
+    {
+      "id": "livelihood",
+      "label": "Lebensunterhalt",
+      "short": "Unterhalt",
+      "profile": "workspace",
+      "root": ".lu-view",
+      "opener": "openLebensunterhaltModal",
+      "line": 128713,
+      "visible": true,
+      "order": 18,
+      "views": "Einnahmen/Ausgaben, Monatsbilanz, Dokumentenanalyse und Übernahmevorschläge."
+    },
+    {
+      "id": "debts",
+      "label": "Schuldenregulierung",
+      "short": "Schulden",
+      "profile": "workspace",
+      "root": ".sr-view",
+      "opener": "openSchuldenModal",
+      "line": 128714,
+      "visible": true,
+      "order": 19,
+      "views": "Forderungen, Gläubiger, Raten, Zahlungen, Schuldeditor und Dokumentenauswertung."
+    },
+    {
+      "id": "health",
+      "label": "Gesundheit",
+      "short": "Gesundheit",
+      "profile": "workspace",
+      "root": ".hi-view",
+      "opener": "openHealthModal",
+      "line": 128716,
+      "visible": true,
+      "order": 20,
+      "views": "Allgemeines, Diagnosen, Medikation, Arzttermine, Klinik/Pflege, Eingriffe, Behandler, Notfallkontakte und Verfügungen."
+    },
+    {
+      "id": "housing",
+      "label": "Wohnen",
+      "short": "Wohnen",
+      "profile": "workspace",
+      "root": ".housing-shell-v255",
+      "opener": "openHousingModal",
+      "line": 128717,
+      "visible": true,
+      "order": 21,
+      "views": "Verlauf, Adressen, Wohnkosten; Untereditoren für Wohnsicherheit, Barrierefreiheit, Probleme und Unterstützung."
+    },
+    {
+      "id": "abilities",
+      "label": "Fähigkeiten & Alltag",
+      "short": "Fähigkeiten",
+      "profile": "standalone",
+      "root": "#functionalProfileHubOverlayV255",
+      "opener": "openMobileAbilities",
+      "line": 128718,
+      "visible": true,
+      "order": 22,
+      "views": "Bereichsübersicht und ganzseitige Lese-/Bearbeitungsansicht; eigenständiges Overlay."
+    },
+    {
+      "id": "needs",
+      "label": "Wünsche und Bedarfe",
+      "short": "Bedarfe",
+      "profile": "workspace",
+      "root": ".gdp-shell",
+      "opener": "openGoalDecisionPlanning",
+      "line": 128719,
+      "visible": true,
+      "order": 23,
+      "views": "Wünsche, Ziele, Bedarfe, Maßnahmen, Entscheidungen, Überprüfungen; Karten, Details und Editor."
+    },
+    {
+      "id": "approvals",
+      "label": "Genehmigungen",
+      "short": "Genehm.",
+      "profile": "workspace",
+      "root": ".ap-view",
+      "opener": "openApprovalsModal",
+      "line": 128720,
+      "visible": true,
+      "order": 24,
+      "views": "Genehmigungsliste, Antrags-/Entscheidungsdaten und fokussierte Neuanlage."
+    },
+    {
+      "id": "contact-monitor",
+      "label": "Kontaktmonitor",
+      "short": "Monitor",
+      "profile": "workspace",
+      "root": ".km-scroll",
+      "opener": "openKontaktMonitor",
+      "line": 128721,
+      "visible": true,
+      "order": 25,
+      "views": "Kontaktübersicht, Fälligkeiten, Filter, Exporte und ausklappbare Kontakterfassung."
+    },
+    {
+      "id": "supervision",
+      "label": "Betreuungsübersicht",
+      "short": "Betreuung",
+      "profile": "workspace",
+      "root": ".bu-table-wrap",
+      "opener": "openBetreuungsuebersichtModal",
+      "line": 128722,
+      "visible": true,
+      "order": 26,
+      "views": "Aktuelle Fälle/Archiv, Fallkarten und Meldeangaben."
+    },
+    {
+      "id": "inbox",
+      "label": "Posteingang",
+      "short": "Post",
+      "profile": "workspace",
+      "root": ".inbox-view",
+      "opener": "openInboxModal",
+      "line": 128723,
+      "visible": true,
+      "order": 27,
+      "views": "Tagesbezogener Dokumenten-Posteingang; Suche/Filter, Upload, KI und Bearbeitungsaktionen."
+    },
+    {
+      "id": "finance",
+      "label": "Finanzen",
+      "short": "Finanzen",
+      "profile": "workspace",
+      "root": ".finance-view",
+      "opener": "openFinanceModal",
+      "line": 128725,
+      "visible": true,
+      "order": 28,
+      "views": "Laufende/einmalige Büro-Posten, Bilanz, Editor; Export, Buchhaltung und Bürokonten."
+    },
+    {
+      "id": "invoices",
+      "label": "Ausgangsrechnungen",
+      "short": "Rechnungen",
+      "profile": "workspace",
+      "root": ".invoice-view",
+      "opener": "openInvoiceModal",
+      "line": 128726,
+      "visible": true,
+      "order": 29,
+      "views": "Ausgangsrechnungsliste, Aktionen/Exporte und ganzseitige Neu-/Bearbeitungsmaske."
+    },
+    {
+      "id": "mileage",
+      "label": "Fahrtkosten",
+      "short": "Fahrten",
+      "profile": "workspace",
+      "root": ".mileage-view",
+      "opener": "openMileageModal",
+      "line": 128727,
+      "visible": true,
+      "order": 30,
+      "views": "Fahrtkarten, Filter, Nachweis und ganzseitige Fahrtmaske mit Strecke/Kilometern."
+    },
+    {
+      "id": "qualifications",
+      "label": "Qualifikationsmanager",
+      "short": "Qualifikation",
+      "profile": "workspace",
+      "root": ".qm-wrap",
+      "opener": "openQualifikationsManager",
+      "line": 128728,
+      "visible": true,
+      "order": 31,
+      "views": "Personen als Karten, Personenfilter und Qualifikations-/Nachweisdetails."
+    },
+    {
+      "id": "user",
+      "label": "Benutzermenü",
+      "short": "Benutzer",
+      "profile": "sheet",
+      "root": null,
+      "opener": "openUserMenu",
+      "line": 128737,
+      "visible": true,
+      "order": 32,
+      "views": "Menüblatt mit aktuellem Fall, Hell-/Dunkel-Wechsel und Abmelden."
+    }
+  ],
+  "hidden_navigation": [
+    {
+      "id": "online-forms",
+      "label": "Online-Formulare",
+      "short": "Formulare",
+      "profile": "workspace",
+      "root": ".of-view",
+      "opener": "openOnlineFormsModal",
+      "line": 128724,
+      "visible": false
+    }
+  ],
+  "quick_actions": [
+    {
+      "label": "Notiz",
+      "handler": "window.__caseOverview.openQuick('note')",
+      "line": 111954
+    },
+    {
+      "label": "Aufnahme",
+      "handler": "window.__caseOverview.memo()",
+      "line": 111954
+    },
+    {
+      "label": "Anlage",
+      "handler": "window.__caseOverview.openQuick('attachment')",
+      "line": 111954
+    },
+    {
+      "label": "Transkript",
+      "handler": "window.__caseOverview.openQuick('transcript')",
+      "line": 111954
+    },
+    {
+      "label": "Wiedervorlage",
+      "handler": "window.__caseOverview.openQuick('followup')",
+      "line": 111954
+    },
+    {
+      "label": "Termin",
+      "handler": "window.__caseOverview.openQuick('calendar')",
+      "line": 111954
+    },
+    {
+      "label": "Aufgabe",
+      "handler": "window.__caseOverview.openQuick('task')",
+      "line": 111954
+    },
+    {
+      "label": "Frist",
+      "handler": "window.__caseOverview.openQuick('deadline')",
+      "line": 111954
+    },
+    {
+      "label": "Planung",
+      "handler": "window.__caseOverview.openQuick('planning')",
+      "line": 111954
+    },
+    {
+      "label": "E-Mail / Post",
+      "handler": "window.__caseOverview.openQuick('communication')",
+      "line": 111954
+    },
+    {
+      "label": "Kontakt",
+      "handler": "window.__caseOverview.openQuick('contact')",
+      "line": 111954
+    },
+    {
+      "label": "Handkasse",
+      "handler": "window.__caseOverview.openQuick('cash')",
+      "line": 111954
+    },
+    {
+      "label": "Überweisung",
+      "handler": "window.__caseOverview.openQuick('transfer')",
+      "line": 111954
+    },
+    {
+      "label": "Banking",
+      "handler": "window.__caseOverview.openQuick('banking')",
+      "line": 111954
+    },
+    {
+      "label": "Vermögen",
+      "handler": "window.__caseOverview.openQuick('asset')",
+      "line": 111954
+    },
+    {
+      "label": "Lebensunterhalt",
+      "handler": "window.__caseOverview.openQuick('livelihood')",
+      "line": 111954
+    },
+    {
+      "label": "Schulden",
+      "handler": "window.__caseOverview.openQuick('debt')",
+      "line": 111954
+    },
+    {
+      "label": "Vergütung",
+      "handler": "window.__caseOverview.openQuick('remuneration')",
+      "line": 111954
+    },
+    {
+      "label": "Fahrt",
+      "handler": "window.__caseOverview.openQuick('mileage')",
+      "line": 111954
+    },
+    {
+      "label": "Gesundheit",
+      "handler": "window.__caseOverview.openQuick('health')",
+      "line": 111954
+    },
+    {
+      "label": "Fallverlauf",
+      "handler": "window.__caseOverview.openQuick('casecycle')",
+      "line": 111954
+    },
+    {
+      "label": "Fähigkeiten",
+      "handler": "window.__caseOverview.quickRun('abilityOpen')",
+      "line": 111954
+    },
+    {
+      "label": "Wohnen",
+      "handler": "window.__caseOverview.quickRun('housingOpen')",
+      "line": 111954
+    },
+    {
+      "label": "Bericht / Formular",
+      "handler": "window.__caseOverview.quickRun('reportsOpen')",
+      "line": 111954
+    },
+    {
+      "label": "Rechnungslegung",
+      "handler": "window.__caseOverview.quickRun('report:accounting')",
+      "line": 111954
+    },
+    {
+      "label": "Betreuungsübersicht",
+      "handler": "window.__caseOverview.quickRun('caseSummaryOpen')",
+      "line": 111954
+    },
+    {
+      "label": "Genehmigung",
+      "handler": "window.__caseOverview.openQuick('approval')",
+      "line": 111954
+    },
+    {
+      "label": "Dokument",
+      "handler": "window.__caseOverview.openQuick('document')",
+      "line": 111954
+    },
+    {
+      "label": "Dokumentation",
+      "handler": "window.__caseOverview.quickRun('caseDocumentationOpen')",
+      "line": 111954
+    },
+    {
+      "label": "Fallchronik",
+      "handler": "window.__caseOverview.quickRun('caseChronicleOpen')",
+      "line": 111954
+    }
+  ]
+}

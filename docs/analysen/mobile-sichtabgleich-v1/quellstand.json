@@ -1,0 +1,82 @@
+{
+  "baseline_sha256": "f368e9db11a4f8a35eafe28f007cebe386c084361cb4ebfca4d25b2447d4e32a",
+  "final_sha256": "1d2d451cf1cba8b3687bcc697de33b3e7395f76098e14fe3129be3367f020eee",
+  "script_count": 311,
+  "unchanged_typed_data_blocks": 82,
+  "nul_bytes_before": 1,
+  "nul_bytes_after": 1,
+  "changed_blocks": [
+    {
+      "tag": "script",
+      "attributes": " id=\"initial-data-domains-script-v255\"",
+      "before_bytes": 86544,
+      "after_bytes": 86801
+    },
+    {
+      "tag": "script",
+      "attributes": "",
+      "before_bytes": 123347,
+      "after_bytes": 123719
+    },
+    {
+      "tag": "script",
+      "attributes": " id=\"betreuungsuebersicht-script-v1\"",
+      "before_bytes": 24596,
+      "after_bytes": 24836
+    },
+    {
+      "tag": "script",
+      "attributes": " id=\"invoice-script-v1\"",
+      "before_bytes": 88566,
+      "after_bytes": 88665
+    },
+    {
+      "tag": "script",
+      "attributes": " id=\"healthinfo-script-v1\"",
+      "before_bytes": 68079,
+      "after_bytes": 68276
+    },
+    {
+      "tag": "script",
+      "attributes": " id=\"approvals-script-v1\"",
+      "before_bytes": 53437,
+      "after_bytes": 53577
+    },
+    {
+      "tag": "script",
+      "attributes": " id=\"kontaktmonitor-script-v1\"",
+      "before_bytes": 44815,
+      "after_bytes": 44981
+    },
+    {
+      "tag": "script",
+      "attributes": " id=\"qualimanager-script-v1\"",
+      "before_bytes": 55550,
+      "after_bytes": 55719
+    },
+    {
+      "tag": "script",
+      "attributes": " id=\"goal-decision-planning-script-v1\"",
+      "before_bytes": 146249,
+      "after_bytes": 146400
+    },
+    {
+      "tag": "style",
+      "attributes": " id=\"mobile-phone-curation-v2\"",
+      "before_bytes": 461642,
+      "after_bytes": 486869
+    },
+    {
+      "tag": "script",
+      "attributes": " id=\"mobile-online-shell-v1-js\"",
+      "before_bytes": 131328,
+      "after_bytes": 137802
+    },
+    {
+      "tag": "script",
+      "attributes": " id=\"functional-planning-profile-script-v255\"",
+      "before_bytes": 68697,
+      "after_bytes": 68835
+    }
+  ]
+}

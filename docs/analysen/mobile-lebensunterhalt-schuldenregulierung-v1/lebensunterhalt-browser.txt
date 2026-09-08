@@ -1,0 +1,39 @@
+PASS Einnahmen zeigen vollständige Posten und alle unfiltrierten Monatswerte
+PASS Ausgaben enthalten die automatisch gespiegelte Schuldenrate
+PASS Bilanz zeigt vollständige Kategorien und Monatsbeträge
+PASS Herkunft und Intervall filtern ohne die Monatsbilanz zu ändern
+PASS Schuldenraten bleiben vollständig lesbar und schreibgeschützt
+PASS Volltextsuche findet die ganze Bezeichnung und erhält den Fokus
+PASS Details enthalten zusätzlich vorhandenes Aktenzeichen und Bewilligungsende
+PASS Einnahme bleibt bis Speichern unverändert
+PASS Neuzeichnen und Remote-Hinweise erhalten den tatsächlichen Entwurf
+PASS Chatwechsel stellt denselben ungespeicherten Formularinhalt wieder her
+PASS Tastatur verbirgt Navigation und lässt Speichern erreichbar
+PASS Speichern erhält Metadaten und synchronisiert die Leistung genau einmal
+PASS Neue Ausgabe speichert alle acht vorhandenen Felder im richtigen Bereich
+PASS Zwischenzeitliche Änderung wird geschützt und der Entwurf bleibt lesbar
+PASS Leistungsübernahme bewahrt Nullbeträge und verknüpft den Datensatz
+PASS Wiederholte Leistungsübernahme erzeugt keine Dubletten
+PASS Dateiauswertung erreicht die vorhandene Dateiverarbeitung und schreibt zunächst nichts
+PASS Nur ausgewählte Vorschläge werden samt Unterlagenangaben und Leistungsabgleich übernommen
+PASS Laufende Auswertung sperrt Navigation und übernimmt keine Daten vorzeitig
+PASS Auswertung überschreibt keinen während der Analyse geänderten Stand
+PASS Abgebrochenes Löschen erhält Einnahme und Leistung
+PASS Bestätigtes Löschen entfernt nur die Einnahme und ihre verknüpfte Leistung
+PASS Fallwechsel zeigt ausschließlich die Einnahmen des gewählten Falls
+PASS Berichtsübergabe erhält den gewählten Fall und übernimmt dessen Einnahmen
+PASS Größenwechsel erhält ungespeicherte Eingaben
+PASS Alle Posten großer Bestände sind nachladbar
+PASS Abwärtsscrollen verbirgt die Navigation
+PASS Aufwärtsscrollen zeigt die Navigation
+PASS Lebensunterhalt 320px hell ohne Überlauf
+PASS Lebensunterhalt 320px dunkel ohne Überlauf
+PASS Lebensunterhalt 360px hell ohne Überlauf
+PASS Lebensunterhalt 360px dunkel ohne Überlauf
+PASS Lebensunterhalt 390px hell ohne Überlauf
+PASS Lebensunterhalt 390px dunkel ohne Überlauf
+PASS Lebensunterhalt 430px hell ohne Überlauf
+PASS Lebensunterhalt 430px dunkel ohne Überlauf
+PASS Leseberechtigte erhalten vollständige Details ohne Schreibaktionen
+PASS Desktop erhält beide Originaltabellen, Auswertung, Leistungsübernahme und Berichtslinks
+PASS Keine JavaScript-Laufzeitfehler

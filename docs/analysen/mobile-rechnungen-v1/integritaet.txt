@@ -1,0 +1,8 @@
+Ausgangsstand SHA-256: f8ac4759861dc4b0948bb35d94be8b27fd16e93ccbaf5a5abe29480879c9da2d
+Ergebnis SHA-256: bfd71ed61190e79855034d6671b962d3fc6e62f8dc1452a3c169b230da788507
+Scriptblöcke: 311; Reihenfolge und Attribute unverändert
+Geänderte Skripte: id="invoice-script-v1", id="mobile-online-shell-v1-js"
+Geänderte Styles: id="mobile-phone-curation-v2"
+Unveränderte eingebettete Datenblöcke: 82 (76 PDF, 6 JSON)
+NUL-Bytes: 1, unverändert
+UTF-8: gültig

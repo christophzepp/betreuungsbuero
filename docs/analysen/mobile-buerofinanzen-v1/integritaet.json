@@ -1,0 +1,19 @@
+{
+  "basis": "v0.7.7 / 9b28c434343743b116da66f37cb88d0b7cbc2019, vorhandener Arbeitsstand erhalten",
+  "before_bytes": 74891228,
+  "after_bytes": 74960306,
+  "before_sha256": "81927c1c3613f5f5a30410ce95d502319cb1b2a93ac9bb8b9ef8e49e4fce1bab",
+  "after_sha256": "03af2e8c4da94ff24e9543f8cf7801b6ea5d89e380cdcfdce1f971d14d4e7c99",
+  "script_blocks": 311,
+  "preserved_data_blocks": 82,
+  "changed_scripts": [
+    "finance-script-v1",
+    "finance-belege-script-v1",
+    "buerofinanzen-shell-v1"
+  ],
+  "changed_styles": [
+    "mobile-phone-curation-v2"
+  ],
+  "nul_bytes": 1,
+  "all_other_bytes_identical": true
+}

@@ -1,0 +1,40 @@
+{
+  "baseline_sha256": "1d2d451cf1cba8b3687bcc697de33b3e7395f76098e14fe3129be3367f020eee",
+  "final_sha256": "b3540da9f70e0860c92239e264da79172a6c878942989b0641c2f7fb0229fdf7",
+  "script_count": 311,
+  "executable_scripts": 229,
+  "unchanged_typed_data_blocks": 82,
+  "outside_changed_block_bodies": "unchanged",
+  "nul_bytes_before": 1,
+  "nul_bytes_after": 1,
+  "changed_blocks": [
+    {
+      "tag": "script",
+      "id": "betreuungsuebersicht-script-v1",
+      "line": 52122,
+      "before_bytes": 24836,
+      "after_bytes": 24868
+    },
+    {
+      "tag": "script",
+      "id": "kontaktmonitor-script-v1",
+      "line": 95804,
+      "before_bytes": 44981,
+      "after_bytes": 45013
+    },
+    {
+      "tag": "style",
+      "id": "mobile-phone-curation-v2",
+      "line": 123160,
+      "before_bytes": 486869,
+      "after_bytes": 488487
+    },
+    {
+      "tag": "script",
+      "id": "mobile-online-shell-v1-js",
+      "line": 132624,
+      "before_bytes": 137802,
+      "after_bytes": 138167
+    }
+  ]
+}

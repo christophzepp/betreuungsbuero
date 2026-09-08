@@ -8,8 +8,9 @@
    Golden bewusst AKTUALISIEREN (nur nach Sichtpruefung!):
      GOLDEN_AKTUALISIEREN=1 node --test tests/html-overlay-golden.test.cjs
 
-   Voraussetzungen: macOS (sips), python3+PIL, server/tools/pdf-overlay/node_modules (pdf-lib).
-   Fehlen sie (z. B. Docker/CI), wird der Test uebersprungen. */
+   Voraussetzungen: macOS (sips), python3+PIL und Entwicklungsabhängigkeiten
+   aus server/package.json (npm ci --include=dev). Fehlen sips oder PIL (z. B.
+   Docker/CI), wird der Test uebersprungen; fehlende npm-Abhängigkeiten sind Fehler. */
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -29,7 +30,10 @@ const FAELLE = [
 function verfuegbar() {
   try { execFileSync('sips', ['--help'], { stdio: 'ignore' }); } catch (_e) { return 'sips fehlt (kein macOS)'; }
   try { execFileSync('python3', ['-c', 'import PIL'], { stdio: 'ignore' }); } catch (_e) { return 'python3/PIL fehlt'; }
-  if (!fs.existsSync(path.join(WERKZEUG, 'node_modules', 'pdf-lib'))) return 'tools/pdf-overlay/node_modules fehlt';
+  assert.doesNotThrow(
+    () => require.resolve('pdf-lib', { paths: [WERKZEUG] }),
+    'PDF-Testbibliothek fehlt: im Verzeichnis server npm ci --include=dev ausführen'
+  );
   return null;
 }
 

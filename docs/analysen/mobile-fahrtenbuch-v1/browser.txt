@@ -1,0 +1,55 @@
+PASS Fahrtkosten zeigen alle Fahrten, Jahresgruppen und gespeicherte Gesamtsummen
+PASS Jahr und Monat begrenzen Fahrten und Summen auf die aktuelle Auswahl
+PASS Volltextsuche findet die Zieladresse und erhält den Fokus
+PASS Fahrtdetail erhält Anlass, Fall, Fahrzeug, Fahrer, Strecke, Erstattung und Bestätigungen
+PASS Fahrtformular schreibt keine Daten vor Speichern
+PASS Hintergrundereignis erhält den Formularknoten und Eingaben
+PASS Chatwechsel erhält das ungespeicherte Fahrtformular
+PASS Tastatur verbirgt Navigation und hält Speichern im sichtbaren Bereich
+PASS Adressvervollständigung verwendet den bestehenden Karten-Endpunkt
+PASS Bürostammadresse lässt sich direkt übernehmen
+PASS Entfernungsberechnung übernimmt Kilometer ohne vorzeitiges Speichern
+PASS Verspätete Routenantwort überschreibt keine inzwischen manuell geänderten Kilometer
+PASS Kalenderauswahl bietet auch mehr als vierzig vorhandene Termine
+PASS Kalenderübernahme ändert Datum, Anlass, Ziel und Fall direkt im Entwurf
+PASS Start-Ziel-Tausch verändert keine übrigen Eingaben
+PASS Fehlgeschlagenes Speichern lässt den vollständigen Entwurf offen
+PASS Bearbeiten erhält fremde Metadaten und unveränderte Erstattung
+PASS Zwischenzeitliche Änderung wird vor dem Schreiben erkannt
+PASS Speichern sperrt Doppelklick und Verlassen
+PASS Duplizieren legt genau eine neue Fahrt ohne übernommene Freigabe an
+PASS Fahrzeugnachweis PDF verwendet den tatsächlichen Dateigenerator
+PASS Fahrzeugnachweis Excel verwendet den tatsächlichen Dateigenerator
+PASS Fahrzeugnachweis ODS verwendet den tatsächlichen Dateigenerator
+PASS Fahrernachweis Excel bleibt über alle Fahrzeuge verfügbar
+PASS Fahrernachweis ODS bleibt über alle Fahrzeuge verfügbar
+PASS Fahrzeugbearbeitung erhält Halter und Eigentümer
+PASS Neues Fahrzeug wird über den vorhandenen Endpunkt angelegt
+PASS Abgebrochene Fahrzeuglöschung erhält den Datensatz
+PASS Freigabe speichert Status und den ursprünglichen Prüfvermerk
+PASS Teilweise fehlgeschlagener Sammelstatus benennt Erfolge und lässt nur offene Fahrten übrig
+PASS Abruffehler erhält den letzten vollständigen Fahrtenbestand sichtbar
+PASS Fehlgeschlagene Fahrerauswahl bleibt gesperrt und löscht keine Zuordnung
+PASS Mitarbeitende erhalten nur Entwurf und Einreichen mit Namensbestätigung
+PASS Einreichen ohne Name schreibt keinen Status
+PASS Bereits geprüfte Fahrten sind für Mitarbeitende vollständig lesbar und gesperrt
+PASS Delegierte Prüfer können fremde Fahrten bearbeiten und freigeben
+PASS Delegierte Freigabe zeigt alle sechs bestehenden Status
+PASS Große Fahrtenlisten laden zunächst sechzig Einträge
+PASS Alle Fahrten bleiben über Nachladen erreichbar
+PASS Abgebrochene Sammellöschung erhält die Fahrt
+PASS Bestätigte Sammellöschung betrifft nur ausgewählte Treffer des aktuellen Filters
+PASS Abwärtsscrollen verbirgt die untere Navigation
+PASS Aufwärtsscrollen zeigt die Navigation wieder
+PASS Fahrtenbuch 320px hell ohne Überlauf und mit allen Kopfaktionen
+PASS Fahrtenbuch 320px dunkel ohne Überlauf und mit allen Kopfaktionen
+PASS Fahrtenbuch 360px hell ohne Überlauf und mit allen Kopfaktionen
+PASS Fahrtenbuch 360px dunkel ohne Überlauf und mit allen Kopfaktionen
+PASS Fahrtenbuch 390px hell ohne Überlauf und mit allen Kopfaktionen
+PASS Fahrtenbuch 390px dunkel ohne Überlauf und mit allen Kopfaktionen
+PASS Fahrtenbuch 430px hell ohne Überlauf und mit allen Kopfaktionen
+PASS Fahrtenbuch 430px dunkel ohne Überlauf und mit allen Kopfaktionen
+PASS Mobile Eingaben überstehen einen Wechsel zur Desktopbreite und zurück
+PASS Desktop behält Originaltabelle, Fahrzeugverwaltung und Downloadmenüs
+PASS Desktop-Entwurf wird in die Mobilansicht übernommen und geschützt
+PASS Keine JavaScript-Laufzeitfehler

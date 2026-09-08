@@ -1,0 +1,98 @@
+{
+  "baseline": "Arbeitsstand zu Beginn dieses Umbaus, einschließlich früherer mobiler Module",
+  "baseline_sha256": "f6085d02e422feab2a64f747fd13bf990f2abafde6010298ba5fcd30b925b44d",
+  "result_sha256": "f368e9db11a4f8a35eafe28f007cebe386c084361cb4ebfca4d25b2447d4e32a",
+  "baseline_bytes": 75007771,
+  "result_bytes": 75076335,
+  "script_blocks": 311,
+  "javascript_blocks": 229,
+  "typed_data_blocks_unchanged": 82,
+  "nul_bytes_unchanged": 1,
+  "html_outside_script_and_style_blocks_identical": true,
+  "changed_blocks": [
+    {
+      "id": "initial-data-domains-script-v255",
+      "type": "script",
+      "line": 2399,
+      "before_bytes": 80708,
+      "after_bytes": 86544
+    },
+    {
+      "id": "betreuungsuebersicht-script-v1",
+      "type": "script",
+      "line": 52120,
+      "before_bytes": 21232,
+      "after_bytes": 24596
+    },
+    {
+      "id": "inbox-script-v1",
+      "type": "script",
+      "line": 58141,
+      "before_bytes": 762270,
+      "after_bytes": 762817
+    },
+    {
+      "id": "healthinfo-script-v1",
+      "type": "script",
+      "line": 74104,
+      "before_bytes": 64077,
+      "after_bytes": 68079
+    },
+    {
+      "id": "approvals-script-v1",
+      "type": "script",
+      "line": 76562,
+      "before_bytes": 50969,
+      "after_bytes": 53437
+    },
+    {
+      "id": "buerodocs-script-v1",
+      "type": "script",
+      "line": 82562,
+      "before_bytes": 41249,
+      "after_bytes": 41285
+    },
+    {
+      "id": "kontaktmonitor-script-v1",
+      "type": "script",
+      "line": 95801,
+      "before_bytes": 41868,
+      "after_bytes": 44815
+    },
+    {
+      "id": "qualimanager-script-v1",
+      "type": "script",
+      "line": 106552,
+      "before_bytes": 49071,
+      "after_bytes": 55550
+    },
+    {
+      "id": "goal-decision-planning-script-v1",
+      "type": "script",
+      "line": 117673,
+      "before_bytes": 140170,
+      "after_bytes": 146249
+    },
+    {
+      "id": "mobile-phone-curation-v2",
+      "type": "style",
+      "line": 123157,
+      "before_bytes": 446556,
+      "after_bytes": 461642
+    },
+    {
+      "id": "mobile-online-shell-v1-js",
+      "type": "script",
+      "line": 132448,
+      "before_bytes": 112369,
+      "after_bytes": 131328
+    },
+    {
+      "id": "functional-planning-profile-script-v255",
+      "type": "script",
+      "line": 147508,
+      "before_bytes": 65936,
+      "after_bytes": 68697
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "start_sha256": "65c42f55d7dbefdc6b2f3f83f6974cb786fb679b485e9010e26bd66d5ed3d668",
+  "result_sha256": "0bb72ef8f7b61a128f7f622845ff2b51253304391e2f469895259bc5ec403cca",
+  "script_blocks": 311,
+  "executable_scripts": 229,
+  "unchanged_data_blocks": 82,
+  "nul_bytes": 1,
+  "changed_scripts": [
+    " id=\"accounting-v157-script\"",
+    " id=\"vermoegen-script-v1\"",
+    " id=\"module-case-switcher-v160\""
+  ],
+  "changed_styles": [
+    " id=\"mobile-phone-curation-v2\""
+  ],
+  "all_other_bytes_unchanged": true
+}

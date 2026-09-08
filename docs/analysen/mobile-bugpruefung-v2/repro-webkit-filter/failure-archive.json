@@ -1,0 +1,408 @@
+[
+  {
+    "field": "Jahr",
+    "chain": [
+      {
+        "tag": "SELECT",
+        "id": "",
+        "cls": "",
+        "hidden": false,
+        "inert": false,
+        "display": "block",
+        "visibility": "hidden",
+        "opacity": "1",
+        "contentVisibility": "visible",
+        "rect": {
+          "x": 16,
+          "y": 244.828125,
+          "width": 358,
+          "height": 46.390625
+        }
+      },
+      {
+        "tag": "LABEL",
+        "id": "",
+        "cls": "mc-field",
+        "hidden": false,
+        "inert": false,
+        "display": "flex",
+        "visibility": "hidden",
+        "opacity": "1",
+        "contentVisibility": "visible",
+        "rect": {
+          "x": 16,
+          "y": 218.984375,
+          "width": 358,
+          "height": 72.234375
+        }
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "cls": "",
+        "hidden": false,
+        "inert": false,
+        "display": "block",
+        "visibility": "hidden",
+        "opacity": "1",
+        "contentVisibility": "visible",
+        "rect": {
+          "x": 16,
+          "y": 218.984375,
+          "width": 358,
+          "height": 88.234375
+        }
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "cls": "mobile-sheet-content mc-tools",
+        "hidden": false,
+        "inert": false,
+        "display": "flex",
+        "visibility": "hidden",
+        "opacity": "1",
+        "contentVisibility": "visible",
+        "rect": {
+          "x": 16,
+          "y": 218.984375,
+          "width": 358,
+          "height": 462.015625
+        }
+      },
+      {
+        "tag": "SECTION",
+        "id": "",
+        "cls": "mobile-sheet-panel mobile-ui-sheet mobile-filter-sheet",
+        "hidden": false,
+        "inert": false,
+        "display": "flex",
+        "visibility": "hidden",
+        "opacity": "1",
+        "contentVisibility": "visible",
+        "rect": {
+          "x": 0,
+          "y": 140.984375,
+          "width": 390,
+          "height": 625.015625
+        }
+      },
+      {
+        "tag": "DIV",
+        "id": "mobileOnlineSheet",
+        "cls": "mobile-online-sheet is-open",
+        "hidden": false,
+        "inert": false,
+        "display": "flex",
+        "visibility": "visible",
+        "opacity": "1",
+        "contentVisibility": "visible",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 766
+        }
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "cls": "",
+        "hidden": false,
+        "inert": false,
+        "display": "block",
+        "visibility": "visible",
+        "opacity": "1",
+        "contentVisibility": "visible",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        }
+      },
+      {
+        "tag": "HTML",
+        "id": "",
+        "cls": "eo-vereint mobile-online-active",
+        "hidden": false,
+        "inert": false,
+        "display": "block",
+        "visibility": "visible",
+        "opacity": "1",
+        "contentVisibility": "visible",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        }
+      }
+    ]
+  },
+  {
+    "field": "modalCaseSwitcherSel",
+    "chain": [
+      {
+        "tag": "SELECT",
+        "id": "modalCaseSwitcherSel",
+        "cls": "mobile-case-picker-v171",
+        "hidden": false,
+        "inert": false,
+        "display": "block",
+        "visibility": "hidden",
+        "opacity": "1",
+        "contentVisibility": "visible",
+        "rect": {
+          "x": 16,
+          "y": 338.609375,
+          "width": 358,
+          "height": 46.390625
+        }
+      },
+      {
+        "tag": "DIV",
+        "id": "modalCaseSwitcher",
+        "cls": "review-field",
+        "hidden": false,
+        "inert": false,
+        "display": "block",
+        "visibility": "hidden",
+        "opacity": "1",
+        "contentVisibility": "visible",
+        "rect": {
+          "x": 16,
+          "y": 319.21875,
+          "width": 358,
+          "height": 65.78125
+        }
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "cls": "mobile-sheet-content mc-tools",
+        "hidden": false,
+        "inert": false,
+        "display": "flex",
+        "visibility": "hidden",
+        "opacity": "1",
+        "contentVisibility": "visible",
+        "rect": {
+          "x": 16,
+          "y": 218.984375,
+          "width": 358,
+          "height": 462.015625
+        }
+      },
+      {
+        "tag": "SECTION",
+        "id": "",
+        "cls": "mobile-sheet-panel mobile-ui-sheet mobile-filter-sheet",
+        "hidden": false,
+        "inert": false,
+        "display": "flex",
+        "visibility": "hidden",
+        "opacity": "1",
+        "contentVisibility": "visible",
+        "rect": {
+          "x": 0,
+          "y": 140.984375,
+          "width": 390,
+          "height": 625.015625
+        }
+      },
+      {
+        "tag": "DIV",
+        "id": "mobileOnlineSheet",
+        "cls": "mobile-online-sheet is-open",
+        "hidden": false,
+        "inert": false,
+        "display": "flex",
+        "visibility": "visible",
+        "opacity": "1",
+        "contentVisibility": "visible",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 766
+        }
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "cls": "",
+        "hidden": false,
+        "inert": false,
+        "display": "block",
+        "visibility": "visible",
+        "opacity": "1",
+        "contentVisibility": "visible",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        }
+      },
+      {
+        "tag": "HTML",
+        "id": "",
+        "cls": "eo-vereint mobile-online-active",
+        "hidden": false,
+        "inert": false,
+        "display": "block",
+        "visibility": "visible",
+        "opacity": "1",
+        "contentVisibility": "visible",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        }
+      }
+    ]
+  },
+  {
+    "field": "archiveReportSelect",
+    "chain": [
+      {
+        "tag": "SELECT",
+        "id": "archiveReportSelect",
+        "cls": "",
+        "hidden": false,
+        "inert": false,
+        "display": "block",
+        "visibility": "hidden",
+        "opacity": "1",
+        "contentVisibility": "visible",
+        "rect": {
+          "x": 16,
+          "y": 429.390625,
+          "width": 358,
+          "height": 46.390625
+        }
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "cls": "",
+        "hidden": false,
+        "inert": false,
+        "display": "block",
+        "visibility": "hidden",
+        "opacity": "1",
+        "contentVisibility": "visible",
+        "rect": {
+          "x": 16,
+          "y": 409,
+          "width": 358,
+          "height": 260
+        }
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "cls": "archive-toolbar",
+        "hidden": false,
+        "inert": false,
+        "display": "flex",
+        "visibility": "hidden",
+        "opacity": "1",
+        "contentVisibility": "visible",
+        "rect": {
+          "x": 16,
+          "y": 409,
+          "width": 358,
+          "height": 260
+        }
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "cls": "mobile-sheet-content mc-tools",
+        "hidden": false,
+        "inert": false,
+        "display": "flex",
+        "visibility": "hidden",
+        "opacity": "1",
+        "contentVisibility": "visible",
+        "rect": {
+          "x": 16,
+          "y": 218.984375,
+          "width": 358,
+          "height": 462.015625
+        }
+      },
+      {
+        "tag": "SECTION",
+        "id": "",
+        "cls": "mobile-sheet-panel mobile-ui-sheet mobile-filter-sheet",
+        "hidden": false,
+        "inert": false,
+        "display": "flex",
+        "visibility": "hidden",
+        "opacity": "1",
+        "contentVisibility": "visible",
+        "rect": {
+          "x": 0,
+          "y": 140.984375,
+          "width": 390,
+          "height": 625.015625
+        }
+      },
+      {
+        "tag": "DIV",
+        "id": "mobileOnlineSheet",
+        "cls": "mobile-online-sheet is-open",
+        "hidden": false,
+        "inert": false,
+        "display": "flex",
+        "visibility": "visible",
+        "opacity": "1",
+        "contentVisibility": "visible",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 766
+        }
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "cls": "",
+        "hidden": false,
+        "inert": false,
+        "display": "block",
+        "visibility": "visible",
+        "opacity": "1",
+        "contentVisibility": "visible",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        }
+      },
+      {
+        "tag": "HTML",
+        "id": "",
+        "cls": "eo-vereint mobile-online-active",
+        "hidden": false,
+        "inert": false,
+        "display": "block",
+        "visibility": "visible",
+        "opacity": "1",
+        "contentVisibility": "visible",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        }
+      }
+    ]
+  }
+]

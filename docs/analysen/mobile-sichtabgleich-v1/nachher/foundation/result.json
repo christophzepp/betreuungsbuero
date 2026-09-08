@@ -1,0 +1,315 @@
+{
+  "errors": [],
+  "requests": [
+    {
+      "url": "/api/chat/users",
+      "method": "GET"
+    },
+    {
+      "url": "/api/calendar/events",
+      "method": "GET"
+    },
+    {
+      "url": "/api/calendar/events",
+      "method": "GET"
+    },
+    {
+      "url": "/api/todos",
+      "method": "GET"
+    },
+    {
+      "url": "/api/user-prefs/mobile-navigation",
+      "method": "GET"
+    },
+    {
+      "url": "/api/chat/conversations",
+      "method": "GET"
+    },
+    {
+      "url": "/api/todos",
+      "method": "GET"
+    },
+    {
+      "url": "/api/todos",
+      "method": "GET"
+    },
+    {
+      "url": "/api/office-profile",
+      "method": "GET"
+    },
+    {
+      "url": "/api/finance/entries",
+      "method": "GET"
+    },
+    {
+      "url": "/api/bank/accounts",
+      "method": "GET"
+    },
+    {
+      "url": "/api/office-json/case_intakes",
+      "method": "GET"
+    },
+    {
+      "url": "/api/office-json/case_outtakes",
+      "method": "GET"
+    },
+    {
+      "url": "/api/inbox",
+      "method": "GET"
+    },
+    {
+      "url": "/api/finance/entries",
+      "method": "GET"
+    },
+    {
+      "url": "/api/office-json/kontaktmonitor",
+      "method": "GET"
+    },
+    {
+      "url": "/api/inbox",
+      "method": "GET"
+    },
+    {
+      "url": "/api/site-profiles",
+      "method": "GET"
+    },
+    {
+      "url": "/api/invoices",
+      "method": "GET"
+    },
+    {
+      "url": "/api/mileage/trips",
+      "method": "GET"
+    },
+    {
+      "url": "/api/betreuungsuebersicht?periodStart=2026-07-01&scope=active",
+      "method": "GET"
+    },
+    {
+      "url": "/api/office-json/case_intakes",
+      "method": "GET"
+    },
+    {
+      "url": "/api/office-json/case_outtakes",
+      "method": "GET"
+    },
+    {
+      "url": "/api/office-json/kontaktmonitor",
+      "method": "GET"
+    },
+    {
+      "url": "/api/calendar/connections",
+      "method": "GET"
+    },
+    {
+      "url": "/api/todos",
+      "method": "GET"
+    },
+    {
+      "url": "/api/calendar/events",
+      "method": "GET"
+    },
+    {
+      "url": "/api/inbox",
+      "method": "GET"
+    },
+    {
+      "url": "/api/documents/ordner-dateien?area=case&caseId=name%3Amara%20hoffmann",
+      "method": "GET"
+    },
+    {
+      "url": "/api/mailbox/case-messages?caseId=name%3Amara%20hoffmann",
+      "method": "GET"
+    },
+    {
+      "url": "/api/betreuungsuebersicht/history",
+      "method": "GET"
+    },
+    {
+      "url": "/api/office-json/case_intakes",
+      "method": "GET"
+    },
+    {
+      "url": "/api/office-json/case_outtakes",
+      "method": "GET"
+    },
+    {
+      "url": "/api/invoices",
+      "method": "GET"
+    },
+    {
+      "url": "/api/mileage/trips",
+      "method": "GET"
+    },
+    {
+      "url": "/api/office-json/kontaktmonitor",
+      "method": "GET"
+    },
+    {
+      "url": "/api/todos/attachments-map",
+      "method": "GET"
+    },
+    {
+      "url": "/api/calendar/events/attachments-map",
+      "method": "GET"
+    },
+    {
+      "url": "/api/inbox",
+      "method": "GET"
+    },
+    {
+      "url": "/api/site-profiles",
+      "method": "GET"
+    },
+    {
+      "url": "/api/invoices",
+      "method": "GET"
+    },
+    {
+      "url": "/api/mileage/trips",
+      "method": "GET"
+    },
+    {
+      "url": "/api/betreuungsuebersicht?periodStart=2026-07-01&scope=active",
+      "method": "GET"
+    },
+    {
+      "url": "/api/documents/strom/grenze",
+      "method": "GET"
+    },
+    {
+      "url": "/api/office-json/kontaktmonitor",
+      "method": "GET"
+    },
+    {
+      "url": "/api/office-json/kontaktmonitor",
+      "method": "GET"
+    },
+    {
+      "url": "/api/chat/users",
+      "method": "GET"
+    },
+    {
+      "url": "/api/chat/conversations",
+      "method": "GET"
+    },
+    {
+      "url": "/api/chat/conversations/direct/messages?limit=50",
+      "method": "GET"
+    },
+    {
+      "url": "/api/chat/conversations/direct/read",
+      "method": "POST",
+      "body": "{}"
+    },
+    {
+      "url": "/api/chat/conversations/team/messages?limit=50",
+      "method": "GET"
+    },
+    {
+      "url": "/api/chat/conversations/team/read",
+      "method": "POST",
+      "body": "{}"
+    },
+    {
+      "url": "/api/chat/conversations/direct/messages?limit=50",
+      "method": "GET"
+    },
+    {
+      "url": "/api/chat/conversations/direct/read",
+      "method": "POST",
+      "body": "{}"
+    },
+    {
+      "url": "/api/cases",
+      "method": "GET"
+    },
+    {
+      "url": "/api/chat/conversations/direct/messages",
+      "method": "POST",
+      "body": "{\"body\":\"Lokale Prüfnachricht\",\"refs\":[],\"attachments\":[]}"
+    },
+    {
+      "url": "/api/chat/conversations/direct/messages",
+      "method": "POST",
+      "body": "{\"body\":\"Lokale Prüfnachricht\",\"refs\":[],\"attachments\":[]}"
+    },
+    {
+      "url": "/api/chat/users",
+      "method": "GET"
+    },
+    {
+      "url": "/api/chat/conversations/direct/read",
+      "method": "POST",
+      "body": "{}"
+    },
+    {
+      "url": "/api/chat/conversations",
+      "method": "GET"
+    },
+    {
+      "url": "/api/chat/conversations/direct/messages?limit=50",
+      "method": "GET"
+    },
+    {
+      "url": "/api/documents/strom/grenze",
+      "method": "GET"
+    },
+    {
+      "url": "/api/office-json/ai_chats",
+      "method": "GET"
+    },
+    {
+      "url": "/api/office-json/ai_chats",
+      "method": "GET"
+    },
+    {
+      "url": "/api/user-prefs/mobile-navigation",
+      "method": "PUT",
+      "body": "{\"prefs\":{\"order\":[\"start\",\"case-chat\",\"master-data\",\"case-overview\",\"documentation\",\"calendar\",\"tasks\",\"deadlines\",\"followups\",\"contacts\",\"mail\",\"documents\",\"case-archive\",\"send-history\",\"banking\",\"cash\",\"assets\",\"livelihood\",\"debts\",\"health\",\"housing\",\"abilities\",\"needs\",\"approvals\",\"contact-monitor\",\"supervision\",\"inbox\",\"finance\",\"invoices\",\"mileage\",\"qualifications\",\"user\"],\"pinned\":[\"case-overview\",\"documentation\",\"mail\",\"start\",\"master-data\",\"calendar\",\"tasks\",\"contacts\"]}}"
+    },
+    {
+      "url": "/api/office-json/case_intakes",
+      "method": "GET"
+    },
+    {
+      "url": "/api/office-json/case_outtakes",
+      "method": "GET"
+    },
+    {
+      "url": "/api/chat/users",
+      "method": "GET"
+    },
+    {
+      "url": "/api/chat/conversations",
+      "method": "GET"
+    },
+    {
+      "url": "/api/chat/conversations/direct/messages?limit=50",
+      "method": "GET"
+    },
+    {
+      "url": "/api/chat/conversations/direct/read",
+      "method": "POST",
+      "body": "{}"
+    },
+    {
+      "url": "/api/chat/users",
+      "method": "GET"
+    },
+    {
+      "url": "/api/chat/conversations/direct/read",
+      "method": "POST",
+      "body": "{}"
+    },
+    {
+      "url": "/api/chat/conversations",
+      "method": "GET"
+    },
+    {
+      "url": "/api/chat/conversations/direct/messages?limit=50",
+      "method": "GET"
+    }
+  ],
+  "output": "/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/docs/analysen/mobile-sichtabgleich-v1/nachher/foundation"
+}

@@ -1,0 +1,25 @@
+Mail-Dark-Mode: integriertes Postfach, Konten, Editor und externe Leseansichten geprüft.
+✔ server/tests/html-mail-dark-mode.test.cjs (315.738458ms)
+✔ Rechnungslegung: unveränderte Felder lösen keine Setter oder manuelle Saldenmarkierung aus (1.63ms)
+✔ Rechnungslegung: Originalsetter werden gebündelt vor genau einer abschließenden Speicherung ausgeführt (0.503666ms)
+✔ Rechnungslegung: gleichzeitige Änderungen oder Fallwechsel werden vor der ersten Mutation erkannt (1.471334ms)
+✔ Rechnungslegung: Feldvalidierung und fehlende Schreibrechte lassen den Entwurf unverändert (0.693541ms)
+✔ Rechnungslegung: Fehler beim Commit behalten das Formular und geben die Bediensperre frei (0.410042ms)
+✔ Rechnungslegung: belegbezogene Filter kombinieren Erkennungszustand, Auswahl und Volltext (0.445875ms)
+✔ Rechnungslegung: Aktualisierung bewahrt Formulare und laufende Vorgänge, gibt neue Fälle aber frei (0.345667ms)
+✔ Handkasse: Jahres- und Suchfilter verändern laufende Salden einschließlich Vorjahresübertrag nicht (1.415875ms)
+✔ Handkasse: Sortierung, Art, Kategorie und Serien-/Schuldenherkunft kombinieren sich (1.034875ms)
+✔ Handkasse: vollständiger neuer Datensatz wird einmal gespeichert und dokumentiert (2.596ms)
+✔ Handkasse: geänderte Vorlagen erhalten fremde Metadaten und setzen Seriencursor nur bei Datum/Intervall zurück (1.171583ms)
+✔ Handkasse: Folgebuchungen behalten Serienkennung und werden nicht selbst zur Vorlage (0.523542ms)
+✔ Handkasse: fremder Fall, fehlende Rechte und gespiegelte Schuldenzahlung werden vor jedem Schreibzugriff abgewiesen (1.16975ms)
+✔ Handkasse: neu geladene Falldaten, entfernte oder konkurrierend bearbeitete Buchungen verlieren keine Änderungen (0.86725ms)
+✔ Handkasse: ungültige Beträge erreichen weder Kassenbuch noch AutoDoku (1.686792ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 320.608375

@@ -1,0 +1,8 @@
+Vergleich mit dem unveränderten Arbeitsstand zu Beginn des Banking-Umbaus.
+311 Scriptblöcke; 229 JavaScriptblöcke; 82 eingebettete Datenblöcke unverändert.
+Ein vorhandenes NUL-Byte unverändert; UTF-8 gültig.
+Geänderte Scriptblöcke:
+id="banking-modul-v1"
+id="mobile-online-shell-v1-js"
+SHA256 vorher: d26825cddb6e00f94e9ae3b10799cadc0ba2a3e44f1556734178e2cd43777e2b
+SHA256 nachher: f8ac4759861dc4b0948bb35d94be8b27fd16e93ccbaf5a5abe29480879c9da2d

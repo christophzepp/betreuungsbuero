@@ -1,0 +1,73 @@
+PASS Planung zeigt vier laufende Posten und die gespeicherte Monatsbilanz
+PASS Einmalige Posten bleiben mit Datum, Kontoart und Betrag getrennt
+PASS Bilanz enthält laufende und einmalige Werte ohne sie zu vermischen
+PASS Zeitraumfilter findet gezielt undatierte Posten
+PASS Postenformular schreibt vor Speichern keine Daten
+PASS Speichern erhält Metadaten und sämtliche ursprünglichen Felder
+PASS Vollständige Excel-Liste enthält beide Postenarten und Personenangaben
+PASS Buchhaltung zeigt sämtliche Buchungen mit passendem Saldo
+PASS Buchungsdetail zeigt vollen Zweck, Ursprung und Belegzuordnung
+PASS Buchungsbearbeitung behält Betrag, Zuordnung und fremde Metadaten
+PASS Manuelle Belegzuordnung speichert Verbindung und Buchungsstatus
+PASS Büroübersicht bleibt mit allen Arbeitsvorräten erreichbar
+PASS Controlling zeigt echte Fallwerte als beschriftete mobile Datensätze
+PASS Controlling exportiert PDF mit unverändertem Fachgenerator
+PASS Controlling exportiert Excel mit unverändertem Fachgenerator
+PASS Controlling bleibt bei 320 Pixeln ohne horizontalen Überlauf lesbar
+PASS Finanzbereiche öffnen den bestehenden mobilen Bürokontenzugang
+PASS Remote-Ereignis und Neuzeichnen erhalten das tatsächliche Postenformular
+PASS Chatwechsel erhält den ungespeicherten Finanzposten
+PASS Tastatur verbirgt Navigation und hält Speichern erreichbar
+PASS Fehlgeschlagenes Speichern erhält Formular und Eingaben
+PASS Ein zwischenzeitlich geänderter Posten wird nicht überschrieben
+PASS Speichern vor geladener Personenauswahl erhält die Zuordnung und speichert null Euro
+PASS Laufendes Speichern sperrt Doppelbedienung und Verlassen
+PASS Neue halbjährliche Planung wird exakt einmal mit eigenem Monatsbetrag gespeichert
+PASS Fehlgeschlagener Planungsabruf erhält den bisherigen Bestand mit Fehlermeldung
+PASS Buchungsfilter begrenzt die Liste auf geschäftliche Einnahmen
+PASS Buchungs-Excel folgt dem tatsächlichen mobilen Filter
+PASS Buchungsliste wird als echte PDF erzeugt
+PASS Buchhaltungsformular übersteht Remote-Ereignis und Chatwechsel
+PASS Fehler beim Buchungsspeichern lässt den Entwurf offen
+PASS Zwischenzeitliche Buchungsänderung verhindert ein Überschreiben
+PASS Belegstempel verwendet Original-PDF und zugeordnete Buchung
+PASS Belegesammlung erzeugt die tatsächlichen zugeordneten PDF-Belege
+PASS Belegesammlung als Excel enthält Rechnungsdaten und Buchungsbezug
+PASS Belegupload liest ein echtes PDF mit den lokalen OCR-Komponenten
+PASS CSV über 180 kB wird ohne Upload-Überlauf vollständig in 140 Buchungen eingelesen
+PASS Auszugssprung zeigt die zugehörigen Buchungen mit Nachladen
+PASS Alle importierten Buchungen bleiben erreichbar
+PASS Volltextsuche erhält Fokus und findet auch später nachgeladene Datensätze
+PASS Abgebrochene Sammellöschung erhält die ausgewählte Buchung
+PASS Sammellöschung erfasst nur die ausgewählten Treffer des aktuellen Filters
+PASS Fehler eines Teilabrufs erhält den letzten vollständigen Buchhaltungsstand
+PASS Beleg-KI übergibt die Originaldatei und speichert die vier vorhandenen Felder
+PASS KI-Zuordnung verwendet den bestehenden Metadatenweg ohne Originaldatei
+PASS Originaldatei bleibt vollständig als PDF zugänglich
+PASS Auszugs-KI ersetzt nach Bestätigung nur die Buchungen dieses Auszugs
+PASS Abwärtsscrollen verbirgt die Navigation
+PASS Aufwärtsscrollen zeigt die Navigation
+PASS Buchhaltung 320px hell ohne Überlauf und mit allen Kopfaktionen
+PASS Buchhaltung 320px dunkel ohne Überlauf und mit allen Kopfaktionen
+PASS Buchhaltung 360px hell ohne Überlauf und mit allen Kopfaktionen
+PASS Buchhaltung 360px dunkel ohne Überlauf und mit allen Kopfaktionen
+PASS Buchhaltung 390px hell ohne Überlauf und mit allen Kopfaktionen
+PASS Buchhaltung 390px dunkel ohne Überlauf und mit allen Kopfaktionen
+PASS Buchhaltung 430px hell ohne Überlauf und mit allen Kopfaktionen
+PASS Buchhaltung 430px dunkel ohne Überlauf und mit allen Kopfaktionen
+PASS Größenwechsel erhält ungespeicherte Eingaben
+PASS Büroplanung 320px hell ohne Überlauf und mit allen Kopfaktionen
+PASS Büroplanung 320px dunkel ohne Überlauf und mit allen Kopfaktionen
+PASS Büroplanung 360px hell ohne Überlauf und mit allen Kopfaktionen
+PASS Büroplanung 360px dunkel ohne Überlauf und mit allen Kopfaktionen
+PASS Büroplanung 390px hell ohne Überlauf und mit allen Kopfaktionen
+PASS Büroplanung 390px dunkel ohne Überlauf und mit allen Kopfaktionen
+PASS Büroplanung 430px hell ohne Überlauf und mit allen Kopfaktionen
+PASS Büroplanung 430px dunkel ohne Überlauf und mit allen Kopfaktionen
+PASS Leseberechtigte sehen die Personenkennung und erhalten keine Schreibaktionen
+PASS Leseberechtigte behalten Buchungsdetails ohne Bearbeiten
+PASS Desktop erhält beide ursprünglichen Planungstabellen und Exportwege
+PASS Desktop erhält Buchhaltungstabellen, Filter und Fachaktionen
+PASS Desktop-Buchungsentwurf wird auf Mobil übernommen und als Änderung geschützt
+PASS Desktop-Planungsentwurf wird auf Mobil übernommen und als Änderung geschützt
+PASS Keine JavaScript-Laufzeitfehler
