@@ -1,0 +1,57 @@
+PASS Dateiliste zeigt ursprüngliche Dateien und Ordner
+PASS Dateityp und Markierung lassen sich kombinieren
+PASS Dateidetails enthalten Größe, OCR, Markierungen, Notiz und Versionen
+PASS Dateimenü erhält Kopieren, Verschieben, OCR, Versionen und Versand
+PASS Speicherfehler erhält die geänderte Dateinotiz
+PASS Escape schützt eine geänderte Dateinotiz
+PASS Chat-Rückkehr erhält das tatsächliche Dateinotizfeld
+PASS Notiz wird am ursprünglichen Dokument gespeichert
+PASS PDF wird mit dem echten PDF-Baustein in der Leseansicht gerendert
+PASS Dokumentauswahl führt aus dem Auswahlblatt zurück zum Leser
+PASS Fehlgeschlagener Kommentar bleibt zur Korrektur und Wiederholung erhalten
+PASS Kommentar speichert Seitenbezug und Text als Anmerkung
+PASS Ordnerblatt hat ein mobiles Fallfeld und geordnete Aktionen
+PASS Ordnerwahl wechselt in den tatsächlichen Zielordner
+PASS Neuer Ordner erhält den aktuell geöffneten Elternordner
+PASS Teilweise fehlgeschlagener Upload erhält die ausstehenden Dateien
+PASS Uploadwiederholung erzeugt keine doppelte erfolgreiche Datei
+PASS Namenssuche filtert die ursprüngliche Dateiliste
+PASS Fehlgeschlagener Ordnerwechsel erhält den vorherigen Ort und seine Dateien
+PASS Erneuter Versuch öffnet genau den zuvor angeforderten Zielordner
+PASS Ausschneiden funktioniert nach dem Wechsel in einen anderen Ordner
+PASS Rückgängig kennt beim Einfügen den tatsächlichen Quellordner
+PASS Download liefert die ursprüngliche Datei und ihren Namen
+PASS Wiedervorlage speichert Datum und Notiz am Dokument
+PASS Neue Fassung nutzt den Versionsweg des bestehenden Dokuments
+PASS Papierkorb stellt die Datei im ursprünglichen Ordner wieder her
+PASS Ordner lässt sich weder in sich selbst noch in einen Unterordner verschieben
+PASS Ordner verschieben speichert den neuen Elternordner
+PASS Ordnerupload erhält die vollständige Hierarchie
+PASS Der originale Strom-Upload bleibt mit Fortschritt und Abbrechen erreichbar
+PASS Erneuter Strom-Upload nutzt denselben Fall, Zielordner und Dateinamen
+PASS Externe Ablage zeigt ihre Ordner und Dateien
+PASS Externe Dateien behalten die vorgesehenen Lese- und Downloadaktionen
+PASS Leserecht zeigt keinen Uploadzugang
+PASS Schreibaktionen sind für reine Leser deaktiviert
+PASS Einstellungen erhalten Ablage, Automatik, Sicherung und Verbindungen
+PASS Einstellungsnavigation scrollt zur gewünschten Gruppe
+PASS E-Mail-Übergabe enthält den echten Dateinamen, MIME-Typ und Inhalt
+PASS Schnellzugriff kann eine Datei hinzufügen und wieder entfernen
+PASS Volltextsuche erhält Fundstelle, Seitensprung und Ordnerzugang
+PASS Eine verspätete Suchantwort ersetzt den inzwischen gewählten Ordner nicht
+PASS Dateiliste blendet die Navigation beim Abwärtsscrollen aus
+PASS Aufwärtsscrollen macht die Navigation wieder erreichbar
+PASS Tastatur blendet die Hauptnavigation aus und lässt die Uploadaktionen erreichbar
+PASS Abbrechen schützt noch nicht hochgeladene Dateien
+PASS Weiter bearbeiten erhält die ausgewählten Dateien
+PASS Auch beim ersten Ladefehler erscheint die neue Ansicht mit Wiederholen
+PASS Dateiliste 320px hell
+PASS Dateiliste 320px dunkel
+PASS Dateiliste 360px hell
+PASS Dateiliste 360px dunkel
+PASS Dateiliste 390px hell
+PASS Dateiliste 390px dunkel
+PASS Dateiliste 430px hell
+PASS Dateiliste 430px dunkel
+PASS Beim Wechsel auf Desktop kehrt die ursprüngliche Exploreransicht zurück
+PASS Keine JavaScript-Laufzeitfehler

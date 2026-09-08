@@ -1,0 +1,6 @@
+FAIL Start nutzt die Kartenbreite false
+FAIL Start nutzt die Kartenbreite true
+FAIL Plus ist rund und mindestens 44 px groß
+PASS Kontaktnotizen bleiben durchsuchbar
+FAIL Kontaktprofil hat eine eigene mobile Formularansicht
+PASS Keine Laufzeitfehler

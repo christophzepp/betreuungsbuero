@@ -1,8 +1,7 @@
 'use strict';
 // Runs the real shipped app with synthetic mail data and an intercepted backend; no external writes.
-const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
+const chromium=require(process.env.PLAYWRIGHT_MODULE||'playwright')[process.env.MOBILE_QA_BROWSER||'chromium'];
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
-const {pathToFileURL}=require('node:url');
 const output=process.env.MOBILE_QA_OUTPUT||'/tmp/mobile-mail-qa';fs.mkdirSync(output,{recursive:true});
 (async()=>{
  const browser=await chromium.launch({headless:true});
@@ -11,7 +10,9 @@ const output=process.env.MOBILE_QA_OUTPUT||'/tmp/mobile-mail-qa';fs.mkdirSync(ou
  const errors=[];page.on('pageerror',e=>{errors.push(e.message);console.log('PAGEERROR',e.message)});
  await page.route('https://**/*',r=>r.abort());await page.route('http://**/*',r=>r.abort());
  await page.addInitScript(()=>{window.__onlineInitialCaseNativeFetch=async(url)=>new Response(JSON.stringify(String(url)==='/api/cases'?{cases:[{id:'case-a',label:'Mara Hoffmann'},{id:'case-b',label:'Jonas Weber'}]}:{}),{headers:{'Content-Type':'application/json'}})});
- await page.goto(pathToFileURL(path.resolve(__dirname,'../../outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html')).href,{waitUntil:'domcontentloaded',timeout:90000});
+ await page.route('http://mobile-qa.invalid/api/**',r=>r.fulfill({contentType:'application/json',body:'{}'}));
+ await page.route('http://mobile-qa.invalid/',r=>r.fulfill({contentType:'text/html',body:fs.readFileSync(path.resolve(__dirname,'../../outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html'))}));
+ await page.goto('http://mobile-qa.invalid/',{waitUntil:'domcontentloaded',timeout:90000});
  await page.evaluate(()=>{
    const day=new Date(),today=[day.getFullYear(),String(day.getMonth()+1).padStart(2,'0'),String(day.getDate()).padStart(2,'0')].join('-');
    window.__qaRequests=[];window.__qaTodos=[
@@ -78,6 +79,10 @@ const output=process.env.MOBILE_QA_OUTPUT||'/tmp/mobile-mail-qa';fs.mkdirSync(ou
  await page.waitForTimeout(180);await page.screenshot({path:path.join(output,'mail-liste.png')});
  await page.getByRole('button',{name:'E-Mails filtern',exact:true}).click();await page.getByLabel('Lesestatus',{exact:true}).selectOption('unseen');await page.getByLabel('Anlagen',{exact:true}).selectOption('yes');await page.waitForTimeout(180);await page.screenshot({path:path.join(output,'mail-filter.png')});await page.getByRole('button',{name:'Anwenden',exact:true}).click();await check('Lesestatus und Anlagen lassen sich kombinieren',async()=>assert.equal(await page.locator('.mx-mobile-view .mx-msg').count(),2));
  await page.locator('.mx-mobile-view .mx-msg[data-uid="1"]').click();await page.waitForTimeout(300);await page.waitForTimeout(180);await page.screenshot({path:path.join(output,'mail-nachricht.png')});
+ await page.locator('[data-rai="toggle"]').click();await page.locator('[data-rai-input]').waitFor();
+ await check('KI-Assistent zeigt seine Eingabe und bewahrt Nachricht und Anlagen',async()=>{assert.ok(await page.locator('[data-rai-input]').isVisible());assert.ok(await page.locator('.mx-read-body').isVisible());assert.ok(await page.locator('.mx-read .mx-atts').isVisible());assert.ok(await page.locator('#mxReadAiHost .mx-ai-body').evaluate(e=>e.getBoundingClientRect().height>=320))});
+ await page.locator('[data-rai-input]').scrollIntoViewIfNeeded();await page.waitForTimeout(200);await page.screenshot({path:path.join(output,'mail-ki-assistent.png')});
+ await page.locator('[data-rai="toggle"]').click();
  await page.getByRole('button',{name:'Antworten',exact:true}).click();await page.locator('#mxBody').waitFor();await page.waitForTimeout(300);await page.waitForTimeout(180);await page.screenshot({path:path.join(output,'mail-verfassen.png')});
  await check('Antwort enthält ursprünglichen Empfänger und Betreff',async()=>{assert.match(await page.locator('#mxToChips').innerText(),/Sozialamt/);assert.match(await page.locator('#mxSubject').inputValue(),/Re: Ihr Antrag/)});
 

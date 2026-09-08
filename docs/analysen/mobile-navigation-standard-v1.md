@@ -15,7 +15,7 @@ Die gemeinsame Regel gilt auch in Formularen und im Mitarbeiterchat. Sie wird ze
 - Eine Sperrfrist von 250 ms verhindert Flackern. Ein bereits abgeschlossener Richtungswechsel wird anschließend auch ohne weiteres Scrollereignis übernommen.
 - Die obersten 28 px zeigen die Leiste sofort. Tastatur und offene Auswahlblätter haben Vorrang vor der Scrollsteuerung.
 - Es zählen Scrollereignisse aus der aktiven Oberfläche. Hintergrundseiten, Eingabefelder und die Blätter der Navigation steuern sie nicht.
-- Beim Scrollen ändern sich weder die Größe des Inhaltsbereichs noch die Position seiner Aktionsleiste. Die Platzreserve bleibt bestehen; die Navigation bewegt sich darüber. Der Hintergrund des aktiven mobilen Moduls bleibt deckend.
+- **Korrektur vom 08.09.2026:** Beim Ausblenden wächst der Inhaltsbereich um die tatsächlich frei werdende Leistenhöhe. Modulaktionen rücken an den unteren Rand nach. Beim Einblenden wird wieder Platz für die gemessene Navigation einschließlich Safe Area reserviert. Ein vom Browser dabei geklemmter Scrollstand am Listenende wird nicht als Richtungswechsel behandelt. Der Hintergrund des Moduls bleibt deckend.
 - Unsichtbare Navigationselemente sind nicht anklickbar oder per Tastatur fokussierbar. Reduzierte Bewegung wird berücksichtigt.
 - Die Tastaturerkennung berücksichtigt sowohl einen verkleinerten sichtbaren Viewport als auch einen verkleinerten Layout-Viewport. Browserleisten, Pinch-Zoom und alleiniger Eingabefokus gelten nicht als geöffnete Bildschirmtastatur.
 - Bei geöffneter Tastatur entfällt die Platzreserve der Navigation. Die Aufgaben-, Dokumentations- und Chataktionen bleiben oberhalb der Tastatur erreichbar.
@@ -31,4 +31,4 @@ Reproduktion: `PLAYWRIGHT_MODULE=/absoluter/pfad/zu/playwright node server/scrip
 
 [Navigation sichtbar](mobile-navigation-standard-v1/navigation-sichtbar.png) · [Navigation ausgeblendet](mobile-navigation-standard-v1/navigation-ausgeblendet.png) · [Browserprotokoll](mobile-navigation-standard-v1/browser-pruefung.txt) · [Gezielte Tests](mobile-navigation-standard-v1/gezielte-tests.txt)
 
-Die Umsetzung liegt lokal in der ausgelieferten HTML-App und ist noch nicht veröffentlicht.
+Die ursprünglichen Regeln wurden mit der Beta veröffentlicht. Die Platzkorrektur vom 08.09.2026 folgt ebenfalls im Beta-Kanal; ihre aktuellen Prüfungen und Bilder stehen in [Mobile Layoutkorrektur v3](mobile-layoutkorrektur-v3.md).

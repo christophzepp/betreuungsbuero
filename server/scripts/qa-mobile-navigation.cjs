@@ -1,8 +1,7 @@
 'use strict';
 // Runs the real shipped app with synthetic tasks and an intercepted backend; no external writes.
-const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
+const chromium=require(process.env.PLAYWRIGHT_MODULE||'playwright')[process.env.MOBILE_QA_BROWSER||'chromium'];
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
-const {pathToFileURL}=require('node:url');
 const output=process.env.MOBILE_QA_OUTPUT||'/tmp/mobile-navigation-qa';fs.mkdirSync(output,{recursive:true});
 (async()=>{
  const browser=await chromium.launch({headless:true});
@@ -10,7 +9,9 @@ const output=process.env.MOBILE_QA_OUTPUT||'/tmp/mobile-navigation-qa';fs.mkdirS
  const page=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true,timezoneId:'Europe/Berlin',locale:'de-DE',userAgent:'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Version/18.0 Mobile/15E148 Safari/604.1'});
  const errors=[];page.on('pageerror',e=>{errors.push(e.message);console.log('PAGEERROR',e.message)});
  await page.route('https://**/*',r=>r.abort());await page.route('http://**/*',r=>r.abort());
- await page.goto(pathToFileURL(path.resolve(__dirname,'../../outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html')).href,{waitUntil:'domcontentloaded',timeout:90000});
+ await page.route('http://mobile-qa.invalid/api/**',r=>r.fulfill({contentType:'application/json',body:'{}'}));
+ await page.route('http://mobile-qa.invalid/',r=>r.fulfill({contentType:'text/html',body:fs.readFileSync(path.resolve(__dirname,'../../outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html'))}));
+ await page.goto('http://mobile-qa.invalid/',{waitUntil:'domcontentloaded',timeout:90000});
  await page.evaluate(()=>{
    const day=new Date(),today=[day.getFullYear(),String(day.getMonth()+1).padStart(2,'0'),String(day.getDate()).padStart(2,'0')].join('-');
    window.__qaRequests=[];window.__qaTodos=[
@@ -57,7 +58,7 @@ const output=process.env.MOBILE_QA_OUTPUT||'/tmp/mobile-navigation-qa';fs.mkdirS
  await check('Neue Aufgabenansicht startet mit sichtbarer Navigation',async()=>assert.equal(await isHidden(),false));
  const before=await page.locator(area).boundingBox();
  await hide(area);
- await check('Abwärtsscrollen blendet Navigation aus und entfernt unsichtbare Fokusziele',async()=>{assert.equal(await isHidden(),true);assert.deepEqual(await page.locator(area).boundingBox(),before)});
+ await check('Abwärtsscrollen blendet Navigation aus und entfernt unsichtbare Fokusziele',async()=>{assert.equal(await isHidden(),true);assert.ok((await page.locator(area).boundingBox()).height>=before.height+65)});
  await check('Ausgeblendete Navigation gibt keine dahinterliegende Startseite frei',async()=>{assert.match(await page.locator('#modal').evaluate(e=>getComputedStyle(e).backgroundColor),/^rgb\(/)});
  await page.screenshot({path:path.join(output,'navigation-ausgeblendet.png')});
  await scroll(area,205);await scroll(area,209);await scroll(area,204);await page.waitForTimeout(300);
@@ -67,6 +68,9 @@ const output=process.env.MOBILE_QA_OUTPUT||'/tmp/mobile-navigation-qa';fs.mkdirS
  await hide(area);await scroll(area,0);await page.waitForTimeout(220);
  await check('Am Seitenanfang erscheint die Leiste wieder',async()=>assert.equal(await isHidden(),false));
  await page.screenshot({path:path.join(output,'navigation-sichtbar.png')});
+ await hide(area);await page.locator(area).evaluate(e=>e.scrollTop=e.scrollHeight);await page.waitForTimeout(600);
+ await check('Am Listenende bleibt die Navigation trotz größerer Arbeitsfläche ruhig',async()=>{assert.equal(await isHidden(),true);const b=await page.locator(area).boundingBox();assert.ok(b.y+b.height>840)});
+ await scroll(area,0);await page.waitForTimeout(200);
  await check('Mehr-Menü bleibt beim Scrollen seines Blatts sichtbar',async()=>{
   await page.locator('[data-mobile-more]').click();await page.locator('.mobile-sheet-content').evaluate(e=>e.scrollTop=300);await page.waitForTimeout(300);assert.equal(await isHidden(),false);await page.keyboard.press('Escape');
  });
@@ -74,7 +78,7 @@ const output=process.env.MOBILE_QA_OUTPUT||'/tmp/mobile-navigation-qa';fs.mkdirS
  await check('Öffnen eines Formulars zeigt Navigation wieder',async()=>assert.equal(await isHidden(),false));
  const footer=await page.locator('.todo-mobile-pilot>.mobile-ui-actions').boundingBox();
  await hide(area);
- await check('Auch lange Formulare verwenden die Scrollregel, ihre Aktionen bleiben fest',async()=>{assert.deepEqual(await page.locator('.todo-mobile-pilot>.mobile-ui-actions').boundingBox(),footer);assert.equal(await page.getByRole('button',{name:'Speichern',exact:true}).isVisible(),true)});
+ await check('Auch lange Formulare verwenden die Scrollregel, ihre Aktionen rücken an den unteren Bildschirmrand',async()=>{assert.ok((await page.locator('.todo-mobile-pilot>.mobile-ui-actions').boundingBox()).y>=footer.y+65);assert.equal(await page.getByRole('button',{name:'Speichern',exact:true}).isVisible(),true)});
  await page.locator('#todoNewTitle').focus();
  await page.evaluate(()=>{
    window.__qaViewportOriginal=window.visualViewport;

@@ -1,0 +1,16 @@
+PASS Start nutzt die Kartenbreite false
+PASS Start nutzt die Kartenbreite true
+PASS Plus ist rund und mindestens 44 px groß
+PASS Kontaktnotizen bleiben durchsuchbar
+PASS Kurze und lange Kontaktnotizen nutzen dieselbe volle Breite
+PASS Kontaktprofil hat eine eigene mobile Formularansicht
+PASS Alle 25 Profilfelder bleiben vorhanden
+PASS Kontaktprofil passt bei 320
+PASS Kontaktprofil passt bei 390
+PASS Kontaktprofil passt bei 570
+PASS Abbruchschutz erhält den Entwurf
+PASS Formularaktionen erreichen bei versteckter Navigation den Bildschirmrand
+PASS Bedingte Kontaktaufnahme zeigt Begründung
+PASS Profil wird über das bestehende Fachmodell gespeichert
+PASS Verwerfen verändert das gespeicherte Profil nicht
+PASS Keine Laufzeitfehler
