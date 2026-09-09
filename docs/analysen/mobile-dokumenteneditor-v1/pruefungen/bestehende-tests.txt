@@ -1,0 +1,42 @@
+✔ Betreuungsanzeige trennt Empfängerauswahl vom optionalen Bezug (86.2155ms)
+✔ beide Freitextfelder der Betreuungsanzeige verwenden denselben Rich-Text-Editor (9.258292ms)
+✔ Betreuungsanzeige zeigt keinen Berichtszeitraum und exportiert einen vollständigen Empfänger (49.797667ms)
+✔ Dokument-Freitextfelder wachsen beim Öffnen und bei Eingaben mit (12.246959ms)
+✔ Freitextfelder werden nicht durch innere Scrollbereiche begrenzt (0.334875ms)
+✔ Freitextfelder passen ihre Höhe nach einem Breitenwechsel erneut an (3.8215ms)
+✔ Freidokument trennt Versandbetreff und sichtbaren Dokumentbetreff (98.360459ms)
+✔ Anfangsbericht nutzt die volle Breite für die Aufenthaltsart und gleich hohe Auswahlfelder (4.804541ms)
+✔ derzeitiger Aufenthalt wird über den zentralen Master-Resolver vollständig aktualisiert (14.009625ms)
+✔ Gesundheitsübersicht speist nur belegbare Anfangsberichtsfelder (0.204125ms)
+✔ Bedarfe, Maßnahmen und Wille werden ausgewählt, kompakt und feldgenau übernommen (7.422625ms)
+✔ falsche Planungsbegründung wird entfernt und nur bedingt oder nein exportiert (0.150041ms)
+✔ Kontaktturnus kommt aus dem fallbezogenen Kontaktmonitor und respektiert Altkennungen (7.556083ms)
+✔ manuelle Inhalte werden von automatischen Synchronisationen geschützt (0.162083ms)
+✔ Rechnungslegung: unveränderte Felder lösen keine Setter oder manuelle Saldenmarkierung aus (13.045291ms)
+✔ Rechnungslegung: Originalsetter werden gebündelt vor genau einer abschließenden Speicherung ausgeführt (2.237791ms)
+✔ Rechnungslegung: gleichzeitige Änderungen oder Fallwechsel werden vor der ersten Mutation erkannt (9.579042ms)
+✔ Rechnungslegung: Feldvalidierung und fehlende Schreibrechte lassen den Entwurf unverändert (3.121292ms)
+✔ Rechnungslegung: Fehler beim Commit behalten das Formular und geben die Bediensperre frei (3.11275ms)
+✔ Rechnungslegung: belegbezogene Filter kombinieren Erkennungszustand, Auswahl und Volltext (1.142583ms)
+✔ Rechnungslegung: Aktualisierung bewahrt Formulare und laufende Vorgänge, gibt neue Fälle aber frei (3.829709ms)
+✔ intern erzeugte Druckformulare verwenden den gemeinsamen A4-Renderer (113.152459ms)
+✔ Originalvorlagen und Freidokument bleiben eigenständige Dokumenttypen (20.582ms)
+✔ die eingebettete Schrift ist als Vorlagen-Block samt fontkit verfügbar (34.330333ms)
+✔ AcroForm-Befüllung erzeugt Appearance-Streams mit der eigenen Schrift (5.433375ms)
+✔ der CI-Kopf trägt Band, Fallbezugskasten und schlanke Folgeseiten-Kopfzeile (63.945ms)
+✔ die Layoutsprache besitzt nummerierte Abschnitte und dynamische Feldkarten (46.433417ms)
+✔ Tabellenfelder rendern mit Kopfwiederholung, Übertrag und Summenschutz (88.603958ms)
+✔ lange Freitextwerte werden ohne Zeilen-Stummel fortgesetzt (51.633458ms)
+✔ ALLE Briefe zeichnen ihren Kopf über die eine zentrale Funktion (Wächter) (97.561083ms)
+✔ PDF-Kennwortschutz ist in beiden Mail-Editoren verdrahtet (30.195666ms)
+✔ Kennwort-Generator und Kennwort-Mail-Option sind in beiden Editoren verdrahtet (33.21075ms)
+✔ die beiden gelöschten Hinweistexte sind aus dem Versand-/Sendenmenü entfernt (12.394833ms)
+✔ fachliche Unterschriftsfelder und eigene Signaturen folgen derselben Abschlussgeometrie (71.242625ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1494.384375

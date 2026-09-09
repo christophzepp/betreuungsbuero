@@ -1,0 +1,105 @@
+PASS neu: Start und Chats genau einmal in der sortierten Leiste
+PASS neu: Persönliche Favoriten bleiben in Reihenfolge erhalten
+PASS neu: Kein veralteter KI-Chat im Mehr-Menü
+PASS neu: Editor ohne alten Chat und mit angeheftetem Start
+PASS neu: Start und Chats sind reguläre sortierbare Vorschau-Buttons
+PASS neu: Abbrechen erhält die Favoriten
+PASS lokales-altprofil: Start und Chats genau einmal in der sortierten Leiste
+PASS lokales-altprofil: Persönliche Favoriten bleiben in Reihenfolge erhalten
+PASS lokales-altprofil: Kein veralteter KI-Chat im Mehr-Menü
+PASS lokales-altprofil: Editor ohne alten Chat und mit angeheftetem Start
+PASS lokales-altprofil: Start und Chats sind reguläre sortierbare Vorschau-Buttons
+PASS lokales-altprofil: Abbrechen erhält die Favoriten
+PASS server-altprofil: Start und Chats genau einmal in der sortierten Leiste
+PASS server-altprofil: Persönliche Favoriten bleiben in Reihenfolge erhalten
+PASS server-altprofil: Kein veralteter KI-Chat im Mehr-Menü
+PASS server-altprofil: Editor ohne alten Chat und mit angeheftetem Start
+PASS server-altprofil: Start und Chats sind reguläre sortierbare Vorschau-Buttons
+PASS server-altprofil: Abbrechen erhält die Favoriten
+PASS Start öffnet Tagesüberblick und markiert den richtigen Tab
+PASS Auch ohne Favoriten bleiben drei feste Zugänge
+PASS Start belegt keinen der acht Favoritenplätze
+PASS Server-Payload enthält genau die acht Favoriten ohne Start oder alten Chat
+PASS Mehr bleibt sichtbar, die sortierte Leiste ohne Seitenüberlauf bei 320 / hell
+PASS Favorit null erreichbar bei 320 / false
+PASS Favorit start erreichbar bei 320 / false
+PASS Favorit calendar erreichbar bei 320 / false
+PASS Favorit tasks erreichbar bei 320 / false
+PASS Favorit documentation erreichbar bei 320 / false
+PASS Favorit mail erreichbar bei 320 / false
+PASS Favorit case-overview erreichbar bei 320 / false
+PASS Favorit contacts erreichbar bei 320 / false
+PASS Favorit deadlines erreichbar bei 320 / false
+PASS Favorit master-data erreichbar bei 320 / false
+PASS Mehr bleibt sichtbar, die sortierte Leiste ohne Seitenüberlauf bei 320 / dunkel
+PASS Favorit null erreichbar bei 320 / true
+PASS Favorit start erreichbar bei 320 / true
+PASS Favorit calendar erreichbar bei 320 / true
+PASS Favorit tasks erreichbar bei 320 / true
+PASS Favorit documentation erreichbar bei 320 / true
+PASS Favorit mail erreichbar bei 320 / true
+PASS Favorit case-overview erreichbar bei 320 / true
+PASS Favorit contacts erreichbar bei 320 / true
+PASS Favorit deadlines erreichbar bei 320 / true
+PASS Favorit master-data erreichbar bei 320 / true
+PASS Mehr bleibt sichtbar, die sortierte Leiste ohne Seitenüberlauf bei 390 / hell
+PASS Favorit null erreichbar bei 390 / false
+PASS Favorit start erreichbar bei 390 / false
+PASS Favorit calendar erreichbar bei 390 / false
+PASS Favorit tasks erreichbar bei 390 / false
+PASS Favorit documentation erreichbar bei 390 / false
+PASS Favorit mail erreichbar bei 390 / false
+PASS Favorit case-overview erreichbar bei 390 / false
+PASS Favorit contacts erreichbar bei 390 / false
+PASS Favorit deadlines erreichbar bei 390 / false
+PASS Favorit master-data erreichbar bei 390 / false
+PASS Mehr bleibt sichtbar, die sortierte Leiste ohne Seitenüberlauf bei 390 / dunkel
+PASS Favorit null erreichbar bei 390 / true
+PASS Favorit start erreichbar bei 390 / true
+PASS Favorit calendar erreichbar bei 390 / true
+PASS Favorit tasks erreichbar bei 390 / true
+PASS Favorit documentation erreichbar bei 390 / true
+PASS Favorit mail erreichbar bei 390 / true
+PASS Favorit case-overview erreichbar bei 390 / true
+PASS Favorit contacts erreichbar bei 390 / true
+PASS Favorit deadlines erreichbar bei 390 / true
+PASS Favorit master-data erreichbar bei 390 / true
+PASS Mehr bleibt sichtbar, die sortierte Leiste ohne Seitenüberlauf bei 570 / hell
+PASS Favorit null erreichbar bei 570 / false
+PASS Favorit start erreichbar bei 570 / false
+PASS Favorit calendar erreichbar bei 570 / false
+PASS Favorit tasks erreichbar bei 570 / false
+PASS Favorit documentation erreichbar bei 570 / false
+PASS Favorit mail erreichbar bei 570 / false
+PASS Favorit case-overview erreichbar bei 570 / false
+PASS Favorit contacts erreichbar bei 570 / false
+PASS Favorit deadlines erreichbar bei 570 / false
+PASS Favorit master-data erreichbar bei 570 / false
+PASS Mehr bleibt sichtbar, die sortierte Leiste ohne Seitenüberlauf bei 570 / dunkel
+PASS Favorit null erreichbar bei 570 / true
+PASS Favorit start erreichbar bei 570 / true
+PASS Favorit calendar erreichbar bei 570 / true
+PASS Favorit tasks erreichbar bei 570 / true
+PASS Favorit documentation erreichbar bei 570 / true
+PASS Favorit mail erreichbar bei 570 / true
+PASS Favorit case-overview erreichbar bei 570 / true
+PASS Favorit contacts erreichbar bei 570 / true
+PASS Favorit deadlines erreichbar bei 570 / true
+PASS Favorit master-data erreichbar bei 570 / true
+PASS Start lässt sich mit Pfeiltasten verschieben
+PASS chats lässt sich per Ziehen zwischen die anderen Buttons sortieren
+PASS start lässt sich per Ziehen zwischen die anderen Buttons sortieren
+PASS Sortierung wird lokal und serverseitig gespeichert
+PASS Chats bietet beide Gesprächsarten und den Mitarbeiter-Badge
+PASS Mitarbeiterchat bleibt über Chats erreichbar
+PASS KI-Fallchat öffnet aus Chats mit bestehendem Rückweg
+PASS Start-Zugang schützt ungespeicherte Formulare
+PASS Desktop blendet die mobile Navigation weiterhin aus
+PASS sortierung-wieder-geladen: Start und Chats genau einmal in der sortierten Leiste
+PASS Gespeicherte Reihenfolge wird unverändert vom Server geladen
+PASS sortierung-wieder-geladen: Persönliche Favoriten bleiben in Reihenfolge erhalten
+PASS sortierung-wieder-geladen: Kein veralteter KI-Chat im Mehr-Menü
+PASS sortierung-wieder-geladen: Editor ohne alten Chat und mit angeheftetem Start
+PASS sortierung-wieder-geladen: Start und Chats sind reguläre sortierbare Vorschau-Buttons
+PASS sortierung-wieder-geladen: Abbrechen erhält die Favoriten
+PASS Keine JavaScript-Laufzeitfehler

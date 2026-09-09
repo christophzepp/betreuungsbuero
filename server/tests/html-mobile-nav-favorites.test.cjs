@@ -20,7 +20,7 @@ const html = fs.readFileSync(htmlPath, 'utf8');
    NICHT auf den vorderen Plätzen: die wandern als Favoriten in die untere Leiste. */
 const expectedDefaultOrder = [
   'start', 'master-data', 'case-overview', 'documentation', 'calendar',
-  'tasks', 'deadlines', 'followups', 'contacts', 'mail', 'documents',
+  'tasks', 'deadlines', 'followups', 'contacts', 'mail', 'report-library', 'documents',
   'case-archive', 'send-history',
   'banking', 'cash',
   'assets', 'livelihood', 'debts', 'health', 'housing', 'abilities', 'needs', 'approvals',
@@ -81,7 +81,7 @@ test('sanitizePreferences: Deckel 8, Verstecktes fliegt auch aus alten Speichers
   assert.ok(Array.from(alt.order).includes('a3'), 'Fehlende sichtbare Bereiche werden weiterhin ergänzt.');
 });
 
-test('Die Menüfolge enthält 31 Bereiche; KI-Fallchat bleibt ausschließlich unter Chats', () => {
+test('Die Menüfolge enthält 32 Bereiche; KI-Fallchat bleibt ausschließlich unter Chats', () => {
   const defaultQuelle = schneiden('const DEFAULT_ORDER = ', '[', ']') + ';';
   const actionQuelle = schneiden('const ACTIONS = ', '[', ']');
   const registeredIds = Array.from(actionQuelle.matchAll(/\{\s*id:\s*'([^']+)'/g), (match) => match[1]);
@@ -124,6 +124,13 @@ test('Gespeicherte Nutzerreihenfolge bleibt erhalten; die Fallmodule werden fach
 
   const neu = sandbox.sanitize(null);
   assert.deepEqual(Array.from(neu.order), expectedDefaultOrder, 'Ein neues Profil muss mit der neuen Standardfolge starten.');
+
+  const ohneDokumente = expectedDefaultOrder.filter(id => id !== 'report-library');
+  const mitDokumenten = sandbox.sanitize({ order: ohneDokumente, pinned: ['calendar'] });
+  assert.equal(mitDokumenten.order[mitDokumenten.order.indexOf('mail') + 1], 'report-library');
+  assert.deepEqual(Array.from(mitDokumenten.order).filter(id => id !== 'report-library'), ohneDokumente,
+    'Die neue Dokumentauswahl ergänzt Altprofile ohne die übrige Reihenfolge umzuschreiben.');
+  assert.deepEqual(Array.from(mitDokumenten.pinned), ['calendar'], 'Dokumente wird nicht ungefragt angeheftet.');
 
   const eigeneReihenfolge = ['finance', 'start', 'calendar'];
   const gespeichert = sandbox.sanitize({ order: eigeneReihenfolge, pinned: ['calendar'] });

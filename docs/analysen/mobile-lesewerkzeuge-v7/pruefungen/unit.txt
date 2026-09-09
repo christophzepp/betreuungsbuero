@@ -1,0 +1,30 @@
+✔ Recherchierte Stand-Angaben sind eingetragen (0.493083ms)
+✔ Die Schreibweise der Staende ist vereinheitlicht (0.588792ms)
+✔ Der Dialog sagt, wie die Angaben auf die Vorlage kommen (5.540667ms)
+✔ Die Positionsprobe ist aus dem Dialog erreichbar (2.219ms)
+✔ Die Sammelansicht trennt offene Befunde von bewussten Festlegungen (11.839208ms)
+✔ Jedes Dokument hat eine Stand-Auskunft (0.592792ms)
+✔ Zwei Fehldeutungen sind korrigiert (0.07425ms)
+✔ Abschnittsfolge: Ueberblick zuerst, Sicherung eigener Abschnitt (85.593583ms)
+✔ Karten einspaltig ueber die volle Breite (Nutzerwunsch 30.08.) (36.916083ms)
+✔ Sprungleiste: Markup, Springen, Aktiv-Nachfuehrung und Warnpunkt (110.89125ms)
+✔ Reichweiten-Marken: Mockup-Farben mit Farbpunkt (buero gruen, ich blau, geraet violett) (49.35375ms)
+✔ Anlege-Formulare eingeklappt: Karten zeigen wie im Mockup erst den Kopf (151.00925ms)
+✔ Export-Ablage: nur noch EINE Karte, Doppelkarte samt Funktion entfernt (110.45375ms)
+✔ Sicherung: gegliedert in Stand/Zeitplaene, Experten-Klappe mit sichtbaren Pflichtteilen (92.555709ms)
+✔ Dunkelmodus: neue Klassen sind abgedeckt (33.8325ms)
+✔ Lesbarkeit: Kartentexte mit Lesebreite (6.275292ms)
+✔ Explorer: fehlgeschlagener Ortswechsel stellt Fall, Baum, Dateien, Auswahl und Verlauf gemeinsam wieder her (24.725708ms)
+✔ Explorer: Wiederholen verwendet dasselbe Ziel und hebt nach Erfolg die Fehlermeldung auf (12.225667ms)
+✔ Explorer: ein zweiter Touch startet während eines laufenden Ortswechsels keine parallele Navigation (13.573ms)
+✔ Explorer: verspätete Antwort eines verlassenen Ordners überschreibt keine neueren Dateien (10.062375ms)
+✔ Explorer: fehlgeschlagener Abruf leert die bisher angezeigte Dateiliste nicht (9.717292ms)
+✔ Explorer: externe Ablage erhält vollständige Dateipfade und Kennzeichnung (9.122042ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1028.284875

@@ -1,0 +1,28 @@
+PASS inventory 89 document types
+PASS Dynamically registered forms also use the mobile editor and original bindings
+PASS Approval opens the mobile editor
+PASS Existing field handler stores the input
+PASS Field search finds a field in a collapsed section
+PASS Revealed field retains its original persistence
+PASS Rerender preserves the open field and value
+PASS Keyboard hides navigation and keeps document actions above the keyboard
+PASS Actual case chat roundtrip preserves the document
+PASS Existing attachment upload remains functional
+PASS Original import, AI and archive actions are accessible
+PASS Document settings open
+PASS Back returns to the originating approval detail
+PASS Rich-text editing remains functional
+PASS Table fields use labeled mobile rows
+PASS Table edit retains calculation and storage
+PASS Scrolling down reclaims the navigation space
+PASS Scrolling up reveals navigation again
+PASS Returning to a document restores its last scroll position
+PASS Narrow phone fits the viewport
+PASS Actual PDF preview renders and does not archive
+PASS Full export workflow remains reachable
+PASS Export footer stays visible and its sections are not squeezed
+PASS Combined export settings remain usable
+PASS Desktop restores original editor without mobile controls
+PASS Inline document cycles restore their original parent without losing inputs
+PASS No browser errors
+SUCCESS 290 checks

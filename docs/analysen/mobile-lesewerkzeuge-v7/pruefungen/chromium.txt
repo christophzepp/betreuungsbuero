@@ -1,0 +1,34 @@
+PASS Alle sechs Werkzeuge bleiben im Blatt vorhanden
+PASS Doppelte Explorer-Navigation und Ordnerinformationen entfallen
+PASS Hand ist eindeutig ausgewählt
+PASS Touchraster passt bei 320px / hell
+PASS Abschluss bleibt über der Hauptnavigation erreichbar 320 / false
+PASS Touchraster passt bei 320px / dunkel
+PASS Abschluss bleibt über der Hauptnavigation erreichbar 320 / true
+PASS Touchraster passt bei 390px / hell
+PASS Abschluss bleibt über der Hauptnavigation erreichbar 390 / false
+PASS Touchraster passt bei 390px / dunkel
+PASS Abschluss bleibt über der Hauptnavigation erreichbar 390 / true
+PASS Touchraster passt bei 570px / hell
+PASS Abschluss bleibt über der Hauptnavigation erreichbar 570 / false
+PASS Touchraster passt bei 570px / dunkel
+PASS Abschluss bleibt über der Hauptnavigation erreichbar 570 / true
+PASS Seitenbreite setzt den Zoom auf die schmale Ansicht
+PASS Verkleinern verkleinert auch unterhalb von 460px
+PASS Vergrößern stellt die vorherige Breite wieder her
+PASS Vollbild behält Beschriftung und Zustand
+PASS Farbflächen nutzen gleichmäßig die Breite
+PASS Markieren lässt die Farbauswahl geöffnet
+PASS Farbe ist zugänglich und eindeutig gewählt
+PASS Werkzeug und Farbe überstehen das Schließen
+PASS Freihandzeichnung behält die Farbauswahl
+PASS Alle sieben Formen und gestrichelte Linien bleiben wählbar
+PASS Form, Linienart und Farbe lassen sich kombinieren
+PASS Kleines Display scrollt nur den Blattinhalt und hält Abschluss erreichbar
+PASS Form wird als echte Anmerkung am richtigen Dokument gespeichert
+PASS Signatur führt zum Platzieren zurück ins Dokument
+PASS Signaturauswahl und Platzierung bleiben vollständig nutzbar
+PASS Kommentar bleibt über den vollständigen Speichervorgang nutzbar
+PASS Leserechte werden erklärt und bleiben unverändert
+PASS Desktop verwendet weiterhin die ursprüngliche Werkzeugleiste
+PASS Keine JavaScript-Laufzeitfehler

@@ -1,0 +1,625 @@
+[
+  {
+    "id": "free_document",
+    "controls": 15,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 2
+  },
+  {
+    "id": "care_application_person",
+    "controls": 14,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 2
+  },
+  {
+    "id": "care_application_zepp",
+    "controls": 18,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 2
+  },
+  {
+    "id": "care_change_person",
+    "controls": 14,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 2
+  },
+  {
+    "id": "care_change_zepp",
+    "controls": 22,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 2
+  },
+  {
+    "id": "letter_care_notice",
+    "controls": 20,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 3
+  },
+  {
+    "id": "care_suggestion",
+    "controls": 45,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 9
+  },
+  {
+    "id": "care_extension",
+    "controls": 35,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 7
+  },
+  {
+    "id": "initial",
+    "controls": 80,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 7
+  },
+  {
+    "id": "annual_noassets",
+    "controls": 48,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 3
+  },
+  {
+    "id": "annual_assets",
+    "controls": 55,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 4
+  },
+  {
+    "id": "court_approval",
+    "controls": 21,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 4
+  },
+  {
+    "id": "closing",
+    "controls": 34,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 6
+  },
+  {
+    "id": "self_management",
+    "controls": 67,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 5
+  },
+  {
+    "id": "remuneration",
+    "controls": 54,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 2
+  },
+  {
+    "id": "asset_inventory",
+    "controls": 24,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 4
+  },
+  {
+    "id": "remuneration_pdf",
+    "controls": 20,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 3
+  },
+  {
+    "id": "accounting",
+    "controls": 0,
+    "adapted": false,
+    "overflow": 0,
+    "sections": 0
+  },
+  {
+    "id": "letter_file_handover",
+    "controls": 24,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 3
+  },
+  {
+    "id": "letter_care_end",
+    "controls": 24,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 3
+  },
+  {
+    "id": "discharge",
+    "controls": 34,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 3
+  },
+  {
+    "id": "letter_death_notice",
+    "controls": 25,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 3
+  },
+  {
+    "id": "death_notice_court",
+    "controls": 15,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 4
+  },
+  {
+    "id": "funeral_directive",
+    "controls": 34,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 6
+  },
+  {
+    "id": "power_of_attorney",
+    "controls": 49,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 6
+  },
+  {
+    "id": "care_register_application",
+    "controls": 68,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 3
+  },
+  {
+    "id": "care_directive",
+    "controls": 36,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 2
+  },
+  {
+    "id": "advance_directive",
+    "controls": 64,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 7
+  },
+  {
+    "id": "rent_certificate",
+    "controls": 47,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 6
+  },
+  {
+    "id": "rent_offer_certificate",
+    "controls": 34,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 4
+  },
+  {
+    "id": "housing_benefit_application",
+    "controls": 420,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 11
+  },
+  {
+    "id": "housing_entitlement_application",
+    "controls": 291,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 8
+  },
+  {
+    "id": "rent_certificate_jc",
+    "controls": 68,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 7
+  },
+  {
+    "id": "disability_change_application",
+    "controls": 146,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 4
+  },
+  {
+    "id": "disability_initial_application",
+    "controls": 132,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 4
+  },
+  {
+    "id": "pension_application",
+    "controls": 384,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 23
+  },
+  {
+    "id": "drv_confidentiality_release",
+    "controls": 12,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 2
+  },
+  {
+    "id": "sgb12_continuation_application",
+    "controls": 87,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 3
+  },
+  {
+    "id": "sgb12_initial_application",
+    "controls": 732,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 13
+  },
+  {
+    "id": "letter_sgb12_informal",
+    "controls": 24,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 3
+  },
+  {
+    "id": "sgb12_social_assistance_application",
+    "controls": 33,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 4
+  },
+  {
+    "id": "sgb12_asset_declaration",
+    "controls": 31,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 4
+  },
+  {
+    "id": "sgb12_social_assistance_short",
+    "controls": 29,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 4
+  },
+  {
+    "id": "sgb9_confidentiality_release",
+    "controls": 24,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 2
+  },
+  {
+    "id": "sgb9_initial_application",
+    "controls": 34,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 4
+  },
+  {
+    "id": "letter_sgb9_informal",
+    "controls": 24,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 3
+  },
+  {
+    "id": "sgb2_annex_uf",
+    "controls": 169,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 5
+  },
+  {
+    "id": "sgb2_withdrawal",
+    "controls": 20,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 2
+  },
+  {
+    "id": "sgb2_annex_vm",
+    "controls": 206,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 6
+  },
+  {
+    "id": "sgb2_income_certificate",
+    "controls": 184,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 5
+  },
+  {
+    "id": "sgb2_annex_ek",
+    "controls": 78,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 3
+  },
+  {
+    "id": "sgb2_annex_se",
+    "controls": 43,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 2
+  },
+  {
+    "id": "sgb2_annex_sv",
+    "controls": 24,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 2
+  },
+  {
+    "id": "letter_sgb2_informal",
+    "controls": 24,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 3
+  },
+  {
+    "id": "sgb2_employment_certificate",
+    "controls": 102,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 4
+  },
+  {
+    "id": "sgb2_annex_uh2",
+    "controls": 53,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 2
+  },
+  {
+    "id": "sgb2_annex_ki",
+    "controls": 73,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 3
+  },
+  {
+    "id": "sgb2_annex_uh3",
+    "controls": 79,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 3
+  },
+  {
+    "id": "sgb2_annex_uh1",
+    "controls": 53,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 2
+  },
+  {
+    "id": "citizen_benefit_continuation",
+    "controls": 84,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 8
+  },
+  {
+    "id": "sgb2_annex_hg",
+    "controls": 32,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 2
+  },
+  {
+    "id": "sgb2_annex_wep",
+    "controls": 115,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 4
+  },
+  {
+    "id": "citizen_benefit_initial",
+    "controls": 126,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 10
+  },
+  {
+    "id": "sgb2_annex_meb",
+    "controls": 50,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 2
+  },
+  {
+    "id": "sgb2_annex_kdu",
+    "controls": 87,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 3
+  },
+  {
+    "id": "sgb2_annex_bb",
+    "controls": 37,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 2
+  },
+  {
+    "id": "sgb2_annex_ve",
+    "controls": 26,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 2
+  },
+  {
+    "id": "sgb2_annex_eks",
+    "controls": 371,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 9
+  },
+  {
+    "id": "alg1_health_questionnaire",
+    "controls": 36,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 4
+  },
+  {
+    "id": "alg1_initial_application",
+    "controls": 32,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 4
+  },
+  {
+    "id": "letter_alg1_employment_certificate",
+    "controls": 24,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 3
+  },
+  {
+    "id": "child_benefit_child_annex",
+    "controls": 166,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 12
+  },
+  {
+    "id": "child_benefit_diversion",
+    "controls": 74,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 7
+  },
+  {
+    "id": "maintenance_advance_application",
+    "controls": 255,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 7
+  },
+  {
+    "id": "child_benefit_application",
+    "controls": 93,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 8
+  },
+  {
+    "id": "naturalization_application",
+    "controls": 363,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 9
+  },
+  {
+    "id": "letter_information_notice",
+    "controls": 24,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 3
+  },
+  {
+    "id": "letter_benefit_notice",
+    "controls": 24,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 3
+  },
+  {
+    "id": "broadcast_registration",
+    "controls": 34,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 2
+  },
+  {
+    "id": "broadcast_change_notice",
+    "controls": 56,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 3
+  },
+  {
+    "id": "broadcast_exemption_application",
+    "controls": 26,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 4
+  },
+  {
+    "id": "letter_gkv_claims",
+    "controls": 24,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 3
+  },
+  {
+    "id": "letter_gkv_membership",
+    "controls": 24,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 3
+  },
+  {
+    "id": "letter_bank_registration",
+    "controls": 25,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 3
+  },
+  {
+    "id": "buero_freidokument",
+    "controls": 15,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 2
+  },
+  {
+    "id": "buero_uebersicht",
+    "controls": 15,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 2
+  },
+  {
+    "id": "buero_aenderung",
+    "controls": 15,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 2
+  },
+  {
+    "id": "housing_inspection_inventory",
+    "controls": 122,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 18
+  },
+  {
+    "id": "court_payment_notice",
+    "controls": 25,
+    "adapted": true,
+    "overflow": 0,
+    "sections": 5
+  }
+]

@@ -1,0 +1,27 @@
+PASS Dokumente is separate from the file explorer
+PASS Dokumente can be pinned and sorted with Start and Chats
+PASS Document preference is saved locally and sent to the server
+PASS All registered documents appear exactly once
+PASS Search filters documents by title and category
+PASS An unloaded case retains the existing document gate
+PASS Selection from Start opens the mobile document editor
+PASS Back restores the document search and preserves edits
+PASS Category filter includes exactly its documents and subcategories
+PASS Closing the filter discards unapplied changes
+PASS Reset restores all document types
+PASS No results has an explicit empty state
+PASS Rechnungslegung keeps its existing mobile workflow
+PASS Rechnungslegung also returns to the document list
+PASS Document list restores its scroll position
+PASS List fits 320 pixels in light
+PASS List fits 320 pixels in dark
+PASS List fits 390 pixels in light
+PASS List fits 390 pixels in dark
+PASS List fits 570 pixels in light
+PASS List fits 570 pixels in dark
+PASS New custom documents are included without a hard-coded menu entry
+PASS Custom document retains its native binding and list return
+PASS Start leaves the document list cleanly
+PASS Desktop does not retain a mobile document modal
+PASS No browser errors
+SUCCESS 26 checks

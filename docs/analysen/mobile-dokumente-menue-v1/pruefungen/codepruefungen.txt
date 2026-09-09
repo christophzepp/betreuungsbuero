@@ -1,0 +1,38 @@
+✔ Rechnungslegung: unveränderte Felder lösen keine Setter oder manuelle Saldenmarkierung aus (2.523834ms)
+✔ Rechnungslegung: Originalsetter werden gebündelt vor genau einer abschließenden Speicherung ausgeführt (0.518708ms)
+✔ Rechnungslegung: gleichzeitige Änderungen oder Fallwechsel werden vor der ersten Mutation erkannt (1.759875ms)
+✔ Rechnungslegung: Feldvalidierung und fehlende Schreibrechte lassen den Entwurf unverändert (1.076959ms)
+✔ Rechnungslegung: Fehler beim Commit behalten das Formular und geben die Bediensperre frei (0.531375ms)
+✔ Rechnungslegung: belegbezogene Filter kombinieren Erkennungszustand, Auswahl und Volltext (0.50375ms)
+✔ Rechnungslegung: Aktualisierung bewahrt Formulare und laufende Vorgänge, gibt neue Fälle aber frei (0.384875ms)
+✔ Der Feinschliff steht vollständig innerhalb der Mobil-Abfrage (48.873041ms)
+✔ Keine Regel des Feinschliffs kann die Desktop-Ansicht erreichen (14.962833ms)
+✔ Jedes der neun Module wird im Feinschliff behandelt (12.365459ms)
+✔ Die Handkassenaktionen stehen nur mobil direkt unter dem Jahrfilter (32.072625ms)
+✔ Fall und Jahr der Handkasse stehen nur mobil linksbündig untereinander (55.160833ms)
+✔ Aktuelle Fälle und Archiv bilden mobil einen fugenlosen 50-50-Umschalter (19.035708ms)
+✔ Die Mindestbreiten und festen Pixelraster des Desktops sind mobil aufgehoben (42.691541ms)
+✔ Die mobile Kalenderleiste hat für das Ansichts-Menü eine eigene Spalte (10.574542ms)
+✔ Die Module hängen weiterhin im gemeinsamen Smartphone-Profil (653.059875ms)
+✔ Modul-eigene Innenscroller sind im Smartphone-Profil freigegeben (51.346292ms)
+✔ Der Finanz-Posten ist mobil eine eigene Vollbildmaske (30.351542ms)
+✔ Der Datei-Explorer hat mobil einen einzigen Scroller und einen vollbreiten Ordnerbaum (78.161041ms)
+✔ Ein Ordnerklick schließt den Baum auf schmalen Geräten wieder (73.540333ms)
+✔ Die Auslösebedingung der mobilen Ansicht bleibt unverändert (27.726375ms)
+✔ Mobil-Registry: Archiv und Versandhistorie sind eingetragen, jede Wurzel bleibt eindeutig (49.479333ms)
+✔ Archiv und Versandhistorie: Schaltflächen stehen mobil untereinander (70.379834ms)
+✔ Mobil: kein leerer Streifen rechts - Modulbreiten dürfen die Vollbreite nicht schlagen (42.393125ms)
+✔ sanitizePreferences: Deckel 8, Verstecktes fliegt auch aus alten Speicherständen (98.951416ms)
+✔ Die Menüfolge enthält 32 Bereiche; KI-Fallchat bleibt ausschließlich unter Chats (49.476875ms)
+✔ Gespeicherte Nutzerreihenfolge bleibt erhalten; die Fallmodule werden fachlich einsortiert (82.911666ms)
+✔ Die Leiste rendert bis zu 8 Favoriten und meldet ihre Knopfzahl fürs CSS (30.843ms)
+✔ Anpassen-Dialog: horizontale Live-Vorschau mit Zieh-Umsortierung (25.411916ms)
+✔ Mehr-Menü und Editor blenden Online-Formulare aus, die Erkennung bleibt (42.931292ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1785.648334
