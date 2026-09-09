@@ -1,0 +1,10 @@
+{
+  "passed": [
+    "Online-Speicher bleibt korrekt bezeichnet",
+    "Schlagwortsuche filtert weiterhin und behält ihren Inhalt",
+    "Demo-Kalender erklärt die Speicherung in dieser Sitzung",
+    "Schlagwortsuche steht oben und passt bei 1440px",
+    "Schlagwortsuche steht oben und passt bei 320px"
+  ],
+  "errors": []
+}

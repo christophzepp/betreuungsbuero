@@ -373,9 +373,36 @@ test('Die Stundenhöhe ist einstellbar und steht am Rahmen', () => {
   });
   assert(html.includes("calTimeGridHourPx(col),from=calTimeGridFromHour(col)"),
     'Der Drag-Geist rechnet nicht mit der gezeichneten Stundenhöhe.');
-  assert(html.includes('calTimeGridHourPx(ev.currentTarget),from=calTimeGridFromHour(ev.currentTarget)'),
-    'Der Drop-Handler rechnet nicht mit der gezeichneten Stundenhöhe.');
+  assert(html.includes('target=calDragTarget(ev.currentTarget,ev.clientY,info)'),
+    'Drop und Vorschau müssen dieselbe Berechnung verwenden.');
   assert(html.includes("getPropertyValue(name)"), 'Die Drag-Handler lesen die Werte nicht vom Rahmen.');
+});
+
+test('Ablegezeit berücksichtigt Greifposition, Scrollen und jede Stundenhöhe', () => {
+  for (const [hour,from,top,y,grab,time] of [
+    [48,0,-432,180,15,'12:30'],
+    [66,8,120,433.5,30,'12:15'],
+    [34,6,-100,121,15,'12:15'],
+    [66,8,100,100,30,'08:00'],
+    [48,0,0,1200,0,'23:45'],
+    [48,8,0,10,0,'08:15']
+  ]) {
+    const context={calTimeGridHourPx:()=>hour,calTimeGridFromHour:()=>from};
+    vm.createContext(context);vm.runInContext(functionSource('calDragTarget'),context);
+    const result=context.calDragTarget({getBoundingClientRect:()=>({top})},y,{grabMinutes:grab,durationMs:3600000});
+    assert.equal(result.time,time,JSON.stringify({hour,from,top,y,grab}));
+    assert.ok(result.top>=0);assert.equal(result.height,Math.max(24,hour-2));
+  }
+});
+
+test('Lokales Aktualisieren bricht bei verweigertem oder wirkungslosem Speichern ab', () => {
+  for (const setItem of [()=>{throw new Error('QuotaExceeded')},()=>{}]) {
+    let notifications=0;
+    const context={localStorage:{setItem,getItem:()=>null},window:{__calendarTodoLocalSaved:()=>notifications++}};
+    vm.createContext(context);vm.runInContext(functionSource('saveLocal'),context);
+    assert.throws(()=>context.saveLocal('calendar',[{id:'a'}],true),/lokalen Speicher/);
+    assert.equal(notifications,0,'Ein fehlgeschlagener Schreibversuch darf keine Folgeaktionen auslösen.');
+  }
 });
 
 test('Der Wochentitel überlebt ausgeblendete Wochenenden', () => {

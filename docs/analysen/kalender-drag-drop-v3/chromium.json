@@ -1,0 +1,24 @@
+{
+  "passed": [
+    "Echtes Ziehen speichert 12:15 einschließlich Dauer, Erinnerung und Zielvorschau",
+    "Greifposition und Hintergrundaktualisierung erhalten den laufenden Ziehvorgang",
+    "Erneutes Laden zeigt die gespeicherte Verschiebung",
+    "Gescrolltes 24-Stunden-Raster speichert 13:30 und erhält die Scrollposition",
+    "Tagesansicht erlaubt Verschieben auf eine andere Uhrzeit",
+    "Serverfehler erhält den ursprünglichen Termin und wird direkt im Kalender angezeigt",
+    "Ladefehler beim Ablegen bleibt sichtbar und schreibt keine Ersatzdaten",
+    "Ablegen außerhalb bricht ohne Speicherung und ohne Geisterrahmen ab",
+    "Nach Abbruch und Speicherfehler funktioniert der nächste Versuch",
+    "Echtes Ziehen verschiebt task in der Aufgabenablage",
+    "Echtes Ziehen verschiebt followup in der Aufgabenablage",
+    "Echtes Ziehen verschiebt deadline in der Aufgabenablage",
+    "Ganztagstermin wird beim Ablegen auf 11 Uhr zu einem einstündigen Termin",
+    "Monatsraster verschiebt das Datum unter Erhalt von Uhrzeit und Dauer",
+    "Der lokale Test verwendet den echten Demo-Arbeitsspeicher der Anwendung",
+    "Lokale UTC-Termine werden auf den gewählten Tag und die lokale Stunde gespeichert",
+    "Numerische lokale Kennungen werden statt eines stillen Abbruchs korrekt gespeichert",
+    "Lokale Änderungen bleiben nach erneutem Öffnen des Kalenders erhalten",
+    "Lokaler Speicherfehler wird angezeigt und erhält die ursprüngliche Uhrzeit"
+  ],
+  "errors": []
+}

@@ -1,0 +1,14 @@
+{
+  "passed": [
+    "Datum-/Ortsausrichtung 1440px light",
+    "Datum-/Ortsausrichtung 1440px dark",
+    "Datum-/Ortsausrichtung 736px light",
+    "Datum-/Ortsausrichtung 736px dark",
+    "Datum-/Ortsausrichtung 390px light",
+    "Datum-/Ortsausrichtung 390px dark",
+    "Datum-/Ortsausrichtung 320px light",
+    "Datum-/Ortsausrichtung 320px dark",
+    "Ganztägiger Termin behält Datum und Symbol"
+  ],
+  "errors": []
+}
