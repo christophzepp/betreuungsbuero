@@ -1,0 +1,19 @@
+{
+  "passed": [
+    "Aufgabenlisten am unteren Fensterrand öffnen vollständig oberhalb des Buttons",
+    "Offenes Menü folgt dem Button beim Scrollen der Seitenleiste",
+    "Ansichtsmenü öffnet bei ausreichend Platz unterhalb des Buttons",
+    "Kalender-und-Farben-Menü bleibt ebenfalls vollständig sichtbar",
+    "Lange Aufgabenlisten passen bei 1440×560 und sind intern scrollbar",
+    "Letzte Listenzeile bleibt bei 1440×560 erreichbar",
+    "Lange Aufgabenlisten passen bei 1024×480 und sind intern scrollbar",
+    "Letzte Listenzeile bleibt bei 1024×480 erreichbar",
+    "Lange Aufgabenlisten passen bei 390×700 und sind intern scrollbar",
+    "Letzte Listenzeile bleibt bei 390×700 erreichbar",
+    "Lange Aufgabenlisten passen bei 320×480 und sind intern scrollbar",
+    "Letzte Listenzeile bleibt bei 320×480 erreichbar",
+    "Listenfilter bleibt beim Anwenden wirksam",
+    "Alle Listen lassen sich wieder einblenden"
+  ],
+  "errors": []
+}

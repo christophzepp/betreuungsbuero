@@ -1,0 +1,79 @@
+PASS Arbeitsbereich zeigt Seitenleiste und alle Ansichten ohne doppelte Feldkennungen
+PASS Desktopsuche filtert die echten Termine
+PASS Fall und Eintragsarten lassen sich kombinieren und einzeln zurücksetzen
+PASS Gleichzeitige Termine verdecken sich nicht
+PASS Termindetails enthalten Erinnerung, Kalender, Fall, Kartenlink und Anlagen
+PASS Das Formular enthält sämtliche ursprünglichen Felder und zusätzliche Farbauswahl
+PASS Hintergrundaktualisierungen erhalten denselben Formular-DOM
+PASS Escape schützt ungespeicherte Eingaben
+PASS Ungültige Terminreihenfolge wird vor dem Speichern abgefangen
+PASS Anlagen-Upload ersetzt weder Formular noch Notiz
+PASS Uploadfehler behält die Datei zur Wiederholung
+PASS Speicherfehler bewahrt den vollständigen Entwurf
+PASS Laufendes Speichern sperrt Schließen und doppelte Speicherung
+PASS Speicherung verwendet dieselbe Kennung und lädt ausstehende Anlagen nach
+PASS Ein Termin ohne Erinnerung erhält beim Öffnen keine neue Erinnerung
+CREATE_DIAGNOSTIC {
+  error: '',
+  requests: [
+    { url: '/api/todos', method: 'GET', body: {} },
+    { url: '/api/calendar/events', method: 'GET', body: {} },
+    { url: '/api/cases', method: 'GET', body: {} },
+    { url: '/api/calendar/connections', method: 'GET', body: {} },
+    { url: '/api/cases', method: 'GET', body: {} },
+    { url: '/api/calendar/events', method: 'GET', body: {} },
+    { url: '/api/todos', method: 'GET', body: {} },
+    { url: '/api/cases', method: 'GET', body: {} }
+  ],
+  fields: [
+    {
+      id: 'calNewTitle',
+      value: 'Fortbildung mit Anlagen',
+      valid: true,
+      message: ''
+    },
+    {
+      id: 'calNewStartDate',
+      value: '2026-09-09',
+      valid: true,
+      message: ''
+    },
+    { id: 'calNewStartTime', value: '09:00', valid: true, message: '' },
+    {
+      id: 'calNewEndDate',
+      value: '2026-09-09',
+      valid: true,
+      message: ''
+    },
+    { id: 'calNewEndTime', value: '10:00', valid: true, message: '' },
+    { id: 'calNewAllDay', value: 'on', valid: true, message: '' },
+    { id: 'calNewReminder', value: '', valid: false, message: '' },
+    { id: 'calNewColor', value: '#936a43', valid: true, message: '' },
+    { id: 'calNewInheritColor', value: 'on', valid: true, message: '' },
+    {
+      id: 'calNewCustomColor',
+      value: '#936a43',
+      valid: true,
+      message: ''
+    },
+    { id: 'calNewLocation', value: '', valid: true, message: '' },
+    { id: 'calNewOnlineUrl', value: '', valid: true, message: '' },
+    { id: 'calNewRecurInterval', value: '2', valid: true, message: '' },
+    { id: 'calNewRecurUntil', value: '', valid: true, message: '' },
+    { id: '', value: '', valid: true, message: '' }
+  ]
+}
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+0 !== 1
+
+    at /private/tmp/calendar-qa-baseline.cjs:111:1364
+    at async check (/private/tmp/calendar-qa-baseline.cjs:52:47)
+    at async /private/tmp/calendar-qa-baseline.cjs:111:1274 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 1,
+  operator: 'strictEqual',
+  diff: 'simple'
+}

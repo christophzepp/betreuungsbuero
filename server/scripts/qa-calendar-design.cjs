@@ -86,6 +86,7 @@ const output=process.env.CALENDAR_QA_OUTPUT||'/private/tmp/calendar-desktop-qa';
  const closeMenus=async()=>{await page.evaluate(()=>document.querySelectorAll('.cal-vis-panel,.cal-tools').forEach(d=>d.open=false));await settle()};
  await settle();await page.evaluate(()=>document.querySelectorAll('#modeIntroOverlay').forEach(el=>el.remove()));
  await page.evaluate(async()=>{await window.__calViewPrefSet('hours','8-18');await window.__calViewPrefSet('hourHeight',66);await window.__calViewPrefSet('weekends',false);await window.__calendarSetView('week')});await closeMenus();
+ if(process.env.CALENDAR_QA_POPOVER){await require('./qa-calendar-popover.cjs')(page,check,output);assert.deepEqual(errors,[]);fs.writeFileSync(path.join(output,'popover-pruefung.json'),JSON.stringify({passed,errors},null,2));return}
  if(process.env.CALENDAR_QA_DRAG){await require('./qa-calendar-drag.cjs')(page,check,output);assert.deepEqual(errors,[]);fs.writeFileSync(path.join(output,'drag-pruefung.json'),JSON.stringify({passed,errors},null,2));return}
  if(process.env.CALENDAR_QA_FEEDBACK){await require('./qa-calendar-layout-feedback.cjs')(page,check,output,false);assert.deepEqual(errors,[]);return}
  if(process.env.CALENDAR_QA_EXTRA){await extraChecks(page,check,output);assert.deepEqual(errors,[]);fs.writeFileSync(path.join(output,'zusatzbericht.json'),JSON.stringify({passed,errors},null,2));return}

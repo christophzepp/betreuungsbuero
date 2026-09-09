@@ -405,6 +405,20 @@ test('Lokales Aktualisieren bricht bei verweigertem oder wirkungslosem Speichern
   }
 });
 
+test('Kalender-Pop-ups wählen die freie Seite und passen auch ohne Mindesthöhe', () => {
+  const context={};vm.createContext(context);vm.runInContext(functionSource('calPopoverPlacement'),context);
+  for(const [anchor,bounds,height,top,maxHeight] of [
+    [{top:540,bottom:572},{top:8,bottom:592},300,236,300],
+    [{top:80,bottom:110},{top:8,bottom:592},120,114,120],
+    [{top:86,bottom:110},{top:8,bottom:192},300,114,78],
+    [{top:40,bottom:70},{top:8,bottom:156},360,74,82]
+  ]){
+    const result=context.calPopoverPlacement(anchor,bounds,height);
+    assert.equal(result.top,top);assert.equal(result.maxHeight,maxHeight);
+    assert.ok(result.top>=bounds.top&&result.top+result.maxHeight<=bounds.bottom);
+  }
+});
+
 test('Der Wochentitel überlebt ausgeblendete Wochenenden', () => {
   // Regression: der Titel griff auf days[6] zu. Mit ausgeblendetem Wochenende hat die Liste nur
   // fünf Einträge - die Ansicht warf, und weil calFullViewMode das Schliessen überlebt, liess sich
