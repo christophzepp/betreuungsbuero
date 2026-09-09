@@ -1,0 +1,26 @@
+PASS Detailaktionen stehen paarweise in gleich breiten Reihen
+PASS Symbole sind im Desktop-Zeitraster und an Ganztagseinträgen vorhanden
+PASS Auch das Monatsraster trägt die Eintrags-Symbole
+PASS Ansichtsbuttons 320px bilden vier gleich breite Felder
+PASS Tag 320px zeigt nur eine Tagesgruppe und alle vier Symbole
+PASS Woche 320px besitzt echte getrennte Tagesspalten
+PASS Wochentag-Sprung 320px erhält Woche und erreicht Sonntag
+PASS Wochenkarte 320px öffnet den ursprünglichen Termin
+PASS Liste 320px: Zeitraumfelder passen und gruppieren denselben Tag einmal
+PASS Ansichtsbuttons 390px bilden vier gleich breite Felder
+PASS Tag 390px zeigt nur eine Tagesgruppe und alle vier Symbole
+PASS Woche 390px besitzt echte getrennte Tagesspalten
+PASS Wochentag-Sprung 390px erhält Woche und erreicht Sonntag
+PASS Wochenkarte 390px öffnet den ursprünglichen Termin
+PASS Liste 390px: Zeitraumfelder passen und gruppieren denselben Tag einmal
+PASS Mini-Kalender öffnet sich gezielt und passt in das schmale Fenster
+PASS Ansichtsbuttons 600px bilden vier gleich breite Felder
+PASS Tag 600px zeigt nur eine Tagesgruppe und alle vier Symbole
+PASS Woche 600px besitzt echte getrennte Tagesspalten
+PASS Wochentag-Sprung 600px erhält Woche und erreicht Sonntag
+PASS Wochenkarte 600px öffnet den ursprünglichen Termin
+PASS Liste 600px: Zeitraumfelder passen und gruppieren denselben Tag einmal
+PASS Ansichtsbuttons 820px bilden vier gleich breite Felder
+PASS Tag 820px zeigt nur eine Tagesgruppe und alle vier Symbole
+PASS Woche 820px besitzt echte getrennte Tagesspalten
+PASS Liste 820px: Zeitraumfelder passen und gruppieren denselben Tag einmal

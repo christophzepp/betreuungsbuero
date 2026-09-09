@@ -1,0 +1,41 @@
+✔ Jede Wochenzeile ist ein Grid, Termine spannen echte Spalten (5.487875ms)
+✔ Mehrtagestermine tragen einen Gruppenschluessel je Vorkommen (21.159708ms)
+✔ Der gemeldete Zeilensprung tritt nicht mehr auf (16.356333ms)
+✔ Zeilentreue ueber den Wochenwechsel laesst sich abschalten (9.409542ms)
+✔ Einzeltermine stehen buendig unter den Balken (18.762958ms)
+✔ Zeilen je Woche begrenzen die Anzeige und erzeugen "+N weitere" (29.02ms)
+✔ Kalenderwochen, Folgetitel und Zeilennummern sind schaltbar (19.247458ms)
+✔ Zwei Vorkommen desselben Serientermins verschmelzen nicht (9.470708ms)
+✔ Tageszellen bleiben Klick-, Drag- und Drop-Ziel (9.296208ms)
+✔ Ansichtseinstellungen sind im Desktop-Arbeitsbereich und mobilen Menü erreichbar (58.294917ms)
+✔ Kopf, Ganztagszeile und Stundenraster teilen in Tag und Woche exakt dieselben Spalten (32.9865ms)
+✔ Die Ganztags-Zeile der Wochenansicht springt nicht mehr die Zeile (19.269167ms)
+✔ Das Zeitfenster kürzt leere Randstunden, versteckt aber nie einen Termin (28.779667ms)
+✔ Die Stundenhöhe ist einstellbar und steht am Rahmen (48.054541ms)
+✔ Der Wochentitel überlebt ausgeblendete Wochenenden (53.296542ms)
+✔ Ein Fehler in einer Ansicht sperrt nicht den ganzen Kalender (67.816333ms)
+✔ Die Wochenansicht kann auf Montag bis Freitag verkürzt werden (24.127292ms)
+✔ Die Listenansicht kann Zusatzzeilen ausblenden (38.903209ms)
+✔ Vergangene Einträge und kompakte Zeilen sind in der Liste verdrahtet (30.667625ms)
+✔ Jede Ansicht bekommt genau die Schalter, die dort wirken (27.794667ms)
+✔ Alle JavaScript-Bloecke der HTML bleiben syntaktisch gueltig (130.317667ms)
+✔ Gleichzeitige Termine teilen sich Spalten; anschließende Termine erhalten die volle Breite (9.80275ms)
+✔ Eigene Terminfarben bleiben gültig, unbekannte Farbwerte fallen sicher zurück (8.405542ms)
+✔ Wiederholungsformular erhält die begrenzte Anzahl einer bestehenden Serie (8.02975ms)
+✔ Desktopvalidierung erlaubt Ganztag am selben Tag und blockiert ungültige Zeit- und Seriengrenzen (10.206833ms)
+✔ Die kompakten Tagesgruppen wiederholen Überschriften nicht bei mehreren Einträgen (18.267833ms)
+✔ Die Wochenübersicht behält leere Tage und ordnet Einträge der richtigen Spalte zu (19.405125ms)
+✔ Eintragsart bestimmt das gemeinsame Symbol unabhängig von frei gewählten Titeln (30.737042ms)
+✔ Kalenderfilter kombiniert Fall-ID, Kalender und Eintragsart mit persönlichen Sichtbarkeiten (27.619667ms)
+✔ Agenda schließt die vorherige Ganztagsbuchung am exklusiven Ende aus, zeigt aber den gesamten Endtag (19.04975ms)
+✔ Verschieben erhält Termindauer und Abstand der Erinnerung (18.223916ms)
+✔ Mehrtagstermine behalten beim Verschieben die Anzahl ganzer Kalendertage über Zeitumstellungen (19.215375ms)
+✔ Mobile Wochenüberschrift zeigt ISO-KW auch am Jahreswechsel (35.741625ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 33
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1120.153

@@ -92,6 +92,8 @@ function buildContext(prefs) {
     eventHex: (e) => e.hex || '',
     itemTitleWithCase: (e, title) => title,
     repeatIconHTML: () => '',
+    calEntryIconHTML: () => '',
+    calEntryTitle: e => e.title,
     realItemId: (e) => e.masterId || e.id,
     esc: (s) => String(s),
     escAttr: (s) => String(s).replace(/"/g, '&quot;'),
@@ -525,4 +527,29 @@ test('Desktopvalidierung erlaubt Ganztag am selben Tag und blockiert ungültige 
   fields.RecurFreq.value='daily';fields.RecurUntil.value='2026-09-08';assert.equal(ctx.calDesktopValid(),false);assert.match(error,/Wiederholung/);
   fields.RecurUntil.value='2026-09-10';fields.AllDay.checked=false;fields.EndDate.value='2026-09-10';assert.equal(ctx.calDesktopValid(),true);
   ctx.calDesktop.busy=true;assert.equal(ctx.calDesktopValid(),false);
+});
+
+test('Die kompakten Tagesgruppen wiederholen Überschriften nicht bei mehreren Einträgen',()=>{
+  const ctx=buildContext(null);ctx.calFullEventRowHTML=e=>`<article>${e.id}</article>`;
+  vm.runInContext(functionSource('calGroupedAgendaHTML'),ctx);
+  const markup=ctx.calGroupedAgendaHTML([{id:'a',startAt:'2026-09-09T09:00:00'},{id:'b',startAt:'2026-09-09T10:00:00'},{id:'c',startAt:'2026-09-10T08:00:00'}]);
+  assert.equal((markup.match(/class="cal-agenda-date"/g)||[]).length,2);
+  assert.equal((markup.match(/<article>/g)||[]).length,3);
+  assert.ok(markup.indexOf('<article>b')<markup.indexOf('Donnerstag'));
+});
+test('Die Wochenübersicht behält leere Tage und ordnet Einträge der richtigen Spalte zu',()=>{
+  const ctx=buildContext(null);ctx.calFullDay=new Date(2026,8,9);
+  vm.runInContext(functionSource('calWeekOverviewHTML'),ctx);
+  const days=Array.from({length:7},(_,i)=>new Date(2026,8,7+i));
+  const markup=ctx.calWeekOverviewHTML(days,[{id:'a',title:'Montag',startAt:'2026-09-07T09:00:00'},{id:'b',title:'Mittwoch',startAt:'2026-09-09T10:00:00'},{id:'outside',title:'Nächste Woche',startAt:'2026-09-14T09:00:00'}]);
+  assert.equal((markup.match(/data-week-day=/g)||[]).length,7);
+  assert.equal((markup.match(/class="cal-week-empty"/g)||[]).length,5);
+  assert.equal((markup.match(/data-calendar-event=/g)||[]).length,2);
+  assert.match(markup,/data-week-day="2026-09-09"[\s\S]*?data-calendar-event="b"/);
+  assert.ok(!markup.includes('Nächste Woche'));
+});
+test('Eintragsart bestimmt das gemeinsame Symbol unabhängig von frei gewählten Titeln',()=>{
+  const ctx=buildContext(null);vm.runInContext(functionSource('calEntryKind')+'\n'+functionSource('calEntryIconHTML'),ctx);
+  const examples=[['events',{title:'Aufgabe besprechen'}],['tasks',{__calItemKind:'todo',__pseudoList:'tasks'}],['fristen',{itemType:'deadline'}],['followups',{itemType:'followup'}]];
+  for(const [kind,event] of examples){assert.equal(ctx.calEntryKind(event),kind);assert.match(ctx.calEntryIconHTML(event),new RegExp('data-cal-kind="'+kind+'"'));assert.match(ctx.calEntryIconHTML(event),/<svg/)}
 });

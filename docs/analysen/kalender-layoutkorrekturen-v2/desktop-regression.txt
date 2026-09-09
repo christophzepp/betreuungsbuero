@@ -1,0 +1,36 @@
+PASS Arbeitsbereich zeigt Seitenleiste und alle Ansichten ohne doppelte Feldkennungen
+PASS Desktopsuche filtert die echten Termine
+PASS Fall und Eintragsarten lassen sich kombinieren und einzeln zurücksetzen
+PASS Gleichzeitige Termine verdecken sich nicht
+PASS Termindetails enthalten Erinnerung, Kalender, Fall, Kartenlink und Anlagen
+PASS Das Formular enthält sämtliche ursprünglichen Felder und zusätzliche Farbauswahl
+PASS Hintergrundaktualisierungen erhalten denselben Formular-DOM
+PASS Escape schützt ungespeicherte Eingaben
+PASS Ungültige Terminreihenfolge wird vor dem Speichern abgefangen
+PASS Anlagen-Upload ersetzt weder Formular noch Notiz
+PASS Uploadfehler behält die Datei zur Wiederholung
+PASS Speicherfehler bewahrt den vollständigen Entwurf
+PASS Laufendes Speichern sperrt Schließen und doppelte Speicherung
+PASS Speicherung verwendet dieselbe Kennung und lädt ausstehende Anlagen nach
+PASS Ein Termin ohne Erinnerung erhält beim Öffnen keine neue Erinnerung
+PASS Neuanlage mit Uploadfehler behält die gespeicherte Kennung
+PASS Wiederholung des Uploads erzeugt keinen zweiten Termin und erhält Ganztag, Farbe und Serie
+PASS Verschieben ohne Ziehen erhält Dauer und Erinnerungsabstand
+PASS Drag-and-drop nutzt die gezeichnete Stundenhöhe und verschiebt die Erinnerung mit
+PASS Aufgaben öffnen im Kalender ihre Details mit Ursprungskennung
+PASS Aufgabenbearbeitung speichert am ursprünglichen Datensatz
+PASS Erledigen, Wiederöffnen und Rückkehr erhalten den Kalenderkontext
+PASS Bearbeiten bewahrt die begrenzte Anzahl einer importierten Serie
+PASS ICS-Einzel- und Gesamtexport sowie Import bleiben funktionsfähig
+PASS Synchronisieren ruft den bestehenden Kalenderweg auf
+PASS Ladefehler zeigt eine Fehlermeldung und behält vorherige Einträge
+PASS Eigener Listenzeitraum bietet Von/Bis und Mini-Kalender
+PASS Kalenderlayout 1024px light ohne horizontalen Überlauf
+PASS Kalenderlayout 1024px dark ohne horizontalen Überlauf
+PASS Kalenderlayout 736px light ohne horizontalen Überlauf
+PASS Kalenderlayout 736px dark ohne horizontalen Überlauf
+PASS Kalenderlayout 390px light ohne horizontalen Überlauf
+PASS Kalenderlayout 390px dark ohne horizontalen Überlauf
+PASS Kalenderlayout 320px light ohne horizontalen Überlauf
+PASS Kalenderlayout 320px dark ohne horizontalen Überlauf
+PASS Keine JavaScript-Laufzeitfehler
