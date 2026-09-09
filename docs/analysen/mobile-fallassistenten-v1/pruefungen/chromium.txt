@@ -1,0 +1,55 @@
+PASS Fallbeginn speichert nicht erst nach Weiter
+PASS Neun geführte Schritte und gesperrte Folgeschritte
+PASS Datei-Upload erhält ursprüngliche Verarbeitung
+PASS Dokumente werden als kompakte Liste angeboten
+PASS Zweites Schreiben erhält seinen eigenen Inhalt
+PASS Rückkehr erhält den individuellen Inhalt des ersten Schreibens
+PASS Zurück führt in die Dokumentliste desselben Assistenten
+PASS Dokument ergänzen ist direkt erreichbar und aktualisiert die Liste
+PASS Suche grenzt die Dokumentliste ein
+PASS Direkter Export verwendet den Inhalt des gewählten Dokuments
+PASS Export ist innerhalb des mobilen Bildschirms erreichbar
+PASS Vorschlag ersetzt den gespeicherten Dokumententwurf bewusst
+PASS Hauptnavigation speichert den Assistenten und verlässt ihn
+PASS Fortsetzen erhält den späten Dokumentenschritt
+PASS Fortsetzen lädt den richtigen Dokumentinhalt
+PASS Fallabschluss speichert Grund und Datum ohne Schrittwechsel
+PASS Schlussbericht und Abrechnung haben dieselbe Dokumentauswahl
+PASS Abschlusscheckliste bleibt erhalten und aktualisiert den Dokumentstatus
+PASS Schlussdokumente sind nach Fertigstellung filterbar
+PASS Schlussdokument co-doc-mtu1gnlz-0 nutzt mobilen Editor
+PASS Schlussdokument co-doc-mtu1gnlz-1 nutzt mobilen Editor
+PASS Speicherfehler hält den Assistenten mit Eingaben geöffnet
+PASS Fehlgeschlagenes Laden überschreibt keine gespeicherten Läufe
+PASS ci Schritt 1 hat erreichbare Navigation
+PASS ci Schritt 2 hat erreichbare Navigation
+PASS ci Schritt 3 hat erreichbare Navigation
+PASS ci Schritt 4 hat erreichbare Navigation
+PASS ci Schritt 5 hat erreichbare Navigation
+PASS ci Schritt 6 hat erreichbare Navigation
+PASS ci Schritt 7 hat erreichbare Navigation
+PASS ci Schritt 8 hat erreichbare Navigation
+PASS ci Schritt 9 hat erreichbare Navigation
+PASS co Schritt 1 hat erreichbare Navigation
+PASS co Schritt 2 hat erreichbare Navigation
+PASS co Schritt 3 hat erreichbare Navigation
+PASS co Schritt 4 hat erreichbare Navigation
+PASS co Schritt 5 hat erreichbare Navigation
+PASS co Schritt 6 hat erreichbare Navigation
+PASS co Schritt 7 hat erreichbare Navigation
+PASS co Schritt 8 hat erreichbare Navigation
+PASS Ordner können ohne Drag-and-drop verschoben werden
+PASS Ordnerplan bleibt nach Touch-Verschieben erhalten
+PASS Layout 320 false
+PASS Layout 320 true
+PASS Layout 390 false
+PASS Layout 390 true
+PASS Layout 570 false
+PASS Layout 570 true
+PASS Bildschirmtastatur gibt den Platz der Navigation frei
+PASS Scrollen nutzt den Platz der ausgeblendeten Navigation
+PASS Zurückscrollen blendet die Navigation wieder ein
+PASS Desktop zeigt ursprüngliche Schrittleiste
+PASS Desktop öffnet den zuvor mobil gespeicherten Dokumentinhalt
+PASS Mobile Rückkehr erhält die Ergänzung vom Desktop
+PASS Keine JavaScript-Laufzeitfehler

@@ -24,7 +24,7 @@ for(const [name,navFixture,expected] of scenarios){
   if(navFixture.server?.navOrder)check('Gespeicherte Reihenfolge wird unverändert vom Server geladen',await nav.locator('.mobile-nav-favorites button').evaluateAll(es=>es.map(e=>e.dataset.mobileAction||'chats')).then(ids=>JSON.stringify(ids)===JSON.stringify(navFixture.server.navOrder)));
   check(name+': Persönliche Favoriten bleiben in Reihenfolge erhalten',JSON.stringify(await favorites())===JSON.stringify(expected));
   await nav.locator('[data-mobile-more]').click();
-  check(name+': Kein veralteter KI-Chat im Mehr-Menü',await sheet.locator('[data-mobile-action="case-chat"]').count()===0&&await sheet.locator('.mobile-more-item').count()===32);
+  check(name+': Kein veralteter KI-Chat im Mehr-Menü',await sheet.locator('[data-mobile-action="case-chat"]').count()===0&&await sheet.locator('.mobile-more-item').count()===37);
   await sheet.locator('[data-mobile-edit-navigation]').click();
   check(name+': Editor ohne alten Chat und mit angeheftetem Start',await sheet.locator('[data-editor-id="case-chat"]').count()===0&&await sheet.locator('[data-editor-id="start"] .mobile-pin-toggle').isDisabled());
   check(name+': Start und Chats sind reguläre sortierbare Vorschau-Buttons',await sheet.locator('[data-preview-id="start"]').isEnabled()&&await sheet.locator('[data-preview-id="chats"]').isEnabled()&&await sheet.locator('.mobile-nav-preview .is-static').allTextContents().then(text=>text.join(',')==='Mehr'));

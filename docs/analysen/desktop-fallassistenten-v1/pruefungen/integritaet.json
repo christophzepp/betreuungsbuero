@@ -1,0 +1,17 @@
+{
+  "scriptBlocksBefore": 314,
+  "scriptBlocksAfter": 315,
+  "embeddedDataBlocks": 82,
+  "embeddedDataUnchanged": true,
+  "nulBytesBefore": 1,
+  "nulBytesAfter": 1,
+  "changedExistingScripts": [
+    "caseintake-script-v1",
+    "caseouttake-script-v1",
+    "mobile-case-wizard-v1"
+  ],
+  "newScripts": [
+    "desktop-case-wizard-v1"
+  ],
+  "outsideBlocksUnchangedExceptWhitespace": true
+}

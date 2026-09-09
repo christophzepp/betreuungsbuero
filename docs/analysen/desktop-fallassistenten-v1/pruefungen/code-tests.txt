@@ -1,0 +1,39 @@
+HTML Case-ID-Integration: 289 Blöcke, 0 Syntaxfehler, Doppel-Label-Verträge erfüllt
+✔ server/tests/html-case-id-integration.test.cjs (958.783333ms)
+✔ Rechnungslegung: unveränderte Felder lösen keine Setter oder manuelle Saldenmarkierung aus (3.839333ms)
+✔ Rechnungslegung: Originalsetter werden gebündelt vor genau einer abschließenden Speicherung ausgeführt (0.536ms)
+✔ Rechnungslegung: gleichzeitige Änderungen oder Fallwechsel werden vor der ersten Mutation erkannt (3.272709ms)
+✔ Rechnungslegung: Feldvalidierung und fehlende Schreibrechte lassen den Entwurf unverändert (2.00725ms)
+✔ Rechnungslegung: Fehler beim Commit behalten das Formular und geben die Bediensperre frei (1.916125ms)
+✔ Rechnungslegung: belegbezogene Filter kombinieren Erkennungszustand, Auswahl und Volltext (0.600584ms)
+✔ Rechnungslegung: Aktualisierung bewahrt Formulare und laufende Vorgänge, gibt neue Fälle aber frei (0.406ms)
+✔ sanitizePreferences: Deckel 8, Verstecktes fliegt auch aus alten Speicherständen (145.183041ms)
+✔ Die Menüfolge enthält 37 Bereiche; KI-Fallchat bleibt ausschließlich unter Chats (64.552541ms)
+✔ Gespeicherte Nutzerreihenfolge bleibt erhalten; die Fallmodule werden fachlich einsortiert (116.106916ms)
+✔ Die Leiste rendert bis zu 8 Favoriten und meldet ihre Knopfzahl fürs CSS (37.702542ms)
+✔ Anpassen-Dialog: horizontale Live-Vorschau mit Zieh-Umsortierung (29.042542ms)
+✔ Mehr-Menü und Editor blenden Online-Formulare aus, die Erkennung bleibt (48.869916ms)
+✔ Stetiges Scrollen in kleinen Schritten blendet aus; keine Selektorkaskade je Ereignis (94.335333ms)
+✔ Kleine Gegenbewegungen flackern nicht, bewusster Richtungswechsel blendet wieder ein (61.96725ms)
+✔ Ein schneller abgeschlossener Richtungswechsel wird nach der Sperrfrist übernommen (57.549209ms)
+✔ Der Seitenanfang gewinnt sofort gegen die Sperrfrist (57.745ms)
+✔ Fremde Hintergrundroller, Eingabefelder und horizontale Bewegung schalten nicht um (51.438458ms)
+✔ Neue Ansicht zeigt die Navigation und verwirft einen ausstehenden Richtungswechsel (50.707625ms)
+✔ Modal- und Chatwechsel erneuern die Scrollprüfung nur einmal (47.867166ms)
+✔ Tastatur hat Vorrang vor Scrollen, Seitenanfang und Menüöffnung; Schließen zeigt wieder an (48.144583ms)
+✔ Android mit verkleinertem innerHeight bleibt über die gemerkte Höhe erkennbar (48.535916ms)
+✔ Browserleisten, Pinch-Zoom und eine Hardwaretastatur sind keine Bildschirmtastatur (50.410334ms)
+✔ Offene Auswahlblätter und Desktop werden nicht vom Scrollen umgeschaltet (43.404792ms)
+✔ Navigation verschiebt ihre Leiste ohne Root-Has-Selektor und respektiert reduzierte Bewegung (32.823041ms)
+✔ Geführte Fallassistenten verwenden ihren eigenen Scrollbereich (46.964709ms)
+✔ HTML bleibt syntaktisch unverändert prüfbar (234.664375ms)
+✔ Online-Erstfall bekommt beim appLoginReady Vorrang vor optionalen GET-/api-Abrufen (30.823125ms)
+✔ Online-Fallstart lädt den aktiven Fall vor Panel-Render und Hintergrund-Preload (36.051417ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5359.094375

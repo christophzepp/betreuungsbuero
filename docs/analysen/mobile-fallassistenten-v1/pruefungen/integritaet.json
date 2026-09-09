@@ -1,0 +1,17 @@
+{
+  "scriptBlocksBefore": 313,
+  "scriptBlocksAfter": 314,
+  "byteIdenticalBlocks": 307,
+  "embeddedDataBlocks": 82,
+  "allEmbeddedDataUnchanged": true,
+  "nulBefore": 1,
+  "nulAfter": 1,
+  "chromium": {
+    "checks": 55,
+    "errors": []
+  },
+  "webkit": {
+    "checks": 55,
+    "errors": []
+  }
+}

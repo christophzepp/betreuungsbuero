@@ -21,11 +21,11 @@ const html = fs.readFileSync(htmlPath, 'utf8');
 const expectedDefaultOrder = [
   'start', 'master-data', 'case-overview', 'documentation', 'calendar',
   'tasks', 'deadlines', 'followups', 'contacts', 'mail', 'report-library', 'documents',
-  'case-archive', 'send-history',
+  'case-archive', 'send-history', 'folder-generator',
   'banking', 'cash',
   'assets', 'livelihood', 'debts', 'health', 'housing', 'abilities', 'needs', 'approvals',
   'contact-monitor',
-  'supervision', 'inbox', 'finance', 'invoices', 'mileage', 'qualifications', 'user'
+  'cases', 'case-archive-management', 'case-intake', 'case-outtake', 'supervision', 'inbox', 'finance', 'invoices', 'mileage', 'qualifications', 'user'
 ];
 
 function schneiden(startMarke, offen, zu) {
@@ -81,7 +81,7 @@ test('sanitizePreferences: Deckel 8, Verstecktes fliegt auch aus alten Speichers
   assert.ok(Array.from(alt.order).includes('a3'), 'Fehlende sichtbare Bereiche werden weiterhin ergänzt.');
 });
 
-test('Die Menüfolge enthält 32 Bereiche; KI-Fallchat bleibt ausschließlich unter Chats', () => {
+test('Die Menüfolge enthält 37 Bereiche; KI-Fallchat bleibt ausschließlich unter Chats', () => {
   const defaultQuelle = schneiden('const DEFAULT_ORDER = ', '[', ']') + ';';
   const actionQuelle = schneiden('const ACTIONS = ', '[', ']');
   const registeredIds = Array.from(actionQuelle.matchAll(/\{\s*id:\s*'([^']+)'/g), (match) => match[1]);
@@ -131,6 +131,15 @@ test('Gespeicherte Nutzerreihenfolge bleibt erhalten; die Fallmodule werden fach
   assert.deepEqual(Array.from(mitDokumenten.order).filter(id => id !== 'report-library'), ohneDokumente,
     'Die neue Dokumentauswahl ergänzt Altprofile ohne die übrige Reihenfolge umzuschreiben.');
   assert.deepEqual(Array.from(mitDokumenten.pinned), ['calendar'], 'Dokumente wird nicht ungefragt angeheftet.');
+
+  const neueBereiche = ['folder-generator', 'cases', 'case-archive-management'];
+  const alterVollstand = expectedDefaultOrder.filter(id => !neueBereiche.includes(id));
+  const freigeschaltet = sandbox.sanitize({ order: alterVollstand, pinned: ['mail', 'calendar'], navOrder: ['calendar', 'chats', 'start', 'mail'] });
+  assert.deepEqual(Array.from(freigeschaltet.order).filter(id => !neueBereiche.includes(id)), alterVollstand,
+    'Ordnergenerator, Fälle und Fallarchiv ergänzen das Menü ohne bisherige Bereiche zu verschieben.');
+  assert.deepEqual(Array.from(freigeschaltet.navOrder), ['calendar', 'chats', 'start', 'mail']);
+  assert.deepEqual(Array.from(freigeschaltet.pinned), ['mail', 'calendar']);
+  for (const id of neueBereiche) assert.equal(Array.from(freigeschaltet.order).filter(x => x === id).length, 1);
 
   const eigeneReihenfolge = ['finance', 'start', 'calendar'];
   const gespeichert = sandbox.sanitize({ order: eigeneReihenfolge, pinned: ['calendar'] });

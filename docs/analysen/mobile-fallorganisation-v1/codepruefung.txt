@@ -1,0 +1,29 @@
+HTML Case-ID-Integration: 289 Blöcke, 0 Syntaxfehler, Doppel-Label-Verträge erfüllt
+✔ server/tests/html-case-id-integration.test.cjs (568.540584ms)
+✔ 0.7.6 bietet einen echten leeren lokalen Fall mit stabiler ID an (154.151833ms)
+✔ eine neue lokale Installation startet ohne eingebettetes Bürologo (23.008375ms)
+✔ Branding erzeugt ein Profil-Logo dynamisch und kehrt ohne Logo zum neutralen Zustand zurück (15.823167ms)
+✔ Bürostammdaten sind lokal editierbar und das optionale Logo wird verlustfrei restauriert (36.832166ms)
+✔ lokales Büroprofil speichert Felder und entfernt ein gelöschtes Logo sofort (9.264125ms)
+✔ lokale Bürostammdaten werden vor Seitenwechsel und Schließen aus dem Formular gesichert (30.894917ms)
+✔ lokale Büroorganisation verwendet die eingebettete Vorlage ohne Serverzugriff (17.82725ms)
+✔ integrierte Arbeitsmappen werden angelegt und nach einem Neustart wiederhergestellt (55.888958ms)
+✔ lokale Einzel- und Gesamtsicherung erzwingen den vollständigen Pflichtbestand (7.296375ms)
+✔ Ordner- und ZIP-Import bevorzugen die verlustfreie Büroorganisations-JSON (2.468208ms)
+✔ sanitizePreferences: Deckel 8, Verstecktes fliegt auch aus alten Speicherständen (234.041458ms)
+✔ Die Menüfolge enthält 35 Bereiche; KI-Fallchat bleibt ausschließlich unter Chats (56.844417ms)
+✔ Gespeicherte Nutzerreihenfolge bleibt erhalten; die Fallmodule werden fachlich einsortiert (89.792625ms)
+✔ Die Leiste rendert bis zu 8 Favoriten und meldet ihre Knopfzahl fürs CSS (30.733791ms)
+✔ Anpassen-Dialog: horizontale Live-Vorschau mit Zieh-Umsortierung (25.875416ms)
+✔ Mehr-Menü und Editor blenden Online-Formulare aus, die Erkennung bleibt (44.135583ms)
+✔ HTML bleibt syntaktisch unverändert prüfbar (204.196583ms)
+✔ Online-Erstfall bekommt beim appLoginReady Vorrang vor optionalen GET-/api-Abrufen (75.550875ms)
+✔ Online-Fallstart lädt den aktiven Fall vor Panel-Render und Hintergrund-Preload (34.48875ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4997.292083

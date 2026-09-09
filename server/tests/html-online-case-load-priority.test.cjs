@@ -34,15 +34,15 @@ function region(start, end) {
 
 test('HTML bleibt syntaktisch unverändert prüfbar', () => {
   const allScripts = scripts();
-  /* 06.09.2026 Briefkopf-Editor P3: zwei neue Schriftblöcke (tpl_font_dejavu_oblique, tpl_font_dejavu_bold_oblique) für Kursiv im Briefkopf - Nutzerentscheidung, 309 + 2 = 311; JS-Blöcke bleiben 229. */
-  assert.equal(allScripts.length, 311, 'Scriptblockzahl hat sich verändert.');
+  /* 09.09.2026: Dokumenteneditor, Dokumentauswahl sowie mobile und Desktop-Fallassistenten ergänzen vier JS-Blöcke. */
+  assert.equal(allScripts.length, 315, 'Scriptblockzahl hat sich verändert.');
   let jsCount = 0;
   allScripts.forEach((script, index) => {
     if (/\btype\s*=\s*(['"]?)(?!text\/javascript|application\/javascript|module)\w/i.test(script.attrs)) return;
     jsCount += 1;
     new vm.Script(script.body, { filename: `html-online-case-load-priority-${index + 1}.js` });
   });
-  assert.equal(jsCount, 229, 'JavaScript-Blockzahl hat sich verändert.');
+  assert.equal(jsCount, 233, 'JavaScript-Blockzahl hat sich verändert.');
 });
 
 test('Online-Erstfall bekommt beim appLoginReady Vorrang vor optionalen GET-/api-Abrufen', async () => {

@@ -1,0 +1,79 @@
+PASS Ordnergenerator einmal freigeschaltet
+PASS Fälle einmal freigeschaltet
+PASS Fallarchiv einmal freigeschaltet
+PASS Drei aktive Fälle, zwei archivierte ausgeblendet
+PASS Suche filtert Fallliste
+PASS Erst Detail mit allen Inhaltsständen und Zuordnungen
+PASS Zurück behält Suche
+PASS Fachfilter: fehlende Stammdaten
+PASS Zuordnungen speichern am Zielfall ohne Fallwechsel
+CONSOLE WebSocket connection to 'ws://completion.invalid/ws' failed: A server with the specified hostname could not be found.
+PASS Abgelehnte Zuordnung fällt auf gespeicherten Wert zurück
+PASS Abbruchschutz erhält Fallentwurf
+PASS Fehler beim Speichern erhält Entwurf
+PASS Umbenennen speichert Fall und Stammdaten
+PASS Zurück nach Bearbeitung hat funktionierende Fallliste
+PASS Abgelehnte Fallanlage erhält alle sechs Felder
+PASS Verwerfen stellt interaktive Liste wieder her
+PASS Alle sechs Importwege erreichbar
+PASS Fallarchiv zeigt nur archivierte Fälle
+PASS Archivierter Fall muss vor Öffnen zurückgeholt werden
+PASS Zurückholen verwendet ursprüngliche Archivfunktion
+CONSOLE WebSocket connection to 'ws://completion.invalid/ws' failed: A server with the specified hostname could not be found.
+PASS Sammellöschen betrifft genau die Archivauswahl
+PASS Sammelarchivierung erhält fehlgeschlagene Auswahl
+PASS Standardstruktur umfasst 13 Hauptordner
+PASS Unterordner wird im Originalplan gespeichert
+PASS Leerer Ordnername beschädigt gespeicherten Plan nicht
+CONSOLE WebSocket connection to 'ws://completion.invalid/ws' failed: A server with the specified hostname could not be found.
+PASS Verschieben schließt eigenen Ordner und Nachfahren aus
+PASS Verschieben erhält Unterordner
+PASS Herkunftsfilter findet verschachtelte eigene Ordner
+PASS Sammellöschen entfernt überlappende Ordnerauswahl vollständig
+PASS KI-Vorschlag erst nach Übernahme im Plan
+PASS ZIP mit Ordnerstruktur heruntergeladen
+CONSOLE WebSocket connection to 'ws://completion.invalid/ws' failed: A server with the specified hostname could not be found.
+PASS Explorerübernahme überträgt echte Ordnerpfade
+PASS Ohne Verwaltungsrecht kein Anlegen
+PASS Ohne Verwaltungsrecht keine Importe oder Sammelaktionen
+PASS faelle ohne Überlauf 320 false
+PASS faelle ohne Überlauf 320 true
+PASS faelle ohne Überlauf 390 false
+PASS faelle ohne Überlauf 390 true
+PASS faelle ohne Überlauf 570 false
+PASS faelle ohne Überlauf 570 true
+CONSOLE WebSocket connection to 'ws://completion.invalid/ws' failed: A server with the specified hostname could not be found.
+PASS fallarchiv ohne Überlauf 320 false
+PASS fallarchiv ohne Überlauf 320 true
+PASS fallarchiv ohne Überlauf 390 false
+PASS fallarchiv ohne Überlauf 390 true
+PASS fallarchiv ohne Überlauf 570 false
+PASS fallarchiv ohne Überlauf 570 true
+PASS ordnergenerator ohne Überlauf 320 false
+PASS ordnergenerator ohne Überlauf 320 true
+PASS ordnergenerator ohne Überlauf 390 false
+PASS ordnergenerator ohne Überlauf 390 true
+CONSOLE WebSocket connection to 'ws://completion.invalid/ws' failed: A server with the specified hostname could not be found.
+PASS ordnergenerator ohne Überlauf 570 false
+PASS ordnergenerator ohne Überlauf 570 true
+PASS Ordner am Desktop weiterhin native Ansicht
+PASS Fälle am Desktop weiterhin native Ansicht
+PASS Fallarchiv am Desktop weiterhin native Ansicht
+PASS Fall öffnen lädt den gewählten Originaldatensatz
+CONSOLE WebSocket connection to 'ws://completion.invalid/ws' failed: A server with the specified hostname could not be found.
+CONSOLE WebSocket connection to 'ws://completion.invalid/ws' failed: A server with the specified hostname could not be found.
+PASS Fallanlage speichert und öffnet den Fall, inklusive gewählter Fristenübernahme
+PASS Teilfehler beim Stammdaten-PATCH erhält Korrekturentwurf
+CONSOLE WebSocket connection to 'ws://completion.invalid/ws' failed: A server with the specified hostname could not be found.
+PASS Gelöschtes Betreuungsbeginndatum wird tatsächlich geleert
+PASS Ungültiger ZIP-Import verändert keine Fälle
+PASS Ladefehler wird mit Wiederholen angezeigt, vorhandene Liste bleibt
+PASS Ordnerentwurf übersteht Chat und Rückkehr
+PASS Tastatur erhält Speichern im sichtbaren Bereich
+PASS Späte KI-Antwort holt den Nutzer nicht aus dem nächsten Menü zurück
+CONSOLE WebSocket connection to 'ws://completion.invalid/ws' failed: A server with the specified hostname could not be found.
+PASS Lesbare Fallsicherung öffnet mobiles Importformular mit allen Feldern
+PASS Importkorrekturen werden beim Verlassen geschützt
+PASS Importabbruch kehrt zur bedienbaren Fallliste zurück
+PASS Keine JavaScript-Laufzeitfehler
+{"checks":68,"failed":[],"errors":[]}

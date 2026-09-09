@@ -1,0 +1,66 @@
+PASS Fallbeginn speichert aktuelle Desktopfelder ohne Weiter
+PASS Speicherfehler hält Fallbeginn mit Eingaben geöffnet
+PASS Speicherfehler wird dauerhaft im Kopf angezeigt
+PASS Fehlgeschlagenes Laden ersetzt keinen gespeicherten Lauf
+PASS Erneutes Speichern schließt erst nach erfolgreichem Schreiben
+PASS Überlappende Speichervorgänge erhalten beide Läufe
+PASS Späte Speicherung markiert keinen neuen leeren Lauf als gespeichert
+PASS Zwölf Dokumente bleiben kompakt auswählbar
+PASS Dokumentsuche findet auch den letzten Empfänger
+PASS Dokumenteditor behält lesbare Abschnittstitel hell
+PASS Dokumenteditor behält lesbare Abschnittstitel dunkel
+PASS Dunkler Dokumenteditor zeigt lesbare Feldbezeichnungen
+PASS Direkter Desktopexport verwendet den Inhalt des zweiten Dokuments
+PASS Export öffnen behauptet keinen erfolgten Export
+PASS Dokumentwechsel erhält den individuellen Entwurf
+PASS Erledigtfilter nutzt ausdrückliche Bestätigung
+PASS Dokumentergänzung erhält den gesamten Plan
+PASS Fallabschluss speichert Grund, Datum, Abrechnungsart und Fall-ID
+PASS Herausgabe speichert Empfänger, Anschrift und Checkliste
+PASS Fortsetzen lädt den gespeicherten Fall statt des aktuell fremden Falls
+PASS Fehlgeschlagener Fallwechsel öffnet keinen Abschluss am falschen Fall
+PASS Späte Antwort der offenen Punkte überschreibt keinen neueren Schritt
+PASS Späte Antwort öffnet keinen geschlossenen Assistenten
+PASS Offene Aufgaben zeigen das echte Fälligkeitsfeld
+PASS Aufgabenänderung schreibt dueAt statt eines wirkungslosen Feldes
+PASS Terminänderung erhält ID und Dauer ohne Löschen und Neuanlegen
+PASS Fehlgeschlagene Änderung erhält das geöffnete Formular
+PASS Fehlgeschlagene Erledigung meldet keinen Erfolg
+PASS Fehlgeschlagenes Löschen wird als Fehler behandelt
+PASS Ladefehler werden nicht als keine offenen Punkte dargestellt
+PASS Fehler bei Abschlussarbeiten lässt den Lauf offen
+PASS ci Schritt 1 hat eine passende Arbeitsfläche und feste Navigation
+PASS ci Schritt 2 hat eine passende Arbeitsfläche und feste Navigation
+PASS ci Schritt 3 hat eine passende Arbeitsfläche und feste Navigation
+PASS ci Schritt 4 hat eine passende Arbeitsfläche und feste Navigation
+PASS ci Schritt 5 hat eine passende Arbeitsfläche und feste Navigation
+PASS ci Schritt 6 hat eine passende Arbeitsfläche und feste Navigation
+PASS ci Schritt 7 hat eine passende Arbeitsfläche und feste Navigation
+PASS ci Schritt 8 hat eine passende Arbeitsfläche und feste Navigation
+PASS ci Schritt 9 hat eine passende Arbeitsfläche und feste Navigation
+PASS co Schritt 1 hat eine passende Arbeitsfläche und feste Navigation
+PASS co Schritt 2 hat eine passende Arbeitsfläche und feste Navigation
+PASS co Schritt 3 hat eine passende Arbeitsfläche und feste Navigation
+PASS co Schritt 4 hat eine passende Arbeitsfläche und feste Navigation
+PASS co Schritt 5 hat eine passende Arbeitsfläche und feste Navigation
+PASS co Schritt 6 hat eine passende Arbeitsfläche und feste Navigation
+PASS co Schritt 7 hat eine passende Arbeitsfläche und feste Navigation
+PASS co Schritt 8 hat eine passende Arbeitsfläche und feste Navigation
+PASS Schlussbericht und Rechnungslegung behalten beide Dokumente
+PASS Schlussbericht öffnet den vollständigen Desktopeditor
+PASS Desktoplayout 1100 hell
+PASS Desktoplayout 1100 dunkel
+PASS Desktoplayout 1280 hell
+PASS Desktoplayout 1280 dunkel
+PASS Desktoplayout 1600 hell
+PASS Desktoplayout 1600 dunkel
+PASS Wechsel zum Smartphone entfernt ausschließlich den Desktoprahmen
+PASS Desktop-Rückkehr erhält Dokumentliste und Navigation
+PASS Fallabschluss beendet den Lauf bei Speicherfehler nicht
+PASS Fallbeginn beendet den Lauf bei Speicherfehler nicht
+PASS Fallbeginn schließt nach erfolgreichem Speichern als abgeschlossen
+PASS Fallabschluss schließt erst nach erfolgreichen Abschlussarbeiten
+PASS Löschen nach Ladefehler erhält alle gespeicherten Läufe
+PASS Erfolgreiches Löschen betrifft nur den gewählten Lauf
+PASS Erstellte Schlussdokumente sind über die Checkliste filterbar
+PASS Keine JavaScript-Laufzeitfehler

@@ -1,0 +1,11 @@
+{
+  "basis": "e7cf3f742c74bfb7d7c43368bf21a9872c1e2040",
+  "scriptBlocks": 313,
+  "changedScripts": [
+    " id=\"online-case-sync-script-v1\"",
+    " id=\"ordnergenerator-script-v1\"",
+    " id=\"mobile-online-shell-v1-js\""
+  ],
+  "otherScriptAndDataBlocksUnchanged": 310,
+  "NULUnchanged": true
+}
