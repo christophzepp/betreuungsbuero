@@ -1,0 +1,2083 @@
+✔ wartet auf laufende Writes und weist neue während der Sicherung ab (3.444541ms)
+✔ lesende Anfragen bleiben während einer Sicherung verfügbar (1.108584ms)
+✔ mutierende OAuth-GET-Callbacks werden wie Writes drainiert und gesperrt (2.083ms)
+✔ nur die bekannten Callback-Pfade klassifizieren GET/HEAD als mutierend (0.483208ms)
+✔ Token-/Cache-schreibende Discovery- und Leseendpunkte sind explizit mutierend (0.209541ms)
+✔ Mailbox-SSE und gewöhnliche Downloads bleiben ausdrücklich lesend (0.121417ms)
+✔ Client-close gibt einen laufenden Handler nicht vorzeitig frei; res.end beendet den Vertrag (0.122375ms)
+✔ bereinigter Stream-Abbruch gibt den Request ausdrücklich frei und lässt die nächste Sicherung starten (5.816375ms)
+✔ verschachteltes withWrite bleibt im Request gezählt und abgekoppelte Arbeit erhält einen eigenen Kontext (0.607958ms)
+✔ begin wartet race-frei auf einen bereits gestarteten Hintergrundschreiber (1.357708ms)
+✔ Hintergrundschreiber startet während angeforderter oder aktiver Sicherung nicht (0.146875ms)
+✔ Arbeitsdaten-Zusatzabbild enthält Zuständigkeiten, Verlauf und nur Dokumentmetadaten (4.449333ms)
+✔ Büro-/Moduldaten lassen reine Demo-Chats, Status und Anlagen vollständig draußen (3.243542ms)
+✔ Serverabbilder entfernen alte Demo-Fälle samt Personen, Kalender, Fahrten und JSON-Verweisen (1.970917ms)
+✔ Auslieferung pinnt Umfang, Tabellenvertrag und Excel-Zeilenreparatur (850.698042ms)
+✔ Browservertrag entfernt Demo-Konten, Personen, Fälle und Fahrten vor XLSX/ODS/CSV/JSON (364.698875ms)
+✔ BLEIBT verspricht nichts, was anderswo entfernt wird (154.503375ms)
+✔ Jeder BLEIBT-Eintrag existiert überhaupt als Beschriftung (106.217375ms)
+✔ Das Ausblenden der Sicherung bleibt begründet - sonst wirkt es wie ein Defekt (42.810833ms)
+✔ Die wirkungslose Promptbibliothek-Regel ist entfernt - samt Begründung (48.884291ms)
+✔ Selbstprüfung: der Strichpunkt-Typ (tpl_kg*) gilt als vorhanden - genau der gemeldete Fehler (36.517625ms)
+✔ Selbstprüfung: fehlende und leere gewählte Vorlagen fallen weiter auf (16.5095ms)
+✔ Selbstprüfung: eine abgewählte, dennoch befüllte Vorlage fällt weiter auf (23.133959ms)
+✔ Selbstprüfung: eine Code-Fundstelle der id täuscht den Schnitt nicht (16.595667ms)
+✔ Selbstprüfung: eigene Vordrucke (cfpdf:) werden weiter geprüft (44.369875ms)
+✔ Selbstprüfung arbeitet scanfrei - keine Volltext-RegExp über die Riesendatei mehr (26.076125ms)
+✔ Sammler: entfernte (stillgelegte) Originale werden nicht mehr verlangt (55.503959ms)
+✔ Pflichtblöcke: die DejaVu-Schriften reisen wieder in jeder Außendienst-Datei (49.783958ms)
+✔ Pflichtblöcke: der Server kann alle vier Schriftblöcke einzeln liefern (schlanke Auslieferung) (337.018958ms)
+✔ Jeder Abbruch schließt die Fortschrittsanzeige - kein hängendes „Bitte warten" mehr (289.113583ms)
+✔ Sammler: ohne Auswahl reist alles mit (Altverhalten bleibt) (33.204083ms)
+✔ Sammler: abgewähltes Konto und abgewählte Ordner bleiben vollständig zu Hause (14.049167ms)
+✔ Sammler: fehlende Einträge gelten als angewählt (Neues fehlt nicht still) (20.961583ms)
+✔ Sammler: alle Konten abgewählt wird ehrlich gemeldet (16.367792ms)
+✔ Die 100er-Grenze: angefordert wird nicht mehr als der Server je liefert (30.356833ms)
+✔ Dialog: Ordnerwahl mit Papierkorb/Spam-Vorgabe ist verdrahtet (163.344625ms)
+✔ Aufräumrunde: kein Doppelbau, Hintertür zu (52.686917ms)
+✔ AD-Datei: Reinladeassistent hält die Dokumente nicht mehr gefangen (Nutzerfund 30.08.) (21.824958ms)
+✔ AD-Aufräumer: die Markierung versteckt selbst - der Rechte-Anwender deckt nichts mehr auf (47.068667ms)
+✔ Mail-Liste im Büro blättert echt statt am Limit zu ersticken (59.459708ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+[auth] Büro-Geheimnisse konnten nicht entschlüsselt werden: Ungültiges internes Geheimnisformat.
+✔ ein nach dem Start beschädigtes Office-Secret beendet Login/Session-Wiederaufnahme nicht (291.907958ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ Extension- und WebDAV-Nutzungstimestamps warten eine aktive Gesamtsicherung ab (15.382709ms)
+✔ zeitgesteuerte Fachschreiber melden sich an der Vollsicherungsbarriere an (5.759542ms)
+✔ alle clientseitigen Stream-Abbruchpfade beenden den Request erst nach der Temp-Bereinigung (0.381666ms)
+✔ Nutzungstimestamps werden nur innerhalb der Schreibbarriere als erledigt markiert (0.205333ms)
+✔ übersprungene Abgleiche behandeln die Sicherungsphase nicht als Fachfehler (0.27475ms)
+✔ schreibende Fallübergabe ist als GET ausdrücklich in Barriere und Koordinator erfasst (0.544875ms)
+✔ portables Schema 3 wickelt interne Secrets auf einen neuen ENCRYPTION_KEY um (141.492375ms)
+✔ kaputtes internes Secret verhindert ein halbfertiges portables Abbild (1.760084ms)
+✔ Büro-JSON entfernt Mount-Secrets und den historischen Maps-Ciphertext (0.901916ms)
+✔ Recovery-Bundle ist disjunkt und bindet beide Artefakte an dieselbe DB-Revision (0.989959ms)
+✔ Generator und Recovery-Prüfung teilen dieselbe Registrierung verschlüsselter Felder (1.840791ms)
+✔ portable Generatoren und Validatoren arbeiten bei fehlenden Pflichttabellen/-spalten fail-closed (7.748ms)
+✔ portabler Security-Restore enthält und ersetzt das Audit-Protokoll nicht (1.129125ms)
+✔ neuester eigener vollständiger Snapshot wird manifestgebunden als ZIP-Quelle gewählt (18.519208ms)
+✔ zusätzliche Datei, falsche TARGET_ID und Traversal im Manifest werden abgewiesen (7.166375ms)
+✔ eine nachträglich inhaltlich beschädigte Manifestdatei wird abgewiesen (2.198084ms)
+backup-preflight: lokale, Recovery- und Remote-Bereitschaft ok
+✔ tests/backup-preflight.test.js (63.404584ms)
+✔ strikter Restore rollt bereits geschriebene Tabellen bei einer fehlerhaften Zeile zurück (8.905958ms)
+✔ jede Restore-Zeile wird mit ihrer eigenen Spaltenmenge validiert und übernommen (0.647833ms)
+✔ echtes UPSERT erhält abhängige Zeilen und unterstützt zusammengesetzte Primärschlüssel (1.3745ms)
+✔ Security-/Credentials-Replace entfernt Altzugriffe und neutralisiert referenzierte Principals FK-sicher (3.728916ms)
+✔ Restore lehnt fehlende Tabellen und falsche Schemas vor dem ersten Schreiben ab (0.505875ms)
+✔ laufende Sitzung und nicht auflösbare Fallzuständigkeiten sind sichtbar gezählte Skips (0.531708ms)
+✔ INSERT OR IGNORE weist bestehende Zeilen als bewussten Skip aus (0.2065ms)
+✔ safeAll macht unerwartete Tabellenfehler sichtbar statt eine leere Liste vorzutäuschen (0.10925ms)
+✔ Restore-Vorschau führt echte Constraints aus und rollt sämtliche Testschreibvorgänge zurück (0.332083ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ gemeinsame Registrierung klassifiziert jede Anwendungstabelle oder schließt sie begründet aus (146.124667ms)
+✔ Büro-/Modulabbild enthält OCR verlustfrei, aber keine Intake- oder Signaturbytes (155.091459ms)
+✔ Büroabbild normalisiert volatile Laufzustände, vollständige Modulregistrierung behält sie (152.39325ms)
+✔ Fallsicherung nimmt sichere direkte und indirekte Fallbezüge aus der Registrierung mit (339.633459ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ Server-Zeile traegt reviewDate - ausgefuehrt gegen die echte Route (231.037125ms)
+✔ Rechnungslegung (ausgefuehrt): ohne Karte bleiben Farbe und Name exakt wie bisher (19.277459ms)
+✔ Rechnungslegung (ausgefuehrt): eine gepflegte Karte faerbt den Tabellenkopf und setzt den Firmennamen (6.364833ms)
+✔ Rechnungslegung (ausgefuehrt): kaputte Werte fallen auf die heutigen Literale zurueck (35.062125ms)
+✔ Rechnungslegung: Raster, Schrift und Aufbau des Tabellenkopfs bleiben unveraendert (41.667083ms)
+✔ Mitteilung: die Fusszeile kommt aus den Briefkopf-Bausteinen, mit Rueckfall auf das bisherige Literal (106.241125ms)
+✔ online: Speichern -> Neuladen (frische vm) -> PDF-Kopf zeichnet die gespeicherte Karte (322.071875ms)
+✔ online: Realtime - ein anderes Fenster aendert die Vorgabe, das Ereignis laedt nach (107.653875ms)
+✔ online: persoenliche Abweichung end-to-end - Name/Titel/Funktionszeile im PDF-Kopf, Kartenfeld und Sperrschalter sperren (74.637ms)
+✔ online: fremder Fall -> Abweichung ruht (Betreuer:in des Falls, Buerovorgabe); eigener Fall -> wirkt (27.333667ms)
+✔ lokal: Speichern in bueroLocal (saveBueroLocal) -> Neuladen aus demselben Speicher -> PDF-Kopf; Abweichung ebenso (3.501625ms)
+✔ lokal: fremder Fall -> PDF-Kopf zeigt die Betreuer:in des Falls (nicht die angemeldete Person), Anpassung ruht (1.29825ms)
+✔ __briefkopfEigenAnwenden: Funktionszeile trifft die erste Zeile ohne Namensbaustein, sonst kommt sie dazu; Titel hinter BETREUER (0.80925ms)
+✔ Editor (ausgefuehrt): Chips kleben nicht an Marken, F/K/U ohne Auswahl haelt den Cursor (32.13575ms)
+✔ Buerostammdaten-Hinweise: Logo = App-Marke, Briefkopf ueber den Editor mit Sprunglink (102.219375ms)
+✔ Exportdialog: Briefkopf-Zeile mit Stand und Sprunglink nur bei Briefkopf-Ausgaben (27.735ms)
+✔ Editor: Abschnitt „Meine Anpassung“, Buerovorgabe ohne Abweichung auf der Seite, Berichtsdruck-Seitenfuss fest (54.842125ms)
+✔ Nur-Lese-Ansicht: „Meine Anpassung“ steht ganz oben in der Eigenschaftenspalte, die Eigen-Felder bleiben bedienbar (Nacharbeit P3) (57.517167ms)
+✔ keine Platzhaltertexte mehr: „folgt in Paket P2“, „erst in P3“ (93.304833ms)
+Eigene Schrift nicht verfügbar – Helvetica-Fallback: fontkit fehlt
+Eigene Schrift nicht verfügbar – Helvetica-Fallback: fontkit fehlt
+Eigene Schrift nicht verfügbar – Helvetica-Fallback: fontkit fehlt
+Eigene Schrift nicht verfügbar – Helvetica-Fallback: fontkit fehlt
+✔ Erstseiten-Kopf der Standardkarte zeichnet exakt die heutigen Literale und gibt 724 zurueck (104.455709ms)
+✔ Kompatibilitaet: Bueroname = Person -> Funktionszeile fett 9,5 pt bei y=798 (wie heute) (93.1205ms)
+✔ Firmenname in den Buerostammdaten: Standardkarte druckt wie heute (OFFICE.name), gepflegte Karte und Vorschau nutzen den Firmennamen (102.754333ms)
+✔ Folgeseiten-Kopf: Band 806..819, Bueroname 7,5 pt fett weiss y=809,5, Rueckgabe 782; Seitenzahl nur mit SEITE/SEITEN (90.104292ms)
+✔ Infoblock: Ihr Zeichen 9,3 pt bei 578, Ort/Datum 10 pt fett bei 565, Rueckgabe 552; Sonderfaelle wie heute (108.521791ms)
+✔ Absenderzeile: 7,6 pt bei x=80 auf der Kopf-Grundlinie, Linie 3 pt darunter bis max. 517, Tinte des Aufrufers (79.625541ms)
+✔ Fusszeile: vier Zeilen 7,2 pt CI bei 58/45/32/19 mit den heutigen Texten; leere Abschnitte fallen weg (183.085ms)
+✔ Berichtsdruck: Kopf aus der Karte im Raster 48..547,28 - Band y=749 h=24, Text 12,5 pt y=756,5, Titel bei 722 (98.193625ms)
+✔ geaenderte Karte: Linie, Falz-/Lochmarken, Kursiv (Oblique), Unterstreichung, Bandtext links, Kopf rechts zentriert (133.718708ms)
+✔ Editor-Vorschau: __briefkopfVorschauSetzen lenkt die Zeichner auf die ungespeicherte Karte (87.580583ms)
+✔ HTML-Koepfe: Druckansicht und Bildschirmkopf entstehen aus der Karte (CI-Farbe, Runs als b/i/u) (78.881041ms)
+✔ Schriftbloecke: DejaVu Sans Oblique und Bold-Oblique liegen als pdf-base64-Bloecke hinter dem Bold-Block (108.845542ms)
+✔ unifiedDocumentFonts (ausgefuehrt): Kursivschnitte nur bei Bedarf, Rueckfall Helvetica-Oblique (85.317542ms)
+✔ Verdrahtung: Absenderzeile und Fusszeile laufen ueberall ueber die neuen Funktionen, keine Literal-Kopien mehr (237.35ms)
+✔ Ablage: briefkopf steht in KEYS und in der Schreibschranke (4.940625ms)
+✔ Rechte (ausgefuehrt): Schreiben verlangt isAdmin || canManageOfficeProfile, Lesen nur die Anmeldung (375.62675ms)
+✔ Persoenliche Abweichung (ausgefuehrt): briefkopf-eigen nimmt nur name/titel/funktion (15.363209ms)
+✔ Menue: Eintrag hinter den Buerostammdaten, Indikator, Sprungziel und Sperrschalter (179.573625ms)
+✔ Nacharbeit P3: Seite fuer alle, readOnly = weder Admin noch Buerostammdaten-Recht, Indikator zaehlt die Anpassung (140.999292ms)
+✔ Sicherungswege: Whitelist + lokaler Export + Import + Online-Export tragen briefkopf (113.439792ms)
+✔ loadBueroLocal (ausgefuehrt): briefkopf und briefkopfEigen ueberleben das Neuladen (52.916667ms)
+✔ Resolver: Wortgrenzen, Beschriftungen, Wegfall leerer Abschnitte und Zeilen (41.658667ms)
+✔ Runs: Zustandsautomat - ***fett kursiv***, Kursiv um Fett, offene Marke bleibt Text (Behebung 06.09.) (14.589959ms)
+✔ Runs: Fett, Kursiv, Unterstrichen - auch verschachtelt (29.911292ms)
+✔ Standardkarte = heutige Literale, Ausgangspunkte, Normalisierung (15.060916ms)
+✔ Persoenliche Abweichung: wirkt nur, wenn Karte UND Sperrschalter es erlauben (17.355583ms)
+✔ Persoenliche Abweichung gilt nur im eigenen Fall (Fund 12) (36.309583ms)
+✔ Fund 12: Verdrahtung - Cache-Frische, Aussendienst-Kopf, Editor-Texte (127.881666ms)
+✔ Befunde 1/3: im fremden Fall druckt BETREUER die Betreuer:in des Falls, nicht die angemeldete Person (54.314375ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ liefert die zuletzt aktualisierte Unterschrift des im Fall hinterlegten Betreuers (216.328791ms)
+case-assignment-routes: ID-Vorrang, Eindeutigkeit, Sichtbarkeit und Umhängen ok
+✔ tests/case-assignment-routes.test.js (664.066083ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ ohne Sitzung antworten alle Chat-Routen mit 401 (37.953875ms)
+✔ Nutzerliste: nur aktive Konten, displayName-Fallback, Initialen und Verbindungsstatus (14.739042ms)
+✔ Direkt-Unterhaltung anlegen und beim zweiten Anlauf deduplizieren (21.121584ms)
+✔ Gruppen-Unterhaltung mit Titel (3.597542ms)
+✔ Nachricht senden: 201, sichtbar in GET, updated_at steigt, unread beim Empfänger, WS-Push (13.034958ms)
+✔ Nicht-Teilnehmer bekommt bei GET messages dieselbe 404 wie bei einer unbekannten Unterhaltung (6.232667ms)
+✔ read-POST setzt unread auf 0 und meldet chat-read nur an die anderen Teilnehmer (5.519666ms)
+✔ Anlagen-Roundtrip: Bytes identisch zurück, Nicht-Teilnehmer 404 (8.652458ms)
+✔ kind='ki': KI-Assistent als Absender, Anforderer bleibt nachvollziehbar (7.302583ms)
+✔ Status-POST ändert den Status in der Nutzerliste und stößt den Präsenz-Broadcast an (37.875667ms)
+✔ Validierung: leere Nachricht 400, zu großer body 413, zu große Anlage 413 (45.486417ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+▶ Controlling: Recht, Fallsichtbarkeit und Nutzlast
+  ✔ ohne Anmeldung: 401 (32.748083ms)
+  ✔ Finanz- und Fallrecht ersetzen das Controlling-Recht nicht (163.263083ms)
+  ✔ Admin sieht alles, ohne dass ihm das Recht zugeteilt wurde (139.206ms)
+  ✔ Nutzlast: vier Dimensionen, keine Euro, kein stammdaten_json (174.246333ms)
+  ✔ Fallsichtbarkeit greift und wird gemeldet (119.017417ms)
+  ✔ scope: archived und all (146.770542ms)
+✔ Controlling: Recht, Fallsichtbarkeit und Nutzlast (1078.543208ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ Recht: viewControlling steht im Katalog, default AUS, Admin geht vorbei (1.362042ms)
+✔ Sitzung: keine Aufbau-Stelle darf canViewControlling vergessen (33.007083ms)
+✔ Route: geschuetzt, sichtbarkeitsgefiltert - und ohne jede Euro-Rechnung (2.115209ms)
+▶ Route im Betrieb: Recht, Sichtbarkeit, Vertragsfelder
+  ✔ ohne Anmeldung 401 (46.994709ms)
+  ✔ Finanz- und Fallrecht ersetzen das Controlling-Recht nicht (134.92075ms)
+  ✔ Admin kommt ohne Zuteilung durch, Vertragsfelder stimmen (138.0945ms)
+  ✔ Fallsichtbarkeit greift und die Antwort gibt es zu (159.154208ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+  ✔ scope: active ist Standard, archived/all vorhanden, Unsinn faellt zurueck (143.104708ms)
+✔ Route im Betrieb: Recht, Sichtbarkeit, Vertragsfelder (1047.409666ms)
+✔ Stammdaten: die drei Verguetungsfelder stehen im Modell und in beiden Masken (25.983417ms)
+✔ Wertevorrat: Maske, Verguetungsantrag und REM_RATES sagen dasselbe (53.082791ms)
+✔ Verguetungsprofil: Fall schlaegt Antrag, Antrag wird gekennzeichnet, nichts wird geraten (34.311416ms)
+✔ Reiter: fehlende Angaben werden getrennt gezaehlt und nie als 0 mitaddiert (93.441459ms)
+✔ Reiter: der Bildschirm zeigt die Luecken - auch wenn es keine gibt (62.122291ms)
+✔ Reiter: ein Enddatum in der Zukunft beendet die Betreuung noch nicht (197.494791ms)
+✔ Reiter: dieselben Daten ergeben vormittags und nachmittags dieselben Zahlen (253.083583ms)
+✔ Reiter: ein Beginn in der Zukunft ist kein fehlendes Anfangsdatum (86.141208ms)
+✔ Reiter: dieselbe Person ergibt EINE Zeile, egal wie ihr Name geschrieben ist (87.105083ms)
+✔ Reiter: eine unvollstaendige Auswertung sagt das ueber ihrer ersten Zahl (90.094375ms)
+✖ Auslieferung: die Zahl der Skriptbloecke ist unveraendert 311 (58.281667ms)
+▶ Rueckfall: Server liest den Verguetungsantrag - und sagt es
+  ✔ gepflegte Stammdaten schlagen den Antrag (0.261209ms)
+  ✔ leere Stammdaten holen sich die Angaben aus dem Antrag (0.090334ms)
+  ✔ ohne Antrag bleibt der Fall ehrlich leer (0.028625ms)
+  ✔ Client und Server leiten identisch ab (2.752958ms)
+✔ Rueckfall: Server liest den Verguetungsantrag - und sagt es (327.394542ms)
+✔ Die Ableitung ist kein toter Code mehr (58.39525ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ Dashboard-Layout wird benutzerspezifisch validiert, gespeichert und im Büroabbild gesichert (259.714833ms)
+✔ Ablage: datenschutz steht in der Whitelist und hat eigene Schranken (2.405167ms)
+✔ Rechte (ausgefuehrt): Schreiben verlangt isAdmin || canManageOfficeProfile (291.416708ms)
+✔ Rechte (ausgefuehrt): die Lese-Schranke greift nur fuer die eigens geschuetzten Schluessel (26.087542ms)
+✔ Rechte (ausgefuehrt): unbekannte Schluessel verraten sich nicht (4.504833ms)
+✔ Vorlage: alle sieben Verarbeitungstaetigkeiten mit stabilen Kennungen (4.699917ms)
+✔ Vorlage: alle zwoelf TOM-Punkte mit stabilen Kennungen und gueltigen Gruppen (0.960875ms)
+✔ Vorlage: TOM-Punkte ohne Programmbezug starten ohne Beschreibung und ohne Status (1.083625ms)
+✔ Vorlage: die Saeuberung laesst die stabilen Kennungen unangetastet (0.50075ms)
+✔ Erstbefuellung (ausgefuehrt): leer -> Vorlage, danach nie wieder (0.686958ms)
+✔ Erstbefuellung (ausgefuehrt): auch ein leergeraeumtes Verzeichnis bleibt leer (0.774625ms)
+✔ Frist Auskunftsersuchen: ein Monat ab Eingang (Art. 12 Abs. 3 DSGVO) (0.459334ms)
+✔ dsIso: nur ein wirklich existierendes Datum wird gespeichert (ausgefuehrt) (0.349667ms)
+✔ Frist Datenpanne: 72 Stunden ab Entdeckung, in Stunden gerechnet (Art. 33 Abs. 1) (4.215209ms)
+✔ Fristanzeige: verbleibende Zeit und Ueberfaelligkeit werden gerechnet (1.83675ms)
+✔ Kalender (ausgefuehrt): Termin ist lokal und traegt weder Namen noch Vorfall (1.616833ms)
+✔ Kalender (ausgefuehrt): ohne Kennung oder Frist entsteht gar kein Termin (1.10825ms)
+✔ Kalender (ausgefuehrt): Abschalten nimmt den Termin wieder zurueck (1.049458ms)
+✔ Laden (ausgefuehrt): ein Fehlschlag ist NICHT dasselbe wie ein leeres Buero (3.0535ms)
+✔ Reiter (ausgefuehrt): ein Ladefehler schreibt NICHTS und sagt es ehrlich (0.618334ms)
+✔ Reiter (ausgefuehrt): ein gepflegter Bestand wird gelesen und nicht angetastet (0.842875ms)
+✔ Reiter (ausgefuehrt): ein wirklich leeres Buero bekommt die Vorlage genau einmal (0.70925ms)
+✔ Verzeichnis (ausgefuehrt): ein geaendertes Feld stempelt die Zeile nicht als geprueft (0.803458ms)
+✔ Verzeichnis: die Bestaetigung steht als eigener Knopf im Kartenfuss (33.0955ms)
+✔ Lokalsicherung: die Datenschutz-Dokumentation wird gesammelt UND zurueckgeschrieben (16.197667ms)
+✖ Auslieferung: die Blockzahl bleibt bei 311 (38.740125ms)
+✔ Auslieferung: der Datenschutz-Baustein haengt an denselben Rechten wie der Server (19.249333ms)
+✔ GUI-Runde 29.08.: eine Kopfleiste, feste Raster, gedeckelte Breiten (331.717291ms)
+✔ GUI-Runde 29.08. II: alle Felder einer Karte sind gleich hoch (216.916459ms)
+✔ GUI-Runde 29.08. III: Fristen vor Erledigung, Terminschalter bei der Frist, sprechender TOM-Knopf (258.481916ms)
+✔ Auskunftsersuchen: die Fristverlängerung nach Art. 12 Abs. 3 S. 2 ist einstellbar (435.346542ms)
+✔ Vorlagenpunkte sind wiederherstellbar – Bibliothek statt Papierkorb (431.8555ms)
+✔ Eigene TOM-Maßnahmen sind gleichwertig: Bezeichnung und Leitfrage bearbeitbar (273.726167ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ Zwei Vorführkonten: WebSocket verbindet und die Nachricht kommt live an (65.816792ms)
+✔ Präsenz: Vorführkonten sehen einander, echte Konten bleiben getrennt (39.636834ms)
+✔ RAM-Wegwerfspeicher: der Demo-Marker aktiviert den Tausch des Außendienst-Blocks (34.49975ms)
+✔ Login-Gate: Demo-Zweig, Paket-Boot und Rückkehr in den echten Speicher (119.854417ms)
+✔ Anmeldeseite: der Demo-Knopf hängt am Server-Schalter (88.416208ms)
+✔ Einstellungsmenü: eigener Bereich „Demo-Modus" unter dem Lokalen Modus (56.402666ms)
+✔ Chat und Echtzeit sind für die Vorführung freigegeben - sonst nichts (28.600584ms)
+✔ Übungspostfach: neue Geschichten zu den fünf Fällen, keine Karteileichen, nie verstrichene Fristen (133.124625ms)
+✔ Demo-Intro: eigene Variante, erscheint bei jeder Anmeldung, Mustermensch-Marke erzeugt (190.782208ms)
+✔ Online-Grundlage (Nutzerentscheid 30.08., 4. Runde): Attrappen statt Lokal-Blockaden (312.833125ms)
+✔ Online-Grundlage, 5. Runde: Badge D, Mail-Karte, Fallwechsler-Brücke, Banking-Einstieg (141.427625ms)
+✔ Bürovorlagen: generell umbenannt, Alt-Erkennung unangetastet (75.367709ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ Schalter: einschalten legt die zwanzig Vorführkonten an, ausschalten räumt ab (13542.993583ms)
+✔ Login-Regeln: Vorführkonten nur über den Demo-Zugang, echte nie darüber (Quelltext-Pins) (0.5115ms)
+✔ Online-Schranke: Demo-Sitzungen erreichen NUR den Chat (4.501625ms)
+✔ Selbstheilung: fehlende Kontenreihen entstehen beim Serverstart (Nutzerfund: DemoAdmin-Login schlug fehl) (0.6515ms)
+✔ Vorführkonten: zwei Reihen - Mitarbeitende und Administration (Nutzerentscheid 30.08.) (0.336792ms)
+✔ Chat-Trennung: Demo sieht nur Demo, echt sieht nur echt - auch bei der Teilnehmerwahl (9.975666ms)
+✔ Online-Modus: die fünf festen Vorführ-Fälle bleiben selbst für Admins unsichtbar (1.615ms)
+✔ Vorführpaket: vollständig, bebildert und restlos verfremdet (1631.249666ms)
+✔ Aufräumen (0.55675ms)
+✔ Banking-Attrappe: fünf Konten, gültige IBANs, lückenlose Saldo-Ketten (34.971208ms)
+✔ Banking-Attrappe: Auftrags-Lebenslauf entwurf → freigegeben → eingereicht, nie echt (23.198375ms)
+✔ Zahlungsvorschläge-Attrappe: sicherer Treffer für die Nowak-Rechnung, RAM-Matching wie am Server (47.295833ms)
+✔ Kontakt-Ablage-Attrappe: Ablauf übernehmen/verwerfen/wiederherstellen, Sync-Nachschub einmalig (63.5145ms)
+✔ KI-Vorführantworten: Themen treffen, Kennzeichnung immer dabei (4.2055ms)
+✔ Kalender-Attrappe: ein Musterkonto, Listen-Auswahl wirkt, Neuanlage ehrlich abgelehnt (21.661625ms)
+✔ Explorer-Attrappe: 13 Register je Fall, Listing ohne Inhalte, Schreibwege gesperrt (32.308375ms)
+✔ Formular-Attrappe: Seed, RAM-CRUD und Pflichtfeld wie am Server (13.217584ms)
+✔ Vertretungs-Attrappe: Seed passt zum RAM-Personenregister der Vorführung (35.692208ms)
+✔ Datenadministration: Fallliste aus der Registry, Schreibwege gesperrt (40.956584ms)
+✔ Reihenfolge-Vertrag: __wieOnline steht vor jedem Aufrufer (0.254625ms)
+✔ Feinschliff 30.08.: ausgegraute Schreibwege, offener Fall markiert, ehrliche Texte (198.681625ms)
+✔ Fallbezug: die Vorführung kennt ihren offenen Fall (Nutzerfund: fehlende Umschalter) (49.9105ms)
+✔ Angleichung 30.08. abends: Verwaltungssicht, alle Bereiche, Meine Einstellungen (79.790917ms)
+✔ Verwaltungs-Attrappe: die sieben freigeschalteten Bereiche haben eine Datengrundlage (6.885042ms)
+✔ Vorführung liefert die Anwendung nicht als Datei aus (Nutzerfund 30.08. abends) (113.540583ms)
+✔ Vorführdaten kommen wirklich an: Paket-Cache und Mail-Zähler (Nutzerfund 30.08.) (30.174208ms)
+✔ Fallwechsel-Toast: kein Excel-Hinweis in der Vorführung (Nutzerfund 30.08.) (23.666959ms)
+✔ Datenfülle und Leseansicht (Nutzerfund: kaum Mail, kaum Dateien, leere Leseansicht) (177.603417ms)
+✔ Fallwechsler: einheitliche Beschriftung mit Aktenzeichen (Nutzerfund 30.08.) (56.157833ms)
+✔ Fallwechsler: auch der GEÖFFNETE Fall trägt sein Aktenzeichen (Nutzerfund 30.08. abends) (23.592208ms)
+✔ Optionen validieren Remote-Offsite, Retention und getrennte Konsistenz-Retries (1.605583ms)
+✔ Verpasster Wochenlauf wird nachgeholt, bei deaktiviertem Catch-up aber nicht (1.14325ms)
+✔ Überfälligkeit folgt dem nächsten geplanten Wochen- oder Monatstermin (1.131292ms)
+✔ Ungültiges options_json wird kritisch gemeldet und niemals mit Defaults ausgeführt (4.775ms)
+✔ Fehler wird begrenzt wiederholt und erfolgreicher Lauf transportiert Härtungsoptionen (14.781334ms)
+✔ persistierter Offsite-Retry lädt nur den fertigen Snapshot und errichtet keine neue Schreibsperre (3.433167ms)
+✔ manueller oder neuer planmäßiger Lauf nimmt trotz Pending immer eine frische lokale Generation auf (1.197917ms)
+✔ Fehler eines frischen Laufs vor SNAPSHOT bewahrt den vorhandenen Offsite-Retry-Kontext (1.063667ms)
+✔ Serverstart kennzeichnet alten Lauf als unterbrochen und plant genau einen Retry (0.827ms)
+✔ Serverstart reconciliiert einen attestierbaren Offsite-Kontext einmalig auch nach ausgeschöpftem Backoff (1.335584ms)
+✔ Kapazitätsmeldung und fehlende Schutzbausteine erscheinen im Healthstatus (0.20075ms)
+✔ Fehlendes Dead-Man-Erfolgssignal wird als eigener Healthalarm gemeldet (0.25625ms)
+✔ Beschädigte Quell- und Zielkonfigurationen werden fail-closed gemeldet (0.126542ms)
+✔ Warnmailfehler bleibt Diagnosewert und verändert den Backupstatus nicht (2.016041ms)
+✔ Health-Watchdog ist single-flight und eine hängende Warnmail endet an eigener Frist (28.026125ms)
+✔ Fehlender aktiver Gesamtjob löst mit Default-Einstellung Systemwarnung und Warnmail aus (1.289667ms)
+✔ Mailfehler ist eigener Healthhinweis, ohne den erfolgreichen Backupjob umzudeuten (0.880625ms)
+✔ Offsite-Warteschlange wird nach Neustart aus dem Ziel gelesen und profilfremder Bestand ist kritisch (3.259708ms)
+✔ Manueller Start reserviert synchron genau einen Lauf (1.132292ms)
+✔ Pausierter oder administrativ reservierter Zeitplan kann nicht manuell starten (0.700541ms)
+✔ Konfigurationsänderung während des Laufes wird nicht als neuer Erfolg attestiert (0.8975ms)
+✔ TARGET_ID wird per CAS sofort gebunden und nicht erst nach Offsite-Erfolg (0.815958ms)
+✔ Gesamtbackup materialisiert über den starken Vor-Snapshot-Vertrag (2.750834ms)
+✔ Import und Zwei-Wege-Paarung können die lokale Snapshotphase nicht überlappen (8.351708ms)
+✔ Gesamtbackup belegt erst die Schreibbarriere und danach den Koordinator (4.348917ms)
+✔ Mount-Cursor bleibt am Laufstart und nimmt während des Uploads entstandene Dateien im Folgelauf mit (6.597417ms)
+✔ Mount-Lauf besitzt eine Gesamtfrist und ein auslaufender Provideraufruf verhindert Überlappung (29.786083ms)
+✔ manueller und laufender Mount-Lauf reservieren dieselbe Single-flight-Sperre (4.05575ms)
+document-finder-sync: Scan, Apply, Finder-Moves, Regeln und Idempotenz ok
+✔ tests/document-finder-sync.test.js (151.249375ms)
+✔ Zeitplan ist konfigurierbar und Nachhollauf verwendet den gewählten Modus (8.411625ms)
+✔ Finder-Löschungen brauchen eine getrennte Freigabe und verschonen verwaltete Abbilder (1.482792ms)
+✔ Zeit- und Intervallvalidierung sowie letzter wöchentlicher Termin (0.405541ms)
+✔ Automatischer Plattenabgleich wartet hinter der Sicherungsschranke und bleibt nachholbar (0.315625ms)
+✔ pflegt Fallabbilder und entfernt ein nicht mehr vorhandenes Passfoto (151.196875ms)
+✔ verwaltet Büroabbilder admin-only, verlangt den externen Schlüssel und erneuert sie nachts (668.634292ms)
+✔ behält bei einem Publikationsfehler die letzte gültige Fassung (14.053375ms)
+✔ meldet ein unlesbares internes Secret sichtbar und pflegt die unkritischen Büroabbilder weiter (44.243209ms)
+✔ entprellt markierte Änderungen und veröffentlicht erst nach Fälligkeit (13.218959ms)
+✔ Vollbackup erkennt gleich lange Änderungen derselben SQLite-Sekunde und überspringt danach unveränderte Generatoren (668.318458ms)
+✔ erzeugt mit schwachem Legacy-Recovery-Key keine neuen Sicherheitsumschläge (198.21525ms)
+✔ zieht Security-Änderungen entprellt nach und belegt die aktuelle DB-Quellrevision (431.400416ms)
+document-migration: dry-run, Abbruch/Fortsetzung, Module, Waisen und Wiederholung ok
+✔ tests/document-migration.test.js (439.75675ms)
+✔ normalisiert Unicode auf NFC und vergleicht deutsche Namen ohne Gross-/Kleinschreibung (1.735667ms)
+✔ ersetzt Windows-Zeichen und Steuerzeichen mit sichtbaren Gruenden (0.49925ms)
+✔ entfernt nachgestellte Punkte und Leerzeichen (0.297292ms)
+✔ entschaerft reservierte Windows-Geraetenamen auch mit Endung (0.519458ms)
+✔ kappt auf 255 UTF-8-Bytes ohne Zeichen zu teilen und erhaelt die Endung (0.633958ms)
+✔ liefert fuer jede Anpassung Original, Ergebnis und Bytewerte (2.415417ms)
+✔ führt konkurrierende Arbeiten seriell aus und priorisiert die Warteschlange (3.627209ms)
+✔ verschachtelte Arbeit ist reentrant und skipIfBusy startet keine Konkurrenz (4.414125ms)
+✔ read-only Scan meldet Größe, SHA, Sidecar, NFD, Legacy-Waise und Symlink und journalisiert (33.72375ms)
+✔ Apply zieht eine eindeutige Finder-Umbenennung per .ablage-Sidecar nach und normalisiert NFD im DB-Namen (8.050917ms)
+✔ Apply zieht einen eindeutigen Finder-Move über dev+ino in den neuen Ordner nach (8.52975ms)
+✔ Apply erkennt physisches Löschen ausschließlich als missing und lässt die DB-Zeile aktiv (3.00375ms)
+✔ Apply setzt bei nicht verfügbarer Speicherwurzel nicht alle Dateien fälschlich auf missing (4.108417ms)
+✔ Apply nutzt SHA+Größe nur bei genau einem Kandidaten (7.604458ms)
+✔ Apply meldet eine case-insensitive Zielkollision sichtbar und überschreibt keine DB-Zuordnung (5.458083ms)
+✔ mehrdeutige SHA+Größe-Kandidaten bleiben Konflikt und werden nicht automatisch zugeordnet (7.804208ms)
+✔ geschützte Verwaltung trennt quittierte Waisen und Umstellungsberichte von unbekannten Dateien (14.935083ms)
+✔ automatischer Vollabgleich verändert verwaltete Abbilder nicht (5.826916ms)
+document-storage: ok
+✔ tests/document-storage.test.js (117.934042ms)
+✔ Fallanlage erzeugt exakt die Register 00 bis 12 und keine Unterordner (0.996542ms)
+✔ liest ISO- und deutsche Daten und weist ungueltige Kalendertage ab (0.713208ms)
+✔ Dokumentationseintrag verwendet Ereignisdatum, Uhrzeit und flachen Eintragsordner (1.728916ms)
+✔ Dokumentationseintrag übernimmt ohne eigenes Zeitfeld die Anlagenzeit (2.306708ms)
+✔ Dokumentationseintrag verlangt ein bestes verfuegbares Datum und meldet Namensanpassungen (0.370458ms)
+✔ Berichtszeitraum nutzt Kalenderjahr oder den abweichenden Monatszeitraum (0.657208ms)
+✔ ciFolderGuess legt Leistungstraeger nach 05 und Unbekanntes nach 00 (0.947916ms)
+documents-replacement-rollback: DB, Datei, Sidecar, Restore und Strom ok
+✔ tests/documents-replacement-rollback.test.js (544.903167ms)
+documents-route-real-folders: config compatibility and export routing ok
+✔ tests/documents-route-real-folders.test.js (433.921208ms)
+documents-route-scope: Fallrechte und Registerinvariante ok
+✔ tests/documents-route-scope.test.js (2025.032416ms)
+doku-attachments: ok
+✔ tests/doku-attachments.test.js (60.525292ms)
+doku-date: ok
+✔ tests/doku-date.test.js (85.991334ms)
+✔ Die globale Dunkelmodus-Regel setzt nur noch die Farbe, nicht die Kurzschreibweise (1.290083ms)
+✔ Beide Auswahlfelder mit eigenem Pfeil bekommen ihn im Dunkelmodus zurueck (71.93925ms)
+✔ Im Hellmodus bleibt alles wie bisher (38.613834ms)
+✔ Online-Admin sieht alle 30 Bereiche - der Umbau hat online nichts weggenommen (106.611834ms)
+✔ Lokal-Admin: die tragfähigen Bereiche erscheinen, die Server-Bereiche wandern in den Sammelhinweis (52.530709ms)
+✔ Datei-Betrieb (kein Konto): fail-closed trotz permissionValue(null)=true (58.667708ms)
+✔ Lokal-Nutzer ohne Rechte: Gates wirken zusätzlich zur Modus-Matrix (66.643667ms)
+✔ Online-Person ohne jedes Recht: der Briefkopf bleibt sichtbar (Nur-Lese), die Buerostammdaten nicht (Nacharbeit P3) (87.049917ms)
+✔ Der Kern des Umbaus: AD-Gate, Ladepfad, Sammelhinweis, Datei-Einstieg (166.756208ms)
+✔ Willkommens-Schalter und Herkunfts-Zugangszeile tragen lokal (59.208125ms)
+✔ Server: Vorgaben und Rollen liest JEDE angemeldete Person - auch ohne Fallrechte (261.076041ms)
+✔ Server: Schreiben verlangt Admin oder Bürostammdaten-Recht (28.46425ms)
+✔ Server: Roundtrip - Gespeichertes kommt für eine rechtelose Sitzung zurück (4.595083ms)
+✔ Server: Rechte-Schablonen im rollen-Blob nur für Verwaltende (Redaktion) (4.216375ms)
+✔ Server: unbekannte Schlüssel verraten sich weiterhin nicht (Reihenfolge Recht vor Whitelist) (3.378792ms)
+✔ Auflösung: Person schlägt Rolle schlägt Büro, zwingend reist mit (8.962917ms)
+✔ Auflösung: __einstellungenVorgabe wirkt nur online und nur angemeldet (2.072458ms)
+✔ Auflösung: __eigeneWahlGesperrt genau bei Vorgabe-Wert AUS (6.089ms)
+✔ Katalog: die verdrahteten Schlüssel sind vollständig und eindeutig (4.539375ms)
+✔ Leser: stil() folgt der zwingenden Vorgabe, sonst der eigenen Wahl (19.80325ms)
+✔ Leser: dlTarget() ebenso (22.096917ms)
+✔ Leser: __defaultSendAccount() ebenso (20.114792ms)
+✔ Leser: die Sperr-Wächter stehen in beiden Vorlagen-Lesern (24.476084ms)
+✔ Lokal-Whitelist: Standard-Sendekonto und Standard-Kalender überleben das Neuladen (13.03375ms)
+✔ Benachrichtigungen: eigener Bereich statt versteckt in den Mail-Einstellungen (292.257916ms)
+✔ Benachrichtigungen: der Fristen-Vorlauf ist nicht mehr hart verdrahtet (68.544959ms)
+✔ Kuratierung: Gruppen-Überschriften und einheitliche Vorgabespalte (130.088041ms)
+✔ Vorgaben: je Person einzeln steuerbar, mehrere in einem Zug (20.679708ms)
+✔ Kuratierung: die Vorgabespalte hat gegliederte, volle Zeilen (139.7675ms)
+✔ Vorgaben: die Rollen-Wahl verschweigt sich nicht mehr (52.008416ms)
+✔ Mail-Prefs (ausgeführt): ein Teil-PUT löscht keine fremden Felder (308.459417ms)
+✔ Layout: die Dialoggröße überlebt eingebettete Bausteine (41.0855ms)
+✔ Layout: der Dialog ist gegen den globalen Scroll-Vertrag abgeschirmt (15.001125ms)
+✔ Unterschriften: nur noch an EINER Stelle (Nutzerwunsch 27.08.) (57.024333ms)
+✔ Erweiterung: alles an EINER Stelle (Nutzerwunsch 27.08.) (77.255792ms)
+✔ Kuratierung: eine Tabelle mit festen Spalten statt zweier versetzter (69.596417ms)
+✔ Kuratierung: „Woher kommt was" ist nach Bereichen gegliedert (37.044958ms)
+✖ Struktur: Blockzahl unverändert (NEUER script-Block ist verboten) (53.129291ms)
+✔ Nutzer-Menü: Reihenfolge der Unterpunkte (Nutzervorgabe 30.08.2026) (27.848625ms)
+✔ Struktur: Dialog, Sidebar-Matcher und Whitelist-Einträge vorhanden (246.169625ms)
+✔ Einbettung: die Bereiche rendern IM Dialog, nicht daneben (Nutzer-Rückmeldung 27.08.) (161.025584ms)
+✔ Einbettung: switchTab zerstört den Einstellungsdialog nicht mehr (schwerster Befund) (24.169125ms)
+✔ Einbettung: das Menü räumt seine Wirte beim Schließen ab (37.227125ms)
+✔ Einbettung: eingebettete Erfolgspfade schließen nicht das ganze Menü (15.207333ms)
+✔ Einbettung: KI-Direktverbindung und Mail sind vollständig verdrahtet (106.30375ms)
+✔ Standard-Ausgangskonto: die persönliche Wahl hängt nur noch am Konto (126.966917ms)
+✔ Admin-Panel: jeder Reiter hat einen Bereich im Einstellungsmenü (38.058917ms)
+✔ Admin-Panel: die Kopf-Aktion der Hülle ging verloren und ist wieder da (72.159333ms)
+✔ Admin-Panel: online führt kein Weg mehr in die alte Hülle (103.670125ms)
+✔ Altdialoge: jeder führt online in seinen Bereich des Einstellungsmenüs (117.072833ms)
+✔ Altdialoge: kein Unterdialog reißt das Menü aus dem geteilten Modal (23.504584ms)
+✔ Indikatoren: jeder Navigationseintrag hat einen (61.830458ms)
+✔ Indikatoren: der Layout-Haken ist ein Attribut, keine Klasse (62.519208ms)
+✔ Indikatoren: die geerbten Aktualisierer werden beim Öffnen angestoßen (150.111667ms)
+✔ Indikatoren: die Statusabfrage hält die Rechte ein (ausgeführt) (9.221ms)
+✔ KI-Schnellzugriff: Eintrag, Ziel und Recht (59.797291ms)
+✔ KI-Indikator: hängt am Serverstand, nicht am toten Browser-Zustand (101.173084ms)
+✔ Nutzerbereich: bleibt am unteren Rand stehen und scrollt nicht weg (22.495833ms)
+✔ Sortierer: das Nutzer-Menü darf nie in eine Gruppe einsortiert werden (24.108417ms)
+✔ KI-Zugangsdaten: EIN Block, der Büro-Schlüssel gewinnt je Anbieter (110.955542ms)
+✔ KI-Pruefstatus: gruen erst nach aktivem Test, Key-Wechsel setzt zurueck (0.998375ms)
+✔ KI-Zugangsdaten: das Feld weicht dem Hinweis, wenn das Büro einen Schlüssel hat (47.165167ms)
+✔ KI-Zugangsdaten: der Büro-Schlüssel gewinnt zur Laufzeit – Server und Client gleich (41.061041ms)
+✔ KI-Zugangsdaten: eigene Werte wandern serverseitig mit, wenn das Recht da ist (37.190125ms)
+✔ Standard-Ausgangskonto: der Stern sitzt in der Kontenliste, das Auswahlfeld ist weg (131.9395ms)
+✔ „Woher kommt was": der Hinweis auf den abgelösten Dialog ist entfernt (28.428167ms)
+✔ Standard-Ausgangskonto: auch die BÜRO-Ebene hat nur noch eine Stelle (110.876917ms)
+✔ Signaturen: die Auflösung folgt der Wahl am Konto, ohne Rückfall (40.392584ms)
+✔ Signaturen: der Kontodialog zeigt die Wahl statt eines dritten Textfelds (89.935667ms)
+✔ Signaturen: die abgelösten Konto-Texte werden einmal gezeigt, bevor sie fort sind (12.523167ms)
+✔ Systemversand: das benutzte Konto lässt sich nicht mehr still entziehen (0.2385ms)
+✔ Systemversand: die Zuweisung sitzt in der Kontenzeile, das Auswahlfeld ist weg (80.199084ms)
+✔ Fußleisten: die Sticky-Regel des KI-Dialogs greift nur auf DESSEN Leiste (15.872542ms)
+✔ Feldhöhen: Textfeld, Dropdown und Uhrzeit stehen in einer Linie (35.759375ms)
+✔ Dokumentinfo-Höhe greift nur in ihrem eigenen Dialog (43.488167ms)
+✔ Vorlagen & Formulare: der Speicherwege-Hinweis klebt nicht mehr unten (32.364ms)
+✔ Mail-Einstellungen: Reihenfolge Systemversand → Signatur → Regeln → Vorlagen (47.350166ms)
+✔ Schritt 3: die Büro-Signatur hat einen eigenen Kasten und einen eigenen Speicherweg (90.111375ms)
+✔ Abgelöste Konto-Signaturen verschwinden, sobald die neue Büro-Signatur steht (57.651417ms)
+✔ Reine Vorgabe-Regeln sagen, wo man sie umstellt (48.507583ms)
+✔ Datenadministration: fünf gleich gebaute Karten über die volle Breite (Variante B) (108.941292ms)
+✔ Umbau-Notizen sind aus der Oberfläche verschwunden (90.428625ms)
+✔ Vorschlagslisten: die linke Spalte reicht so weit wie die rechte (32.860625ms)
+✔ Datenadministration: Knopfreihen stehen in Spalten (62.105041ms)
+✔ Standard-Ausgangskonto wird unter der Kontenliste gezeichnet (64.071334ms)
+✔ Kalender: drei Abschnitte in der Reihenfolge, in der man arbeitet (98.188291ms)
+✔ Kalender: die Verbindung ist eine Karte, „Entfernen" steht abgesetzt (60.453ms)
+✔ Kalender: Anbieter gruppiert, Kartentitel eine Ebene unter dem Seitentitel (71.068042ms)
+✔ Versandwege: die Export-Karten sind online abgeschaltet – lokal bleiben sie (225.941041ms)
+✔ Eingebettete Fußzeilen kleben nicht über dem Inhalt (0.217875ms)
+✔ Dateinamen & Betreff trägt die Vorlagen je Dokumentart (78.175916ms)
+✔ Vorlagen-Panel: gegliedert statt Textwand, ohne feste Farben (134.429834ms)
+✔ Klapp-Zeile: Bedienelement wie überall, Nachschlagen daneben (140.96325ms)
+✔ Klapp-Zustand überlebt das Neuzeichnen (27.910917ms)
+✔ Download-Ziel behält alle fünf Möglichkeiten und beide Hinweise (43.448458ms)
+✔ Signalfarben kommen aus den vorhandenen Variablen (45.496875ms)
+✔ Der neue Feldtyp ist beiden Beschriftungs-Helfern bekannt (17.998959ms)
+✔ Erklärzeile und Auslöser bleiben beieinander (32.398334ms)
+✔ Vorgabe-Box: Stand immer sichtbar, Felder auf Verlangen (75.18775ms)
+✔ Der Stilblock der Box steht vor den Stufenfarben (60.337375ms)
+✔ Klappzustand, Gedächtnis und Fokus überleben das Neuzeichnen (108.854542ms)
+✔ Fremde Nutzer der Box bleiben unversehrt (67.31275ms)
+✔ Feinschliff: der Zwingend-Hinweis erklärt das Formular und steht darin (11.209375ms)
+✔ Feinschliff: der lange Nachsatz des Schalters klappt weg (35.873167ms)
+✔ Vorschlagslisten: beide Spalten sind gleich lang (128.244ms)
+✔ Vorschlagslisten füllen die Höhe exakt, ohne Fensterrechnung (71.771125ms)
+✔ Vorschlagslisten: der Kopf der rechten Spalte verschwendet keine Zeile (51.596792ms)
+✔ Der Stilblock der Vorschlagslisten hat ausgewogene Klammern (20.160875ms)
+✔ Falldaten: die Aktionsknöpfe stehen in jeder Zeile untereinander (98.508ms)
+✔ Falldaten: die Aktionsspalte bleibt bei schmalem Fenster erreichbar (77.835584ms)
+✔ Datenadministration: gefüllte und umrandete Knöpfe sind gleich hoch (35.180833ms)
+✔ Falldaten: die Auswahlfelder für Betreuer und Vertretung schneiden nicht mehr ab (66.600167ms)
+✔ Falldaten: die Markierung des aktiven Falls endet an der Aktionsspalte (34.605792ms)
+✔ Standard-Ausgangskonto: eigene Karte statt rahmenlosem Block zwischen Karten (86.203625ms)
+✔ Datenadministration: das Kurz-Label läuft nicht mehr auf den ersten Knopf (43.39ms)
+✔ Falldaten: die Trennkante der Aktionsspalte liegt AUF dem Rahmen, nicht daneben (46.014375ms)
+✔ Mail-Einstellungen: der Benachrichtigungs-Hinweis führt hin, statt nur zu zeigen (223.938042ms)
+✔ Systemversand: Wegweiser sehen nicht mehr aus wie Eingabefelder (111.668125ms)
+✔ Mail-Einstellungen: Speichern-Zeilen kleben nicht am Feld darüber (40.96675ms)
+✔ Mail-Einstellungen: jede Karte sagt an derselben Stelle, für wen sie gilt (180.352292ms)
+✔ Verarbeitungs-Log: eine Überschrift, eine Knopfreihe, gleich hohe Felder (171.548458ms)
+✔ Datenschutz: die Kopfdaten stehen in einem Formular, nicht in einer Streuung (263.409875ms)
+✔ Mail-Karten: die Marke sitzt in der Kopfzeile, nicht im Beschreibungstext (33.924208ms)
+✔ Einstellungsmenü: die Navigationsleiste springt beim Seitenwechsel nicht mehr nach oben (76.328833ms)
+✔ E-Mail-Links im Adressbuch: eigene Karte, ehrlich beschriftet (53.5285ms)
+✔ Fallliste-Zusammenführung Schritt 1: Zeitstempel, Archiv-Karte, eine Trennlinie (116.321458ms)
+✔ Falldaten: die Aktionsspalte ist ein Menü – die Tabelle passt wieder ins Fenster (167.944958ms)
+✔ Mehrfachauswahl: das Anhaken lässt die Einstellungs-Schale stehen (45.409917ms)
+✔ Mehrfachauswahl auch im Fallarchiv – mit eigenen Sammelaktionen (137.729083ms)
+✔ Sammelaktionen: frische Liste, Grund bei Ablehnung, Auswahl bleibt bei Fehlschlag (123.693792ms)
+✔ Fall-Formulare legen sich über den Baustein, nicht über die Einstellungs-Schale (87.236ms)
+✔ Sammel-Löschen gibt es in BEIDEN Falltabellen (70.544708ms)
+✔ Fallliste-Zusammenführung Schritt 2a: Suche in der Datenadministration, Bereich „Fälle" abgebaut (250.319917ms)
+✔ Fallliste-Zusammenführung Schritt 2b: die Sidebar-Menüs zeigen die Karten der Datenadministration (136.626208ms)
+✔ Zählpunkte, KI-Haken, Zahnrad – die drei Wünsche vom 29.08. nachmittags (180.859208ms)
+✔ Kalender-Karten: Lesebreite statt Bandwurmzeilen, der Feed-Text ist gegliedert (101.319375ms)
+✔ Unterschriftauswahl: das Feld füllt sich nach, statt tot zu bleiben (51.000291ms)
+✔ Unterschriftauswahl: der Nachfüller schreibt nur bei echter Änderung (Beobachter-Schleife) (37.915458ms)
+✔ Blockade-Hinweis: Helfer + rote Markierung (hell und dunkel) (68.428167ms)
+✔ Blockade-Hinweis: alle fünf Prüfstellen rufen den Helfer (28.778583ms)
+✔ Formular-Assistent stellt alle fachlichen Datenquellen als Dictionary-Werte bereit (3.655958ms)
+✔ reale Datensicherung liefert Fall-, Berichts-, Doku- und deutsche Kontaktfelder (1.124834ms)
+✔ Extension-Dokumentrouten verwenden zentrale Fallakte mit Berechtigung und Altbestands-Fallback (0.257125ms)
+✔ Die Versionsnummer der Erweiterung ist in allen Paketquellen synchron (4.64275ms)
+✔ Die Quellenregel: JSON allein genuegt, Excel-Paar genuegt, halbe Sachen nicht (12.153833ms)
+✔ Alle vier Importwege benutzen dieselbe Regel (49.996833ms)
+✔ Mehrfallimport: ein Ordner voller JSON-Dateien wird erkannt (ausgefuehrt) (14.631625ms)
+✔ Der Datei-Weg bietet die JSON als eigenstaendigen Weg an (28.272959ms)
+✖ Blockzahl bleibt bei 311 (53.917667ms)
+✔ Zeilenbildung (ausgefuehrt): die Vorschau nimmt die eingetippten Werte und schreibt das Datum deutsch (93.829542ms)
+✔ Verdrahtung: der Streifen steht im Formular, klappt eigenstaendig auf und zieht bei jeder Eingabe nach (78.0045ms)
+✔ Gestaltung: der Streifen sieht auch im freistehenden Formular wie im Lesebereich aus (38.307667ms)
+✔ Fusszeile: der Tastaturhinweis sagt, was die Tasten tun (18.577167ms)
+✔ Briefkopf: der erste Ausgangspunkt heisst nach seinem Deko-Element „Balken“ (31.168125ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+▶ Aufgaben-Feed (CalDAV)
+  ✔ ohne gültigen Token: 401 (12.148625ms)
+  ✔ PROPFIND Depth:1 listet Sammlung + Einträge, aber nie Private (3.812667ms)
+  ✔ REPORT liefert Kalenderdaten, die unser eigener Parser versteht (3.731417ms)
+  ✔ GET auf die Sammlung ist ein ICS-Gesamtabo (0.702291ms)
+  ✔ PUT mit COMPLETED hakt die Aufgabe lokal ab (einziger Schreibweg) (3.02825ms)
+  ✔ PUT mit Inhaltsänderung ohne Statuswechsel: 403 + Journal (2.509417ms)
+  ✔ PUT auf eine Frist: immer 403 (Nur-Export) (2.160083ms)
+  ✔ DELETE wird abgelehnt (2.395875ms)
+  ✔ Basic-Auth mit Token als Passwort funktioniert als Ersatzweg (2.795625ms)
+✔ Aufgaben-Feed (CalDAV) (45.955791ms)
+✔ Fallbeginn-OCR bleibt fallbezogen und Außendienstanlagen sind idempotent (525.530333ms)
+✔ Der Quellmaterial-Abschnitt existiert und die Positivliste kennt die Kurations-JSONs (0.494125ms)
+✔ Positivlisten-Muster: Kurations-JSON ja, node_modules und PDFs nein (ausgefuehrt) (74.176083ms)
+✔ Der echte Abschnitt kopiert PDFs und laesst render/ zurueck (ausgefuehrt) (152.503416ms)
+✔ Der Restore laesst unbekannte Betriebs-Pfade bewusst liegen (1.529875ms)
+Gesamtsicherung – unvollständig: [
+  'Die Excel-Vorlagen konnten nicht geladen werden – Stammdaten/Adressverzeichnis fehlen als .xlsx (CSV und ODS sind enthalten).',
+  'Für „Aktiv, Anna“ fehlen die Excel-Dateien (Fall war nicht geöffnet – CSV und ODS sind enthalten).',
+  'Für „Bruch, Bernd“ fehlen die Excel-Dateien (Fall war nicht geöffnet – CSV und ODS sind enthalten).',
+  'Für „Chronik, Clara“ fehlen die Excel-Dateien (Fall war nicht geöffnet – CSV und ODS sind enthalten).'
+]
+✔ Online ohne abrufbare Serversicherung: Rueckfrage nennt Dokumentenspeicher UND Datenbank, danach laeuft der ZIP-Bau (17.62125ms)
+✔ 403 an der Jobs-Liste: Administratoren-Grundtext, Abbrechen bricht wirklich ab (0.667333ms)
+✔ 403 an der download-latest-Vorpruefung: ebenfalls Administratoren-Grundtext (0.485166ms)
+✔ Abrufbare Serversicherung: direkter Download bleibt der Vorrangweg, keine Rueckfrage (1.137959ms)
+✔ Frischladung: jeder nicht-aktive Fall laeuft ueber fetchCaseState -> GET /api/cases/:id/load, sequenziell (0.84325ms)
+Gesamtsicherung – unvollständig: [
+  'Die Excel-Vorlagen konnten nicht geladen werden – Stammdaten/Adressverzeichnis fehlen als .xlsx (CSV und ODS sind enthalten).',
+  'Für „Aktiv, Anna“ fehlen die Excel-Dateien (Fall war nicht geöffnet – CSV und ODS sind enthalten).',
+  'Für „Bruch, Bernd“ fehlen die Excel-Dateien (Fall war nicht geöffnet – CSV und ODS sind enthalten).',
+  'Für „Chronik, Clara“ fehlen die Excel-Dateien (Fall war nicht geöffnet – CSV und ODS sind enthalten).'
+]
+Gesamtsicherung – unvollständig: [
+  'Für „Lokal, Ludwig“ fehlen die Excel-Dateien (Fall war nicht geöffnet – CSV und ODS sind enthalten).'
+]
+✔ Altbestand: die fünf fest gekennzeichneten Vorführfälle werden auch in einer echten Online-Liste übersprungen (13.301ms)
+✔ Die Rechnungslegung eines NICHT-aktiven Falls landet in dessen Datensicherung.json (0.737834ms)
+✔ Archivierte Faelle landen im Archiv/-Ordner der ZIP (0.535583ms)
+✔ Dateiname online: "Arbeitsdatenexport (online).zip" mit Zeitstempel (0.55875ms)
+✔ Dateiname lokal: wortgleich weiter "Lokaler Arbeitsdatenexport.zip" (2.118541ms)
+✔ Demo-Modus: Arbeitsdatenexport bricht vor Abruf, Fallsammlung und ZIP-Bau ab (0.858708ms)
+✔ WAS-FEHLT.txt liegt NUR online unter Büroorganisation und benennt die Kernluecken (0.328375ms)
+✔ Die Betriebsarten-Pins gelten weiter: Sektion ohne /api/admin/, lokaler Name lebt (25.745041ms)
+✔ Die kuratierte 31.08.-Vorlage ist unverändert Server- und eingebettete Blankovorlage (11.542416ms)
+✔ Die kuratierte Servervorlage ist Standard-OOXML und boClonePlan läuft bereits auf dem Rohformat (48.317208ms)
+✔ boNormalizeTemplateWorkbookXml: Praefixe weg, xmlns:r am Root - boClonePlan, Blattverzeichnis-Regex und sheetId-Normierung laufen auf der echten Vorlage (43.458542ms)
+✔ Verdrahtung in der Auslieferung: Normalisierung am Ladepfad, Qualifikationen ohne Duplikat (152.954375ms)
+Büroorganisation für Komplettsicherung fehlgeschlagen Error: Prototyp-Blatt fehlt in der Vorlage: Fahrtenbuch KFZ
+    at cfg.bueroorgBuildAll (/private/tmp/calendar-baseline/server/tests/gesamtexport-online.test.cjs:583:46)
+    at window.downloadAllCasesZip (case-backup-all-v161.js:396:64)
+    at async fuehreExportAus (/private/tmp/calendar-baseline/server/tests/gesamtexport-online.test.cjs:178:3)
+    at async TestContext.<anonymous> (/private/tmp/calendar-baseline/server/tests/gesamtexport-online.test.cjs:584:13)
+    at async Test.run (node:internal/test_runner/test:1332:7)
+    at async Test.processPendingSubtests (node:internal/test_runner/test:911:7)
+Gesamtsicherung – unvollständig: [
+  'Die Excel-Vorlagen konnten nicht geladen werden – Stammdaten/Adressverzeichnis fehlen als .xlsx (CSV und ODS sind enthalten).',
+  'Für „Aktiv, Anna“ fehlen die Excel-Dateien (Fall war nicht geöffnet – CSV und ODS sind enthalten).',
+  'Für „Bruch, Bernd“ fehlen die Excel-Dateien (Fall war nicht geöffnet – CSV und ODS sind enthalten).',
+  'Für „Chronik, Clara“ fehlen die Excel-Dateien (Fall war nicht geöffnet – CSV und ODS sind enthalten).',
+  'Betreuungsorganisation: die Mappe (xlsx/ods/csv) UND die JSON fehlt/fehlen im ZIP (Prototyp-Blatt fehlt in der Vorlage: Fahrtenbuch KFZ).'
+]
+✔ Aeusserer Wurf (__bueroorgBuildAll): FEHLER-Datei in der ZIP, Warn-Toast statt Erfolgs-Toast, ACHTUNG-Zeile ganz oben in WAS-FEHLT.txt (24.117ms)
+Büroorganisation-JSON für Komplettsicherung fehlgeschlagen Error: Server-Endpunkt nicht erreichbar
+    at cfg.bueroorgCollectData (/private/tmp/calendar-baseline/server/tests/gesamtexport-online.test.cjs:622:49)
+    at window.downloadAllCasesZip (case-backup-all-v161.js:416:144)
+    at async fuehreExportAus (/private/tmp/calendar-baseline/server/tests/gesamtexport-online.test.cjs:178:3)
+    at async TestContext.<anonymous> (/private/tmp/calendar-baseline/server/tests/gesamtexport-online.test.cjs:623:13)
+    at async Test.run (node:internal/test_runner/test:1332:7)
+    at async Test.processPendingSubtests (node:internal/test_runner/test:911:7)
+Gesamtsicherung – unvollständig: [
+  'Die Excel-Vorlagen konnten nicht geladen werden – Stammdaten/Adressverzeichnis fehlen als .xlsx (CSV und ODS sind enthalten).',
+  'Für „Aktiv, Anna“ fehlen die Excel-Dateien (Fall war nicht geöffnet – CSV und ODS sind enthalten).',
+  'Für „Bruch, Bernd“ fehlen die Excel-Dateien (Fall war nicht geöffnet – CSV und ODS sind enthalten).',
+  'Für „Chronik, Clara“ fehlen die Excel-Dateien (Fall war nicht geöffnet – CSV und ODS sind enthalten).',
+  'Betreuungsorganisation: die JSON (verlustfreier Restore-Weg) fehlt/fehlen im ZIP (Server-Endpunkt nicht erreichbar).'
+]
+✔ Innerer Wurf (nur JSON): Mappe bleibt in der ZIP, FEHLER-Datei benennt die fehlende JSON, Warnform statt Erfolg (5.803833ms)
+Gesamtsicherung – unvollständig: [
+  'Die Excel-Vorlagen konnten nicht geladen werden – Stammdaten/Adressverzeichnis fehlen als .xlsx (CSV und ODS sind enthalten).',
+  'Für „Aktiv, Anna“ fehlen die Excel-Dateien (Fall war nicht geöffnet – CSV und ODS sind enthalten).',
+  'Für „Bruch, Bernd“ fehlen die Excel-Dateien (Fall war nicht geöffnet – CSV und ODS sind enthalten).',
+  'Für „Chronik, Clara“ fehlen die Excel-Dateien (Fall war nicht geöffnet – CSV und ODS sind enthalten).'
+]
+✔ Gegenlauf ohne Wurf: keine FEHLER-Datei, Erfolgs-Toast, keine ACHTUNG-Zeile (8.441417ms)
+✔ Auslieferung: __workToast traegt die Warnform (type warn, .work-toast.warn existiert im CSS) (13.106917ms)
+✖ Auslieferung: die Blockzahl bleibt bei 311 (46.389041ms)
+✔ v255-Injektor behandelt nur Stammdaten-Mappen (ausgefuehrt) (13.830541ms)
+✔ Moduldaten-Fehlschlag nennt den echten Status statt zu raten (63.037625ms)
+handover-endpoint: complete package and visible 409 verified
+✔ tests/handover-endpoint.test.js (485.230625ms)
+✔ baut alle fünf Begleitdateien mit vollständigem Prüfsummenmanifest (6.40525ms)
+✔ PDFs werden bei langen Aktenlisten mehrseitig und behalten volle Hashes (30.153458ms)
+✔ unsichere ZIP-Pfade und ungültige Prüfsummen werden abgewiesen (0.353041ms)
+✔ WinAnsi-Ausgabe erhält die deutschen Pflichtzeichen einschließlich § (0.064292ms)
+✔ ZIP-Writer verwirft eine zwischen Hashlauf und ZIP-Lesen veränderte Quelle (1.242583ms)
+✔ ZIP-Writer erzeugt strombasiert ein standardlesbares ZIP64-Paket (152.072ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ liest XML-RPC-Betraege mit Dezimalpunkt (0.56875ms)
+✔ liest deutsche und international gruppierte Betraege (0.086ms)
+✔ normalisiert Salden und Umsatzbetraege ohne Faktor 100 (0.252417ms)
+✔ berechnet Folgefaelligkeiten fuer Intervall-Zahlungen (0.111708ms)
+node:assert:152
+  throw new AssertionError(obj);
+  ^
+
+AssertionError [ERR_ASSERTION]: /private/tmp/calendar-baseline/outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html: Scriptblockzahl hat sich verändert.
+    at Object.<anonymous> (/private/tmp/calendar-baseline/server/tests/html-addressbook-dark-mode.test.cjs:39:10)
+    at Module._compile (node:internal/modules/cjs/loader:1871:14)
+    at Object..js (node:internal/modules/cjs/loader:2002:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 315,
+  expected: 311,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.18.0
+✖ tests/html-addressbook-dark-mode.test.cjs (242.456125ms)
+HTML-Backup-Härtung: Health, Warnungen, Generationen, Retries und Remote-Restic-Konfiguration geprüft
+✔ tests/html-backup-hardening.test.cjs (256.0835ms)
+HTML-Backup-UI: verschlüsselter Restore, Tokenwahl, Edit/PATCH, Health, Schutzstatus, Vorprüfung, Admin-Gate und Gesamtexport geprüft
+✔ tests/html-backup-ui-reachability.test.cjs (326.111583ms)
+✔ Gesamtsicherung: die ZIP-JSON entsteht aus der ANGEREICHERTEN Sammlung (32.593458ms)
+✔ Lokal-Export: Kontaktmonitor, Qualifikationen, Karten und beide Vorschlags-Bestaende wandern mit (19.0405ms)
+✔ Lokal-Export: Rueckfaelle - Registry-Spiegel und Live-Kanal der Stammdaten-Vorschlaege (17.50675ms)
+✔ Import: Kontaktmonitor merged nach caseId, Qualifikationen je Person - Bestand gewinnt (12.750208ms)
+✔ Import: Registry und Karten-Einstellungen NUR bei Leerstand (7.795583ms)
+✔ loadBueroLocal: aiChats, caseOuttakes und fileNameStyle ueberleben das Neuladen (14.498333ms)
+✔ Online-Export: die officeJson-Feldliste holt auch datenschutz (Nicht-Admin-Weg) (6.658458ms)
+✔ Jede Wochenzeile ist ein Grid, Termine spannen echte Spalten (10.863167ms)
+✔ Mehrtagestermine tragen einen Gruppenschluessel je Vorkommen (54.416292ms)
+✔ Der gemeldete Zeilensprung tritt nicht mehr auf (29.216125ms)
+✔ Zeilentreue ueber den Wochenwechsel laesst sich abschalten (12.009541ms)
+✔ Einzeltermine stehen buendig unter den Balken (27.440917ms)
+✔ Zeilen je Woche begrenzen die Anzeige und erzeugen "+N weitere" (39.008875ms)
+✔ Kalenderwochen, Folgetitel und Zeilennummern sind schaltbar (33.592417ms)
+✔ Zwei Vorkommen desselben Serientermins verschmelzen nicht (11.674875ms)
+✔ Tageszellen bleiben Klick-, Drag- und Drop-Ziel (13.369ms)
+✔ Das Ansichts-Menue haengt in beiden Werkzeugleisten (80.875667ms)
+✔ Kopf, Ganztagszeile und Stundenraster teilen in Tag und Woche exakt dieselben Spalten (53.580125ms)
+✔ Die Ganztags-Zeile der Wochenansicht springt nicht mehr die Zeile (34.293209ms)
+✔ Das Zeitfenster kürzt leere Randstunden, versteckt aber nie einen Termin (46.277667ms)
+✔ Die Stundenhöhe ist einstellbar und steht am Rahmen (78.704917ms)
+✔ Der Wochentitel überlebt ausgeblendete Wochenenden (80.328292ms)
+✔ Ein Fehler in einer Ansicht sperrt nicht den ganzen Kalender (100.835042ms)
+✔ Die Wochenansicht kann auf Montag bis Freitag verkürzt werden (31.405625ms)
+✔ Die Listenansicht kann Zusatzzeilen ausblenden (52.026708ms)
+✔ Vergangene Einträge und kompakte Zeilen sind in der Liste verdrahtet (27.52525ms)
+✔ Jede Ansicht bekommt genau die Schalter, die dort wirken (25.964375ms)
+✔ Alle JavaScript-Bloecke der HTML bleiben syntaktisch gueltig (215.370541ms)
+node:assert:152
+  throw new AssertionError(obj);
+  ^
+
+AssertionError [ERR_ASSERTION]: Scriptblockzahl hat sich verändert.
+    at Object.<anonymous> (/private/tmp/calendar-baseline/server/tests/html-calendar-todo-case-context.test.cjs:15:8)
+    at Module._compile (node:internal/modules/cjs/loader:1871:14)
+    at Object..js (node:internal/modules/cjs/loader:2002:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 315,
+  expected: 311,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.18.0
+✖ tests/html-calendar-todo-case-context.test.cjs (232.418542ms)
+✔ Betreuungsantrag Betreuter ergänzt standardmäßig keine Unterschrift am Dokumentende (17.379292ms)
+✔ Betreuungsantrag Betreuer besitzt die gewünschten Dokumentinformationen (62.110666ms)
+✔ Betreuungsantrag Betreuer steht direkt nach dem Antrag der betreuten Person (62.468083ms)
+✔ Originalvorlage ist ausgegraut und Briefkopfversion ist Standard (137.41325ms)
+✔ Unterschrift des Betreuers ist Dokumentstandard (53.460541ms)
+✔ Betreuungsantrag Betreuer zeigt nur die fachlich benannte Feldebene (60.896667ms)
+✔ zusätzliche obere Ort-, Datums- und Unterschriftsfelder sind entfernt (80.369417ms)
+✔ nur der obere KI-Zusatzblock an der Gerichtsanschrift ist unterdrückt (5.105625ms)
+✔ sichtbare Felder befüllen die acht technischen PDF-Ziele (115.5075ms)
+✔ Geburtsdatum und Betreuungsgericht stammen korrekt aus den Falldaten (4.821083ms)
+✔ Felder sind fachlich geordnet und verwenden vollständige Anschriften (32.477917ms)
+✔ Übernahmefelder sind einheitlich benannt und standardhoch (0.84675ms)
+✔ unter dem Titel wird kein Berichtszeitraum ausgegeben (55.125042ms)
+✔ Druck- und Briefkopfversion verwenden den eigentlichen Betreuerantrag (144.37475ms)
+✔ das echte Paket-Anschreiben bleibt vom Formular-Briefkopf getrennt (42.409708ms)
+✔ PDF-Ausgabe enthält Ort, Datum und die konfigurierte Betreuer-Unterschrift (64.374708ms)
+✔ Betreuungsantrag Betreuter zeigt nur die kuratierte Eingabeebene (92.697458ms)
+✔ sichtbare Felder befüllen die vier technischen PDF-Ziele (53.164125ms)
+✔ Geburtsdatum stammt aktuell aus den Falldaten (16.741375ms)
+✔ Anschrift der erklärenden Person verwendet die vollständige Stammdatenanschrift (18.915208ms)
+✔ Erklärung verwendet dynamisch Fallbetreuer und Bürostammdaten (61.577416ms)
+✔ leeres Unterschriftsfeld der erklärenden Person bleibt Bestandteil des PDF-Exports (6.831583ms)
+✔ Ort und Datum besitzen im Betreuungsantrag dieselbe Feldhöhe (0.276458ms)
+✔ Ort wird aus dem Wohnort der betroffenen Person übernommen (35.580167ms)
+✔ Briefkopfversion des Formulars ist deaktiviert und Druckansicht ist Standard (104.391417ms)
+✔ Dokumenteninformation weist den Umfang als 1 Seite(n) aus (18.89625ms)
+✔ alle Dokumente besitzen eine eigene Anschreiben-Signaturauswahl und nutzen sie im PDF (57.367375ms)
+✔ Betreuerwechsel Betreuer ist zwischen Personenwechsel und Betreuungsanzeige einsortiert (0.436417ms)
+✔ Dokumenteninformationen und Exportregeln entsprechen dem Personenantrag (0.218917ms)
+✔ nur eine kuratierte, dynamische Feldebene bleibt sichtbar (41.746625ms)
+✔ Übernahmefelder besitzen dieselbe Höhe wie die übrigen Eingabefelder (0.109458ms)
+✔ Felder sind fachlich geordnet und verwenden vollständige Stammdaten (0.271667ms)
+✔ Berichtszeitraum ist ausgeschaltet und die Betreuer-Unterschrift ist Standard (1.145375ms)
+✔ Briefkopfversion formuliert den Dokumenteninhalt statt des Standardanschreibens (0.28525ms)
+✔ Paket-Anschreiben und fachlicher Dokumentbrief bleiben getrennt (0.147666ms)
+✔ Betreuerwechsel Betreuter steht zwischen Betreuungsantrag Betreuer und Betreuungsanzeige (83.538125ms)
+✔ das Dokument zeigt nur eine fachlich benannte Feldebene (47.564791ms)
+✔ Felder folgen der vereinheitlichten Struktur und den Stammdaten (94.265041ms)
+✔ dynamischer Text verwendet den aktuell hinterlegten Fallbetreuer (76.65125ms)
+✔ sichtbare Felder befuellen die amtliche PDF-Vorlage (44.480833ms)
+✔ unter dem Dokumenttitel wird kein Berichtszeitraum gerendert (26.88975ms)
+✔ Dokumente des Betreuers tragen die neuen Bezeichnungen und Kürzel (34.5595ms)
+✔ Dokumenteninformationen des Betreuerwechsels sind fachlich gesetzt (29.977417ms)
+✔ nur Druckansicht und Anschreiben plus Formular sind verfügbar (42.217834ms)
+✔ zusätzliche Unterschriftsbereiche sind standardmäßig ausgeschaltet (76.7865ms)
+✔ Betreuungsanzeige besitzt die festgelegten Dokumentinformationen (1.503583ms)
+✔ Exportarten und Empfänger werden auch für Bestandsdaten migriert (0.480417ms)
+✔ nachgeladenes altes Fallobjekt wird erst beim Öffnen vollständig korrigiert (2.514667ms)
+✔ Anschreiben und Dokument verwenden im kombinierten Export den Briefkopf (0.264833ms)
+✔ Unterschrift des Betreuers ist Dokumentstandard (0.2955ms)
+✔ Betreuungsanzeige trennt Empfängerauswahl vom optionalen Bezug (19.508875ms)
+✔ beide Freitextfelder der Betreuungsanzeige verwenden denselben Rich-Text-Editor (10.088625ms)
+✔ Betreuungsanzeige zeigt keinen Berichtszeitraum und exportiert einen vollständigen Empfänger (58.975667ms)
+✔ uses the selected export contact customer or reference number (2.599541ms)
+✔ uses the recipient file number stored in the address master data (0.867875ms)
+✔ uses the recipient process number when no file number exists (0.914333ms)
+✔ uses the predefined court file number (3.484917ms)
+✔ uses a manually predefined recipient reference (1.342292ms)
+✔ keeps an explicit manual field value as an override (1.223292ms)
+✔ also accepts a contract number stored with the recipient (1.321833ms)
+✔ leaves export-mode reference empty until a concrete recipient is selected (1.044167ms)
+✔ Briefkopf führt das fremde Aktenzeichen rechtsbündig über Ort/Datum (zentraler Infoblock) (68.9625ms)
+✔ Druckansicht zeigt das fremde Aktenzeichen als dezente Referenzzeile (69.616417ms)
+node:assert:152
+  throw new AssertionError(obj);
+  ^
+
+AssertionError [ERR_ASSERTION]: /private/tmp/calendar-baseline/outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html: Scriptblockzahl hat sich verändert.
+    at Object.<anonymous> (/private/tmp/calendar-baseline/server/tests/html-case-file-finance-dark-mode.test.cjs:98:10)
+    at Module._compile (node:internal/modules/cjs/loader:1871:14)
+    at Object..js (node:internal/modules/cjs/loader:2002:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 315,
+  expected: 311,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.18.0
+✖ tests/html-case-file-finance-dark-mode.test.cjs (290.964709ms)
+HTML Case-ID-Integration: 289 Blöcke, 0 Syntaxfehler, Doppel-Label-Verträge erfüllt
+✔ tests/html-case-id-integration.test.cjs (658.120417ms)
+✔ sd_institution ist ein first-class Stammdatenkatalog und akzeptiert den Server-Override (89.698458ms)
+✔ allgemeine fallbezogene Institutionseingaben verwenden weiterhin sd_institution (60.307458ms)
+✔ Posteingang verwendet sd_institution für Fallfelder, aber ba_institution für echte Bürokontakte (3.759375ms)
+✔ Fallbeginn reicht sd_institution an Person, Unterkunft und Fallkontakte weiter (5.851875ms)
+✔ Leistungsträger, Versicherungen und Banken verwenden den allgemeinen Institutionskatalog (10.345167ms)
+✔ Fristenverwaltung und E-Mail-Frist verwenden sd_institution für das Gegenüber (35.473375ms)
+✔ alle gemeldeten Institutionsfelder verwenden sd_institution (274.7225ms)
+✔ alle gemeldeten reinen Ortsfelder verwenden in jeder Schema-Definition sd_ort (215.549375ms)
+✔ Art der stationären Einrichtung verwendet den fachlichen Unterkunftsarten-Katalog (43.376083ms)
+✔ frühere Leistungsträger im Hauptantrag verwenden sd_institution (2.289958ms)
+✔ Vermögensmodul rendert das Institut als zentrale Institutions-Combobox (31.265334ms)
+✔ Gesundheitsmenü rendert Kliniken mit sd_institution (35.638292ms)
+✔ Fallbeginn löst health.hospital.clinic zu sd_institution auf und rendert data-combo (39.268542ms)
+✔ Büroprofil und Büroprofil-Posteingang verwenden die vier zentralen Stammdatenlisten (13.062333ms)
+✔ Berichtstabellen verwenden fachlich passende zentrale Kategorien (5.521ms)
+✔ Rechnungslegung bindet Kontoart und manuelle Vermögenskategorie an zentrale Listen (2.273417ms)
+✔ Handkasse wechselt in Hauptdialog und Posteingang zwischen Einnahme- und Ausgabenkategorien (2.617292ms)
+✔ Amtliche Tabellen verwenden Geschlechts- und Einkunftskataloge (6.0695ms)
+✔ Pflegegrad sowie HA-Personen- und Adressfelder verwenden die Stammdatenkataloge (34.879458ms)
+✔ WBA-Postleitzahl verwendet den zentralen PLZ-Katalog (3.191208ms)
+✔ Kindergeld-Antrag und Anlage Kind verwenden Titel-, Orts- und Staatsangehörigkeitskataloge (47.823375ms)
+✔ DRV-Antrag verwendet Titel-, Orts-, Länder-, Staatsangehörigkeits- und PLZ-Kataloge (34.060834ms)
+✔ Mitteilungsverordnung verwendet den PLZ- und Ortskatalog (115.922ms)
+node:assert:152
+  throw new AssertionError(obj);
+  ^
+
+AssertionError [ERR_ASSERTION]: /private/tmp/calendar-baseline/outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html: Scriptblockzahl hat sich verändert.
+    at Object.<anonymous> (/private/tmp/calendar-baseline/server/tests/html-dashboard-widgets.test.cjs:84:10)
+    at Module._compile (node:internal/modules/cjs/loader:1871:14)
+    at Object..js (node:internal/modules/cjs/loader:2002:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 315,
+  expected: 311,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.18.0
+✖ tests/html-dashboard-widgets.test.cjs (1483.854417ms)
+node:assert:152
+  throw new AssertionError(obj);
+  ^
+
+AssertionError [ERR_ASSERTION]: Scriptblockzahl hat sich verändert.
+    at Object.<anonymous> (/private/tmp/calendar-baseline/server/tests/html-desktop-view-lock.test.cjs:15:8)
+    at Module._compile (node:internal/modules/cjs/loader:1871:14)
+    at Object..js (node:internal/modules/cjs/loader:2002:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 315,
+  expected: 311,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.18.0
+✖ tests/html-desktop-view-lock.test.cjs (244.000125ms)
+Dokumenten-Kuratierung 12.08.2026: Katalog-Patches und Laufzeitblock 2.41 verifiziert
+✔ V159-Zeile bleibt parsebar und frei von Script-Tag-Sequenzen (0.518792ms)
+✔ Teilwert-Fehlmappings der pdf-Ebenen sind korrigiert (6.425334ms)
+✔ Berichtszeitraum-Felder der Selbstverwaltung/Entlastung sind ableitbar, Bankfelder gemappt (0.734292ms)
+✔ Katalog-Metadaten sind fachlich gesetzt statt Platzhalter (19.932208ms)
+✔ Brief-Defaulttexte sind repariert (0.374ms)
+✔ flatSchemas: Gesundheitsfragebogen ohne Haushalts-Ableitungen, Mietangebot ohne Ist-Miete (0.233084ms)
+✔ Kernschemata: Genehmigung mit Pflichtfeldern und Rechtsgrundlage, Aufenthaltsort-Fix, Vergütungspflicht (4.616208ms)
+✔ Laufzeitblock 2.41: Master-Refresh, Zeitraum-Ableitung und stillgelegte Vorsorgevollmacht-pdf-Ebene (69.352542ms)
+✔ Export-Dark-Mode ist auf die beiden Dokumentexport-Renderer begrenzt (0.572834ms)
+✔ Unterschriftenauswahl und Anlagen-Dateifelder erhalten dunkle Oberflächen (0.113083ms)
+✔ Adressbuch, Filter und Kontaktaktionen werden vollständig abgedunkelt (0.123666ms)
+✔ Auswahl-, Warn- und Fokuszustände bleiben deutlich erkennbar (0.136709ms)
+✔ Inline formatierte Betreff-Werkzeuge werden von späten Weißregeln abgefangen (0.063292ms)
+✔ Dokumenten-Dark-Mode ist auf Informationsdialog und Vorlagenübersicht begrenzt (1.013875ms)
+✔ Alle Teilflächen aus dem Dokumenten-Informationsdialog werden dunkel gestaltet (0.174958ms)
+✔ Späte Weißregeln für Formfelder und Safari-Selects werden überschrieben (1.729292ms)
+✔ Auswahl-, Deaktiviert- und Warnzustände bleiben visuell unterscheidbar (2.445042ms)
+✔ Vorlagenübersicht erhält dunkle Tabelle und lesbare Statusfarben (0.215ms)
+HTML-Dokumenttaxonomie: Register 00–12, eindeutige Fall-IDs und Explorer-Endpunkt ok
+✔ tests/html-document-taxonomy.test.cjs (374.310291ms)
+✔ Dokument-Freitextfelder wachsen beim Öffnen und bei Eingaben mit (11.983875ms)
+✔ Freitextfelder werden nicht durch innere Scrollbereiche begrenzt (1.036209ms)
+✔ Freitextfelder passen ihre Höhe nach einem Breitenwechsel erneut an (4.662834ms)
+✔ alle Felder „Die Person ist mir bekannt“ nutzen dieselbe Ableitungsregel (68.197584ms)
+✔ Hausbesuch und persönliches Gespräch mit der betreuten Person belegen „bekannt“ (52.43325ms)
+✔ Telefonate und Kontakte mit Dritten belegen „bekannt“ nicht (38.700792ms)
+✔ ohne Kontaktnachweis wird kein automatisches „nein“ gesetzt (33.039834ms)
+✔ ein positiver Nachweis aktualisiert auch einen älteren Nein-Wert (20.808375ms)
+node:assert:152
+  throw new AssertionError(obj);
+  ^
+
+AssertionError [ERR_ASSERTION]: /private/tmp/calendar-baseline/outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html: Scriptblockzahl hat sich verändert.
+    at Object.<anonymous> (/private/tmp/calendar-baseline/server/tests/html-documents-dark-mode.test.cjs:57:10)
+    at Module._compile (node:internal/modules/cjs/loader:1871:14)
+    at Object..js (node:internal/modules/cjs/loader:2002:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 315,
+  expected: 311,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.18.0
+✖ tests/html-documents-dark-mode.test.cjs (266.55975ms)
+✔ Berichtsrelevanz ist berichtsübergreifend beschriftet und erklärt (49.696166ms)
+✔ Berichtsfreigabe verwendet den vorhandenen Inhalt (Vorgangstext) ohne zweites Textfeld (39.016833ms)
+✔ Zielfelder decken Jahres- und Schlussbericht ab, Automatik speist die Kontaktgestaltung (0.403417ms)
+✔ die Sync-Brücke schreibt markierte Einträge geschützt in die Zielberichte (0.291875ms)
+✔ der Kontaktmonitor zeigt erfasste Profil-Einschätzungen kompakt an (50.279167ms)
+✔ Recherchierte Stand-Angaben sind eingetragen (1.503667ms)
+✔ Die Schreibweise der Staende ist vereinheitlicht (0.471417ms)
+✔ Der Dialog sagt, wie die Angaben auf die Vorlage kommen (10.434916ms)
+✔ Die Positionsprobe ist aus dem Dialog erreichbar (5.967708ms)
+✔ Die Sammelansicht trennt offene Befunde von bewussten Festlegungen (19.45125ms)
+✔ Jedes Dokument hat eine Stand-Auskunft (0.61525ms)
+✔ Zwei Fehldeutungen sind korrigiert (0.093209ms)
+✔ Abschnittsfolge: Ueberblick zuerst, Sicherung eigener Abschnitt (154.697167ms)
+✔ Karten einspaltig ueber die volle Breite (Nutzerwunsch 30.08.) (75.618084ms)
+✔ Sprungleiste: Markup, Springen, Aktiv-Nachfuehrung und Warnpunkt (340.656333ms)
+✔ Reichweiten-Marken: Mockup-Farben mit Farbpunkt (buero gruen, ich blau, geraet violett) (112.73675ms)
+✔ Anlege-Formulare eingeklappt: Karten zeigen wie im Mockup erst den Kopf (306.010583ms)
+✔ Export-Ablage: nur noch EINE Karte, Doppelkarte samt Funktion entfernt (206.860583ms)
+✔ Sicherung: gegliedert in Stand/Zeitplaene, Experten-Klappe mit sichtbaren Pflichtteilen (161.84125ms)
+✔ Dunkelmodus: neue Klassen sind abgedeckt (81.63775ms)
+✔ Lesbarkeit: Kartentexte mit Lesebreite (12.96075ms)
+✔ Je Jahr genau zwei Sammelknöpfe statt einer Knopfreihe (33.563875ms)
+✔ Das Aufklappfeld führt eine Zeile je Fahrzeug mit drei Formaten (18.059167ms)
+✔ Die Ausfuhrwege werden unverändert mit Fahrzeug und Jahr gerufen (24.538166ms)
+✔ Fahrzeuge und Personen stehen alphabetisch, nicht in Fahrtenreihenfolge (16.358625ms)
+✔ Ohne Fahrer:in bleibt das Feld erklärt leer (17.262125ms)
+✔ Die Bedienung: aufklappen, wechseln, schließen (26.5135ms)
+✔ Escape schließt nur das Feld, nicht das ganze Fenster (14.601334ms)
+✔ Außendienstrückweg lädt bei reiner Textänderung kein vorhandenes Foto erneut hoch (44.30375ms)
+✔ Außendienst zeigt alle Editordokumente standardmäßig ausgewählt mit Sammelaktionen (43.378167ms)
+✔ nur ausgewählte Berichte und Berichtsarchive reisen in den Falldaten mit (2.901542ms)
+✔ Auswahl wird im Snapshot gespeichert und amtliche PDF-Vorlagen werden passend reduziert (0.845084ms)
+✔ Außendienst-Lader begrenzt den Dokumenteneditor auf die mitgenommene Auswahl (0.100667ms)
+✔ geklonte laufende Berichtsanzeige wird vor dem Download geleert (0.139167ms)
+node:assert:152
+  throw new AssertionError(obj);
+  ^
+
+AssertionError [ERR_ASSERTION]: HTML: Scriptblöcke
+    at validateScripts (/private/tmp/calendar-baseline/server/tests/html-final-audit-patch.test.cjs:31:10)
+    at Object.<anonymous> (/private/tmp/calendar-baseline/server/tests/html-final-audit-patch.test.cjs:41:1)
+    at Module._compile (node:internal/modules/cjs/loader:1871:14)
+    at Object..js (node:internal/modules/cjs/loader:2002:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 315,
+  expected: 311,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.18.0
+✖ tests/html-final-audit-patch.test.cjs (178.149083ms)
+FinCombo-Laufzeit: dynamisches Wohnen-Feld, Live-Katalog und Overlay-Ebene geprüft.
+✔ tests/html-fincombo-runtime.test.cjs (331.85375ms)
+✔ Server: custom_forms ist freigeschaltet und schreibgeschuetzt (0.690667ms)
+✔ Admin-Panel: Tab "Formulare" ist verdrahtet (60.138042ms)
+✔ Registrierung: eigenes Formular landet paarweise in REPORTS und SCHEMAS (18.437416ms)
+✔ Registrierung: Katalog-Kollisionen und fremde ids werden abgewiesen (27.924792ms)
+✔ Registrierung: Loeschen baut zurueck, currentReport faellt zurueck (11.343291ms)
+✔ Registrierung: Ausblenden und Wieder-Einblenden mitgelieferter Dokumente (12.897208ms)
+✔ Feldkennungen: stabil, fortlaufend, kollisionsfrei (15.089208ms)
+✔ Persistenz-Grenze: die V159-Katalogzeile kennt keine Eigenformulare (94.098459ms)
+✔ Editor-Oberflaeche: Kernfunktionen sind veroeffentlicht (71.052583ms)
+✔ XSS-Schutz: das Kürzel wird in der Seitenleiste escaped (20.85225ms)
+✔ XSS-Schutz: __cfNormalisieren entfernt gefaehrliche Zeichen und kappt Laengen (11.495042ms)
+✔ Persistenz: der Editor schreibt ueber Read-Modify-Write (29.028459ms)
+✔ Echtzeit: fremde Aenderungen werden uebernommen (7.853542ms)
+✔ Doppelklick-Schutz beim Speichern (36.649958ms)
+✔ ID-Wiederverwendung: geloeschte Kennungen bleiben belegt (13.40125ms)
+✔ Archivschutz: Schema bleibt bei vorhandenen Falldaten erhalten (18.572167ms)
+✔ Bauabschnitt 7: dokumenteLesen nimmt Eigenformulare wieder auf (Riegel entfernt) (14.254875ms)
+✔ Bauabschnitt 7: der Generator bettet Eigenformulare + Vordruck-Bytes ein (15.27ms)
+✔ Bauabschnitt 7: Selbstpruefung ist reihenfolgetolerant und verlangt die Definition (17.307334ms)
+✔ Bug E: __stammwertV262 bedient keine geerbten Prototyp-Schluessel (11.934667ms)
+✔ Bauabschnitt 7: der Leser registriert eingebettete Eigenformulare vor dem Filter (22.884416ms)
+✔ Bauabschnitt 7: embeddedPdfBytes liest den eingebetteten cfpdf-Block (offline) (1.031208ms)
+✔ Tabellen-Baustein: __cfFeldSaeubern nimmt customTable und saeubert die Spalten (14.304667ms)
+✔ Tabellen-Baustein: leere/kaputte Spalten ergeben eine Standardspalte (10.325834ms)
+✔ Tabellen-Baustein: Editor und Rendering sind verdrahtet (184.304625ms)
+✔ Tabellen-Baustein: das Beiblatt liest Objekt-Zeilen lesbar (5.11325ms)
+✔ Vordruck-Route: Byte-Ablage ist rechte-gegatet, PDF-geprueft und 5-MB-begrenzt (0.804333ms)
+✔ Sicherung: custom_form_templates ist ohne Bytes registriert (Variante A) (0.252ms)
+✔ Karte-Sanitizer: nur endliche Positionen zu echten Feldkennungen ueberleben (14.119875ms)
+✔ Registrierung: Formular mit Vordruck + Karte wird als flat-Original freigeschaltet (8.682916ms)
+✔ Registrierung: Vordruck ohne Position bleibt unfertig; Loeschen raeumt die Register (15.061167ms)
+✔ Export-Aufloesung: embeddedPdfBytes kennt den customtpl-Zweig; der Editor ist verdrahtet (51.551792ms)
+✔ Kopieren-Sanitizer: __cfPdfSaeubern haelt einen quelleElementId-Verweis (21.626916ms)
+✔ Karte-Sanitizer: stamm.*-Anker ueberstehen die Persistenz (14.809375ms)
+✔ Karte-Sanitizer: mehr Spec-Felder (prefix/charStep/lineHeight/clear) bleiben erhalten (16.098042ms)
+✔ Registrierung: quelleElementId ersetzt den customtpl-Verweis (kopierter Vordruck) (14.619ms)
+✔ Kopieren: Remap, Tabellen-Erhalt und PDF-Zuordnungsuebernahme sind verdrahtet (28.466667ms)
+✔ GUI: Breite je Baustein per Ziehen (Breitgriff) ist verdrahtet (81.17ms)
+✔ Unterschriftenzeile: Sanitizer erzwingt Anzeige-Regeln und haelt signer (10.743209ms)
+✔ Unterschriftenzeile: Editor und Laufzeit sind verdrahtet (60.2825ms)
+✔ Vorbefuellung: gruppierte Stammdaten-Pfade + neue valueAt-Namensraeume (91.291875ms)
+✔ Vorbefuellung: die datentragenden Module sind als Gruppen angeboten (321.076833ms)
+✔ Vorbefuellung: valueAt loest die neuen Modul-Namensraeume auf (vm-Probe) (18.67475ms)
+✔ Bedarfe & Wille: die Bridge exportiert composeByType (16.901625ms)
+✔ Dokumenteigenschaften: der bestehende Dialog ist aus dem Editor erreichbar (mit Rueckweg) (106.385625ms)
+✔ Aussendienst: spaete Registrierungen respektieren die Mitnahmeliste (25.1735ms)
+✔ Aussendienst: die Mitnahmeliste greift erst, wenn der Lader sie gesetzt hat (32.030084ms)
+✔ Freidokument trennt Versandbetreff und sichtbaren Dokumentbetreff (73.165916ms)
+✔ der Hub existiert und das Formular bleibt als Editor erhalten (86.524583ms)
+✔ der Sidebar-Eintrag hängt über Bedarfe & Wille und ist per GROUPS verankert (45.658042ms)
+✔ der alte Kopf-Button im Wünsche-Modul ist herausgelöst (10.489875ms)
+✔ Bearbeiten geschieht in EINER Ebene direkt in der Karte (Inline-Editor) (134.843458ms)
+✔ die Brücken zum Planungsmodul stehen (Badge, Bedarf ableiten, Herkunfts-Chip) (96.887625ms)
+✔ Wiedervorlagen je Bereich sind erfasst und in „Prüfungen & Wiedervorlagen" eingespeist (326.371125ms)
+✔ die Fallübersicht kennt Fähigkeiten-Vorgänge und Profil-Wiedervorlagen (103.611208ms)
+✔ einheitliche Glocke, Schnellaktionen Fähigkeiten/Wohnen, Wohnen speist die Übersicht (189.838166ms)
+✔ der Hub rendert Kennzahlen und Bereichskarten aus echten Profildaten (Laufzeit) (85.801792ms)
+✔ sd_hausnummer ist eine echte statische Stammdaten-Liste mit garantiert 1 bis 500 (14.264209ms)
+✔ alle festen Hausnummer-Eingaben verwenden sd_hausnummer (318.183584ms)
+✔ Fallbeginn löst Hausnummern und person.houseLetter über zentrale Stammdaten-Schlüssel auf (38.214958ms)
+✔ auch der Posteingang rendert Anschriftsvorschläge über die zentrale Server-Combobox (52.236833ms)
+✔ Meldeadresse und momentaner Aufenthalt bilden auf Desktop zwei gleich breite Spalten (0.886167ms)
+✔ das Adressraster stapelt responsiv und behält Adressbuch- sowie Kopieraktionen (0.320917ms)
+✔ beide Übernahmeaktionen des momentanen Aufenthalts stehen in derselben Kopfzeile (0.395042ms)
+✔ die Adressbuchaktion der Meldeadresse steht als eigene Zeile unter dem Titel (0.255375ms)
+✔ Wohnen migriert jeden bisherigen Sammeleintrag genau einmal in eine eigene Liste (12.041375ms)
+✔ Explizit leere neue Listen werden nicht aus veralteten Legacy-Sammelfeldern wiederbefüllt (1.752ms)
+✔ CRUD verwaltet die vier Wohnlisten unabhängig und hält die Legacy-Spiegel kompatibel (9.04325ms)
+✔ JSON-Speicherrundlauf erhält alle individuellen Wohneinträge ohne erneute Migration (1.463291ms)
+✔ Editoren aller vier Listen erfassen und validieren Eintragsdatum, Status und optionales Enddatum (2.618708ms)
+✔ Anfangsbericht aggregiert jeden Eintrag in Bereichs- und Einfügereihenfolge (3.456958ms)
+✔ Berichtsbefüllung verwendet nur zeitlich überschneidende Einträge aller vier Bereiche (2.913208ms)
+✔ Migrierte aktuelle Probleme behalten die bisherige ausführliche Berichtsbezeichnung (0.749583ms)
+✔ Zeitraum-Zusammenfassung übernimmt alle vier Wohnlisten und beide Grenzen einschließlich (11.403458ms)
+✔ Jahresberichte erhalten Wohnstatus, Pflegedienste und alle Zeitraumdaten; manuelle Werte bleiben geschützt (4.147625ms)
+✔ Unvollständige Zeiträume bleiben unbefüllt und Pflegedienste bilden den Periodenendstand ab (1.104542ms)
+✔ Verwaltete Wohnblöcke in Jahresbericht und Rechnungslegung sind idempotent und schützen manuelle Nachbearbeitung (1.557ms)
+✔ Schlussbericht nennt nur echte Beginn- und Endereignisse innerhalb des Zeitraums, einschließlich Grenzen (1.902958ms)
+✔ Öffentlicher Vertrag synchronisiert einzeln oder alle unterstützten Dokumente (5.304417ms)
+✔ Synchronisation läuft vor amtlicher PDF-, Export- und Kombinationsausgabe (30.961209ms)
+✔ Wohnen fordert den first-class Katalog sd_wohneinrichtung mit der Feldbeschriftung Einrichtung an (137.738166ms)
+✔ sd_wohneinrichtung übernimmt nur Wohnquellen und schließt fachfremde oder inaktive Institutionen aus (78.31825ms)
+✔ ohne gespeicherte Einrichtungsnamen bleibt ein wohnfachlicher Basiskatalog sichtbar (92.672084ms)
+✔ der serverseitige Override von sd_wohneinrichtung ersetzt die dynamische Softwareliste (76.510083ms)
+✔ icsUtcStamp liefert echte UTC-Bestandteile, nicht die Ortszeit (24.906541ms)
+✔ Die Ausfuhr stempelt Termine und Aufgaben mit icsUtcStamp (20.049375ms)
+✔ Die alte Mischung aus Ortszeit und angehaengtem Z ist verschwunden (27.717875ms)
+Anfangsbericht-Datenquellen v255: Wohnen, Soziales, Fähigkeiten/Alltag, Kontaktprofil, Kontakte und Pflegegeld geprüft.
+✔ tests/html-initial-data-domains-v255.test.cjs (362.317334ms)
+✔ Anfangsbericht nutzt die volle Breite für die Aufenthaltsart und gleich hohe Auswahlfelder (1.759ms)
+✔ derzeitiger Aufenthalt wird über den zentralen Master-Resolver vollständig aktualisiert (9.497792ms)
+✔ Gesundheitsübersicht speist nur belegbare Anfangsberichtsfelder (0.169416ms)
+✔ Bedarfe, Maßnahmen und Wille werden ausgewählt, kompakt und feldgenau übernommen (12.15775ms)
+✔ falsche Planungsbegründung wird entfernt und nur bedingt oder nein exportiert (0.163417ms)
+✔ Kontaktturnus kommt aus dem fallbezogenen Kontaktmonitor und respektiert Altkennungen (6.028958ms)
+✔ manuelle Inhalte werden von automatischen Synchronisationen geschützt (0.35875ms)
+✔ Anfangsbericht zeichnet Checkboxen als mittige Vektorkreuze (1.345125ms)
+✔ alle Checkboxgruppen verwenden die vermessenen Innenmittelpunkte (0.495833ms)
+✔ das zuständige Betreuungsgericht wird aus den Fallstammdaten auf Seite 1 gesetzt (0.331875ms)
+✔ Ohne Freigabe bleibt alles beim Alten - nur der Generationenfilter greift (27.52775ms)
+✔ Freigabe beschraenkt die tatsaechliche Verfuegbarkeit (online wie lokal) (20.40825ms)
+✔ Die Freigabe schlaegt den Generationenfilter - ein freigegebenes Altmodell bleibt sichtbar (9.3815ms)
+✔ Ins Leere greifende Freigabe zeigt lieber alles als ein leeres Auswahlfeld (15.265542ms)
+✔ Kaputte oder fremdartige Freigabewerte werden ignoriert, nicht uebernommen (54.091375ms)
+✔ Admin-Ankreuzliste zeigt ALLE Modelle - sonst waere ein Altmodell nie freigebbar (17.208209ms)
+✔ Bereits freigegebene Kennungen bleiben sichtbar, auch wenn der Anbieter sie nicht mehr listet (7.5495ms)
+✔ Ausdrueckliche Vorauswahl schlaegt die wirksame Freigabe (Lokal-Vorgaben-Maske im Online-Betrieb) (11.957959ms)
+✔ Ohne geladene Modellliste erklaert die Maske den naechsten Schritt (13.696791ms)
+✔ Serverseite traegt die Freigabe von der Spalte bis ins Login-Paket (2.555167ms)
+✔ Die Freigabe darf NICHT im Generationenfilter landen (Trennung der Ebenen) (2.237917ms)
+✔ Fall-Sammelroute liefert dieselbe Clientform und fällt bei 404 vollständig zurück (6.380584ms)
+✔ Fall-Sammelroute umgeht 401/403 nicht mit Einzelabrufen (2.754791ms)
+✔ Büro-Sammelroute braucht neben der dynamischen Übersicht nur eine Anfrage und hat 404-Rückfall (4.873166ms)
+✔ Büro-Sammelroute umgeht 401/403 nicht mit den sieben Einzelabrufen (0.807833ms)
+✔ Online-Sicherung ist im Explorer vollständig erreichbar und in der Seitenleiste verborgen (157.838ms)
+✔ 0.7.6 bietet einen echten leeren lokalen Fall mit stabiler ID an (69.476416ms)
+✔ eine neue lokale Installation startet ohne eingebettetes Bürologo (18.017292ms)
+✔ Branding erzeugt ein Profil-Logo dynamisch und kehrt ohne Logo zum neutralen Zustand zurück (13.796083ms)
+✔ Bürostammdaten sind lokal editierbar und das optionale Logo wird verlustfrei restauriert (45.958875ms)
+✔ lokales Büroprofil speichert Felder und entfernt ein gelöschtes Logo sofort (13.20225ms)
+✔ lokale Bürostammdaten werden vor Seitenwechsel und Schließen aus dem Formular gesichert (38.826083ms)
+✔ lokale Büroorganisation verwendet die eingebettete Vorlage ohne Serverzugriff (20.882083ms)
+✔ integrierte Arbeitsmappen werden angelegt und nach einem Neustart wiederhergestellt (82.858541ms)
+✔ lokale Einzel- und Gesamtsicherung erzwingen den vollständigen Pflichtbestand (14.794333ms)
+✔ Ordner- und ZIP-Import bevorzugen die verlustfreie Büroorganisations-JSON (4.486333ms)
+✔ loadBueroLocal: Vorlagen, Speicherort und KI-Prompts ueberleben das Neuladen (ausgefuehrt) (29.711291ms)
+✔ Lokal-Export: die fuenf ui_prefs-Felder und mode_intro_seen wandern mit (ausgefuehrt) (24.183875ms)
+✔ Import: Vorlagen-/Prompt-Maps mergen je Kennung, downloadTarget/modeIntroSeen nur bei Leerstand (17.096583ms)
+✔ Sammler: lokale Unterschriften-Bilder, bdocDocs und die VOLLE Historie wandern mit (ausgefuehrt) (34.061333ms)
+✔ Sammler: im Lokal-Modus geht keine einzige Server-Anfrage hinaus (ausgefuehrt) (27.644875ms)
+✔ Sammler: online werden die sechs Server-Werte weiterhin geholt (Gegenprobe) (31.055084ms)
+✔ Import: Unterschriften-Dedupe lokal, Buero-Dokumente additiv, Historie je (caseId,periodStart) (21.859084ms)
+✔ Kalender & Aufgaben (JSON): die Handsortierung wandert mit und kommt NUR bei Leerstand zurueck (35.825584ms)
+node:assert:152
+  throw new AssertionError(obj);
+  ^
+
+AssertionError [ERR_ASSERTION]: /private/tmp/calendar-baseline/outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html: Scriptblockzahl hat sich verändert.
+    at Object.<anonymous> (/private/tmp/calendar-baseline/server/tests/html-mail-dark-mode.test.cjs:54:10)
+    at Module._compile (node:internal/modules/cjs/loader:1871:14)
+    at Object..js (node:internal/modules/cjs/loader:2002:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 315,
+  expected: 311,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.18.0
+✖ tests/html-mail-dark-mode.test.cjs (273.539208ms)
+✔ die JSON-Datensicherung bleibt eine vollständige Zustandskopie (5.781166ms)
+✔ der Zusatzblatt-Block ist verdrahtet (Zip-Schreiber, Sammel-ZIP-Fallback, Einlesen) (95.586625ms)
+✔ Fähigkeiten und Wohnen überstehen den Excel-Rundlauf (Bauen → Einlesen) (26.408666ms)
+✔ die Blatt-Injektion ergänzt Arbeitsmappe, Beziehungen und Inhaltstypen (und ersetzt beim zweiten Lauf) (28.17725ms)
+✔ die formatierte Nutzer-Vorlage wird zellgenau befüllt und im Blanko-Fall unangetastet gelassen (23.319792ms)
+✔ alte Arbeitsmappen werden beim Sichern strukturell auf die neueste Basis angeglichen (43.012167ms)
+✔ die Blanko-Vorlage erhält die Blattstruktur OHNE Falldaten (88.176875ms)
+✔ Stammdaten-Kuration erhält stabile sheetId-Werte und entfernt eine veraltete calcChain vollständig (52.23575ms)
+✔ die echte Stammdaten-Vorlage behält ihre calcChain-kompatiblen Blatt-IDs und wird paketweit bereinigt (33.813166ms)
+✔ Server- und eingebettete Stammdaten-Vorlage sind die kuratierte Nutzerdatei vom 31.08.2026 (13.813583ms)
+✔ Bedarfe & Wille wird trotz XML-Entity im Blattnamen in die kuratierte Zeile 5 gefüllt (19.46ms)
+✔ Betreuungsverlauf erweitert den kuratierten Zeilenstil (1.142458ms)
+✔ Die Auswahl-Handler bauen die Ansicht nicht mehr komplett neu (66.08375ms)
+✔ Der leichte Nachzug aktualisiert genau das, was von der Auswahl abhängt (11.637709ms)
+✔ Löschen und Statuswechsel bauen weiterhin vollständig neu (49.895416ms)
+✔ Der Vollaufbau setzt weiterhin Platzhalter und lädt nach (11.095417ms)
+✔ Rechnungslegung: unveränderte Felder lösen keine Setter oder manuelle Saldenmarkierung aus (3.671875ms)
+✔ Rechnungslegung: Originalsetter werden gebündelt vor genau einer abschließenden Speicherung ausgeführt (1.219792ms)
+✔ Rechnungslegung: gleichzeitige Änderungen oder Fallwechsel werden vor der ersten Mutation erkannt (4.083291ms)
+✔ Rechnungslegung: Feldvalidierung und fehlende Schreibrechte lassen den Entwurf unverändert (1.914417ms)
+✔ Rechnungslegung: Fehler beim Commit behalten das Formular und geben die Bediensperre frei (1.352167ms)
+✔ Rechnungslegung: belegbezogene Filter kombinieren Erkennungszustand, Auswahl und Volltext (1.574292ms)
+✔ Rechnungslegung: Aktualisierung bewahrt Formulare und laufende Vorgänge, gibt neue Fälle aber frei (1.280917ms)
+✔ Vermögensaufstellung: Anfang und Abschluss verwenden alle vier Bereiche und behalten gleiche IDs getrennt (1.498375ms)
+✔ Vermögensaufstellung: Herkunft, Kategorie, Institut, Position und Volltext kombinieren sich (0.4235ms)
+✔ Vermögensaufstellung: Sortierung verändert die zugrunde liegende Reihenfolge nicht (9.228083ms)
+✔ Vermögensaufstellung: neue Position wird genau einmal im ausgewählten Bereich gespeichert (1.4175ms)
+✔ Vermögensaufstellung: Bearbeitung erhält Metadaten, ID und den unabhängigen Abschlusswert (0.356667ms)
+✔ Vermögensaufstellung: entfallene oder fremd geänderte Position wird nicht mit einem älteren Entwurf überschrieben (1.045709ms)
+✔ Vermögensaufstellung: Leseberechtigte und Schulden-Spiegelungen werden vor jeder Mutation abgewiesen (0.495541ms)
+✔ Vermögensaufstellung: Speicherfehler stellt den vorherigen Stand wieder her und entfernt keine fremden Werte (0.620167ms)
+✔ Vermögensaufstellung: vorhandene offene Werte und negative Zahlen bleiben möglich, ungültige Angaben schreiben nichts (3.62475ms)
+✔ Modul-Fallwechsler: Berichtsübergabe gibt ausschließlich den gewünschten Rücksprung frei (17.685291ms)
+✔ Rechnungslegung: importiertes Bargeld behält beide Werte auch bei erneuter Kontoberechnung (12.828208ms)
+✔ Rechnungslegung: die vorgesehene Kontosumme bleibt automatisch und auf Cent gerundet (6.267625ms)
+✔ Banking: verspätete Antwort eines verlassenen Falls überschreibt weder Umsätze noch Kontofilter (2.581792ms)
+✔ Banking: fehlgeschlagener Kontoabruf markiert unvollständige Daten, ohne alte Umsätze als aktuell auszugeben (2.398333ms)
+✔ Banking: maximale Servergrenze und Kappungszahlen bleiben erhalten (1.087125ms)
+✔ Banking: fehlgeschlagene Kontenübersicht meldet den Fehler und beendet den Ladezustand (0.405292ms)
+✔ Banking: Richtung und Suche bleiben mit Kontofilter kombinierbar und behalten Fallmetadaten (2.252666ms)
+✔ Banking: Auftragsfilter gilt auch für den gemeinsamen Export- und Sammeleingang (1.019583ms)
+✔ Banking: Intervallstatus und Name sind kombinierbar; Desktop übernimmt keine mobilen Statusfilter (0.417833ms)
+✔ Banking: Büroübersicht verändert weder Fall noch offene Zahlungsformulare (1.293875ms)
+✔ Kalenderfilter kombiniert Fall-ID, Kalender und Eintragsart mit persönlichen Sichtbarkeiten (44.877916ms)
+✔ Agenda schließt die vorherige Ganztagsbuchung am exklusiven Ende aus, zeigt aber den gesamten Endtag (32.84025ms)
+✔ Verschieben erhält Termindauer und Abstand der Erinnerung (31.422083ms)
+✔ Mehrtagstermine behalten beim Verschieben die Anzahl ganzer Kalendertage über Zeitumstellungen (31.947375ms)
+✔ Mobile Wochenüberschrift zeigt ISO-KW auch am Jahreswechsel (52.644458ms)
+✔ Chats zählt ungelesene Nachrichten über alle Gespräche und liefert nur Metadaten (1.4465ms)
+✔ Auf der mobilen Gesprächsliste bleibt eine neue Nachricht im zuletzt geöffneten Gespräch ungelesen (9.682333ms)
+✔ Nur eine sichtbare Unterhaltung im aktiven Tab wird gelesen; Wiederholungen zählen nicht doppelt (0.712917ms)
+✔ Nachladen neuer Gespräche verdoppelt ihren Server-Zähler nicht (1.219875ms)
+✔ Desktop behält Zweispalten-Verhalten, ohne Auswahl entsteht keine Gelesen-Anfrage (0.488875ms)
+✔ Chat füllt auf dem Telefon die Fläche über der Mobilnavigation (222.918417ms)
+✔ Genau eine Ebene je Bildschirm: Übersicht ODER Unterhaltung (66.080417ms)
+✔ Jeder Weg in eine Unterhaltung schaltet die Telefonansicht um (129.4525ms)
+✔ Schulden: alle Kosten und Zahlungen gehen in Forderung und Restschuld ein (2.398792ms)
+✔ Schulden: Historie, Stadium, Gläubiger, Zahlungsstand und Suche kombinieren sich (3.42475ms)
+✔ Schulden: büroweite Treffer behalten Fallkennung bei gleichen Forderungskennungen (1.502792ms)
+✔ Schulden: Zahlungsjahr und Handkassenfilter arbeiten auf Einzelzahlungen (1.672625ms)
+✔ Schulden: Bearbeitung erhält Metadaten und spiegelt Forderung, Restschuld, Rate und Bargeld korrekt (3.864ms)
+✔ Schulden: neue Forderung übernimmt alle Kosten und Bankfelder ohne vorzeitige Mutation (1.683333ms)
+✔ Schulden: neue Barzahlung spiegelt sich exakt einmal in Vermögen und Handkasse (1.700459ms)
+✔ Schulden: Bearbeitung einer Zahlung erhält deren Kennung und entfernt eine aufgehobene Barspiegelung (1.412167ms)
+✔ Schulden: Statuswechsel setzt und entfernt Erledigungs- und Pausendaten (2.339958ms)
+✔ Schulden: Fallwechsel, entfernte Forderung und konkurrierende Zahlungen blockieren ältere Entwürfe (15.803625ms)
+✔ Schulden: Speicherfehler rollt sämtliche Finanzspiegelungen zurück (2.196291ms)
+✔ Schulden: Leseberechtigte und ungültige Beträge schreiben nichts (2.551667ms)
+✔ Schulden: Zahlungssuche findet nur die passende Einzelzahlung statt aller Zahlungen derselben Forderung (1.182042ms)
+✔ Explorer: fehlgeschlagener Ortswechsel stellt Fall, Baum, Dateien, Auswahl und Verlauf gemeinsam wieder her (32.162ms)
+✔ Explorer: Wiederholen verwendet dasselbe Ziel und hebt nach Erfolg die Fehlermeldung auf (24.4865ms)
+✔ Explorer: ein zweiter Touch startet während eines laufenden Ortswechsels keine parallele Navigation (17.181ms)
+✔ Explorer: verspätete Antwort eines verlassenen Ordners überschreibt keine neueren Dateien (13.687916ms)
+✔ Explorer: fehlgeschlagener Abruf leert die bisher angezeigte Dateiliste nicht (13.985375ms)
+✔ Explorer: externe Ablage erhält vollständige Dateipfade und Kennzeichnung (11.224167ms)
+✔ Büroplanung: laufende Monatswerte bleiben von Frequenz und Jahresfilter unabhängig (7.0885ms)
+✔ Büroplanung: Art, Konto, Partner, Person, Frequenz und Volltext sind kombinierbar (1.723917ms)
+✔ Büroplanung: undatierte Einmalposten werden trotz laufender Frequenzauswahl gefunden (0.625459ms)
+✔ Büroplanung: Sortieren verändert die gespeicherte Reihenfolge nicht (0.485ms)
+✔ Büroplanung: lokales Speichern erhält Metadaten, Personen und explizite Nullbeträge (0.528667ms)
+✔ Büroplanung: eine zwischenzeitliche Änderung verhindert das Überschreiben (0.505ms)
+✔ Büroplanung: fehlende Schreibrechte verhindern jeden Schreibzugriff (0.320875ms)
+✔ Büroplanung: lokaler Speicherfehler stellt den bisherigen Bestand wieder her (0.304958ms)
+✔ Büroplanung: nicht geladene oder nicht berechtigte Personenauswahl wird nicht mitgesendet (0.381333ms)
+✔ Buchhaltung: Suche und Belegfilter erfassen exakt die passenden Einzelbuchungen (0.725ms)
+✔ Buchhaltung: Auszugsfilter und Jahr über Jahresgrenzen bleiben kombinierbar (0.451542ms)
+✔ Buchhaltung: Belegstatus, Volltext und Jahresfilter berücksichtigen die vorhandene Zuordnung (0.368708ms)
+✔ Buchhaltung: ein fehlgeschlagener Teilabruf ersetzt keine der vier vorhandenen Listen (0.442792ms)
+✔ Buchhaltung: eine verspätete ältere Antwort überschreibt den neueren Abruf nicht (1.569209ms)
+✔ Buchhaltung: große Dateien werden ohne Argumentlisten-Überlauf nach Base64 umgewandelt (43.665125ms)
+✔ Buchhaltung lokal: Auszugsmetadaten lassen sich über den bestehenden Endpunkt ändern (0.769041ms)
+✔ Buchhaltung lokal: Auszugslöschung löst nur die betroffenen Belegverbindungen (0.571625ms)
+✔ Buchhaltung lokal: erneuter Auszugsimport setzt Parsezustand und ersetzt die Buchungen (0.382292ms)
+✔ Buchhaltung lokal: Originaldatei und OCR-Text bleiben nur in der Sitzung verfügbar (0.662625ms)
+✔ Büroplanung: entzogene Klarnamenberechtigung verbirgt auch zuvor geladene Namen (0.337084ms)
+✔ pruneStaleFormStates räumt genau die Klassen ab, deren Modul nicht mehr sichtbar ist (39.606875ms)
+✔ Die Verdrahtung: Aufräumen läuft bei jedem Ansichtswechsel UND beim Schließen (42.985125ms)
+✔ Lebenslauf der Rechnungsmaske durch die ECHTEN Funktionen: setzen → laden → aufbauen → wechseln → schließen (70.632375ms)
+✔ Die fünf Klassen sind keine Erfindung des Tests: jede hat ihre Umschaltstelle im Modul (60.890708ms)
+✔ Rechnungs-Vollmaske: die Ausblendliste trifft die echten Klassen der Ansicht (69.238292ms)
+✔ Kalender-Vollmaske: Formular markiert den Pfad, CSS blendet den Rest aus (Nutzerwunsch 03.08.2026) (44.404792ms)
+✔ Benutzermenü: explizite Darstellung, Zeitplan und Abmelden (18.5135ms)
+✔ Handkasse: Jahres- und Suchfilter verändern laufende Salden einschließlich Vorjahresübertrag nicht (1.521166ms)
+✔ Handkasse: Sortierung, Art, Kategorie und Serien-/Schuldenherkunft kombinieren sich (0.802417ms)
+✔ Handkasse: vollständiger neuer Datensatz wird einmal gespeichert und dokumentiert (1.163334ms)
+✔ Handkasse: geänderte Vorlagen erhalten fremde Metadaten und setzen Seriencursor nur bei Datum/Intervall zurück (0.46325ms)
+✔ Handkasse: Folgebuchungen behalten Serienkennung und werden nicht selbst zur Vorlage (0.4065ms)
+✔ Handkasse: fremder Fall, fehlende Rechte und gespiegelte Schuldenzahlung werden vor jedem Schreibzugriff abgewiesen (0.928875ms)
+✔ Handkasse: neu geladene Falldaten, entfernte oder konkurrierend bearbeitete Buchungen verlieren keine Änderungen (2.193417ms)
+✔ Handkasse: ungültige Beträge erreichen weder Kassenbuch noch AutoDoku (1.649375ms)
+✔ Wohnen und Fähigkeiten sind als getrennte mobile Bereiche registriert (62.028125ms)
+✔ Fähigkeiten wechselt sauber zwischen eigenständigem Overlay und gemeinsamen Modulen (65.272166ms)
+✔ Fähigkeiten nutzt mobil den ganzen Schirm - ohne Fußnavigation darunter (192.884125ms)
+✔ Fähigkeiten-Editor füllt mobil die Fläche statt unten leer zu laufen (105.715416ms)
+✔ Wohnen-Untereditoren sind mobil eine ganzseitige Maske ohne Scrollen (Nutzerwunsch 30.08.2026) (193.027208ms)
+✔ Zeitleiste: Bearbeiten und Löschen stehen mobil dauerhaft an der Karte (0.870166ms)
+✔ Fähigkeiten und Alltag verwendet mobil nur den gemeinsamen Modul-Scroller (99.9055ms)
+✔ Fähigkeiten mobil: Übersicht rollt als Ganzes, Lesen und Bearbeiten sind ganzseitig (Nutzerwunsch 30.08.2026) (127.877ms)
+✔ Fähigkeiten mobil: jeder Weg in einen Bereich öffnet die Vollansicht (99.010916ms)
+✔ Rechnungen: Suche, Empfänger, Jahr und Fallfilter kombinieren sich; Fallkennung hat Vorrang (15.298333ms)
+✔ Rechnungen: Segmente und offener Betrag verwenden dieselbe Statuswahrheit einschließlich Teilzahlung und Storno (1.573833ms)
+✔ Rechnungen: Sortierung nach offenem Betrag und Fälligkeit; Exporte benutzen dieselben mobilen Filter (0.615458ms)
+✔ Rechnungen: lokales Bearbeiten erhält ausgelassene Kennungen und konvertiert nur gesendete Beträge (0.576166ms)
+✔ Rechnungen: explizit fallfreie Auswahl leert Zuordnung; unbekannte Rechnung wird nicht versehentlich neu angelegt (0.566666ms)
+✔ Rechnungen: Netzwerkvertrag maskiert IDs, erhält partielle Payloads und zeigt Serverfehler (0.502ms)
+✔ Rechnungen: verspätete ältere Aktualisierung überschreibt neueren Bestand nicht (1.400833ms)
+✔ Rechnungen: geparkter Chat oder verlassenes Modul nimmt keine Antwort an und merkt Aktualisierung vor (1.003459ms)
+✔ Rechnungen: Büroaktualisierung ersetzt keinen offenen Entwurf; Lesefehler bleibt vom Leerbestand unterscheidbar (1.045667ms)
+✔ Rechnungen: strikte Leser unterscheiden Berechtigungs-/Netzfehler, bestehende Dashboard-Leser behalten ihren Vertrag (1.122958ms)
+✔ Rechnungen: Zahlungsabgleich identifiziert eine Kontobuchung unabhängig von erneutem Rechnungsvorschlag (0.733917ms)
+✔ Rechnungen: PDF-Gesamteingang steht unter Eingangsbetrag statt unter Zahlungsziel (2.83375ms)
+✔ Lebensunterhalt: Bereich, Volltext, Kategorie, Intervall, Status und Herkunft kombinieren sich (1.660667ms)
+✔ Lebensunterhalt: Sortieren verändert die gespeicherte Reihenfolge nicht (0.822875ms)
+✔ Lebensunterhalt: Einnahme wird mit allen Feldern gespeichert und als Leistung verknüpft (4.537375ms)
+✔ Lebensunterhalt: Ausgaben speichern Status und Ratenende ohne fremde Leistungen zu ändern (1.117375ms)
+✔ Lebensunterhalt: Nullbeträge ersetzen alte Leistungsbeträge und werden nicht als leer geladen (1.80325ms)
+✔ Lebensunterhalt: Bearbeitung erhält Kennung, Aktenzeichen und unbekannte Metadaten (1.117667ms)
+✔ Lebensunterhalt: Fall-, Daten-, Posten- und Leistungsänderungen verhindern das Überschreiben (4.349125ms)
+✔ Lebensunterhalt: Leserechte und gespiegelt gepflegte Raten werden vor Speichern geprüft (2.153167ms)
+✔ Lebensunterhalt: Speicherfehler stellt Posten, verknüpfte Leistungen und Berichte gemeinsam wieder her (1.39375ms)
+✔ Lebensunterhalt: Auswertung bleibt an die ursprüngliche Fallinstanz und Schreibberechtigung gebunden (1.512667ms)
+✔ Mobile Mailfilter kombinieren Lesestatus, Anlagen, Konto, Priorität und Label (2.129375ms)
+✔ Fallfilter berücksichtigt Ablagezuordnung und Absenderbezug sowie fehlende Zuordnung (1.738208ms)
+✔ Vorhandene Schnellfilter und Betreff-/Absendersuche bleiben kombinierbar (10.346959ms)
+✔ Empfänger-Commit übersteht den erneuten Blur beim Ersetzen der Adresschips (18.408625ms)
+✔ Entwurfsfilter verwendet gespeicherten Fallkontext oder Dokumentationsfall (1.440375ms)
+✔ Fahrtenfilter: Jahr, Monat, Fahrzeug, Fall, Fahrer, Status und Volltext kombinieren sich (4.813333ms)
+✔ Fahrtenfilter: nicht zugeordnete Fahrten und importierte Fahrernamen bleiben auffindbar (0.579708ms)
+✔ Chronologische Sortierung behandelt deutsches Datum und ISO-Datum gleichwertig (10.110458ms)
+✔ Auswertung summiert gespeicherte Erstattung einschließlich historischer und Nullbeträge (1.627625ms)
+✔ Mitarbeitende bearbeiten nur eigene ungeprüfte Fahrten (1.295125ms)
+✔ Delegierte Prüfer bearbeiten Fahrten, erhalten aber keine fremde Fahrzeugverwaltung (0.934667ms)
+✔ Leseschutz und fehlgeschlagener Abruf sperren Schreibaktionen (3.136667ms)
+✔ Fahrtformular erhält alle acht vorhandenen Felder und lehnt ungültige Kilometer ab (0.763792ms)
+✔ Nicht geladene Fall- oder Fahrerauswahl wird beim Speichern nicht als leere Zuordnung gesendet (0.454708ms)
+✔ Einreichen erfordert für Mitarbeitende eine Namensbestätigung und erlaubt keine Freigabe (0.531625ms)
+✔ Lokales Bearbeiten erhält Erstattungssnapshot, Unterschriften und fremde Metadaten (2.246667ms)
+✔ Geänderte Kilometer verwenden lokal den vorhandenen Pauschalsatz (1.215875ms)
+✔ Lokale neue Fahrt hat eigenen Datensatz und leere Bestätigungen (0.657208ms)
+✔ Lokaler Speicherfehler stellt Fahrzeuge und Fahrten wieder her (1.199458ms)
+✔ Fahrzeuglöschung entfernt lokal nur die dazugehörigen Fahrten (0.73425ms)
+✔ Vorprüfung stoppt inzwischen veränderte Fahrten und entzogenes Bearbeitungsrecht (0.55275ms)
+✔ Ein Server-Schreibfehler wird mit der tatsächlichen Meldung weitergereicht (0.476167ms)
+✔ Fehlender Nebenabruf erhält bisherige Zuordnungen und kennzeichnet die Auswahl als ungeladen (0.551958ms)
+✔ Eine ältere Antwort darf einen neueren Fahrtenabruf nicht überschreiben (0.440166ms)
+✔ Ein zwischenzeitlich geöffnetes Formular verhindert den Austausch seiner Datenbasis (0.384042ms)
+✔ Verspätete Entfernungsberechnung erhält manuell korrigierte Kilometer (1.236458ms)
+✔ Ein während des Exports vorgemerkter Datenabruf wird nach dem Export nachgeholt (0.498667ms)
+✔ Fristen unterscheiden heute, überfällig und die nächsten sieben Tage (34.674667ms)
+✔ Fristen wählen Fälle über IDs auch bei gleichem Namen (17.99475ms)
+✔ Fristen lassen Herkunft, fachliche Kategorie, Priorität und Suche kombinieren (17.450959ms)
+✔ Wiedervorlagen teilen fällige, geplante und abgeschlossene Vorgänge ohne Lücken auf (16.854625ms)
+✔ Wiedervorlagen kombinieren Ursprungsmodul, Fall-ID, Priorität und Suche (16.294667ms)
+✔ Der Feinschliff steht vollständig innerhalb der Mobil-Abfrage (57.533875ms)
+✔ Keine Regel des Feinschliffs kann die Desktop-Ansicht erreichen (24.320667ms)
+✔ Jedes der neun Module wird im Feinschliff behandelt (16.349166ms)
+✔ Die Handkassenaktionen stehen nur mobil direkt unter dem Jahrfilter (49.927083ms)
+✔ Fall und Jahr der Handkasse stehen nur mobil linksbündig untereinander (73.106458ms)
+✔ Aktuelle Fälle und Archiv bilden mobil einen fugenlosen 50-50-Umschalter (26.602625ms)
+✔ Die Mindestbreiten und festen Pixelraster des Desktops sind mobil aufgehoben (65.090041ms)
+✔ Die mobile Kalenderleiste hat für das Ansichts-Menü eine eigene Spalte (18.130708ms)
+✔ Die Module hängen weiterhin im gemeinsamen Smartphone-Profil (976.053292ms)
+✔ Modul-eigene Innenscroller sind im Smartphone-Profil freigegeben (74.192584ms)
+✔ Der Finanz-Posten ist mobil eine eigene Vollbildmaske (52.336542ms)
+✔ Der Datei-Explorer hat mobil einen einzigen Scroller und einen vollbreiten Ordnerbaum (131.987167ms)
+✔ Ein Ordnerklick schließt den Baum auf schmalen Geräten wieder (83.073834ms)
+✔ Die Auslösebedingung der mobilen Ansicht bleibt unverändert (34.511167ms)
+✖ Mobil-Registry: Archiv und Versandhistorie sind eingetragen, jede Wurzel bleibt eindeutig (34.46775ms)
+✔ Archiv und Versandhistorie: Schaltflächen stehen mobil untereinander (56.056459ms)
+✔ Mobil: kein leerer Streifen rechts - Modulbreiten dürfen die Vollbreite nicht schlagen (60.13175ms)
+✔ sanitizePreferences: Deckel 8, Verstecktes fliegt auch aus alten Speicherständen (140.586916ms)
+✔ Die Menüfolge enthält 37 Bereiche; KI-Fallchat bleibt ausschließlich unter Chats (65.021375ms)
+✔ Gespeicherte Nutzerreihenfolge bleibt erhalten; die Fallmodule werden fachlich einsortiert (117.780583ms)
+✔ Die Leiste rendert bis zu 8 Favoriten und meldet ihre Knopfzahl fürs CSS (47.017542ms)
+✔ Anpassen-Dialog: horizontale Live-Vorschau mit Zieh-Umsortierung (42.010167ms)
+✔ Mehr-Menü und Editor blenden Online-Formulare aus, die Erkennung bleibt (59.334208ms)
+Smartphone-Layout: Navigation, Dialoge, Tabellen, KI-Chat, Mail, Kalender, Dateien und Verwaltung ohne horizontales Seiten-Scrollen kuratiert.
+✔ tests/html-mobile-phone-layout.test.cjs (1780.370792ms)
+✔ Die Mechanik ist vollständig vorhanden (154.660917ms)
+✔ Der Auslöser hängt an den vier Anlegen-Schaltflächen - und nur an ihnen (20.525459ms)
+✔ Ohne mobile Ansicht passiert nichts (35.393708ms)
+✔ Jede Regel der Vollansicht ist auf die mobile Ansicht begrenzt (6.77ms)
+✔ Der Rückweg ist immer vorhanden (44.744333ms)
+✔ Der Beobachter sieht nur Aufbauten, nicht die eigenen Markierungen (17.272792ms)
+✔ Stetiges Scrollen in kleinen Schritten blendet aus; keine Selektorkaskade je Ereignis (96.765209ms)
+✔ Kleine Gegenbewegungen flackern nicht, bewusster Richtungswechsel blendet wieder ein (69.344ms)
+✔ Ein schneller abgeschlossener Richtungswechsel wird nach der Sperrfrist übernommen (61.052334ms)
+✔ Der Seitenanfang gewinnt sofort gegen die Sperrfrist (59.887125ms)
+✔ Fremde Hintergrundroller, Eingabefelder und horizontale Bewegung schalten nicht um (52.552125ms)
+✔ Neue Ansicht zeigt die Navigation und verwirft einen ausstehenden Richtungswechsel (58.811375ms)
+✔ Modal- und Chatwechsel erneuern die Scrollprüfung nur einmal (69.852667ms)
+✔ Tastatur hat Vorrang vor Scrollen, Seitenanfang und Menüöffnung; Schließen zeigt wieder an (60.124125ms)
+✔ Android mit verkleinertem innerHeight bleibt über die gemerkte Höhe erkennbar (67.193542ms)
+✔ Browserleisten, Pinch-Zoom und eine Hardwaretastatur sind keine Bildschirmtastatur (56.117042ms)
+✔ Offene Auswahlblätter und Desktop werden nicht vom Scrollen umgeschaltet (58.365042ms)
+✔ Navigation verschiebt ihre Leiste ohne Root-Has-Selektor und respektiert reduzierte Bewegung (49.456584ms)
+✔ Geführte Fallassistenten verwenden ihren eigenen Scrollbereich (65.8885ms)
+✔ Heute wird am Nachmittag nicht als überfällig einsortiert (61.542209ms)
+✔ Diese Woche endet am Sonntag und überschreitet keine Kalenderwoche (41.376125ms)
+✔ Suche, Fall-ID, Liste, Priorität und Status lassen sich kombinieren (39.377541ms)
+✔ Wiedervorlagen und Aufgaben beachten die vorhandenen getrennten Sichtbarkeitsschlüssel (38.509125ms)
+✔ Ungültige oder fehlende Daten werden als ohne Termin behandelt (45.91475ms)
+✔ Mobile Oberfläche nutzt Originalformular und Speicherlogik, keine zweite Aufgaben-Datenbank (63.570666ms)
+✔ Checkboxen im Editor-Grid bleiben klein und beschriftbar (9.849083ms)
+✔ kompakte Formular-Textareas sind von der 420px-Legacy-Regel ausgenommen (0.989541ms)
+Modus-Intro und Tagesüberblick: Software-Blau, JSON-/Serverstatus, echte Kennzahlen, Fallumschalter und Schnellzugriffe verdrahtet.
+✔ tests/html-mode-intro.test.cjs (1020.430125ms)
+Neue Dokumentvorlagen: dynamische Wohnungs-Tabellen und neutralisierter A4-Gerichtsexport vorhanden
+✔ tests/html-new-document-templates.test.cjs (746.525334ms)
+node:assert:152
+  throw new AssertionError(obj);
+  ^
+
+AssertionError [ERR_ASSERTION]: Scriptblockzahl hat sich verändert.
+    at Object.<anonymous> (/private/tmp/calendar-baseline/server/tests/html-no-module-folder.test.cjs:31:8)
+    at Module._compile (node:internal/modules/cjs/loader:1871:14)
+    at Object..js (node:internal/modules/cjs/loader:2002:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 315,
+  expected: 311,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.18.0
+✖ tests/html-no-module-folder.test.cjs (308.517375ms)
+✔ HTML bleibt syntaktisch unverändert prüfbar (295.512166ms)
+✔ Online-Erstfall bekommt beim appLoginReady Vorrang vor optionalen GET-/api-Abrufen (34.084875ms)
+✔ Online-Fallstart lädt den aktiven Fall vor Panel-Render und Hintergrund-Preload (41.446125ms)
+✔ Overlay-Probe-Renderings entsprechen den abgenommenen Golden-Referenzen (9327.014709ms)
+HTML-Recovery-Key-Verwaltung: Online-Admin-Gate, maskierte Eingaben, Einmal-Download, Rotation und Offline-Abgrenzung geprüft
+✔ tests/html-recovery-key-admin.test.cjs (259.2115ms)
+HTML-Betriebsarten: Online, Lokal und Außendienst einschließlich OCR, Nur-Lesen-Dokumenten und Rückweg geprüft
+✔ tests/html-runtime-modes.test.cjs (815.957333ms)
+✔ Dark-Mode-Korrektur ist auf das einheitliche Einstellungsmenü begrenzt (0.510917ms)
+✔ Navigation, Eingabefelder und harte Inline-Hellwerte werden abgedeckt (0.080833ms)
+✔ Alle in den Screenshots auffälligen Fachansichten besitzen eigene Regeln (0.351417ms)
+✔ Semantische Flächen bleiben im Dunkelmodus unterscheidbar (0.280083ms)
+✔ Der zuvor weiße KI-Aktionsbalken erhält eine dunkle Fläche (0.14ms)
+✔ Der Formular-Baukasten besitzt drei dunkle Arbeitsbereiche und einen lesbaren Abschnittskopf (0.215ms)
+✔ Geburtsort verwendet in Stammdaten, Sozialem Netzwerk und Posteingang dieselbe Ortsliste (0.697ms)
+✔ Blutgruppe und Wertmarke sind first-class zentrale Stammdaten-Kataloge (12.809334ms)
+✔ Ausweisstatus wird in Stammdaten und Posteingang von der Ausweisart abgeleitet (0.958125ms)
+✔ Posteingang rendert Doku, Kontakt, Aufgabenkreis, Schulden, Genehmigung, GDP und Vorsorge mit zentralen Schlüsseln (0.4445ms)
+✔ Posteingang verwendet für Fall- und Büro-Adressbuch getrennte Kataloge (6.951458ms)
+✔ Fallbeginn verwendet die Fachkataloge für Doku, Kontakt, Genehmigung und Frequenz (7.704916ms)
+✔ Büroprofil wählt für Anrede, PLZ, Ort und Land den passenden zentralen Katalog (0.549625ms)
+✔ Die Diagnose kennt alle vier Betriebsarten (27.31525ms)
+✔ Der Wiederherstellungsmodus wird als solcher gemeldet (17.711875ms)
+✔ Die Funktionsprüfung nennt Zweck und Bedeutung je Betriebsart (19.698084ms)
+✔ Die Ausgabe deckt die heutigen Bereiche ab (50.879583ms)
+✔ Der Supportbericht nennt Betriebsart, Anmeldung und Echtzeit-Zustand (17.12325ms)
+✔ Der Echtzeit-Abgleich lässt sich von außen abfragen (27.0365ms)
+✔ Die Serverroute liefert die Zahlen, die die Diagnose zeigt (0.24475ms)
+✔ intern erzeugte Druckformulare verwenden den gemeinsamen A4-Renderer (34.246166ms)
+✔ Originalvorlagen und Freidokument bleiben eigenständige Dokumenttypen (30.749833ms)
+✔ die eingebettete Schrift ist als Vorlagen-Block samt fontkit verfügbar (44.44025ms)
+✔ AcroForm-Befüllung erzeugt Appearance-Streams mit der eigenen Schrift (11.110042ms)
+✔ der CI-Kopf trägt Band, Fallbezugskasten und schlanke Folgeseiten-Kopfzeile (82.212708ms)
+✔ die Layoutsprache besitzt nummerierte Abschnitte und dynamische Feldkarten (59.321ms)
+✔ Tabellenfelder rendern mit Kopfwiederholung, Übertrag und Summenschutz (119.136625ms)
+✔ lange Freitextwerte werden ohne Zeilen-Stummel fortgesetzt (57.404917ms)
+✔ ALLE Briefe zeichnen ihren Kopf über die eine zentrale Funktion (Wächter) (135.828917ms)
+✔ PDF-Kennwortschutz ist in beiden Mail-Editoren verdrahtet (36.111042ms)
+✔ Kennwort-Generator und Kennwort-Mail-Option sind in beiden Editoren verdrahtet (37.903333ms)
+✔ die beiden gelöschten Hinweistexte sind aus dem Versand-/Sendenmenü entfernt (28.204208ms)
+✔ fachliche Unterschriftsfelder und eigene Signaturen folgen derselben Abschlussgeometrie (95.51075ms)
+✔ das Unterschriftenblatt übernimmt die gemeinsame Drucklayoutsprache (63.041417ms)
+✔ Unterschriften stehen in gleichmäßig aufgebauten Karten (31.145125ms)
+✔ mehrere Unterschriftenblätter erhalten wiederholte Köpfe und eigene Seitenzahlen (49.40575ms)
+✔ v230-Druck des Vermögensverzeichnisses entspricht den Golden-Referenzen (7005.227625ms)
+✔ Übersetzung: Codes und Klartexte in beide Richtungen, Unbekanntes wird verworfen (5.633667ms)
+✔ Export und Import hängen an der gemeinsamen Übersetzung; Übersicht/Kombi bewusst nicht (38.339125ms)
+✔ der v255-Nachrüster ergänzt die drei Kopfzellen samt Stil und ist idempotent (29.329292ms)
+✔ Die beiden neuen Dokumente stehen vollstaendig im Katalog (69.806042ms)
+✔ Jedes Schemafeld der zugeordneten Dokumente hat eine Position (70.777ms)
+✔ Jede Auswahloption hat eine Position oder ist bewusst leer (4.110666ms)
+✔ Kopffelder aus den Stammdaten sind angebunden (35.837125ms)
+✔ Was der Vordruck nicht fasst, kommt auf ein Beiblatt statt zu verschwinden (11.340209ms)
+✔ Getauschte Vorlagen tragen ihre recherchierte Herkunft (37.257ms)
+✔ Rechnungslegung ist nicht mehr pauschal von der Originalvorlage ausgenommen (5.023167ms)
+✔ Nicht freigegebene Originalvorlagen sind im Exportdialog gesperrt (0.7125ms)
+✔ Dokumente ohne ausfüllbaren Amtsvordruck sind dauerhaft ausgegraut (1.510958ms)
+✔ Tabellen lassen sich über die Kategorie zuordnen (6.949416ms)
+✔ Die Totenfürsorgeverfügung folgt jetzt dem Vordruck (4.388584ms)
+✔ Vermögensverzeichnis: alle Anker des eigenen Erzeugers sind gesetzt (30.207292ms)
+✔ Die Zuordnung kommt aus der Rechnung der Anwendung, nicht aus einer Kurationsnummer (20.390625ms)
+✔ Bewusst abgelöste Vordrucke sind kein Mangel und nennen den Grund (13.657458ms)
+✔ Die Bezeichnung kommt aus der Dokumentenliste, nicht aus der Vorlagen-Nutzlast (18.489375ms)
+✔ Auch die vom Programm erzeugten Dokumente stehen in der Liste (23.512333ms)
+✔ Ein sehr langer Grund bricht nicht mitten im Wort ab (14.520209ms)
+✔ Die Kopfzeile trennt bewusste Ablösungen von offenen Zuordnungen (14.207167ms)
+✔ Jede Stilllegung hinterlässt ihren Grund in den Daten (29.063708ms)
+✔ Die sichtbaren Begründungen tragen echte Umlaute (46.357709ms)
+✔ Die kuratierte Vorlagenliste ist vollständig beziffert (21.385083ms)
+✔ lagert ausschließlich OCR aus und hydriert verlustfrei (8.0555ms)
+✔ normale Antwort enthält nur Metadaten und Manipulation wird erkannt (0.495791ms)
+✔ Metadaten prüfen Anzahl, Textlänge und SHA-256 (0.0655ms)
+✔ modelToRRule waehlt die Wertart von UNTIL nach dem Startwert (0.802041ms)
+✔ Der Rueckweg liest beide Formen gleich - der Umbau ist verlustfrei (0.666958ms)
+✔ CalDAV: Ganztagsserie traegt ein DATE, getaktete Serie eine schwebende Zeit (4.824167ms)
+✔ Google bekommt bei Ganztagsterminen ebenfalls ein DATE (0.392541ms)
+✔ Die Ausfuhr der Auslieferungsdatei schreibt kein UTC-UNTIL mehr (134.618042ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ Fall- und Büro-Sammelrouten sind wortlautgleich, fall- und rechtegeprüft (1313.027375ms)
+✔ Karten: OpenStreetMap gilt als nutzbar - es braucht keinen Schlüssel (40.313334ms)
+✔ Karten: Google/HERE OHNE Schlüssel melden nicht mehr fälschlich „konfiguriert" (28.029458ms)
+✔ Karten: mit Schlüssel - eigener wie Admin-Vorgabe - gilt der Anbieter als konfiguriert (93.837833ms)
+✔ Mail: lokal „unbekannt" statt behauptetem „konfiguriert" (13.818833ms)
+✔ Mail: ohne Server (Datei-Betrieb) ist Versand sicher nicht möglich (25.267459ms)
+✔ Die übrigen Bereiche rechnen unverändert weiter (62.59075ms)
+✔ Anzeige: der dritte Zustand wird als „nicht prüfbar" ausgewiesen (87.749792ms)
+✔ PDF-Anlage wird mit requestweitem Kennwort echt verschlüsselt (51.336375ms)
+✔ Anlagen-eigenes pdfKennwort wird ebenfalls angewendet (6.220916ms)
+✔ Nicht-PDF-Anhang bricht den geschützten Versand ab (kein stilles Leck) (7.689375ms)
+✔ ohne Kennwort bleiben Anlagen byteidentisch (2.144125ms)
+✔ kaputte PDF mit Kennwortwunsch bricht ab statt unverschlüsselt zu senden (0.248292ms)
+✔ die Kennwort-Mail nennt Bezug und Kennwort, aber förmlich und vollständig (0.146041ms)
+mcp-case-assignment.test.js: OK
+✔ tests/mcp-case-assignment.test.js (265.536417ms)
+✔ Die Seite hinter einem offenen Modal ist stillgelegt (0.956125ms)
+✔ Das Modal verkettet sein Rollen nicht nach draussen (0.390792ms)
+✔ Im Modal selbst bleibt das Rollen erhalten (62.413875ms)
+✔ Der Anmeldevorhang behaelt seine eigene, gleich gebaute Sperre (0.242417ms)
+module-files: zentrale Verweise und Zielpfade ok
+✔ tests/module-files.test.js (169.088917ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ Vertretung: Spalte in der Falltabelle, beide Aufrufer bedient (131.48375ms)
+✔ Vertretung: reine Angabe - vergibt keine Zugriffsrechte (36.542625ms)
+✔ Vertretung: Vertretungsplan je Person ist als Admin-Tab verdrahtet (72.737959ms)
+✔ Aufbewahrung: Schalter, Jahre und Zieldatum im Fallabschluss (305.289542ms)
+✔ Aufbewahrung: Termin entsteht erst beim Uebernehmen, nur einmal (142.636667ms)
+✔ Aufbewahrung: Zieldatum rechnet 10 Jahre ab Betreuungsende (1.28575ms)
+✔ Verarbeitungs-Log: Schema, Indizes und Sicherungs-Einordnung (0.688958ms)
+✔ Verarbeitungs-Log: Middleware ordnet Aktionen korrekt ein (ausgefuehrt) (152.300833ms)
+✔ Verarbeitungs-Log: Anmeldungen werden protokolliert, Doppelschreiben verhindert (0.529375ms)
+✔ Verarbeitungs-Log: Admin-Ansicht filtert und zeigt die neuen Merkmale (31.165083ms)
+✔ Review-Fix: Aufbewahrungs-Termin traegt Fallbezug und wandert nicht nach aussen (10.019833ms)
+✔ Review-Fix: Aenderung nach dem Anlegen nimmt den alten Termin zurueck (45.225125ms)
+✔ Review-Fix: Betreuungsende wandert korrekt zwischen deutschem und ISO-Format (36.78675ms)
+✔ Review-Fix: groesste Weitergabe (Fallübergabe-ZIP) wird protokolliert (1.08875ms)
+✔ Review-Fix: Auth-Vorgaenge und fremde Zugangswege sind erfasst (0.181458ms)
+✔ Review-Fix: CSV-Export folgt dem Filter und traegt die Verarbeitungs-Merkmale (11.921667ms)
+✔ Review-Fix: Zeitfilter rechnet Ortszeit nach UTC, Vertretungsplan nutzt Ortszeit (27.838208ms)
+✔ Vertretung: auch externe Personen können vertreten (29.08.2026) (143.498875ms)
+✔ Vertretung: EINE Seite für beides – Abschnitte statt Doppel-Überschrift, Je-Fall-Karte geteilt (129.559084ms)
+✔ Externe Personen: das Register speist alle Auswahlen – Blob-Verzeichnis und Präfix sind raus (65.384875ms)
+OFFSITE_MAINTENANCE=OK JOB_TAG=bb-job-f4cdac978e880595699b82a0 POLICY_SHA=b1f78c0bd645f77b7f4f183875c3d3c4bcb0f3b7887861958b3f36b2fd4eb0cc
+OFFSITE_MAINTENANCE=OK JOB_TAG=bb-job-f4cdac978e880595699b82a0 POLICY_SHA=e844dbf19c1bdf95e107a169d2a1dfbc382c32db79be45ec2e757f0527fc1c4d
+OFFSITE_MAINTENANCE=OK JOB_TAG=bb-job-f4cdac978e880595699b82a0 POLICY_SHA=b1f78c0bd645f77b7f4f183875c3d3c4bcb0f3b7887861958b3f36b2fd4eb0cc
+OFFSITE_MAINTENANCE=OK JOB_TAG=bb-job-f4cdac978e880595699b82a0 POLICY_SHA=b1f78c0bd645f77b7f4f183875c3d3c4bcb0f3b7887861958b3f36b2fd4eb0cc
+OFFSITE_MAINTENANCE=FEHLER JOB_TAG=bb-job-f4cdac978e880595699b82a0 POLICY_SHA=b1f78c0bd645f77b7f4f183875c3d3c4bcb0f3b7887861958b3f36b2fd4eb0cc
+offsite-maintenance: Der Wartungs-Lock ist kein gültiges JSON.
+offsite-maintenance: Das Statusverzeichnis muss exakt mit Modus 0700 geschützt sein.
+OFFSITE_MAINTENANCE=OK JOB_TAG=bb-job-f4cdac978e880595699b82a0 POLICY_SHA=b1f78c0bd645f77b7f4f183875c3d3c4bcb0f3b7887861958b3f36b2fd4eb0cc
+offsite-maintenance: Eine Offsite-Wartung läuft bereits; der Lock bleibt unverändert.
+OFFSITE_MAINTENANCE=FEHLER JOB_TAG=bb-job-f4cdac978e880595699b82a0 POLICY_SHA=b1f78c0bd645f77b7f4f183875c3d3c4bcb0f3b7887861958b3f36b2fd4eb0cc
+OFFSITE_MAINTENANCE=FEHLER JOB_TAG=bb-job-f4cdac978e880595699b82a0 POLICY_SHA=b1f78c0bd645f77b7f4f183875c3d3c4bcb0f3b7887861958b3f36b2fd4eb0cc
+✔ getrennte Wartung führt taggebunden forget/prune und check aus und schreibt sicheren Beleg (429.619167ms)
+✔ SFTP-Wartung funktioniert ohne Provider-Credential-Datei und erbt keine Provider-Rechte (306.216167ms)
+✔ Beleg ist bei geänderter Policy, Überfälligkeit oder unsicherem Modus nicht grün (277.981167ms)
+✔ fehlgeschlagene Wartung überschreibt einen alten Erfolg sichtbar mit Fehler (436.9065ms)
+✔ bestehender Wartungs-Lock wird weder gelöscht noch als Lauf übergangen (9.625458ms)
+✔ Wartungs-Writer lehnt ein für Gruppe oder andere offenes Statusverzeichnis ab (1.75925ms)
+✔ verwaister Wartungs-Lock wird sicher übernommen und der Lauf fortgesetzt (274.041583ms)
+✔ aktiver gültiger Wartungs-Lock bleibt fail-closed unverändert (9.960958ms)
+✔ hängendes Restic endet an der Zeitgrenze und hinterlässt einen Fehlerbeleg (1649.664708ms)
+✔ Restic-Zeitgrenze beendet unter POSIX auch einen SIGTERM-ignorierenden Enkelprozess (3697.1245ms)
+✔ Absturz vor Lock-Veröffentlichung hinterlässt nie partielles finales JSON (68.060167ms)
+✔ Absturz nach atomarer Lock-Veröffentlichung hinterlässt vollständigen übernehmbaren Lock (76.805416ms)
+✔ Statusmonitor meldet fehlende externe Konfiguration eindeutig (0.219625ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ serverseitiger Modus-Guard sperrt local-Sitzungen und lässt Auth/Bearer-Verträge unberührt (162.959125ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ Bestandsübernahme: Nutzer + Mitarbeitende werden EINE Person je Mensch (155.490167ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ Routen: Kennung eindeutig, interne nie löschen, Konto verknüpft per Name (288.962917ms)
+Audit-Log fehlgeschlagen TypeError: The database connection is not open
+    at logAction (/private/tmp/calendar-baseline/server/src/middleware/audit.js:49:16)
+    at /private/tmp/calendar-baseline/server/src/modules/office/profile-routes.js:252:3
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:149:13)
+    at /private/tmp/calendar-baseline/server/src/middleware/authentication.js:143:5
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/index.js:284:15
+Audit-Log fehlgeschlagen TypeError: The database connection is not open
+    at logAction (/private/tmp/calendar-baseline/server/src/middleware/audit.js:49:16)
+    at /private/tmp/calendar-baseline/server/src/modules/office/profile-routes.js:282:3
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:149:13)
+    at /private/tmp/calendar-baseline/server/src/middleware/authentication.js:143:5
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/index.js:284:15
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ employees-Route ist eine Sicht auf persons – Löschen deaktiviert nur (181.1535ms)
+✔ Client: EIN Menü „Personen“, Bürostammdaten online nur Ansicht (143.985792ms)
+✔ Etappe 2: Bestandswerte werden Personen-IDs, extern:-Werte werden Register-Personen (103.878208ms)
+✔ Etappe 2: gatherPersons liest das Register, Konsumenten hängen an der ID (49.0325ms)
+Audit-Log fehlgeschlagen TypeError: The database connection is not open
+    at logAction (/private/tmp/calendar-baseline/server/src/middleware/audit.js:49:16)
+    at /private/tmp/calendar-baseline/server/src/modules/office/persons-routes.js:155:3
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:149:13)
+    at requirePersonsEdit (/private/tmp/calendar-baseline/server/src/modules/office/persons-routes.js:37:53)
+    at router.post.b (/private/tmp/calendar-baseline/server/src/modules/office/persons-routes.js:129:10)
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+Audit-Log fehlgeschlagen TypeError: The database connection is not open
+    at logAction (/private/tmp/calendar-baseline/server/src/middleware/audit.js:49:16)
+    at /private/tmp/calendar-baseline/server/src/modules/office/persons-routes.js:155:3
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:149:13)
+    at requirePersonsEdit (/private/tmp/calendar-baseline/server/src/modules/office/persons-routes.js:37:53)
+    at router.post.b (/private/tmp/calendar-baseline/server/src/modules/office/persons-routes.js:129:10)
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+Audit-Log fehlgeschlagen TypeError: The database connection is not open
+    at logAction (/private/tmp/calendar-baseline/server/src/middleware/audit.js:49:16)
+    at /private/tmp/calendar-baseline/server/src/modules/office/persons-routes.js:155:3
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:149:13)
+    at router.post.b (/private/tmp/calendar-baseline/server/src/modules/office/persons-routes.js:128:117)
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/index.js:284:15
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ Etappe 3: Personen-Feld an Finanz-Posten – Klarname nur mit Recht, sonst NUR die Kennung (158.279625ms)
+✔ Etappe 3: Recht, Formular-Schranke, Excel-Spalte G, Auswertung (151.474917ms)
+✔ Etappe 4: Alt-Tabelle weg (mit Sicherheitsgurt), alte Sicherungen klar abgelehnt (100.252208ms)
+✔ Bugjagd 30.08.: Nutzer-Löschen löst die Person INNERHALB der Transaktion (0.341291ms)
+✔ Bugjagd 30.08.: Stunden-Kaltcache – Auflösung wärmt sich selbst (22.679ms)
+✔ Bugjagd 30.08.: Bestandsübernahme heilt sich selbst (Riss-Szenario + Teilbestand) (109.774208ms)
+Audit-Log fehlgeschlagen TypeError: The database connection is not open
+    at logAction (/private/tmp/calendar-baseline/server/src/middleware/audit.js:49:16)
+    at /private/tmp/calendar-baseline/server/src/modules/office/persons-routes.js:155:3
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:149:13)
+    at requirePersonsEdit (/private/tmp/calendar-baseline/server/src/modules/office/persons-routes.js:37:53)
+    at router.post.b (/private/tmp/calendar-baseline/server/src/modules/office/persons-routes.js:129:10)
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+Audit-Log fehlgeschlagen TypeError: The database connection is not open
+    at logAction (/private/tmp/calendar-baseline/server/src/middleware/audit.js:49:16)
+    at /private/tmp/calendar-baseline/server/src/modules/office/persons-routes.js:155:3
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:149:13)
+    at router.post.b (/private/tmp/calendar-baseline/server/src/modules/office/persons-routes.js:128:117)
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/index.js:284:15
+✔ Bugjagd 30.08.: Kennung ist rechtegeschützt, nur intern – und Namens-Match kapert keine Externen (169.743917ms)
+✔ Bugjagd 30.08.: Client-Pins der übrigen Fixes (QM, Excel-Mitarbeiter, Vertretungsplan, Konto anlegen) (206.001125ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+▶ Qualifikationen: eigener Eintrag ja, fremde nur mit Recht
+  ✔ mit dem Recht: alle Einträge (158.31625ms)
+  ✔ ohne das Recht: nur der eigene Eintrag (Personen-ID) (119.464958ms)
+  ✔ ohne das Recht: auch der alte Namensschlüssel zählt als eigener Eintrag (109.717542ms)
+  ✔ Speichern ohne das Recht löscht fremde Einträge nicht (106.082417ms)
+  ✔ Fremde Einträge lassen sich ohne das Recht auch nicht unterschieben (108.695792ms)
+  ✔ mit dem Recht bleibt das Speichern unverändert möglich (99.247667ms)
+✔ Qualifikationen: eigener Eintrag ja, fremde nur mit Recht (991.023625ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ Raum-Broadcast erreicht alle Betrachter, App-Ping wird beantwortet (98.821417ms)
+✔ Ein hart gestorbener Socket kappt die Zustellung an spaeter Beigetretene nicht (62.115458ms)
+✔ Heartbeat raeumt stumme Verbindungen ab (kein Pong -> terminate) (339.36575ms)
+✔ Ohne gueltige Sitzung kein Upgrade (2.827791ms)
+✔ Client-Gegenstuecke: Totmann-Uhr, Reconnect-Kette, sofortiges Feld-Nachziehen, Berichts-Nachladen (241.335583ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ Fallbezug: Kennung schlaegt Etikett, Etikett bleibt Rueckfallebene (16.540209ms)
+✔ Fallauswahl: Vorauswahl ueber Kennung, ueber Etikett und der verwaiste Sonderfall (31.339458ms)
+✔ Fallauswahl: das Speichern liest Kennung UND Etikett als Paar (29.924ms)
+✔ Alle Anlagewege geben Kennung und Dokumentart mit (37.132417ms)
+✔ Posteingang: die Kennung geht nur mit, solange der Fall nicht umgestellt wurde (ausgefuehrt) (170.496083ms)
+✔ Rueckverweis Antrag -> Rechnung wird auch online gesetzt (ausgefuehrt) (59.467791ms)
+✔ Excel-Reimport zerstoert die Verknuepfung nicht mehr (32.639542ms)
+✔ Excel-Reimport im Lokalmodus gleicht ab statt zu ersetzen (ausgefuehrt) (5.831167ms)
+✔ Vorausschau und Fall-Dashboard vergleichen ueber die Kennung (19.9175ms)
+✔ Vorausschau: das Etikett wirkt nur noch als Rueckfallebene (ausgefuehrt) (34.224583ms)
+✔ Server: Fallkennung wird geprueft, Altbestand nachgezogen (ausgefuehrt) (181.51675ms)
+✔ Server: Dokumentart wird nur der FORM nach geprueft (0.33025ms)
+✖ Blockzahl bleibt bei 311 (42.471792ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ MCP-Module mit DB-Bereinigungstimer werden in Recovery nicht geladen (0.652167ms)
+✔ neuer ENCRYPTION_KEY erzwingt Admin-Quarantäne und atomaren Schema-3-Doppelrestore (2719.369417ms)
+✔ ein verlinkter oder beschädigter Restore-Marker öffnet den Server niemals (125.687291ms)
+✔ ein langlebiger Restore-Fortschrittsmarker sperrt auch das SIGKILL-Fenster vor dem Datentausch (353.542792ms)
+✔ ein Dateisystemfehler bei der Freigabe lässt die DB in Quarantäne und die geprüfte Generation erhalten (185.250042ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ Admin kann Recovery-Key sicher erzeugen, prüfen, rotieren und portable Secrets restaurieren (6123.492166ms)
+✔ nutzt die Umgebung als Fallback und gibt niemals Schlüssel oder Pfad im Status aus (321.401917ms)
+✔ akzeptiert einen starken Umgebungs-Fallback ohne erzwungene Rotation (139.388708ms)
+✔ verwalteter Schlüssel hat Vorrang, bleibt nach Neustart erhalten und ist 0600 geschützt (1024.975833ms)
+✔ weist menschenlesbare Importphrasen ab und vergibt bei Rotation eine neue Key-ID (641.88975ms)
+✔ stellt Schlüsselmetadaten nach Prozessabbruch zwischen beiden renames idempotent fertig (582.965375ms)
+✔ beschädigte, zu offene oder verlinkte Managed-Dateien fallen nicht still auf die Umgebung zurück (1.129ms)
+✔ Secret-Datei innerhalb der Sicherungsdatenwurzel wird abgewiesen (0.406916ms)
+[recovery] Quarantäne (encryption_key_invalid) automatisch aufgehoben: der ENCRYPTION_KEY ist unverändert derselbe wie vor dem Vorfall, alle 1 gespeicherten Geheimnisse sind damit lesbar, und es liegt kein Restore-Marker vor. Ein Fremd- oder Altbestand hätte diese Prüfungen nicht bestanden.
+[recovery] Quarantäne (encryption_key_invalid) automatisch aufgehoben: der ENCRYPTION_KEY ist erstmals gebunden, alle 0 gespeicherten Geheimnisse sind damit lesbar, und es liegt kein Restore-Marker vor. Ein Fremd- oder Altbestand hätte diese Prüfungen nicht bestanden.
+[recovery] Selbstheilung geprüft und verweigert (schluessel_abweichend). Die Quarantäne bleibt bestehen.
+[recovery] Quarantäne (encryption_key_changed_during_recovery) automatisch aufgehoben: der ENCRYPTION_KEY ist unverändert derselbe wie vor dem Vorfall, alle 1 gespeicherten Geheimnisse sind damit lesbar, und es liegt kein Restore-Marker vor. Ein Fremd- oder Altbestand hätte diese Prüfungen nicht bestanden.
+[recovery] Selbstheilung geprüft und verweigert (restore_marker_vorhanden). Die Quarantäne bleibt bestehen.
+[recovery] Selbstheilung geprüft und verweigert (grund_nicht_selbstheilbar). Die Quarantäne bleibt bestehen.
+[recovery] Selbstheilung geprüft und verweigert (grund_nicht_selbstheilbar). Die Quarantäne bleibt bestehen.
+[recovery] Selbstheilung geprüft und verweigert (artefaktweg_begonnen). Die Quarantäne bleibt bestehen.
+[recovery] Quarantäne (encryption_key_invalid) automatisch aufgehoben: der ENCRYPTION_KEY ist unverändert derselbe wie vor dem Vorfall, alle 0 gespeicherten Geheimnisse sind damit lesbar, und es liegt kein Restore-Marker vor. Ein Fremd- oder Altbestand hätte diese Prüfungen nicht bestanden.
+[recovery] Selbstheilung geprüft und verweigert (fortschrittsmarker_vorhanden). Die Quarantäne bleibt bestehen.
+[recovery] Selbstheilung geprüft und verweigert (datenwurzel_gewechselt). Die Quarantäne bleibt bestehen.
+[recovery] Quarantäne (encryption_key_invalid) automatisch aufgehoben: der ENCRYPTION_KEY ist unverändert derselbe wie vor dem Vorfall, alle 0 gespeicherten Geheimnisse sind damit lesbar, und es liegt kein Restore-Marker vor. Ein Fremd- oder Altbestand hätte diese Prüfungen nicht bestanden.
+[recovery] Selbstheilung geprüft und verweigert (artefaktweg_begonnen). Die Quarantäne bleibt bestehen.
+[recovery] Selbstheilung geprüft und verweigert (artefaktweg_begonnen). Die Quarantäne bleibt bestehen.
+[recovery] Quarantäne (legacy_secret_decryption_failed) automatisch aufgehoben: der ENCRYPTION_KEY ist erstmals gebunden, alle 1 gespeicherten Geheimnisse sind damit lesbar, und es liegt kein Restore-Marker vor. Ein Fremd- oder Altbestand hätte diese Prüfungen nicht bestanden.
+[recovery] Selbstheilung geprüft und verweigert (geheimnis_unlesbar: office_profile.maps_api_key_encrypted). Die Quarantäne bleibt bestehen.
+[recovery] Selbstheilung geprüft und verweigert (restore_marker_vorhanden). Die Quarantäne bleibt bestehen.
+✔ Der Vorfall vom 25.08.: Schluessel kurz weg -> Selbstheilung statt Sackgasse (114.090083ms)
+✔ Frische Datenbank waehrend des Ausfalls: erster Schluessel wird nachgebunden (43.008042ms)
+✔ Gefahrenfall 1: fremder Schluessel bleibt in Quarantaene (151.567875ms)
+✔ Gefahrenfall 2: Restore-Marker blockiert die Selbstheilung - auch ein unguueltiger (82.198375ms)
+✔ Gefahrenfall 3: Disaster-Grund heilt nie - und ein Schluessel-Ausfall ueberschreibt ihn nicht mehr (134.716209ms)
+✔ Gefahrenfall 4: laufender Artefakt-Restore wird nicht ueberholt (82.758ms)
+✔ Selbstheilung raeumt Sitzungen ab (85.800958ms)
+✔ Angriff 1: Symlink-Alias macht den Fortschrittsmarker nicht mehr unsichtbar (126.6405ms)
+✔ Angriff 1b: gewechselte Datenwurzel heilt nicht (die alte traegt die Marker) (166.830208ms)
+✔ Angriff 2+5: der begonnene Artefakt-Freigabeweg ueberlebt Ausfall UND Eskalation (131.70925ms)
+✔ Angriff 3: falscher Erstschluessel wird nicht gebunden - der richtige heilt spaeter (78.39475ms)
+✔ Angriff 4+6: ehrliche Etiketten - kein "Schluessel geaendert" bei identischen Schluesseln (112.086ms)
+✔ Angriff 7: die verweigerte Heilung ist im Status sichtbar (131.346208ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ Rechnung: ein geaendertes Etikett ohne Kennung zieht die Kennung mit (ausgefuehrt) (181.920334ms)
+✔ Controlling: geratene Wohnform zaehlt nicht, Klarnamen nur mit Fall-Sichtrecht (ausgefuehrt) (131.190417ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ Rollen-Vorlagen: 8 Rollen, jede an-Liste besteht nur aus ECHTEN Rechte-Keys (38.93275ms)
+✔ Rollen-Vorlagen: Übernahme + Bearbeiten sind verdrahtet (68.304417ms)
+✔ Kontakt-Rückweg: Außendienst-Kontakte werden automatisch ins Büro zurückgeschrieben (86.222583ms)
+✔ Umbau: Rollen-Wahl sitzt bei der Person, der Rollen-Reiter pflegt nur den Katalog (143.215541ms)
+✔ Funktion vs. Rolle: getrennte Felder, Betreuer per Häkchen statt Textraten (223.4005ms)
+✔ Personen-Profil: gegliedert, ohne doppelte Darstellungsfelder (313.335917ms)
+✔ KI-Fernzugriff: Verbindungs-Karte mit kopierbarer Adresse statt doppeltem Fließtext (147.613959ms)
+✔ Nutzer löschen: alle users-Fremdschlüssel aus dem Schema, ehrliche Absage statt 500er (903.440166ms)
+✔ Dry-run ist schreibfrei; Apply prüft alles und bewahrt unbekannten Altbestand (214.880417ms)
+✔ Hashfehler, Traversal, Symlink und Spezialdatei schreiben kein Zielbyte (268.966542ms)
+✔ Crashmarker sperrt den Start; --resume rollt zurück und veröffentlicht idempotent neu (476.056333ms)
+✔ --rollback stellt nach einem Crash den vollständigen unbekannten Altbestand wieder her (234.939875ms)
+✔ Manipulierter ACTIVE-Marker kann keinen Pfad außerhalb der Ziele löschen (49.30175ms)
+✔ verschlüsselt und entschlüsselt schema- und prüfsummengebunden (161.3865ms)
+✔ liest historische Version-1-Umschläge, erzeugt sie aber nicht mehr (128.356334ms)
+✔ weist falschen Schlüssel, Schema und manipulierten Ciphertext ab (161.6495ms)
+✔ stableJson ist unabhängig von der Objektschlüssel-Reihenfolge (0.172083ms)
+✔ bindet Key-ID, Generation und Quellrevision innen und außen kryptografisch (189.684292ms)
+✔ Rechtematrix: jedes Server-Recht hat GENAU EINE Excel-Spalte - und umgekehrt (37.358959ms)
+✔ Y/L/O/N: Kodierung und Decoder des Reimports invertieren einander (alle vier Kombinationen) (46.631084ms)
+✔ Verguetungsfelder: Codes raus als Klartext, Klartext rein als Codes - mit den echten Schleifen (50.696833ms)
+✔ Verguetungsfelder: toleranter Import - m/M/mittellos treffen, Unbekanntes laesst den Bestand stehen (46.735625ms)
+✔ ZIP-JSON: Anreicherung existiert, die ZIP ruft sie mit Rueckfall, Sektion bleibt /api/admin/-frei (32.288958ms)
+✔ Online-Export: die officeJson-Feldliste traegt datenschutz (11.140417ms)
+✔ Lokal-Export: die fuenf nachgeruesteten Bestaende wandern mit (ausgefuehrt) (11.164125ms)
+✔ Import-Merge: alle fuenf Bestaende werden zurueckgespielt, gepflegte Arbeit gewinnt (ausgefuehrt) (10.179291ms)
+✔ loadBueroLocal-Whitelist: die fuenf Bestaende ueberleben das Neuladen (ausgefuehrt) (16.659833ms)
+✖ die Auslieferung behaelt exakt 311 Script-Bloecke (65.275583ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ Excel-Rundlauf leert nichts mehr: leere Zellen heißen "keine Angabe" (67.581ms)
+✔ Excel-Export trägt die Personen-Profilfelder und das volle extra wieder (39.556209ms)
+✔ Personen-IDs erscheinen nie mehr roh in Dokumenten und Dateinamen (241.63975ms)
+✔ Büro-JSON trägt Register + Vertretungsplan/Qualifikationen/Kontaktmonitor; Gesamtimport liest sie (74.212875ms)
+Audit-Log fehlgeschlagen TypeError: The database connection is not open
+    at logAction (/private/tmp/calendar-baseline/server/src/middleware/audit.js:49:16)
+    at /private/tmp/calendar-baseline/server/src/modules/office/persons-routes.js:155:3
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:149:13)
+    at requirePersonsEdit (/private/tmp/calendar-baseline/server/src/modules/office/persons-routes.js:37:53)
+    at router.post.b (/private/tmp/calendar-baseline/server/src/modules/office/persons-routes.js:129:10)
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+Audit-Log fehlgeschlagen TypeError: The database connection is not open
+    at logAction (/private/tmp/calendar-baseline/server/src/middleware/audit.js:49:16)
+    at /private/tmp/calendar-baseline/server/src/modules/office/persons-routes.js:155:3
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:149:13)
+    at router.post.b (/private/tmp/calendar-baseline/server/src/modules/office/persons-routes.js:128:117)
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/index.js:284:15
+Audit-Log fehlgeschlagen TypeError: The database connection is not open
+    at logAction (/private/tmp/calendar-baseline/server/src/middleware/audit.js:49:16)
+    at /private/tmp/calendar-baseline/server/src/modules/office/persons-routes.js:233:3
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:149:13)
+    at requirePersonsEdit (/private/tmp/calendar-baseline/server/src/modules/office/persons-routes.js:37:53)
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/zepp/Documents/Codex/2026-07-05/hallo-anbei-erh-ltst-du-die/server/node_modules/express/lib/router/index.js:284:15
+✔ Finanzen: Lokal-Import behält die Kennung; Kennung-Leeren mit Zuordnung ist gesperrt (185.050041ms)
+✔ Server-Restore: eine kaputte persons-Zeile kippt nicht mehr den ganzen Restore (0.297792ms)
+✔ Außendienst: Zweitschrift stellt alle vier Teile wieder her, Büro-Kontakte reisen im Diff (57.756833ms)
+✔ erzeugt eine gültige XLSX-Datei mit Umlauten und mehreren Blättern (19.1075ms)
+✔ neue Büro-Aufgabe wird in SP angelegt (0.694958ms)
+✔ bereits erledigte Büro-Aufgabe ohne SP-Seite wird NICHT mehr angelegt (0.072833ms)
+✔ Büro sagt erledigt -> SP hakt ab; SP sagt erledigt -> Rückmeldung ans Büro (0.094041ms)
+✔ Frist in SP abgehakt: KEINE Rückmeldung, SP-Seite wird zurückgesetzt (Nur-Export) (0.060833ms)
+✔ Textabweichung: das Büro führt - außer die SP-Seite ist nachweislich neuer (0.102625ms)
+✔ Frist mit Textabweichung wird immer auf den Bürostand gestellt (0.056375ms)
+✔ verschwundene Remote-Seite räumt nur das Mapping, löscht nichts (0.082ms)
+✔ newSpTasks: nur ungemappte, offene SP-Aufgaben - für den bewussten Übertragen-Knopf (0.076208ms)
+✔ ohne Anmeldung liefert die Plugin-Route 401 (42.223625ms)
+✔ Auskunft nennt Version, Dateien und Größe aus dem echten Plugin-Ordner (12.985375ms)
+✔ Der Download ist ein auspackbares ZIP mit genau den vier Plugin-Dateien (14.204709ms)
+✔ Fehlt der Plugin-Ordner, sagt die Route das klar statt ein leeres ZIP zu liefern (18.041375ms)
+✔ Die Anwendung bietet das Plugin dort an, wo der passende Token entsteht (121.005ms)
+✔ Server: Route hängt eingebaut und der Plugin-Ordner ist eine eigene Pfad-Konstante (0.287625ms)
+✔ „Kalender, Aufgaben & Kontakte" weist zu Super Productivity den Weg (Nutzerfrage 30.08.2026) (11.406625ms)
+✔ Lokal-Modus: der Reiter „Bürostammdaten" zeichnet in den Bereich, aus dem er gerufen wurde (29.819042ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+▶ Nur-Export-Wächter
+  ✔ eingehende Änderung an einer Frist wird verworfen und zurückgeschrieben (1.5015ms)
+  ✔ eine draußen gelöschte Frist wird NICHT lokal gelöscht, sondern neu exportiert (5.662583ms)
+  ✔ normale Aufgaben bleiben beidseitig (der Wächter greift NICHT zu weit) (0.741167ms)
+  ✔ Fristen-Export: unverknüpfte Fristen wandern in die Export-Verbindung (0.6615ms)
+  ✔ ohne deadline_export exportiert der Lauf nichts (0.419083ms)
+✔ Nur-Export-Wächter (10.015917ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+▶ Webhook-Wecker
+  ✔ falsches Secret: 403, unbekannte Verbindung: 404, kein Lauf (21.671208ms)
+  ✔ richtiges Secret (?s=) und HMAC-Signatur werden angenommen (8.25625ms)
+  ✔ viele Aufrufe fallen zu EINEM Lauf zusammen (Entprellung) (1908.16475ms)
+✔ Webhook-Wecker (1950.0985ms)
+▶ OpenProject-Adapter: Vertrag der Dispatch-Schicht
+  ✔ testConnection meldet den Anzeigenamen (30.408833ms)
+  ✔ Projekte werden zu Aufgabenlisten (4.81875ms)
+  ✔ fetchTodos: lockVersion=etag, geschlossener Status=erledigt, Priorität übersetzt (12.807917ms)
+  ✔ updateTodo: Statuswechsel nur bei echtem offen/erledigt-Wechsel (22.553667ms)
+  ✔ 409 wird zur deutschen Konfliktmeldung (10.502333ms)
+  ✔ createTodo reicht bei 422 den ersten Typ nach (14.948208ms)
+  ✔ createProject weicht bei vergebener Kennung aus (7.386375ms)
+✔ OpenProject-Adapter: Vertrag der Dispatch-Schicht (122.554583ms)
+✔ projectIdentifier: URL-tauglich, Umlaute transliteriert (0.308833ms)
+✔ priorityFromTitle: deutsche und englische Instanzen (0.191625ms)
+▶ Vikunja-Adapter: Vertrag der Dispatch-Schicht
+  ✔ listTaskLists blättert und lässt Archiviertes weg (50.523417ms)
+  ✔ fetchTodos: 0001-Datum wird leer, Priorität 3 wird hoch (3.236208ms)
+  ✔ Anlegen ist PUT, Ändern ist POST (18.184208ms)
+  ✔ deleteRemoteTodo und createProject (5.43225ms)
+✔ Vikunja-Adapter: Vertrag der Dispatch-Schicht (88.520625ms)
+✔ Prioritätsübersetzung ist in beide Richtungen stimmig (0.056334ms)
+total-backup-runner: OK
+✔ tests/total-backup-runner.test.js (1196.44825ms)
+✔ Restore ist im Dry-run read-only, prüft die vollständige Manifestmenge und aktiviert atomar in Quarantäne (6462.711792ms)
+✔ Restore ordnet externe Dokumentwurzeln neu zu und aktiviert optionale Laufzeit-Artefakte (1701.685167ms)
+[Fallrechte] Kein Admin-Konto gefunden - alle Faelle bleiben ohne Eigentuemer (und damit fuer alle sichtbar).
+✔ Statuswahrheit: alle Zustaende werden korrekt abgeleitet (31.671292ms)
+✔ Statuswahrheit: offener Betrag und Zahlungsziel (19.916459ms)
+✔ Statuswahrheit: alle Verbraucher nutzen dieselbe Funktion (75.613041ms)
+✔ Ansicht: Statusspalte, Faelligkeit und Pipeline sind verdrahtet (141.048125ms)
+✔ Dashboard-Panel "Verguetungsantraege" war dauerhaft leer - Filter repariert (24.034916ms)
+✔ Server: Statusfelder, Zahlungsziel und Sicherungs-Einordnung (2.423875ms)
+✔ Server: Nummernkreis und Zahlungsabgleich (ausgefuehrt) (151.925583ms)
+✔ Review-Fix: gesetzte Zahlungsstatus, Nullsumme und abgeleitete Faelligkeit (38.3915ms)
+✔ Review-Fix: Zahlungsziel ueberlebt das Bearbeiten (10.517125ms)
+✔ Review-Fix: Zahlungsvorschlaege sind rechtegeschuetzt, gedeckelt und dublettenfrei (5.762041ms)
+✔ Review-Fix: Nummernserie im Client und ueber den Jahreswechsel (17.420416ms)
+✔ Review-Fix: Ansicht, Exporte, Dark-Mode und Lokalmodus (55.044375ms)
+✖ CLI prüft die echte portable Recovery-Revision einer SQLite-Kopie fail-closed (65.659625ms)
+✖ CLI verwirft unvollständiges Recovery-Schema und SQLite-Sidecars (56.03075ms)
+✔ Recovery-Prüfer bindet Schlüssel, gemeinsame Generation, Quellrevision und Artefaktbereich (382.216583ms)
+✔ Recovery-Prüfer weist authentische Umschläge ohne vollständigen Restorevertrag ab (299.954792ms)
+✔ Rechte-Wegweiser nennt je Modus den Ort, den es dort wirklich gibt (32.998708ms)
+✔ Die drei Nur-Lese-/Sperrhinweise nennen keinen festen Ort mehr (109.672208ms)
+✔ Lokal-Modus-Tab beschreibt den Weg zu den Vorgaben so, wie er wirklich ist (151.116042ms)
+✔ Theme-Karte behauptet keinen falschen Speicherort mehr (35.703375ms)
+✔ Die beiden toten Verweise auf einen „Zugangsdaten-Dialog" sind weg (30.633167ms)
+ℹ tests 1361
+ℹ suites 0
+ℹ pass 1342
+ℹ fail 19
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 32384.14975
+
+✖ failing tests:
+
+test at tests/controlling.test.cjs:886:1
+✖ Auslieferung: die Zahl der Skriptbloecke ist unveraendert 311 (58.281667ms)
+  AssertionError [ERR_ASSERTION]: es wurde ein Skriptblock angelegt oder entfernt - neuer Code gehoert in einen vorhandenen Block
+
+  315 !== 311
+
+      at TestContext.<anonymous> (/private/tmp/calendar-baseline/server/tests/controlling.test.cjs:887:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 315,
+    expected: 311,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/datenschutz.test.cjs:809:1
+✖ Auslieferung: die Blockzahl bleibt bei 311 (38.740125ms)
+  AssertionError [ERR_ASSERTION]: Die Auslieferungsdatei hat 315 <script>-Bloecke statt 311 - neuer Code gehoert in einen vorhandenen Block.
+
+  315 !== 311
+
+      at TestContext.<anonymous> (/private/tmp/calendar-baseline/server/tests/datenschutz.test.cjs:811:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 315,
+    expected: 311,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/einstellungen-online.test.cjs:659:1
+✖ Struktur: Blockzahl unverändert (NEUER script-Block ist verboten) (53.129291ms)
+  AssertionError [ERR_ASSERTION]: Die Zahl der script-Blöcke hat sich verändert - neuer Code gehört in bestehende Blöcke.
+
+  315 !== 311
+
+      at TestContext.<anonymous> (/private/tmp/calendar-baseline/server/tests/einstellungen-online.test.cjs:661:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 315,
+    expected: 311,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/fall-import-json.test.cjs:119:1
+✖ Blockzahl bleibt bei 311 (53.917667ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  315 !== 311
+
+      at TestContext.<anonymous> (/private/tmp/calendar-baseline/server/tests/fall-import-json.test.cjs:120:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 315,
+    expected: 311,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/gesamtexport-online.test.cjs:659:1
+✖ Auslieferung: die Blockzahl bleibt bei 311 (46.389041ms)
+  AssertionError [ERR_ASSERTION]: Scriptblockzahl hat sich veraendert.
+
+  315 !== 311
+
+      at TestContext.<anonymous> (/private/tmp/calendar-baseline/server/tests/gesamtexport-online.test.cjs:661:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 315,
+    expected: 311,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/html-addressbook-dark-mode.test.cjs:1:1
+✖ tests/html-addressbook-dark-mode.test.cjs (242.456125ms)
+  'test failed'
+
+test at tests/html-calendar-todo-case-context.test.cjs:1:1
+✖ tests/html-calendar-todo-case-context.test.cjs (232.418542ms)
+  'test failed'
+
+test at tests/html-case-file-finance-dark-mode.test.cjs:1:1
+✖ tests/html-case-file-finance-dark-mode.test.cjs (290.964709ms)
+  'test failed'
+
+test at tests/html-dashboard-widgets.test.cjs:1:1
+✖ tests/html-dashboard-widgets.test.cjs (1483.854417ms)
+  'test failed'
+
+test at tests/html-desktop-view-lock.test.cjs:1:1
+✖ tests/html-desktop-view-lock.test.cjs (244.000125ms)
+  'test failed'
+
+test at tests/html-documents-dark-mode.test.cjs:1:1
+✖ tests/html-documents-dark-mode.test.cjs (266.55975ms)
+  'test failed'
+
+test at tests/html-final-audit-patch.test.cjs:1:1
+✖ tests/html-final-audit-patch.test.cjs (178.149083ms)
+  'test failed'
+
+test at tests/html-mail-dark-mode.test.cjs:1:1
+✖ tests/html-mail-dark-mode.test.cjs (273.539208ms)
+  'test failed'
+
+test at tests/html-mobile-module-views.test.cjs:438:1
+✖ Mobil-Registry: Archiv und Versandhistorie sind eingetragen, jede Wurzel bleibt eindeutig (34.46775ms)
+  AssertionError [ERR_ASSERTION]: folder-generator sollte mobil NICHT angeboten werden.
+      at TestContext.<anonymous> (/private/tmp/calendar-baseline/server/tests/html-mobile-module-views.test.cjs:506:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/html-no-module-folder.test.cjs:1:1
+✖ tests/html-no-module-folder.test.cjs (308.517375ms)
+  'test failed'
+
+test at tests/rechnung-verknuepfung.test.cjs:498:1
+✖ Blockzahl bleibt bei 311 (42.471792ms)
+  AssertionError [ERR_ASSERTION]: Blockzahl veraendert
+
+  315 !== 311
+
+      at TestContext.<anonymous> (/private/tmp/calendar-baseline/server/tests/rechnung-verknuepfung.test.cjs:499:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 315,
+    expected: 311,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/sicherung-vollstaendigkeit.test.cjs:392:1
+✖ die Auslieferung behaelt exakt 311 Script-Bloecke (65.275583ms)
+  AssertionError [ERR_ASSERTION]: Blockzahl-Regel verletzt: neue Bloecke einfuegen ist verboten, Code gehoert in bestehende
+
+  315 !== 311
+
+      at TestContext.<anonymous> (/private/tmp/calendar-baseline/server/tests/sicherung-vollstaendigkeit.test.cjs:394:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 315,
+    expected: 311,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/verify-portable-recovery-revision.test.js:66:1
+✖ CLI prüft die echte portable Recovery-Revision einer SQLite-Kopie fail-closed (65.659625ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  69 !== 0
+
+      at TestContext.<anonymous> (/private/tmp/calendar-baseline/server/tests/verify-portable-recovery-revision.test.js:84:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 69,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/verify-portable-recovery-revision.test.js:112:1
+✖ CLI verwirft unvollständiges Recovery-Schema und SQLite-Sidecars (56.03075ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  69 !== 65
+
+      at TestContext.<anonymous> (/private/tmp/calendar-baseline/server/tests/verify-portable-recovery-revision.test.js:120:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 69,
+    expected: 65,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

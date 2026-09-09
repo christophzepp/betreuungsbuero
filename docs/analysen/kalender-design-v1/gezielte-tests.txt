@@ -1,0 +1,38 @@
+✔ Jede Wochenzeile ist ein Grid, Termine spannen echte Spalten (5.028083ms)
+✔ Mehrtagestermine tragen einen Gruppenschluessel je Vorkommen (19.763292ms)
+✔ Der gemeldete Zeilensprung tritt nicht mehr auf (15.998167ms)
+✔ Zeilentreue ueber den Wochenwechsel laesst sich abschalten (9.178375ms)
+✔ Einzeltermine stehen buendig unter den Balken (17.509209ms)
+✔ Zeilen je Woche begrenzen die Anzeige und erzeugen "+N weitere" (26.510292ms)
+✔ Kalenderwochen, Folgetitel und Zeilennummern sind schaltbar (17.696834ms)
+✔ Zwei Vorkommen desselben Serientermins verschmelzen nicht (8.663583ms)
+✔ Tageszellen bleiben Klick-, Drag- und Drop-Ziel (8.689125ms)
+✔ Ansichtseinstellungen sind im Desktop-Arbeitsbereich und mobilen Menü erreichbar (53.554834ms)
+✔ Kopf, Ganztagszeile und Stundenraster teilen in Tag und Woche exakt dieselben Spalten (30.872042ms)
+✔ Die Ganztags-Zeile der Wochenansicht springt nicht mehr die Zeile (17.931083ms)
+✔ Das Zeitfenster kürzt leere Randstunden, versteckt aber nie einen Termin (26.146917ms)
+✔ Die Stundenhöhe ist einstellbar und steht am Rahmen (44.718417ms)
+✔ Der Wochentitel überlebt ausgeblendete Wochenenden (49.340125ms)
+✔ Ein Fehler in einer Ansicht sperrt nicht den ganzen Kalender (63.586791ms)
+✔ Die Wochenansicht kann auf Montag bis Freitag verkürzt werden (21.906333ms)
+✔ Die Listenansicht kann Zusatzzeilen ausblenden (34.079333ms)
+✔ Vergangene Einträge und kompakte Zeilen sind in der Liste verdrahtet (20.163375ms)
+✔ Jede Ansicht bekommt genau die Schalter, die dort wirken (25.157042ms)
+✔ Alle JavaScript-Bloecke der HTML bleiben syntaktisch gueltig (129.445375ms)
+✔ Gleichzeitige Termine teilen sich Spalten; anschließende Termine erhalten die volle Breite (9.801792ms)
+✔ Eigene Terminfarben bleiben gültig, unbekannte Farbwerte fallen sicher zurück (8.781ms)
+✔ Wiederholungsformular erhält die begrenzte Anzahl einer bestehenden Serie (7.989625ms)
+✔ Desktopvalidierung erlaubt Ganztag am selben Tag und blockiert ungültige Zeit- und Seriengrenzen (10.5125ms)
+✔ Kalenderfilter kombiniert Fall-ID, Kalender und Eintragsart mit persönlichen Sichtbarkeiten (26.164625ms)
+✔ Agenda schließt die vorherige Ganztagsbuchung am exklusiven Ende aus, zeigt aber den gesamten Endtag (18.611792ms)
+✔ Verschieben erhält Termindauer und Abstand der Erinnerung (17.100417ms)
+✔ Mehrtagstermine behalten beim Verschieben die Anzahl ganzer Kalendertage über Zeitumstellungen (17.937417ms)
+✔ Mobile Wochenüberschrift zeigt ISO-KW auch am Jahreswechsel (33.574ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 968.380292

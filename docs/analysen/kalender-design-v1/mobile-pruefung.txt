@@ -1,0 +1,59 @@
+PASS Kalender beginnt mit Tagesagenda, Wochenleiste und allen Eintragsarten
+PASS Suche durchsucht Titel und Metadaten ohne Neubau des Suchfelds
+PASS Fall-ID und Eintragsart sind kombinierbar
+PASS Terminseite zeigt Kalender, Erinnerung, Anschrift, Online-Link und Anlagen
+PASS Terminformular enthält sämtliche ursprünglichen Felder und reale Speicherorte
+PASS Hintergrundaktualisierung bewahrt den Kalenderentwurf
+PASS Anlagen hinzufügen verändert ausschließlich den Anlagenbereich
+PASS Abgelehnte Anlagenlöschung bleibt sichtbar und bewahrt die Notiz
+PASS Chat-Ausflug erhält den echten Terminformular-DOM
+PASS Fehlgeschlagene Anlage eines vorhandenen Termins bleibt zur Wiederholung erhalten
+PASS Ungültige Terminreihenfolge verhindert die Speicherung
+PASS Speicherfehler hält den vollständigen Entwurf offen
+PASS Laufendes Speichern wird auch beim Chat-Wechsel geschützt
+PASS Bearbeiten aktualisiert denselben Termin mit Fall und Erinnerung
+PASS Ganztägig deaktiviert Zeitfelder und passt die automatische Erinnerung an
+PASS Teilweiser Uploadfehler bewahrt Dateien und die Kennung des gespeicherten Termins
+PASS Erneutes Speichern lädt am selben Termin hoch und bewahrt Serie und Zuordnungen
+PASS Serienseite macht die Wirkung auf die gesamte Serie deutlich
+PASS ICS-Einzelexport erreicht den Browserdownload
+PASS Abgelehnte Terminlöschung lässt Serie und Ansicht bestehen
+PASS Woche zeigt KW und eine Agenda mit Tagesgruppen
+PASS Monatsübersicht hat 42 auswählbare Tage mit Trefferhinweisen
+PASS Liste grenzt den eigenen Zeitraum einschließlich Endtag ein
+PASS Kalendersichtbarkeit verwendet die bestehende persönliche Einstellung
+PASS Das bisherige Planungsraster bleibt separat erreichbar
+PASS Kalenderansicht behält Stundenhöhe und Zeitfenster
+PASS Stundenhöhe wird über den ursprünglichen Einstellungsweg gespeichert
+PASS ICS-Gesamtexport bleibt erreichbar
+PASS ICS-Import nutzt den bisherigen Parser und Speicherweg
+PASS Synchronisierung bleibt über Mehr erreichbar
+PASS Ladefehler bewahrt bereits geladene Termine
+PASS Touch-Verschieben erhält Dauer, Erinnerung und Fallzuordnung
+PASS Aufgaben und Wiedervorlagen lassen sich ohne Termine kombinieren
+PASS Kalender → todo-a zeigt zuerst Details
+PASS Bearbeiten speichert am ursprünglichen Eintrag mit Fallzuordnung todo-a
+PASS Zurück erhält Kalenderwoche und kombinierte Filter todo-a
+PASS Kalender → follow-a zeigt zuerst Details
+PASS Bearbeiten speichert am ursprünglichen Eintrag mit Fallzuordnung follow-a
+PASS Zurück erhält Kalenderwoche und kombinierte Filter follow-a
+PASS Alle Eintragsarten lassen sich ausschalten
+PASS Zurücksetzen aktiviert alle vier Eintragsarten
+PASS Abbrechen kehrt zur Detailansicht zurück und verwirft nur die Eingabe
+PASS Kalender-Rückweg erhält auch nach Statuswechsel die Scrollposition
+PASS Direkt geöffnete Aufgaben führen zurück zur Aufgabenliste
+PASS Tagesagenda 320px hell
+PASS Tagesagenda 320px dunkel
+PASS Tagesagenda 360px hell
+PASS Tagesagenda 360px dunkel
+PASS Tagesagenda 390px hell
+PASS Tagesagenda 390px dunkel
+PASS Tagesagenda 430px hell
+PASS Tagesagenda 430px dunkel
+PASS Terminformular passt bei 320px einschließlich Datumsfeldern
+PASS Terminformular passt bei 430px einschließlich Datumsfeldern
+PASS Tastatur blendet Navigation aus und lässt Formularaktionen erreichbar
+PASS Desktop öffnet den neuen Kalender-Arbeitsbereich
+PASS Desktopformular speichert auch nach Wechsel zur Telefonbreite
+PASS Mobiles Formular speichert auch nach Wechsel zur Desktopbreite
+PASS Keine JavaScript-Laufzeitfehler

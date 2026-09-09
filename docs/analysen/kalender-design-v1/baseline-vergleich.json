@@ -1,0 +1,83 @@
+{
+  "introduced_failures": [],
+  "existing_failures": [
+    {
+      "file": "tests/controlling.test.cjs",
+      "test": "Auslieferung: die Zahl der Skriptbloecke ist unveraendert 311"
+    },
+    {
+      "file": "tests/datenschutz.test.cjs",
+      "test": "Auslieferung: die Blockzahl bleibt bei 311"
+    },
+    {
+      "file": "tests/einstellungen-online.test.cjs",
+      "test": "Struktur: Blockzahl unverändert (NEUER script-Block ist verboten)"
+    },
+    {
+      "file": "tests/fall-import-json.test.cjs",
+      "test": "Blockzahl bleibt bei 311"
+    },
+    {
+      "file": "tests/gesamtexport-online.test.cjs",
+      "test": "Auslieferung: die Blockzahl bleibt bei 311"
+    },
+    {
+      "file": "tests/html-addressbook-dark-mode.test.cjs",
+      "test": "tests/html-addressbook-dark-mode.test.cjs"
+    },
+    {
+      "file": "tests/html-calendar-todo-case-context.test.cjs",
+      "test": "tests/html-calendar-todo-case-context.test.cjs"
+    },
+    {
+      "file": "tests/html-case-file-finance-dark-mode.test.cjs",
+      "test": "tests/html-case-file-finance-dark-mode.test.cjs"
+    },
+    {
+      "file": "tests/html-dashboard-widgets.test.cjs",
+      "test": "tests/html-dashboard-widgets.test.cjs"
+    },
+    {
+      "file": "tests/html-desktop-view-lock.test.cjs",
+      "test": "tests/html-desktop-view-lock.test.cjs"
+    },
+    {
+      "file": "tests/html-documents-dark-mode.test.cjs",
+      "test": "tests/html-documents-dark-mode.test.cjs"
+    },
+    {
+      "file": "tests/html-final-audit-patch.test.cjs",
+      "test": "tests/html-final-audit-patch.test.cjs"
+    },
+    {
+      "file": "tests/html-mail-dark-mode.test.cjs",
+      "test": "tests/html-mail-dark-mode.test.cjs"
+    },
+    {
+      "file": "tests/html-mobile-module-views.test.cjs",
+      "test": "Mobil-Registry: Archiv und Versandhistorie sind eingetragen, jede Wurzel bleibt eindeutig"
+    },
+    {
+      "file": "tests/html-no-module-folder.test.cjs",
+      "test": "tests/html-no-module-folder.test.cjs"
+    },
+    {
+      "file": "tests/rechnung-verknuepfung.test.cjs",
+      "test": "Blockzahl bleibt bei 311"
+    },
+    {
+      "file": "tests/sicherung-vollstaendigkeit.test.cjs",
+      "test": "die Auslieferung behaelt exakt 311 Script-Bloecke"
+    }
+  ],
+  "baseline_environment_only": [
+    {
+      "file": "tests/verify-portable-recovery-revision.test.js",
+      "test": "CLI prüft die echte portable Recovery-Revision einer SQLite-Kopie fail-closed"
+    },
+    {
+      "file": "tests/verify-portable-recovery-revision.test.js",
+      "test": "CLI verwirft unvollständiges Recovery-Schema und SQLite-Sidecars"
+    }
+  ]
+}

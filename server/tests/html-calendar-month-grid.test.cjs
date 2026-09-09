@@ -259,19 +259,20 @@ test('Tageszellen bleiben Klick-, Drag- und Drop-Ziel', () => {
   assert(/class="calgrid-day[^"]*" style="grid-column:\d+" data-cal-day="/.test(markup), 'Tageszelle sitzt nicht in ihrer Spalte.');
   assert(markup.includes('calgrid-selected'), 'Der ausgewaehlte Tag wird nicht hervorgehoben.');
   assert(markup.includes('calgrid-day-last'), 'Der Sonntag bekommt keine Randmarkierung.');
-  // Einzeltermine liegen ueber der Zelle und brauchen den Tagesklick daher selbst.
-  assert(/class="calgrid-chip"[^>]*onclick="window\.__calendarDayClick\('2026-08-\d\d'\)"/.test(markup),
-    'Ein Klick auf einen Einzeltermin waehlt den Tag nicht mehr aus.');
+  // Tage bleiben auswählbar; ein Termin öffnet im neuen Entwurf direkt seine Details.
+  assert(/class="calgrid-chip"[^>]*onclick="window\.__calendarShowEditForm\(/.test(markup),
+    'Ein Klick auf einen Einzeltermin öffnet seine Details.');
   assert(/class="calgrid-bar[^"]*"[^>]*onclick="event\.stopPropagation\(\);window\.__calendarShowEditForm\(/.test(markup),
     'Ein Klick auf einen Balken oeffnet den Termin nicht mehr.');
 });
 
-test('Das Ansichts-Menue haengt in beiden Werkzeugleisten', () => {
+test('Ansichtseinstellungen sind im Desktop-Arbeitsbereich und mobilen Menü erreichbar', () => {
   assert(html.includes('function calViewMenuHTML(mode)'), 'Menue-Baustein fehlt.');
   assert(html.includes('window.__calViewPrefSet=function(name,value)'), 'Schalter-Handler fehlt.');
   assert(html.includes('window.__calViewPrefReset=function()'), 'Zuruecksetzen fehlt.');
   const eingebaut = html.split('${calViewMenuHTML(calFullViewMode)}').length - 1;
-  assert.equal(eingebaut, 2, 'Das Menue muss in der mobilen UND der Schreibtisch-Leiste stehen.');
+  assert.equal(eingebaut, 1, 'Der Desktop-Arbeitsbereich hat genau ein Ansichtsmenü.');
+  assert.match(functionSource('calMobileSettings'), /calViewMenuHTML\(calFullViewMode\)/, 'Die mobile Einstellungsseite verwendet dieselben Optionen.');
 
   // Das Menue wirklich bauen lassen - die Schalter entstehen erst aus der Vorlage.
   const menue = buildContext(null).calViewMenuHTML('month');
@@ -306,7 +307,7 @@ test('Kopf, Ganztagszeile und Stundenraster teilen in Tag und Woche exakt diesel
     const markup = buildContext(null).calendarTimeGridHTML(WOCHE.slice(0, dayCount), SZENARIO);
     const expected = `grid-template-columns:44px repeat(${dayCount},minmax(0,1fr))`;
     const header = markup.match(/id="calTimeHeaderRow" style="([^"]+)"/);
-    const allday = markup.match(/id="calTimeAlldayRow" style="([^"]+)"/);
+    const allday = markup.match(/id="calTimeAlldayRow"[^>]*style="([^"]+)"/);
     const body = markup.match(/class="caltime-body" style="([^"]+)"/);
     assert(header && header[1].includes(expected), `Der Kopf besitzt bei ${dayCount} Tagen nicht das gemeinsame Raster.`);
     assert(allday && allday[1].includes(expected), `Die Ganztagszeile besitzt bei ${dayCount} Tagen nicht das gemeinsame Raster.`);
@@ -472,8 +473,9 @@ test('Jede Ansicht bekommt genau die Schalter, die dort wirken', () => {
   assert(ctx.calViewMenuHTML('agenda').includes('Gilt für die Listenansicht'), 'Der Geltungshinweis stimmt nicht.');
   assert(ctx.calViewMenuHTML('week').includes('Gilt für die Wochenansicht'), 'Der Geltungshinweis stimmt nicht.');
   // Das Menü hängt jetzt in JEDER Ansicht in der Werkzeugleiste, mobil wie am Schreibtisch.
-  assert.equal(html.split('${calViewMenuHTML(calFullViewMode)}').length - 1, 2,
-    'Das Menü muss in beiden Werkzeugleisten stehen.');
+  assert.equal(html.split('${calViewMenuHTML(calFullViewMode)}').length - 1, 1,
+    'Das Menü steht in der gemeinsamen Desktop-Werkzeugleiste.');
+  assert.match(functionSource('calMobileSettings'), /calViewMenuHTML\(calFullViewMode\)/);
 });
 
 test('Alle JavaScript-Bloecke der HTML bleiben syntaktisch gueltig', () => {
@@ -486,4 +488,41 @@ test('Alle JavaScript-Bloecke der HTML bleiben syntaktisch gueltig', () => {
     new vm.Script(match[2], { filename: `calendar-month-grid-${index}.js` });
   }
   assert(jsBlocks > 200, 'Unerwartet wenige JavaScript-Bloecke gefunden.');
+});
+
+test('Gleichzeitige Termine teilen sich Spalten; anschließende Termine erhalten die volle Breite', () => {
+  const ctx=buildContext({hours:'8-18',hourHeight:66});
+  const event=(id,start,end)=>({id,title:id,startAt:'2026-09-09T'+start+':00',endAt:'2026-09-09T'+end+':00'});
+  const markup=ctx.calendarTimeGridHTML([new Date('2026-09-09T00:00:00')],[event('a','10:00','11:00'),event('b','10:30','12:00'),event('c','11:30','12:30'),event('d','13:00','14:00')]);
+  const style=id=>markup.match(new RegExp('data-event-id="'+id+'"[^>]*style="([^"]+)"'))[1];
+  assert.match(style('a'),/left:calc\(0% \+ 3px\);width:calc\(50% - 6px\)/);
+  assert.match(style('b'),/left:calc\(50% \+ 3px\);width:calc\(50% - 6px\)/);
+  assert.match(style('c'),/left:calc\(0% \+ 3px\);width:calc\(50% - 6px\)/);
+  assert.match(style('d'),/width:calc\(100% - 6px\)/);
+});
+
+test('Eigene Terminfarben bleiben gültig, unbekannte Farbwerte fallen sicher zurück', () => {
+  const ctx={CAL_EVENT_COLORS:[{key:'',hex:'#1f4e78'},{key:'green',hex:'#2f7a4f'}]};vm.createContext(ctx);
+  vm.runInContext(functionSource('calendarEventColorHex'),ctx);
+  assert.equal(ctx.calendarEventColorHex('#936a43'),'#936a43');
+  assert.equal(ctx.calendarEventColorHex('green'),'#2f7a4f');
+  assert.equal(ctx.calendarEventColorHex('red;position:fixed'),'#1f4e78');
+});
+
+test('Wiederholungsformular erhält die begrenzte Anzahl einer bestehenden Serie', () => {
+  const fields={calNewRecurFreq:{value:'weekly'},calNewRecurInterval:{value:'2',dataset:{count:'4'}},calNewRecurUntil:{value:''}};
+  const ctx={document:{getElementById:id=>fields[id]}};vm.createContext(ctx);vm.runInContext(functionSource('recurrenceRuleFromForm'),ctx);
+  assert.deepEqual(JSON.parse(ctx.recurrenceRuleFromForm('calNew')),{freq:'weekly',interval:2,until:'',count:4});
+  fields.calNewRecurFreq.value='';assert.equal(ctx.recurrenceRuleFromForm('calNew'),'');
+});
+
+test('Desktopvalidierung erlaubt Ganztag am selben Tag und blockiert ungültige Zeit- und Seriengrenzen', () => {
+  const fields={StartDate:{value:'2026-09-09'},EndDate:{value:'2026-09-09'},StartTime:{value:'10:00'},EndTime:{value:'09:00'},AllDay:{checked:false},RecurFreq:{value:''},RecurUntil:{value:''}};
+  let error='';const ctx={calDesktop:{busy:false,form:{isConnected:true,querySelectorAll:()=>[]}},document:{getElementById:id=>fields[id.replace('calNew','')]},calDesktopError:value=>error=value};
+  vm.createContext(ctx);vm.runInContext(functionSource('calDesktopValid'),ctx);
+  assert.equal(ctx.calDesktopValid(),false);assert.match(error,/Ende muss nach/);
+  fields.AllDay.checked=true;assert.equal(ctx.calDesktopValid(),true);
+  fields.RecurFreq.value='daily';fields.RecurUntil.value='2026-09-08';assert.equal(ctx.calDesktopValid(),false);assert.match(error,/Wiederholung/);
+  fields.RecurUntil.value='2026-09-10';fields.AllDay.checked=false;fields.EndDate.value='2026-09-10';assert.equal(ctx.calDesktopValid(),true);
+  ctx.calDesktop.busy=true;assert.equal(ctx.calDesktopValid(),false);
 });

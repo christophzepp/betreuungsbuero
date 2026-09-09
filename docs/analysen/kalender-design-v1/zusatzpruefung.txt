@@ -1,0 +1,15 @@
+PASS Seriendetails zeigen das angeklickte Vorkommen, Bearbeitung bleibt an der Serie
+PASS Monatstag → Neuer Termin übernimmt den ausgewählten Tag
+PASS Kalenderwoche → nächste Woche verwendet die gewählte Woche
+PASS Desktop kann zwischen Agenda und Planungsraster umschalten
+PASS Dunkelmodus zeichnet Linien mit derselben Stundenhöhe wie die Termine
+PASS Kalenderfarben erreichen die wirklichen Terminblöcke
+PASS Datei-Explorer-Übernahme läuft durch den vorhandenen Uploadweg und bewahrt den Entwurf
+PASS Breitenwechsel erhält ungespeicherte Desktopfelder
+PASS Schmale Tages-/Wochenansicht wechselt ohne Filterverlust zur Agenda
+PASS Filter bleiben auch bei 320 Pixeln vollständig erreichbar
+PASS Wiederkehrende Aufgaben werden zur nächsten Fälligkeit fortgeschaltet
+PASS Mehrtagstermin zeigt den letzten belegten Tag einschließlich an
+PASS Ganztägiges Verschieben bewahrt drei Kalendertage über die Zeitumstellung
+PASS Lokaler Kalender speichert ohne Server in seinem bestehenden Speicher
+PASS Lokales Bearbeiten behält die Kennung und aktualisiert den Datensatz
