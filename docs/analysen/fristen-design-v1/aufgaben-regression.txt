@@ -1,0 +1,10 @@
+PASS Anlagenzahl ist bereits in der Liste sichtbar
+PASS Verzögertes Bearbeiten öffnet geschlossenes Fenster nicht erneut
+PASS Verzögerte Synchronisierung bewahrt neuen Formular-DOM
+PASS Datei-Explorer übernimmt Datei in die Aufgabe und verwendet deren Fall
+PASS Fehlgeschlagener Upload an vorhandene Aufgabe bleibt zum Wiederholen erhalten
+PASS Leere Antwort zeigt einen bedienbaren Leerzustand
+PASS Lokal angelegte Aufgabe wird dauerhaft gespeichert
+PASS Enter speichert lokale Änderungen
+PASS Mobile Kalenderaufgabe öffnet neue Details und kehrt zum Kalender zurück
+PASS Keine JavaScript-Laufzeitfehler

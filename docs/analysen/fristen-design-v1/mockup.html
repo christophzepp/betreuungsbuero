@@ -1,0 +1,407 @@
+<div id="fristen-entwurf" lang="de" aria-label="Fristen – neuer Arbeitsbereich">
+  <div class="fd-window">
+    <div class="fd-chrome"><span class="fd-brand"><i data-lucide="panels-top-left" aria-hidden="true"></i>Betreuungsbüro</span><span class="fd-breadcrumb">Organisation / Fristen</span><span class="fd-demo">Entwurf · Beispieldaten</span></div>
+    <header class="fd-header"><div><h1>Fristen &amp; Wiedervorlagen</h1><p>Fälligkeiten erkennen. Rechtzeitig handeln.</p></div><div class="fd-header-actions"><button type="button" class="fd-button" data-action="scan"><i data-lucide="scan-text" aria-hidden="true"></i><span>Aus Dokument erkennen</span></button><button type="button" class="fd-button fd-primary" data-action="new"><i data-lucide="plus" aria-hidden="true"></i><span>Neue Frist</span></button></div></header>
+    <div class="fd-searchbar"><label class="fd-search"><i data-lucide="search" aria-hidden="true"></i><input id="fd-search" type="search" aria-label="Fristen durchsuchen" placeholder="Titel, Institution, Notiz oder Fall suchen"><button type="button" class="fd-icon-button" data-action="clear" aria-label="Suche löschen" hidden><i data-lucide="x" aria-hidden="true"></i></button></label><button type="button" class="fd-button" data-action="filter"><i data-lucide="sliders-horizontal" aria-hidden="true"></i>Filter<span id="fd-filter-count"></span></button></div>
+    <div id="fd-notice" class="fd-notice" role="status" aria-live="polite" hidden></div>
+    <div class="fd-layout"><aside class="fd-sidebar" aria-label="Fristen eingrenzen"></aside><main class="fd-main"><div class="fd-toolbar"><div class="fd-status" aria-label="Fristenstatus"></div><button type="button" class="fd-icon-button" data-action="refresh" aria-label="Fristen neu laden" data-tooltip="Fristen neu laden"><i data-lucide="refresh-cw" aria-hidden="true"></i></button></div><div class="fd-chips"></div><div class="fd-result"><span id="fd-result-count" role="status"></span><span>Do., 10. September 2026</span></div><div class="fd-rows"></div></main><aside class="fd-panel" aria-label="Fristendetails" hidden></aside></div>
+    <footer class="fd-footer"><span><i data-lucide="flag" aria-hidden="true"></i><span id="fd-footer-context">Alle Fälle</span></span><span>Vorschau · Änderungen bleiben im Entwurf</span></footer>
+  </div>
+</div>
+<style>
+#fristen-entwurf{--fd-paper:light-dark(#fff,#172735);--fd-page:light-dark(#f6f9fb,#10202d);--fd-side:light-dark(#f0f5f8,#142431);--fd-ink:light-dark(#213c4c,#e4edf2);--fd-muted:light-dark(#607786,#a0b6c4);--fd-line:light-dark(#d9e5ec,#304957);--fd-accent:light-dark(#246080,#79bedf);--fd-on-accent:light-dark(#fff,#102536);--fd-soft:light-dark(#e9f2f7,#223e50);--fd-red:light-dark(#ab4339,#ffac99);--fd-red-soft:light-dark(#fff1ee,#442e2b);--fd-amber:light-dark(#916010,#f0c474);--fd-amber-soft:light-dark(#fff7e7,#3c3424);--fd-green:light-dark(#327257,#a0d9bc);--fd-green-soft:light-dark(#edf7f0,#213e33);--fd-row-space:16px;color:var(--fd-ink);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;width:100%;container-type:inline-size;color-scheme:light dark;margin-inline:auto}
+#fristen-entwurf *{box-sizing:border-box}
+#fristen-entwurf [hidden]{display:none!important}
+#fristen-entwurf button,#fristen-entwurf input,#fristen-entwurf textarea,#fristen-entwurf select{font:inherit}
+#fristen-entwurf button{color:inherit;cursor:pointer}
+#fristen-entwurf button:disabled{opacity:.5;cursor:default}
+#fristen-entwurf input,#fristen-entwurf select,#fristen-entwurf textarea{border:1px solid var(--fd-line);background:var(--fd-paper);color:var(--fd-ink);border-radius:8px;padding:10px;max-width:100%;min-width:0}
+#fristen-entwurf input[type=checkbox]{width:17px;height:17px;accent-color:var(--fd-accent);margin:0;flex:none}
+#fristen-entwurf input[type=date]{min-height:42px;appearance:none;-webkit-appearance:none}
+#fristen-entwurf input[type=date]::-webkit-date-and-time-value{text-align:left}
+#fristen-entwurf input[type=search]::-webkit-search-cancel-button{-webkit-appearance:none}
+#fristen-entwurf svg{width:17px;height:17px;flex:none;stroke-width:1.7}
+#fristen-entwurf h1,#fristen-entwurf h2,#fristen-entwurf h3,#fristen-entwurf p{margin:0}
+#fristen-entwurf h1{font-size:25px;font-weight:650;line-height:1.25;letter-spacing:-.55px}
+#fristen-entwurf h2{font-size:19px;font-weight:620;line-height:1.45;letter-spacing:-.25px}
+#fristen-entwurf h3{font-size:11px;font-weight:650;letter-spacing:.8px;text-transform:uppercase;color:var(--fd-muted)}
+#fristen-entwurf .fd-window{background:var(--fd-paper);border:1px solid var(--fd-line);border-radius:16px;overflow:clip;position:relative}
+#fristen-entwurf .fd-chrome{display:flex;gap:20px;align-items:center;padding:12px 22px;background:var(--fd-side);border-bottom:1px solid var(--fd-line);font-size:11px;color:var(--fd-muted)}
+#fristen-entwurf .fd-brand{display:flex;align-items:center;gap:8px;color:var(--fd-ink);font-weight:600}
+#fristen-entwurf .fd-demo{margin-left:auto}
+#fristen-entwurf .fd-header{display:flex;gap:20px;align-items:center;justify-content:space-between;padding:25px 25px 19px}
+#fristen-entwurf .fd-header p{font-size:12px;color:var(--fd-muted);margin-top:6px}
+#fristen-entwurf .fd-header-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+#fristen-entwurf .fd-button,#fristen-entwurf .fd-icon-button{display:inline-flex;align-items:center;justify-content:center;gap:7px;background:var(--fd-paper);border:1px solid var(--fd-line);border-radius:8px;padding:8px 12px;min-height:38px;font-size:12px;font-weight:600;text-decoration:none;line-height:1.5}
+#fristen-entwurf .fd-button:hover,#fristen-entwurf .fd-icon-button:hover{background:var(--fd-soft)}
+#fristen-entwurf .fd-icon-button{width:34px;min-height:34px;padding:7px;flex:none}
+#fristen-entwurf .fd-primary{color:var(--fd-on-accent);background:var(--fd-accent);border-color:var(--fd-accent)}
+#fristen-entwurf .fd-primary:hover{background:var(--fd-accent);filter:brightness(.95)}
+#fristen-entwurf .fd-danger{color:var(--fd-red)}
+#fristen-entwurf .fd-quiet{background:transparent;border-color:transparent}
+#fristen-entwurf .fd-searchbar{display:flex;gap:10px;padding:0 25px 20px;border-bottom:1px solid var(--fd-line)}
+#fristen-entwurf .fd-search{display:flex;align-items:center;gap:9px;background:var(--fd-page);border:1px solid var(--fd-line);border-radius:9px;padding:0 11px;min-width:0;flex:1;color:var(--fd-muted)}
+#fristen-entwurf .fd-search input{border:0;background:transparent;flex:1;width:100%;padding:11px 0;font-size:13px}
+#fristen-entwurf .fd-search input::placeholder{color:var(--fd-muted);opacity:1}
+#fristen-entwurf .fd-layout{display:grid;grid-template-columns:204px minmax(0,1fr);align-items:stretch;min-height:660px}
+#fristen-entwurf .fd-sidebar{background:var(--fd-side);padding:22px 16px;border-right:1px solid var(--fd-line);min-width:0}
+#fristen-entwurf .fd-sidebar section+section{border-top:1px solid var(--fd-line);padding-top:20px;margin-top:20px}
+#fristen-entwurf .fd-sidebar h3{margin-bottom:12px}
+#fristen-entwurf .fd-field{display:flex;flex-direction:column;gap:6px;min-width:0;color:var(--fd-muted);font-size:12px}
+#fristen-entwurf .fd-field+.fd-field{margin-top:14px}
+#fristen-entwurf .fd-field input,#fristen-entwurf .fd-field textarea,#fristen-entwurf .fd-field select{width:100%;font-size:13px}
+#fristen-entwurf .fd-select{position:relative;display:block;min-width:0}
+#fristen-entwurf .fd-select select{appearance:none;-webkit-appearance:none;min-height:42px;padding-right:33px;text-overflow:ellipsis;cursor:pointer}
+#fristen-entwurf .fd-select>svg{position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--fd-muted)}
+#fristen-entwurf .fd-side-nav{display:flex;flex-direction:column;gap:3px}
+#fristen-entwurf .fd-side-nav button{display:flex;align-items:center;gap:8px;min-height:36px;width:100%;font-size:12px;text-align:left;border:0;border-radius:7px;padding:8px;background:transparent}
+#fristen-entwurf .fd-side-nav button[aria-pressed=true]{background:var(--fd-soft);color:var(--fd-accent);font-weight:600}
+#fristen-entwurf .fd-side-nav button:hover{background:var(--fd-soft)}
+#fristen-entwurf .fd-side-nav button span:last-child{margin-left:auto;font-size:11px;font-variant-numeric:tabular-nums}
+#fristen-entwurf .fd-side-note{display:flex;align-items:flex-start;gap:8px;font-size:11px;line-height:1.65;color:var(--fd-muted)}
+#fristen-entwurf .fd-main{min-width:0;padding:20px 23px 28px}
+#fristen-entwurf .fd-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px}
+#fristen-entwurf .fd-toolbar>.fd-icon-button{color:var(--fd-muted);border:0}
+#fristen-entwurf .fd-status{display:flex;align-items:center;gap:2px;background:var(--fd-side);padding:3px;border:1px solid var(--fd-line);border-radius:9px}
+#fristen-entwurf .fd-status button{display:flex;align-items:center;gap:8px;background:transparent;border:0;padding:7px 12px;border-radius:6px;min-height:33px;color:var(--fd-muted);font-size:12px}
+#fristen-entwurf .fd-status button[aria-pressed=true]{background:var(--fd-paper);color:var(--fd-accent);font-weight:600;box-shadow:0 1px 4px light-dark(#10233412,#00000020)}
+#fristen-entwurf .fd-status button span{font-size:11px;font-weight:400;font-variant-numeric:tabular-nums}
+#fristen-entwurf .fd-result{display:flex;gap:10px;justify-content:space-between;color:var(--fd-muted);font-size:11px;padding:16px 0 2px;flex-wrap:wrap}
+#fristen-entwurf .fd-chips{display:flex;gap:6px;flex-wrap:wrap}
+#fristen-entwurf .fd-chips:not(:empty){padding-top:12px}
+#fristen-entwurf .fd-chip{display:inline-flex;align-items:center;gap:6px;background:var(--fd-soft);border:1px solid var(--fd-line);padding:3px 8px;border-radius:20px;font-size:11px;color:var(--fd-accent)}
+#fristen-entwurf .fd-chip svg{width:12px;height:12px}
+#fristen-entwurf .fd-group{margin-top:14px}
+#fristen-entwurf .fd-group-head{display:grid;grid-template-columns:17px minmax(0,1fr) auto 17px;gap:8px;align-items:center;font-size:11px;font-weight:650;text-transform:uppercase;letter-spacing:.65px;color:var(--fd-muted);border:0;background:transparent;width:100%;text-align:left;padding:9px 0}
+#fristen-entwurf .fd-group-head>span:last-of-type{font-weight:400;letter-spacing:0}
+#fristen-entwurf .fd-group-head svg:last-child{width:14px}
+#fristen-entwurf .fd-group-head.fd-over{color:var(--fd-red)}
+#fristen-entwurf .fd-group-head.fd-soon{color:var(--fd-amber)}
+#fristen-entwurf .fd-group-head.fd-done{color:var(--fd-green)}
+#fristen-entwurf .fd-row{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:10px;align-items:start;padding:var(--fd-row-space) 0;border-bottom:1px solid var(--fd-line);position:relative}
+#fristen-entwurf .fd-row:last-child{border-bottom:0}
+#fristen-entwurf .fd-row.fd-selected{background:var(--fd-soft);box-shadow:-9px 0 var(--fd-soft),9px 0 var(--fd-soft);border-radius:8px}
+#fristen-entwurf .fd-marker{display:flex;align-items:center;justify-content:center;width:27px;min-height:29px;color:var(--fd-accent);border-radius:7px;background:var(--fd-soft);margin-top:1px}
+#fristen-entwurf .fd-marker.fd-over{background:var(--fd-red-soft);color:var(--fd-red)}
+#fristen-entwurf .fd-marker.fd-soon{background:var(--fd-amber-soft);color:var(--fd-amber)}
+#fristen-entwurf .fd-marker.fd-done{background:var(--fd-green-soft);color:var(--fd-green)}
+#fristen-entwurf .fd-open{display:block;width:100%;min-width:0;text-align:left;border:0;padding:0;background:transparent}
+#fristen-entwurf .fd-title{display:block;font-size:13px;line-height:1.5;font-weight:600;overflow-wrap:anywhere}
+#fristen-entwurf .fd-done .fd-title{text-decoration:line-through;color:var(--fd-muted)}
+#fristen-entwurf .fd-context{display:flex;gap:5px;flex-wrap:wrap;font-size:11px;margin-top:4px;color:var(--fd-muted)}
+#fristen-entwurf .fd-context>span+span::before{content:'· ';color:var(--fd-muted)}
+#fristen-entwurf .fd-case{color:var(--fd-accent);font-weight:500}
+#fristen-entwurf .fd-subtitle{display:block;color:var(--fd-muted);font-size:12px;margin-top:4px;overflow-wrap:anywhere}
+#fristen-entwurf .fd-row-meta{display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-size:11px;color:var(--fd-muted);margin-top:9px}
+#fristen-entwurf .fd-row-meta span{display:inline-flex;align-items:center;gap:4px}
+#fristen-entwurf .fd-row-meta svg{width:13px;height:13px}
+#fristen-entwurf .fd-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:3px 7px;border-radius:5px;color:var(--fd-accent);background:var(--fd-soft);white-space:normal}
+#fristen-entwurf .fd-badge.fd-over{color:var(--fd-red);background:var(--fd-red-soft)}
+#fristen-entwurf .fd-badge.fd-soon{color:var(--fd-amber);background:var(--fd-amber-soft)}
+#fristen-entwurf .fd-badge.fd-done{color:var(--fd-green);background:var(--fd-green-soft)}
+#fristen-entwurf .fd-row-side{display:flex;align-items:flex-end;flex-direction:column;gap:6px;max-width:142px}
+#fristen-entwurf .fd-row-side time{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
+#fristen-entwurf .fd-row-side .fd-icon-button{border:0;background:transparent;color:var(--fd-muted);margin-right:-7px}
+#fristen-entwurf .fd-row-side .fd-badge{max-width:100%}
+#fristen-entwurf .fd-derived-intro{font-size:12px;color:var(--fd-muted);margin:0 0 5px;line-height:1.6}
+#fristen-entwurf .fd-empty{display:flex;align-items:center;flex-direction:column;gap:12px;padding:50px 15px;text-align:center;color:var(--fd-muted);font-size:13px}
+#fristen-entwurf .fd-empty>svg{width:28px;height:28px}
+#fristen-entwurf .fd-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 22px;border-top:1px solid var(--fd-line);background:var(--fd-side);color:var(--fd-muted);font-size:11px;flex-wrap:wrap}
+#fristen-entwurf .fd-footer>span:first-child{display:flex;align-items:center;gap:7px}
+#fristen-entwurf .fd-footer svg{width:14px;height:14px}
+#fristen-entwurf .fd-layout.fd-has-panel{grid-template-columns:minmax(0,1fr) 418px}
+#fristen-entwurf .fd-has-panel .fd-sidebar{display:none}
+#fristen-entwurf .fd-panel{border-left:1px solid var(--fd-line);background:var(--fd-page);min-width:0}
+#fristen-entwurf .fd-panel-head{display:flex;align-items:center;gap:10px;padding:18px 21px;border-bottom:1px solid var(--fd-line);background:var(--fd-paper)}
+#fristen-entwurf .fd-panel-head>div{flex:1;min-width:0}
+#fristen-entwurf .fd-panel-head h2{font-size:15px;letter-spacing:0}
+#fristen-entwurf .fd-panel-head small{font-size:11px;color:var(--fd-muted)}
+#fristen-entwurf .fd-panel-body{padding:23px 22px;overflow-wrap:anywhere}
+#fristen-entwurf .fd-panel-body>h2{margin:12px 0 9px}
+#fristen-entwurf .fd-panel-body>p{font-size:12px;color:var(--fd-muted)}
+#fristen-entwurf .fd-panel-body section+section{margin-top:25px}
+#fristen-entwurf .fd-panel-body section>h3{margin-bottom:12px}
+#fristen-entwurf .fd-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:19px 16px;margin:23px 0}
+#fristen-entwurf .fd-detail-grid>div{min-width:0}
+#fristen-entwurf .fd-detail-grid dt{font-size:11px;color:var(--fd-muted);display:flex;align-items:center;gap:6px;margin-bottom:5px}
+#fristen-entwurf .fd-detail-grid dd{font-size:12px;margin:0}
+#fristen-entwurf .fd-detail-grid dt span{min-width:0}
+#fristen-entwurf .fd-wide{grid-column:1/-1}
+#fristen-entwurf .fd-note{font-size:13px;line-height:1.7;white-space:pre-wrap}
+#fristen-entwurf .fd-flow{display:grid;grid-template-columns:20px minmax(0,1fr);gap:5px 9px;font-size:12px;padding:12px 0}
+#fristen-entwurf .fd-flow>svg{color:var(--fd-accent);margin-top:2px}
+#fristen-entwurf .fd-flow small{display:block;font-size:11px;color:var(--fd-muted);margin-top:3px}
+#fristen-entwurf .fd-flow+.fd-flow{border-top:1px solid var(--fd-line)}
+#fristen-entwurf .fd-info{padding:12px;background:var(--fd-soft);border:1px solid var(--fd-line);border-radius:8px;display:flex;gap:8px;align-items:flex-start;color:var(--fd-accent);font-size:12px;line-height:1.65;margin-top:18px}
+#fristen-entwurf .fd-info>svg{margin-top:2px}
+#fristen-entwurf .fd-info.fd-warning{background:var(--fd-amber-soft);color:var(--fd-amber)}
+#fristen-entwurf .fd-panel-actions{display:flex;gap:8px;flex-wrap:wrap;padding:17px 22px;border-top:1px solid var(--fd-line);background:var(--fd-paper)}
+#fristen-entwurf .fd-panel-actions .fd-primary{flex:1}
+#fristen-entwurf[data-panel=detail] .fd-panel-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch}
+#fristen-entwurf[data-panel=detail] .fd-panel-actions .fd-button{padding-inline:8px}
+#fristen-entwurf[data-panel=detail] .fd-panel-actions:has(>button:last-child:nth-child(2)){grid-template-columns:repeat(2,minmax(0,1fr))}
+#fristen-entwurf[data-panel=detail] .fd-panel-actions:has(>button:only-child){grid-template-columns:1fr}
+#fristen-entwurf .fd-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:17px 14px}
+#fristen-entwurf .fd-form-grid .fd-field{margin:0}
+#fristen-entwurf .fd-form-grid textarea{resize:vertical;min-height:110px;line-height:1.65}
+#fristen-entwurf .fd-help{color:var(--fd-muted);font-size:11px;line-height:1.6}
+#fristen-entwurf .fd-sidebar .fd-help{margin-top:7px}
+#fristen-entwurf .fd-form-preview .fd-info{margin-top:0}
+#fristen-entwurf .fd-field:has(input:disabled){opacity:.65}
+#fristen-entwurf .fd-field-caption{font-size:11px;color:var(--fd-muted);line-height:1.55}
+#fristen-entwurf .fd-text-action{font-size:11px;color:var(--fd-accent);border:0;background:transparent;padding:2px 0;text-align:left;display:inline-flex;gap:5px;align-items:center;width:fit-content;min-height:28px}
+#fristen-entwurf .fd-routing{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#fristen-entwurf .fd-routing label{display:flex;gap:8px;align-items:center;border:1px solid var(--fd-line);border-radius:8px;padding:10px;background:var(--fd-paper);font-size:12px;min-height:44px}
+#fristen-entwurf .fd-routing label:has(input:checked){border-color:var(--fd-accent);background:var(--fd-soft)}
+#fristen-entwurf .fd-form-section+.fd-form-section{margin-top:25px}
+#fristen-entwurf .fd-form-section>h3{margin-bottom:13px}
+#fristen-entwurf .fd-form-preview{margin-top:17px}
+#fristen-entwurf .fd-form-error{padding:10px 12px;margin:0 0 15px;border-radius:8px;background:var(--fd-red-soft);color:var(--fd-red);font-size:12px}
+#fristen-entwurf .fd-filter-grid{display:grid;grid-template-columns:1fr 1fr;gap:17px 14px}
+#fristen-entwurf .fd-filter-grid .fd-field{margin:0}
+#fristen-entwurf .fd-full-panel .fd-layout.fd-has-panel{grid-template-columns:1fr}
+#fristen-entwurf[data-detail=full] .fd-layout.fd-has-panel{grid-template-columns:1fr}
+#fristen-entwurf[data-detail=full] .fd-has-panel .fd-main{display:none}
+#fristen-entwurf[data-detail=full] .fd-panel{border-left:0}
+#fristen-entwurf .fd-steps{display:flex;gap:8px;flex-wrap:wrap;font-size:11px;color:var(--fd-muted);margin-bottom:20px}
+#fristen-entwurf .fd-steps span{display:flex;gap:5px;align-items:center}
+#fristen-entwurf .fd-steps [aria-current=step]{font-weight:600;color:var(--fd-accent)}
+#fristen-entwurf .fd-steps svg{width:12px}
+#fristen-entwurf .fd-drop{border:1px dashed var(--fd-accent);border-radius:10px;background:var(--fd-paper);padding:26px 16px;display:flex;align-items:center;flex-direction:column;gap:12px;text-align:center;font-size:13px}
+#fristen-entwurf .fd-drop>svg{width:27px;height:27px;color:var(--fd-accent)}
+#fristen-entwurf .fd-drop.fd-drag-over{background:var(--fd-soft)}
+#fristen-entwurf .fd-drop p{font-size:11px;color:var(--fd-muted)}
+#fristen-entwurf .fd-files{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+#fristen-entwurf .fd-file{display:flex;gap:8px;align-items:center;background:var(--fd-paper);border:1px solid var(--fd-line);border-radius:8px;padding:9px 10px;font-size:12px;min-width:0}
+#fristen-entwurf .fd-file>span{flex:1;min-width:0;overflow-wrap:anywhere}
+#fristen-entwurf .fd-file>svg{color:var(--fd-accent)}
+#fristen-entwurf .fd-scan-result{background:var(--fd-paper);border:1px solid var(--fd-line);border-radius:9px;padding:14px;margin-top:12px}
+#fristen-entwurf .fd-scan-result>label{display:flex;align-items:flex-start;gap:8px;font-size:13px;font-weight:600;margin-bottom:12px}
+#fristen-entwurf .fd-scan-result>label input{margin-top:3px}
+#fristen-entwurf .fd-scan-result .fd-form-grid{gap:10px}
+#fristen-entwurf .fd-scan-result .fd-source-quote{display:flex;gap:7px;align-items:flex-start;padding-top:11px;margin-top:13px;border-top:1px solid var(--fd-line);font-size:11px;color:var(--fd-muted);line-height:1.7}
+#fristen-entwurf .fd-confirm{margin-top:18px;padding:15px;border:1px solid var(--fd-line);border-radius:9px;background:var(--fd-paper);font-size:12px}
+#fristen-entwurf .fd-confirm p{margin-bottom:12px;line-height:1.65}
+#fristen-entwurf .fd-confirm-actions{display:flex;gap:8px;flex-wrap:wrap}
+#fristen-entwurf .fd-notice{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:10px 22px;background:var(--fd-green-soft);color:var(--fd-green);font-size:12px;border-bottom:1px solid var(--fd-line)}
+#fristen-entwurf .fd-notice>span{display:flex;gap:8px;align-items:center}
+#fristen-entwurf .fd-notice .fd-icon-button{border:0;background:transparent;color:inherit}
+#fristen-entwurf .fd-notice[data-tone=warning]{background:var(--fd-amber-soft);color:var(--fd-amber)}
+#fristen-entwurf .fd-notice[data-tone=error]{background:var(--fd-red-soft);color:var(--fd-red)}
+@container (max-width:880px){#fristen-entwurf[data-panel]:not([data-panel=""]) .fd-header{padding-block:16px;gap:0}#fristen-entwurf[data-panel]:not([data-panel=""]) .fd-header p,#fristen-entwurf[data-panel]:not([data-panel=""]) .fd-header-actions,#fristen-entwurf[data-panel]:not([data-panel=""]) .fd-searchbar{display:none}#fristen-entwurf[data-panel]:not([data-panel=""]) .fd-header h1{font-size:19px}}
+@container (max-width:880px){#fristen-entwurf .fd-header{align-items:flex-start;flex-direction:column;gap:15px}#fristen-entwurf .fd-header-actions{justify-content:flex-start}#fristen-entwurf .fd-layout.fd-has-panel{grid-template-columns:1fr}#fristen-entwurf .fd-has-panel .fd-main{display:none}#fristen-entwurf .fd-panel{border-left:0}#fristen-entwurf .fd-panel-body{max-width:660px;margin-inline:auto}#fristen-entwurf .fd-panel-actions{justify-content:flex-end}#fristen-entwurf .fd-panel-actions .fd-primary{flex:0 1 auto}#fristen-entwurf .fd-has-panel{min-height:0}}
+@container (max-width:640px){#fristen-entwurf .fd-sidebar{display:none}#fristen-entwurf .fd-layout{grid-template-columns:1fr;min-height:0}#fristen-entwurf .fd-chrome{padding:11px 16px;gap:8px}#fristen-entwurf .fd-breadcrumb{display:none}#fristen-entwurf .fd-header{padding:22px 17px 17px}#fristen-entwurf h1{font-size:23px}#fristen-entwurf .fd-header-actions{display:grid;grid-template-columns:1fr auto;width:100%}#fristen-entwurf .fd-header-actions .fd-button{padding:9px 10px;min-height:44px}#fristen-entwurf .fd-searchbar{padding:0 17px 17px;gap:8px}#fristen-entwurf .fd-search input{font-size:16px}#fristen-entwurf .fd-searchbar>.fd-button{padding:8px 10px;min-height:44px}#fristen-entwurf .fd-main{padding:17px 18px 25px}#fristen-entwurf .fd-status{flex:1}#fristen-entwurf .fd-status button{flex:1;justify-content:center;min-height:38px;padding:7px 8px}#fristen-entwurf .fd-toolbar>.fd-icon-button{width:40px;min-height:40px}#fristen-entwurf .fd-row{grid-template-columns:25px minmax(0,1fr) auto;gap:8px}#fristen-entwurf .fd-row-side{max-width:112px}#fristen-entwurf .fd-result{font-size:11px;gap:5px}#fristen-entwurf .fd-panel-head{padding:15px 17px}#fristen-entwurf .fd-panel-body{padding:20px 18px}#fristen-entwurf .fd-panel-actions{padding:15px 18px;display:grid;grid-template-columns:1fr 1fr}#fristen-entwurf .fd-panel-actions .fd-primary{order:2;grid-column:1/-1;min-height:44px}#fristen-entwurf .fd-panel-actions .fd-button{min-height:44px}#fristen-entwurf .fd-panel-actions .fd-primary:first-child:last-child{grid-column:1/-1}#fristen-entwurf .fd-field input,#fristen-entwurf .fd-field select,#fristen-entwurf .fd-field textarea{font-size:16px}#fristen-entwurf .fd-group-head{min-height:40px}#fristen-entwurf .fd-row-side>.fd-icon-button{min-width:40px;min-height:40px}#fristen-entwurf .fd-footer{padding:12px 17px;font-size:11px}#fristen-entwurf .fd-footer>span:last-child{width:100%}#fristen-entwurf .fd-text-action{min-height:36px}#fristen-entwurf .fd-chips button{min-height:30px}#fristen-entwurf .fd-notice{padding:10px 17px}}
+@container (max-width:640px){#fristen-entwurf .fd-field select,#fristen-entwurf .fd-field input{min-height:44px}#fristen-entwurf .fd-panel-head .fd-icon-button{min-width:44px;min-height:44px}}
+@container (max-width:430px){#fristen-entwurf .fd-form-grid,#fristen-entwurf .fd-filter-grid{grid-template-columns:1fr}#fristen-entwurf .fd-header-actions{grid-template-columns:1fr}#fristen-entwurf .fd-header-actions .fd-primary{grid-row:1}#fristen-entwurf .fd-row{grid-template-columns:25px minmax(0,1fr)}#fristen-entwurf .fd-row-side{grid-column:2;display:flex;flex-direction:row;align-items:center;max-width:none;gap:8px;flex-wrap:wrap}#fristen-entwurf .fd-row-side>time{white-space:nowrap}#fristen-entwurf .fd-row-side>time{font-size:12px}#fristen-entwurf .fd-row-side>.fd-badge{margin:0}#fristen-entwurf .fd-row-side>.fd-icon-button{width:44px;min-width:44px;min-height:44px;padding:8px;margin-left:auto}#fristen-entwurf .fd-marker{width:24px}#fristen-entwurf .fd-demo{font-size:11px}#fristen-entwurf .fd-result>span:last-child{display:none}#fristen-entwurf .fd-row-meta{gap:7px}#fristen-entwurf .fd-scan-result .fd-form-grid{grid-template-columns:1fr}#fristen-entwurf .fd-panel-actions{grid-template-columns:1fr 1fr}}
+@container (max-width:640px){#fristen-entwurf[data-panel=detail] .fd-panel-actions{grid-template-columns:repeat(2,minmax(0,1fr))}#fristen-entwurf[data-panel=detail] .fd-panel-actions:has(>button:last-child:nth-child(2)) .fd-primary{grid-column:auto}#fristen-entwurf .fd-context{display:block}#fristen-entwurf .fd-context>span{display:block}#fristen-entwurf .fd-context>span+span::before{content:''}#fristen-entwurf .fd-status button,#fristen-entwurf .fd-toolbar>.fd-icon-button,#fristen-entwurf .fd-group-head{min-height:44px}#fristen-entwurf .fd-toolbar>.fd-icon-button{width:44px}#fristen-entwurf .fd-chip{min-height:36px}#fristen-entwurf .fd-search input{width:0}}
+@container (max-width:360px){#fristen-entwurf .fd-detail-grid{grid-template-columns:1fr}#fristen-entwurf .fd-group-head{letter-spacing:.3px}#fristen-entwurf .fd-status button{gap:5px;padding-inline:6px}}
+@media (pointer:coarse){#fristen-entwurf .fd-icon-button,#fristen-entwurf .fd-button,#fristen-entwurf .fd-group-head,#fristen-entwurf .fd-status button,#fristen-entwurf .fd-side-nav button{min-height:44px}#fristen-entwurf .fd-icon-button{min-width:44px}}
+</style>
+<script>
+(() => {
+  const root=document.getElementById('fristen-entwurf');
+  const $=s=>root.querySelector(s), $$=s=>[...root.querySelectorAll(s)];
+  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const icon=name=>`<i data-lucide="${name}" aria-hidden="true"></i>`;
+  const icons=()=>{if(globalThis.lucide)lucide.createIcons({attrs:{width:17,height:17}})};
+  const today='2026-09-10', dayMs=86400000;
+  const parse=d=>d?new Date(d+'T12:00:00'):null;
+  const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const date=d=>d?parse(d).toLocaleDateString('de-DE'):'Ohne Datum';
+  const delta=d=>d?Math.round((parse(d)-parse(today))/dayMs):null;
+  const shift=(d,n)=>{if(!d)return '';const x=parse(d);x.setDate(x.getDate()+n);return iso(x)};
+  const intervalOptions=[['','Einmalig'],['weekly','Wöchentlich'],['biweekly','14-tägig'],['monthly','Monatlich'],['quarterly','Vierteljährlich'],['halfyear','Halbjährlich'],['yearly','Jährlich']];
+  const categories=[['widerspruch','Widerspruch / Rechtsmittel'],['antrag','Antrag / Klage'],['anfangsbericht','Anfangs-/Erstbericht'],['vermoegensverzeichnis','Vermögensverzeichnis'],['jahresbericht','Jahresbericht'],['rechnungslegung','Rechnungslegung'],['verguetung','Vergütung / Abrechnung'],['ueberpruefung','Überprüfung / Verlängerung'],['genehmigung','Betreuungsgerichtliche Genehmigung'],['behoerde','Behörde / Sozialleistung'],['gesundheit','Gesundheit / Reha / Pflege'],['steuer','Steuer / Finanzamt'],['wiedervorlage','Wiedervorlage / interne Prüfung'],['sonstige','Sonstige Frist']];
+  const dueOptions=[['all','Alle Termine'],['overdue','Überfällig'],['next7','Nächste 7 Tage'],['month','Rest dieses Monats'],['30','30 Tage'],['90','90 Tage'],['180','180 Tage'],['3650','10 Jahre']];
+  const sourceOptions=[['all','Alle Fristen'],['own','Eigene Fristen'],['derived','Gesetzlich abgeleitet'],['debt','Schuldenregulierung'],['ki','Dokumentenerkennung']];
+  const cases=[['c1','Rothenberg, Dieter'],['c2','Kilic, Emre'],['c3','Nowak, Halina'],['c4','Weidmann, Jonas']];
+  const label=(arr,id)=>arr.find(x=>x[0]===id)?.[1]||id;
+  const blank={caseId:'c1',title:'',category:'sonstige',institution:'',formName:'',baseDate:'',dueDate:'',interval:'',routing:'both',remindDays:0,priority:'normal',status:'open',source:'manual',note:'',kind:'own'};
+  let items=[
+    {...blank,id:'f1',caseId:'c2',title:'Widerspruch gegen Betriebskostenabrechnung',category:'widerspruch',institution:'Wohnbau Musterbrück',formName:'Widerspruch',baseDate:'2026-08-08',dueDate:'2026-09-07',remindDays:3,priority:'high',source:'inbox',note:'Prüfbericht des Mietervereins beifügen. Zugang und Versandnachweis in der Fallakte dokumentieren.'},
+    {...blank,id:'f2',title:'Stellungnahme zum Gesamtplan',institution:'Sozialamt Landkreis Muster',formName:'Stellungnahme',dueDate:'2026-09-10',remindDays:7,priority:'high',source:'inbox',note:'Überarbeitete Stellungnahme mit der Wohngruppe abstimmen und an die zuständige Sachbearbeitung übermitteln.'},
+    {...blank,id:'f3',caseId:'c2',title:'Mitwirkung: Unterlagen nachreichen',category:'behoerde',institution:'Jobcenter Musterstadt',dueDate:'2026-09-14',baseDate:'2026-08-15',remindDays:3,priority:'high',note:'Aktuelle Kontoauszüge und Mietbescheinigung einreichen.'},
+    {...blank,id:'f4',title:'Barbetrags-Nachweis',institution:'Wohnverbund Am Lindenhof',dueDate:'2026-09-21',note:'Abrechnung und Belegübersicht für den laufenden Zeitraum.'},
+    {...blank,id:'f5',caseId:'c3',title:'Ratenvereinbarung bestätigen',institution:'Stadtwerke Musterstadt',category:'sonstige',dueDate:'2026-09-30',source:'debt',note:'Verknüpft mit der Forderung der Stadtwerke. Fälligkeit und Inhalt werden in der Schuldenregulierung gepflegt.'},
+    {...blank,id:'f6',title:'Vergütungsantrag · 3. Quartal 2026',category:'verguetung',institution:'Amtsgericht Musterdorf',formName:'Vergütungsabrechnung',dueDate:'2026-10-26',interval:'quarterly',remindDays:14,note:'Vergütungszeitraum und Abrechnungsgrundlagen vor Einreichung abgleichen.'},
+    {...blank,id:'f7',caseId:'c4',title:'Jahresbericht an das Amtsgericht',category:'jahresbericht',institution:'Amtsgericht Musterstadt',dueDate:'2026-11-03',interval:'yearly',remindDays:30,source:'ki',note:'Aus dem Gerichtsschreiben übernommen. Entwicklung und persönliche Kontakte im Berichtszeitraum ergänzen.'},
+    {...blank,id:'f8',title:'Verlängerung der Zuzahlungsbefreiung',category:'antrag',institution:'Krankenkasse',dueDate:'2026-12-16',remindDays:14,note:'Grundsicherungsbescheid als Nachweis beifügen.'},
+    {...blank,id:'f9',title:'Termin für Hilfeplangespräch abstimmen',category:'wiedervorlage',institution:'Sozialamt Landkreis Muster',routing:'none',note:'Termin steht noch nicht fest. Rückmeldung der Wohngruppe abwarten.'},
+    {...blank,id:'f10',title:'Widerspruch gegen Ablehnungsbescheid',category:'widerspruch',institution:'Versorgungsamt',dueDate:'2026-09-04',status:'done',note:'Widerspruch eingelegt. Versandnachweis liegt in der Fallakte.'},
+    {...blank,id:'d1',title:'Vergütungsabrechnung',category:'verguetung',institution:'Amtsgericht Musterdorf',dueDate:'2026-10-01',interval:'quarterly',kind:'derived',routing:'none',source:'derived',note:'Aus dem Betreuungsbeginn abgeleiteter Vorschlag für die nächste Quartalsabrechnung. Abrechnungszeitraum und Fälligkeit vor der Übernahme prüfen.'},
+    {...blank,id:'d2',caseId:'c2',title:'Jahresbericht',category:'jahresbericht',institution:'Amtsgericht Musterstadt',dueDate:'2026-10-05',interval:'yearly',remindDays:30,kind:'derived',routing:'none',source:'derived',note:'Aus dem Betreuungsbeginn abgeleitet. Den konkreten Termin aus dem Gerichtsschreiben vor der Übernahme prüfen.'}
+  ];
+  const state={activeCase:'c1',scope:'all',due:'180',source:'all',category:'all',priority:'all',status:'open',query:'',selected:null,panel:'',draft:null,filter:null,confirm:'',files:[],scanStep:0,scanResults:[],collapsed:new Set(['up','later','derived']),dirty:false};
+  const design={density:'comfortable',detail:'side',appearance:'auto',width:'auto'};
+  const caseOptions=()=>[['self','Dieser Fall · '+label(cases,state.activeCase)],['all','Alle Fälle'],...cases];
+  const urgency=x=>{const n=delta(x.dueDate);return x.status==='done'?{key:'done',text:'Erledigt'}:n===null?{key:'later',text:'Ohne Datum'}:n<0?{key:'over',text:`${-n} ${n===-1?'Tag':'Tage'} überfällig`}:n===0?{key:'soon',text:'Heute fällig'}:n<=30?{key:'soon',text:`In ${n} ${n===1?'Tag':'Tagen'}`}:n<=90?{key:'up',text:`In ${n} Tagen`}:{key:'later',text:`In ${n} Tagen`}};
+  const sourceText=x=>x.kind==='derived'?'Gesetzlich abgeleitet':({manual:'Von Hand erfasst',inbox:'Posteingang',ki:'Dokumentenerkennung',debt:'Schuldenregulierung',derived:'Übernommener Vorschlag',goal:'Wünsche und Bedarfe'}[x.source]||'Eigene Frist');
+  const hasCal=x=>['both','calendar'].includes(x.routing),hasTodo=x=>['both','todo'].includes(x.routing);
+  const route=(cal,todo)=>cal&&todo?'both':cal?'calendar':todo?'todo':'none';
+  const current=()=>items.find(x=>x.id===state.selected);
+  function matches(x,f=state){
+    if(f.scope==='self'&&x.caseId!==state.activeCase)return false;
+    if(!['self','all'].includes(f.scope)&&x.caseId!==f.scope)return false;
+    if(f.status!=='all'&&x.status!==f.status)return false;
+    if(f.category!=='all'&&x.category!==f.category||f.priority!=='all'&&x.priority!==f.priority)return false;
+    if(f.source==='own'&&x.kind!=='own'||f.source==='derived'&&x.kind!=='derived'||f.source==='debt'&&x.source!=='debt'||f.source==='ki'&&x.source!=='ki')return false;
+    const n=delta(x.dueDate);
+    if(f.due==='overdue'&&(n===null||n>=0||x.status==='done'))return false;
+    if(f.due==='next7'&&(n===null||n<0||n>7))return false;
+    if(f.due==='month'&&(!x.dueDate||x.dueDate<today||x.dueDate>'2026-09-30'))return false;
+    if(/^\d+$/.test(f.due)&&x.status!=='done'&&n!==null&&n>Number(f.due))return false;
+    const q=String(f.query||'').trim().toLocaleLowerCase('de');
+    return !q||[x.title,x.note,x.institution,x.formName,label(cases,x.caseId),label(categories,x.category)].join(' ').toLocaleLowerCase('de').includes(q);
+  }
+  const filtered=f=>items.filter(x=>matches(x,f)).sort((a,b)=>(a.dueDate||'9999').localeCompare(b.dueDate||'9999'));
+  const button=(action,text,ico='',className='',extra='')=>`<button type="button" class="fd-button ${className}" data-action="${action}" ${extra}>${ico?icon(ico):''}${text}</button>`;
+  const countLabel=n=>`${n} ${n===1?'Frist':'Fristen'}`;
+  function selectField(name,text,options,value,mode='form',extra=''){
+    return `<label class="fd-field ${extra}"><span>${text}</span><span class="fd-select"><select name="${name}" data-mode="${mode}" aria-label="${text}">${options.map(([v,l])=>`<option value="${esc(v)}" ${String(value)===String(v)?'selected':''}>${esc(l)}</option>`).join('')}</select>${icon('chevron-down')}</span></label>`;
+  }
+  const inputField=(name,text,value,type='text',extra='')=>`<label class="fd-field ${extra}"><span>${text}</span><input name="${name}" data-mode="form" type="${type}" value="${esc(value)}" ${name==='remindDays'?'min="0" max="365" step="1"':''}></label>`;
+  function tell(text,tone='success'){const notice=$('#fd-notice');notice.dataset.tone=tone;notice.innerHTML=`<span>${icon(tone==='success'?'circle-check':'circle-alert')}<span>${esc(text)}</span></span><button type="button" class="fd-icon-button" data-action="dismiss" aria-label="Hinweis schließen">${icon('x')}</button>`;notice.hidden=false;icons()}
+  function renderSide(){
+    $('.fd-sidebar').innerHTML=`<section><h3>Mein Überblick</h3>${selectField('scope','Fall auswählen',caseOptions(),state.scope,'side')}${selectField('due','Zeitraum',dueOptions,state.due,'side')}${/^\d+$/.test(state.due)?'<p class="fd-help">Überfällige eingeschlossen</p>':''}</section><section><h3>Herkunft</h3><nav class="fd-side-nav" aria-label="Herkunft filtern">${sourceOptions.map(([v,t],i)=>`<button type="button" data-source="${v}" aria-pressed="${v===state.source}">${icon(['layers','flag','scale','link','scan-text'][i])}${t}<span>${items.filter(x=>matches(x,{...state,source:v})).length}</span></button>`).join('')}</nav></section><section>${selectField('category','Kategorie',[['all','Alle Kategorien'],...categories],state.category,'side')}${selectField('priority','Priorität',[['all','Alle Prioritäten'],['normal','Normal'],['high','Hoch']],state.priority,'side')}</section><section><div class="fd-side-note">${icon('history')}<span>Wiedervorlagen erscheinen vor Fristablauf in den Aufgaben.</span></div></section>`;
+  }
+  function row(x){const u=urgency(x),isDerived=x.kind==='derived',done=x.status==='done',ico=done?'circle-check':isDerived?'scale':x.source==='debt'?'link':'flag',title=x.title||label(categories,x.category);
+    const routingLabel=[hasCal(x)?'Kalendereintrag':'',hasTodo(x)?'Aufgabeneintrag':''].filter(Boolean).join(' und ');
+    return `<article class="fd-row ${done?'fd-done':''} ${state.selected===x.id?'fd-selected':''}" data-row="${x.id}"><span class="fd-marker fd-${u.key}">${icon(ico)}</span><button type="button" class="fd-open" data-open="${x.id}" aria-label="Details: ${esc(title)}"><span class="fd-title">${esc(title)}</span><span class="fd-context"><span class="fd-case">${esc(label(cases,x.caseId))}</span><span>${esc(label(categories,x.category))}</span></span>${x.institution?`<span class="fd-subtitle">${esc(x.institution)}</span>`:''}<span class="fd-row-meta">${x.priority==='high'&&!done?`<span class="fd-danger">${icon('circle-alert')}Hohe Priorität</span>`:''}${!done&&x.dueDate&&x.remindDays&&hasTodo(x)?`<span>${icon('history')}${x.remindDays} ${Number(x.remindDays)===1?'Tag':'Tage'} vorher</span>`:''}${x.interval?`<span>${icon('repeat-2')}${esc(label(intervalOptions,x.interval))}</span>`:''}${x.source==='debt'?`<span>${icon('lock-keyhole')}Schuldenregulierung</span>`:isDerived?`<span>${icon('scale')}Vorschlag</span>`:!done&&x.dueDate?`<span role="img" aria-label="${routingLabel||'Nur Fristenliste'}" data-tooltip="${routingLabel||'Nur Fristenliste'}">${hasCal(x)?icon('calendar-days'):''}${hasTodo(x)?icon('square-check-big'):''}${x.routing==='none'?'Nur Fristenliste':''}</span>`:''}</span></button><div class="fd-row-side">${x.dueDate?`<time datetime="${x.dueDate}">${date(x.dueDate)}</time>`:''}<span class="fd-badge fd-${u.key}">${esc(u.text)}</span><button type="button" class="fd-icon-button" data-open="${x.id}" aria-label="${esc(title)} öffnen">${icon('chevron-right')}</button></div></article>`;
+  }
+  function drawRows(){
+    const list=filtered(state),groups=[['over','Überfällig','circle-alert'],['soon','In den nächsten 30 Tagen','clock-3'],['up','In 31–90 Tagen','calendar-days'],['later','Später / ohne Datum','calendar-range'],['derived','Gesetzlich abgeleitet','scale'],['done','Erledigt','circle-check']];
+    const key=x=>x.status==='done'?'done':x.kind==='derived'?'derived':urgency(x).key;
+    $('.fd-rows').innerHTML=list.length?groups.map(([k,t,ico])=>{const rows=list.filter(x=>key(x)===k);return rows.length?`<section class="fd-group"><button type="button" class="fd-group-head fd-${k}" data-group="${k}" aria-expanded="${!state.collapsed.has(k)}" aria-controls="fd-group-${k}">${icon(ico)}<span>${t}</span><span>${rows.length}</span>${icon(state.collapsed.has(k)?'chevron-down':'chevron-up')}</button><div id="fd-group-${k}" ${state.collapsed.has(k)?'hidden':''}>${k==='derived'?'<p class="fd-derived-intro">Aus Betreuungsdaten vorgeschlagen. Vor der Übernahme prüfen.</p>':''}${rows.map(row).join('')}</div></section>`:''}).join(''):`<div class="fd-empty">${icon('search')}<h2>Keine passenden Fristen</h2><p>Ändern Sie die Suche oder die gewählten Filter.</p>${button('reset','Filter zurücksetzen','rotate-ccw')}</div>`;
+    $('#fd-result-count').textContent=`${list.length} ${list.length===1?'Frist':'Fristen'} · nach Fälligkeit`;
+    $('.fd-status').innerHTML=[['open','Offen'],['done','Erledigt'],['all','Alle']].map(([v,t])=>`<button type="button" data-status="${v}" aria-pressed="${v===state.status}">${t}<span>${items.filter(x=>matches(x,{...state,status:v})).length}</span></button>`).join('');
+    const chips=[];
+    for(const [k,opts] of [['scope',caseOptions()],['due',dueOptions],['source',sourceOptions],['category',[['all','Alle Kategorien'],...categories]],['priority',[['all','Alle Prioritäten'],['high','Hoch'],['normal','Normal']]]])if(state[k]!=='all')chips.push(`<button type="button" class="fd-chip" data-reset="${k}" aria-label="Filter ${esc(label(opts,state[k]))} entfernen">${esc(label(opts,state[k]))}${icon('x')}</button>`);
+    $('.fd-chips').innerHTML=chips.join('');$('#fd-filter-count').textContent=chips.length?String(chips.length):'';
+    $('#fd-footer-context').textContent=label(caseOptions(),state.scope);$('[data-action=clear]').hidden=!state.query;
+    icons();
+  }
+  function render(){renderSide();drawRows();renderPanel()}
+  function panelShell(title,sub,content,actions=''){
+    return `<div class="fd-panel-head"><button type="button" class="fd-icon-button fd-quiet" data-action="back" aria-label="Zur Fristenliste">${icon('arrow-left')}</button><div><h2>${title}</h2><small>${esc(sub)}</small></div><button type="button" class="fd-icon-button fd-quiet" data-action="close" aria-label="Detailansicht schließen">${icon('x')}</button></div>${content}${actions?`<div class="fd-panel-actions">${actions}</div>`:''}`;
+  }
+  function dt(ico,title,value,wide=false){return `<div ${wide?'class="fd-wide"':''}><dt>${icon(ico)}<span>${title}</span></dt><dd>${esc(value||'Nicht angegeben')}</dd></div>`}
+  function routes(x){
+    if(x.kind==='derived')return `<div class="fd-info">${icon('scale')}<span>Dieser Vorschlag ist noch nicht als eigene Frist gespeichert und hat keinen Kalender- oder Aufgabeneintrag.</span></div>`;
+    if(x.status==='done')return `<div class="fd-info">${icon('circle-check')}<span>Erledigt. Die verknüpften Kalender- und Aufgabeneinträge sind entfernt.</span></div>`;
+    const cal=hasCal(x),todo=hasTodo(x),due=x.dueDate;
+    return `${cal?`<div class="fd-flow">${icon('calendar-days')}<div>Kalender<small>${due?date(due)+' · 09:00–09:30 Uhr · rot markiert':'Wird eingetragen, sobald ein Datum feststeht.'}</small></div></div>`:''}${todo?`<div class="fd-flow">${icon(x.remindDays?'history':'square-check-big')}<div>${x.remindDays?'Wiedervorlage als Aufgabe':'Aufgabe am Fristtag'}<small>${due?date(shift(due,-Number(x.remindDays)))+(x.remindDays?' · '+x.remindDays+(Number(x.remindDays)===1?' Tag vorher':' Tage vorher'):''):'Wird eingetragen, sobald ein Datum feststeht.'}</small></div></div>`:''}${!cal&&!todo?`<div class="fd-flow">${icon('list')}<div>Nur in der Fristenliste<small>Kein Eintrag in Kalender oder Aufgaben.</small></div></div>`:''}`;
+  }
+  function detail(x){
+    if(!x)return '';
+    const u=urgency(x),debt=x.source==='debt',derived=x.kind==='derived';
+    let actions=derived?button(x.caseId===state.activeCase?'adopt':'open-case',x.caseId===state.activeCase?'Als eigene Frist übernehmen':'Fall öffnen zum Übernehmen',x.caseId===state.activeCase?'plus':'folder-open','fd-primary'):debt?button('route-cal',hasCal(x)?'Kalender an':'Kalender aus','calendar-days',hasCal(x)?'fd-primary':'',`aria-pressed="${hasCal(x)}"`)+button('route-todo',hasTodo(x)?'Aufgabe an':'Aufgabe aus','square-check-big',hasTodo(x)?'fd-primary':'',`aria-pressed="${hasTodo(x)}"`):button('complete',x.status==='done'?'Wieder öffnen':'Erledigen',x.status==='done'?'rotate-ccw':'check','fd-primary')+button('edit','Bearbeiten','pencil')+button('delete','Löschen','trash-2','fd-danger');
+    return panelShell(derived?'Fristenvorschlag':debt?'Verknüpfte Frist':'Fristendetails',label(cases,x.caseId),`<div class="fd-panel-body"><span class="fd-badge fd-${u.key}">${icon(derived?'scale':x.status==='done'?'circle-check':'flag')}${derived?'Vorschlag · ':''}${esc(u.text)}</span><h2>${esc(x.title||label(categories,x.category))}</h2><p>${esc(label(categories,x.category))}</p><dl class="fd-detail-grid">${dt('calendar-days','Fällig am',date(x.dueDate))}${dt('circle-alert','Priorität',x.priority==='high'?'Hoch':'Normal')}${dt('building-2','Institution / Gegenüber',x.institution,true)}${dt('file-text','Formular / Verfahren',x.formName)}${dt('calendar','Auslöse-/Bescheiddatum',x.baseDate?date(x.baseDate):'Nicht angegeben')}${dt('repeat-2','Wiederholung',label(intervalOptions,x.interval))}${dt('git-branch','Herkunft',sourceText(x))}</dl><section><h3>Kalender &amp; Aufgaben</h3>${routes(x)}</section><section><h3>Notiz</h3><div class="fd-note">${esc(x.note||'Keine Notiz hinterlegt.')}</div></section>${debt?`<div class="fd-info">${icon('lock-keyhole')}<span>Inhalt und Datum werden in der Schuldenregulierung gepflegt. Hier steuern Sie die Einträge in Kalender und Aufgaben.</span></div>`:''}${x.interval&&x.dueDate&&x.kind!=='derived'&&x.status==='open'?`<div class="fd-info">${icon('repeat-2')}<span>Beim Erledigen wird die nächste offene Frist für den ${date(advance(x.dueDate,x.interval))} angelegt.</span></div>`:''}${x.activity?.length?`<section style="margin-top:22px"><h3>Automatische Falldokumentation</h3><div class="fd-flow">${icon('notebook-pen')}<div>${esc(x.activity.at(-1))}<small>Vermerk in der Fallchronik · Vorschau</small></div></div></section>`:''}${state.confirm==='delete'?`<div class="fd-confirm"><p>Frist und verknüpfte Kalender-/Aufgabeneinträge löschen?</p><div class="fd-confirm-actions">${button('cancel-delete','Behalten')}${button('confirm-delete','Frist löschen','trash-2','fd-danger')}</div></div>`:''}</div>`,actions);
+  }
+  function advance(value,type){if(!value||!type)return '';const d=parse(value);if(type==='weekly'||type==='biweekly')return shift(value,type==='weekly'?7:14);const day=d.getDate();d.setDate(1);d.setMonth(d.getMonth()+({monthly:1,quarterly:3,halfyear:6,yearly:12}[type]||0));const last=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();d.setDate(Math.min(day,last));return iso(d)}
+  function formView(){
+    const d=state.draft;
+    const content=`<form id="fd-editor" novalidate><div class="fd-panel-body"><div class="fd-form-error" role="alert" hidden></div><section class="fd-form-section"><h3>Frist</h3><div class="fd-form-grid">${d.id?`<label class="fd-field fd-wide"><span>Fall</span><input aria-label="Fall" value="${esc(label(cases,d.caseId))}" readonly></label>`:selectField('caseId','Fall',cases,d.caseId,'form','fd-wide')}${inputField('title','Titel',d.title,'text','fd-wide')}${selectField('category','Kategorie',categories,d.category,'form','fd-wide')}${inputField('formName','Formular / Verfahren',d.formName,'text','fd-wide')}<label class="fd-field fd-wide"><span>Institution / Gegenüber</span><input name="institution" data-mode="form" list="fd-institutions" value="${esc(d.institution)}" autocomplete="off"></label><datalist id="fd-institutions"><option>Amtsgericht Musterdorf</option><option>Jobcenter Musterstadt</option><option>Sozialamt Landkreis Muster</option><option>Krankenkasse</option></datalist></div></section><section class="fd-form-section"><h3>Datum &amp; Wiederholung</h3><div class="fd-form-grid">${inputField('baseDate','Auslöse-/Bescheiddatum',d.baseDate,'date')}${inputField('dueDate','Fällig am',d.dueDate,'date')}<div class="fd-wide">${button('plus30','30 Tage ab Bescheiddatum','calendar-plus','fd-quiet')}<p class="fd-help">Trägt ein Datum ein. Der konkrete Fristablauf kann abweichen.</p></div>${selectField('interval','Wiederholung',intervalOptions,d.interval,'form','fd-wide')}</div></section><section class="fd-form-section"><h3>Kalender &amp; Aufgaben</h3><div class="fd-routing"><label><input type="checkbox" data-route="calendar" ${hasCal(d)?'checked':''}>${icon('calendar-days')}Kalender</label><label><input type="checkbox" data-route="todo" ${hasTodo(d)?'checked':''}>${icon('square-check-big')}Aufgabe</label></div><div class="fd-form-grid" style="margin-top:16px">${inputField('remindDays','Wiedervorlage: Tage vorher',d.remindDays,'number','fd-wide')}<p class="fd-help fd-wide">0 = am Fristtag · bis zu 365 Tage vorher. Die Wiedervorlage wird als Aufgabe angelegt.</p></div><div class="fd-form-preview">${routes(d)}</div></section><section class="fd-form-section"><h3>Einordnung</h3><div class="fd-form-grid">${selectField('priority','Priorität',[['normal','Normal'],['high','Hoch']],d.priority)}${selectField('status','Status',[['open','Offen'],['done','Erledigt']],d.status)}<label class="fd-field fd-wide"><span>Notiz</span><textarea name="note" data-mode="form" placeholder="Interne Notiz, Aktenzeichen, Bearbeitungshinweise …">${esc(d.note)}</textarea></label></div></section>${state.confirm==='discard'?`<div class="fd-confirm"><p>Die Änderungen wurden noch nicht gespeichert.</p><div class="fd-confirm-actions">${button('keep-edit','Weiter bearbeiten')}${button('discard','Änderungen verwerfen','x','fd-danger')}</div></div>`:''}</div><div class="fd-panel-actions">${button('close','Abbrechen')}${button('save','Frist speichern','check','fd-primary')}</div></form>`;
+    return panelShell(d.id?'Frist bearbeiten':'Neue Frist',label(cases,d.caseId),content);
+  }
+  function filterView(){const f=state.filter;return panelShell('Fristen filtern','Auswahl für die Fristenliste',`<div class="fd-panel-body"><div class="fd-filter-grid">${selectField('scope','Fall',caseOptions(),f.scope,'filter','fd-wide')}${selectField('due','Fälligkeit',dueOptions,f.due,'filter','fd-wide')}<p class="fd-help fd-wide">Bei 30, 90 oder 180 Tagen sowie 10 Jahren sind überfällige Fristen eingeschlossen.</p>${selectField('category','Kategorie',[['all','Alle Kategorien'],...categories],f.category,'filter','fd-wide')}${selectField('priority','Priorität',[['all','Alle Prioritäten'],['high','Hoch'],['normal','Normal']],f.priority,'filter')}${selectField('status','Status',[['open','Offen'],['done','Erledigt'],['all','Alle']],f.status,'filter')}${selectField('source','Herkunft',sourceOptions,f.source,'filter','fd-wide')}</div>${f.query?`<div class="fd-info">${icon('search')}<span>Suche: ${esc(f.query)}</span></div>`:''}</div>`,button('reset-draft','Zurücksetzen','rotate-ccw')+button('apply-filter',`${countLabel(filtered(f).length)} anzeigen`,'check','fd-primary'))}
+  function scanView(){
+    const steps=`<div class="fd-steps" aria-label="Dokumentenerkennung">${['Dokumente','Prüfen','Übernehmen'].map((t,i)=>`<span ${state.scanStep===i?'aria-current="step"':''}>${i+1}. ${t}${i<2?icon('chevron-right'):''}</span>`).join('')}</div>`;
+    let body=steps,actions='';
+    if(state.scanStep===0){body+=`${selectField('scanCase','Fristen anlegen für',cases,state.scanCase||state.activeCase,'scan')}<div class="fd-drop" style="margin-top:18px">${icon('files')}<strong>Dokumente hinzufügen</strong><p>PDF, Bild oder Text · mehrere Dateien möglich</p>${button('pick-files','Dateien auswählen','upload')}<input id="fd-upload" type="file" multiple accept="image/*,application/pdf,.pdf,.png,.jpg,.jpeg,.tif,.tiff,.txt" hidden><p>oder hier ablegen</p></div><div class="fd-files">${state.files.map((f,i)=>`<div class="fd-file">${icon('file-text')}<span>${esc(f.name)}</span><button type="button" class="fd-icon-button" data-file-remove="${i}" aria-label="${esc(f.name)} entfernen">${icon('x')}</button></div>`).join('')}</div>${button('sample-files','Beispieldokument verwenden','file-text','fd-quiet', 'style="margin-top:10px"')}<div class="fd-info">${icon('scan-text')}<span>Im Entwurf wird die Erkennung mit Beispieldaten gezeigt. Ausgewählte Dateien werden weder gelesen noch hochgeladen.</span></div>`;actions=button('close','Abbrechen')+button('analyze','Erkennung starten','sparkles','fd-primary',state.files.length?'':'disabled');}
+    else if(state.scanStep===1){body+=`<p class="fd-help">Beispielergebnis · Datum und Zuordnung vor der Übernahme prüfen.</p>${state.scanResults.map((r,i)=>`<section class="fd-scan-result"><label><input type="checkbox" data-scan-check="${i}" ${r.selected?'checked':''}><span>${esc(r.title)}</span></label><div class="fd-form-grid"><label class="fd-field fd-wide"><span>Titel</span><input data-scan-field="title" data-index="${i}" value="${esc(r.title)}"></label><label class="fd-field fd-wide"><span>Kategorie</span><span class="fd-select"><select data-scan-field="category" data-index="${i}">${categories.map(([v,t])=>`<option value="${v}" ${r.category===v?'selected':''}>${t}</option>`).join('')}</select>${icon('chevron-down')}</span></label><label class="fd-field"><span>Bescheiddatum</span><input type="date" data-scan-field="baseDate" data-index="${i}" value="${r.baseDate}"></label><label class="fd-field"><span>Fällig am</span><input type="date" data-scan-field="dueDate" data-index="${i}" value="${r.dueDate}"></label><label class="fd-field fd-wide"><span>Institution / Gegenüber</span><input data-scan-field="institution" data-index="${i}" value="${esc(r.institution)}"></label><label class="fd-field fd-wide"><span>Notiz</span><textarea data-scan-field="note" data-index="${i}">${esc(r.note)}</textarea></label></div><div class="fd-source-quote">${icon('file-search')}<span>Beispieldokument · „Bitte reichen Sie die fehlenden Unterlagen bis zum 24. September 2026 ein.“</span></div></section>`).join('')}<div class="fd-info">${icon('calendar-check')}<span>Die Auswahl wird für ${esc(label(cases,state.scanCase||state.activeCase))} als eigene Frist mit hoher Priorität sowie Kalender- und Aufgabeneintrag angelegt.</span></div>`;actions=button('scan-back','Zurück','arrow-left')+button('import-scan',`${countLabel(state.scanResults.filter(x=>x.selected).length)} übernehmen`,'check','fd-primary',state.scanResults.some(x=>x.selected)?'':'disabled');}
+    else{body+=`<div class="fd-empty">${icon('circle-check')}<h2>Übernommen</h2><p>Die ausgewählte Frist steht jetzt in der Vorschau der Fristenliste.</p></div>`;actions=button('show-import','Frist ansehen','flag','fd-primary')+button('scan-again','Weitere Dokumente','files');}
+    return panelShell('Fristen aus Dokument erkennen','Texterkennung & KI · Vorschau',`<div class="fd-panel-body">${body}</div>`,actions);
+  }
+  function renderPanel(){
+    const p=$('.fd-panel'),open=!!state.panel;
+    root.dataset.panel=state.panel;
+    p.hidden=!open;$('.fd-layout').classList.toggle('fd-has-panel',open);
+    p.innerHTML=!open?'':state.panel==='detail'?detail(current()):state.panel==='form'?formView():state.panel==='filter'?filterView():scanView();if(open)p.setAttribute('aria-label',$('.fd-panel-head h2').textContent);if(state.panel==='form')updateFormPreview();icons();
+  }
+  function openPanel(mode){state.panel=mode;state.confirm='';render();focusPanel()}
+  function focusPanel(){const head=$('.fd-panel-head');if(!head)return;head.querySelector('button').focus({preventScroll:true});if(root.clientWidth<=880||design.detail==='full')head.scrollIntoView({block:'nearest'})}
+  function closePanel(){if(state.panel==='form'&&state.dirty){state.confirm='discard';renderPanel();$('.fd-confirm')?.scrollIntoView({block:'nearest'});$('[data-action=keep-edit]')?.focus({preventScroll:true});return}const id=state.selected;state.panel='';state.selected=null;state.draft=null;state.dirty=false;state.confirm='';render();const target=$(`[data-open="${id}"]`)||$('[data-action=new]');target.focus({preventScroll:true});if(root.clientWidth<=880)target.scrollIntoView({block:'nearest'})}
+  function startForm(x){state.draft=x?{...x}:{...blank,caseId:['all','self'].includes(state.scope)?state.activeCase:state.scope};state.dirty=false;openPanel('form')}
+  function updateFormPreview(){const d=state.draft;if(!d)return;$('.fd-form-preview').innerHTML=routes(d);$('[name=remindDays]').disabled=!hasTodo(d)||d.status==='done';$('.fd-panel-head small').textContent=label(cases,d.caseId);icons()}
+  function completeFrist(x){
+    x.status='done';const words=[x.title,x.formName,x.category,x.note].join(' '),docu=/widerspruch|einspruch|beschwerde/i.test(words)?'Widerspruch eingelegt':/unterlag|nachreich|beleg|nachweis|antrag/i.test(words)?'Unterlagen eingereicht':/bericht|stellungnahme|rechnungslegung|vermögensverzeichnis/i.test(words)?'Bericht versendet':'';
+    if(docu)x.activity=[...(x.activity||[]),docu+' · '+date(today)];const next=advance(x.dueDate,x.interval);
+    if(next&&!items.some(y=>y.previousId===x.id)){items.push({...x,id:'f'+Date.now(),status:'open',dueDate:next,baseDate:advance(x.baseDate,x.interval),previousId:x.id,activity:['Folgefrist angelegt · '+date(today)]});return next}return '';
+  }
+  function save(){
+    const d=state.draft,form=$('#fd-editor');if(!form.reportValidity())return;
+    d.title=d.title.trim();if(!d.title&&!d.dueDate){$('.fd-form-error').hidden=false;$('.fd-form-error').textContent='Bitte einen Titel oder ein Fälligkeitsdatum angeben.';$('[name=title]').focus();return}
+    if(!d.title)d.title=label(categories,d.category);
+    const created=!d.id,old=items.find(x=>x.id===d.id),justCompleted=old?.status==='open'&&d.status==='done';d.activity=[...(d.activity||[]),'Frist '+(created?'angelegt':'aktualisiert')+' · '+date(today)];if(created)d.id='f'+Date.now();const index=items.findIndex(x=>x.id===d.id);if(index<0)items.push({...d});else items[index]={...d};
+    const saved=items.find(x=>x.id===d.id),next=justCompleted?completeFrist(saved):'';
+    state.dirty=false;state.selected=d.id;state.draft=null;state.panel='detail';state.confirm='';render();tell(next?'Gespeichert und erledigt. Folgefrist für den '+date(next)+' angelegt.':created?'Frist im Entwurf angelegt.':'Änderungen im Entwurf gespeichert.');focusPanel();
+  }
+  function reset(){Object.assign(state,{scope:'all',due:'all',category:'all',source:'all',priority:'all',status:'open',query:''});$('#fd-search').value='';render()}
+  root.addEventListener('input',e=>{
+    const t=e.target;
+    if(t.id==='fd-search'){state.query=t.value;if(state.query)state.collapsed.clear();drawRows();renderSide();if(state.panel==='filter'){state.filter.query=t.value;renderPanel()}icons();return}
+    if(t.dataset.mode==='form'){state.draft[t.name]=t.name==='remindDays'?Number(t.value):t.value;state.dirty=true;if(t.name==='baseDate'&&t.value&&!state.draft.dueDate){state.draft.dueDate=shift(t.value,30);$('[name=dueDate]').value=state.draft.dueDate}updateFormPreview();if(t.name==='title'||t.name==='dueDate')$('.fd-form-error').hidden=true;}
+    if(t.dataset.scanField){const r=state.scanResults[Number(t.dataset.index)];r[t.dataset.scanField]=t.value;if(t.dataset.scanField==='title')t.closest('.fd-scan-result').querySelector(':scope > label span').textContent=t.value||'Ohne Titel';}
+  });
+  root.addEventListener('change',e=>{
+    const t=e.target;
+    if(t.dataset.mode==='side'){state[t.name]=t.value;state.collapsed.clear();render();return}
+    if(t.dataset.mode==='filter'){state.filter[t.name]=t.value;const b=$('[data-action=apply-filter]');b.innerHTML=icon('check')+countLabel(filtered(state.filter).length)+' anzeigen';icons();return}
+    if(t.dataset.mode==='scan')state.scanCase=t.value;
+    if(t.dataset.route){const d=state.draft;d.routing=route($('[data-route=calendar]').checked,$('[data-route=todo]').checked);state.dirty=true;updateFormPreview()}
+    if(t.id==='fd-upload'){state.files.push(...[...t.files].map(f=>({name:f.name})));state.scanResults=[];renderPanel()}
+    if(t.dataset.scanCheck!==undefined){state.scanResults[Number(t.dataset.scanCheck)].selected=t.checked;const n=state.scanResults.filter(x=>x.selected).length,b=$('[data-action=import-scan]');b.disabled=!n;b.innerHTML=icon('check')+countLabel(n)+' übernehmen';icons()}
+  });
+  root.addEventListener('submit',e=>{e.preventDefault();if(e.target.id==='fd-editor')save()});
+  root.addEventListener('click',e=>{
+    const t=e.target.closest('button');if(!t||t.disabled)return;
+    if(t.dataset.open){if(state.panel==='form'&&state.dirty){state.confirm='discard';renderPanel();tell('Bitte den offenen Entwurf zuerst speichern oder verwerfen.','warning');return}state.selected=t.dataset.open;openPanel('detail');return}
+    if(t.dataset.group){const k=t.dataset.group;state.collapsed.has(k)?state.collapsed.delete(k):state.collapsed.add(k);drawRows();return}
+    if(t.dataset.status){state.status=t.dataset.status;render();return}
+    if(t.dataset.source){state.source=t.dataset.source;state.collapsed.clear();render();return}
+    if(t.dataset.reset){state[t.dataset.reset]='all';render();return}
+    if(t.dataset.fileRemove!==undefined){state.files.splice(Number(t.dataset.fileRemove),1);state.scanResults=[];renderPanel();return}
+    const a=t.dataset.action,x=current();
+    if(['new','scan','filter'].includes(a)&&state.panel==='form'&&state.dirty){state.confirm='discard';renderPanel();tell('Bitte den offenen Entwurf zuerst speichern oder verwerfen.','warning');return}
+    switch(a){
+      case 'new':state.selected=null;startForm();break;
+      case 'edit':if(x&&x.source!=='debt'&&x.kind!=='derived')startForm(x);break;
+      case 'filter':state.filter={...state};openPanel('filter');break;
+      case 'apply-filter':for(const k of ['scope','due','category','source','priority','status','query'])state[k]=state.filter[k];$('#fd-search').value=state.query;state.collapsed.clear();state.panel='';render();break;
+      case 'reset-draft':Object.assign(state.filter,{scope:'all',due:'all',category:'all',source:'all',priority:'all',status:'open',query:''});renderPanel();break;
+      case 'clear':state.query='';$('#fd-search').value='';drawRows();renderSide();if(state.panel==='filter'){state.filter.query='';renderPanel()}icons();$('#fd-search').focus();break;
+      case 'reset':reset();break;
+      case 'refresh':render();tell('Fristenansicht im Entwurf aktualisiert.');break;
+      case 'close':case 'back':closePanel();break;
+      case 'dismiss':$('#fd-notice').hidden=true;break;
+      case 'keep-edit':state.confirm='';renderPanel();break;
+      case 'discard':state.dirty=false;closePanel();break;
+      case 'save':save();break;
+      case 'plus30':if(!state.draft.baseDate){$('.fd-form-error').hidden=false;$('.fd-form-error').textContent='Bitte zuerst ein Bescheiddatum eintragen.';$('[name=baseDate]').focus();break}state.draft.dueDate=shift(state.draft.baseDate,30);state.dirty=true;$('[name=dueDate]').value=state.draft.dueDate;$('.fd-form-error').hidden=true;$('.fd-form-preview').innerHTML=routes(state.draft);icons();break;
+      case 'complete':if(!x||x.source==='debt'||x.kind==='derived')break;if(x.status==='done'){x.status='open';tell('Frist im Entwurf wieder geöffnet.')}else{const next=completeFrist(x);tell(next?'Erledigt. Folgefrist für den '+date(next)+' angelegt.':'Frist im Entwurf erledigt.')}render();$('[data-action=complete]')?.focus({preventScroll:true});break;
+      case 'delete':state.confirm='delete';renderPanel();$('.fd-confirm')?.scrollIntoView({block:'nearest'});break;
+      case 'cancel-delete':state.confirm='';renderPanel();break;
+      case 'confirm-delete':if(x&&x.kind!=='derived'&&x.source!=='debt'){items=items.filter(y=>y.id!==x.id);state.panel='';state.selected=null;state.confirm='';render();tell('Frist und verknüpfte Einträge im Entwurf gelöscht.')}break;
+      case 'route-cal':case 'route-todo':if(x?.source==='debt'){x.routing=a==='route-cal'?route(!hasCal(x),hasTodo(x)):route(hasCal(x),!hasTodo(x));render();tell('Kalender-/Aufgabenzuordnung im Entwurf geändert.')}break;
+      case 'open-case':state.activeCase=x.caseId;render();tell(label(cases,x.caseId)+' ist jetzt der geöffnete Fall im Entwurf.');break;
+      case 'adopt':if(x?.kind==='derived'&&x.caseId===state.activeCase){x.kind='own';x.routing='both';x.source='derived';state.source='all';state.status='open';render();tell('Vorschlag als eigene, bearbeitbare Frist übernommen.')}break;
+      case 'scan':state.files=[];state.scanResults=[];state.scanStep=0;state.scanCase=['all','self'].includes(state.scope)?state.activeCase:state.scope;openPanel('scan');break;
+      case 'pick-files':$('#fd-upload').click();break;
+      case 'sample-files':if(!state.files.some(f=>f.name==='Mitwirkungsaufforderung.pdf'))state.files.push({name:'Mitwirkungsaufforderung.pdf'});renderPanel();break;
+      case 'analyze':if(!state.scanResults.length)state.scanResults=[{...blank,title:'Unterlagen zur Weiterbewilligung',category:'behoerde',institution:'Jobcenter Musterstadt',baseDate:'2026-09-03',dueDate:'2026-09-24',selected:true,source:'ki',priority:'high',note:'Aktuelle Einkommensnachweise einreichen. Beispielergebnis der Dokumentenerkennung.'}];state.scanStep=1;renderPanel();focusPanel();break;
+      case 'scan-back':state.scanStep=0;renderPanel();break;
+      case 'import-scan':{const rows=state.scanResults.filter(r=>r.selected);if(!rows.length)break;if(rows.some(r=>!r.title.trim()&&!r.dueDate)){tell('Bitte einen Titel oder ein Datum für die Auswahl angeben.','error');$('[data-scan-field=title]')?.focus();break}rows.forEach((r,i)=>{const id='ocr'+Date.now()+i;items.push({...r,title:r.title.trim()||label(categories,r.category),id,caseId:state.scanCase,routing:'both',status:'open',kind:'own',activity:['Frist aus Dokument übernommen · '+date(today)]});state.importedId=id});state.scanStep=2;render();tell('Erkanntes Beispiel im Entwurf übernommen.');focusPanel();break}
+      case 'show-import':state.selected=state.importedId;openPanel('detail');break;
+      case 'scan-again':state.files=[];state.scanResults=[];state.scanStep=0;renderPanel();focusPanel();break;
+    }
+  });
+  root.addEventListener('keydown',e=>{if(e.key==='Escape'&&state.panel){e.preventDefault();if(state.confirm){state.confirm='';renderPanel()}else closePanel()}});
+  root.addEventListener('dragover',e=>{const d=e.target.closest('.fd-drop');if(d){e.preventDefault();d.classList.add('fd-drag-over')}});
+  root.addEventListener('dragleave',e=>e.target.closest('.fd-drop')?.classList.remove('fd-drag-over'));
+  root.addEventListener('drop',e=>{if(e.target.closest('.fd-drop')){e.preventDefault();state.files.push(...[...e.dataTransfer.files].map(f=>({name:f.name})));state.scanResults=[];renderPanel()}});
+  function applyDesign(){root.style.setProperty('--fd-row-space',design.density==='compact'?'10px':'16px');root.dataset.detail=design.detail;root.style.colorScheme=design.appearance==='auto'?'light dark':design.appearance;root.style.maxWidth=design.width==='phone'?'390px':'';}
+  render();applyDesign();
+  new ResizeObserver(()=>{$('#fd-search').placeholder=root.clientWidth<=640?'Fristen suchen':'Titel, Institution, Notiz oder Fall suchen'}).observe(root);
+  if(globalThis.Tweak){const tweak=new Tweak({container:root,onChange:applyDesign});tweak.addSelect(design,'density',{label:'Listendichte',options:[{label:'Luftig',value:'comfortable'},{label:'Kompakt',value:'compact'}]});tweak.addSelect(design,'detail',{label:'Details',options:[{label:'Seitenbereich',value:'side'},{label:'Eigene Ansicht',value:'full'}]});tweak.addSelect(design,'appearance',{label:'Darstellung',options:[{label:'Automatisch',value:'auto'},{label:'Hell',value:'light'},{label:'Dunkel',value:'dark'}]});tweak.addSelect(design,'width',{label:'Bildschirm',options:[{label:'Verfügbare Breite',value:'auto'},{label:'Smartphone',value:'phone'}]});}
+})();
+</script>

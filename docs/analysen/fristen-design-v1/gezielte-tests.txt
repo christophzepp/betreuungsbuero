@@ -1,0 +1,17 @@
+✔ Wiederholung klemmt Monatsende und Schaltjahr statt Tage zu überspringen (4.54725ms)
+✔ Lokaler Abgleich aktualisiert IDs und erhält fremde Daten und Anlagen (2.49625ms)
+✔ Voller lokaler Speicher meldet Fehler und vergibt keine falschen Verknüpfungen (0.788583ms)
+✔ Online-Teilfehler wird ohne zusätzliche Kalender-Dublette wiederholt (0.699167ms)
+✔ Entfernte externe Verknüpfung wird nur bei 404 neu angelegt (0.49175ms)
+✔ Abgebrochener Serienabschluss behält seinen Fortschritt und erzeugt eine Folgefrist (0.657375ms)
+✔ Bestätigtes Speichern meldet Schreibschutz, falschen Fall und Serverfehler (11.471042ms)
+✔ Fristen-Arbeitsbereich initialisiert ohne bereits geöffnetes Dialogelement (1.320958ms)
+✔ Fehlgeschlagenes Nachladen erhält die bisherigen Fristenvorschläge (0.499ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 184.32125

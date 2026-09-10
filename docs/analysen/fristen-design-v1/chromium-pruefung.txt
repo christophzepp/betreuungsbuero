@@ -1,0 +1,98 @@
+PASS Echte Fristenliste und Suche sichtbar
+PASS Alle Formularfelder vorhanden
+PASS Speichert Frist, Kalender und Wiedervorlage
+PASS Aktualisierung und Escape erhalten den Entwurf
+PASS Fenster schließen schützt ungespeicherte Angaben
+PASS Neue Frist aus einem unveränderten Formular ist leer
+PASS Leeres Formular wird nicht gespeichert
+PASS 30-Tage-Hilfe und alle Wiederholungen sind verfügbar
+PASS Anlegen im Fremdfall erhält alle Angaben und kehrt zurück
+PASS Kalender-/Aufgabenrouting calendar
+PASS Kalender-/Aufgabenrouting todo
+PASS Kalender-/Aufgabenrouting none
+PASS Kalender-/Aufgabenrouting both
+PASS Teilfehler bleibt sichtbar und bewahrt Entwurf und erfolgreiche Verknüpfung
+PASS Wiederholen aktualisiert vorhandene IDs ohne Dubletten
+PASS Parallel geänderte Frist wird nicht überschrieben
+PASS Fehler beim Serienabschluss bleibt wiederholbar
+PASS Monatsende und Wiederholung erzeugen genau eine Folgefrist
+PASS Erledigen entfernt verknüpfte Einträge und dokumentiert den Abschluss
+PASS Wiederöffnen stellt Kalender und Aufgabe wieder her
+PASS Verknüpfte Schuldenfrist schützt Inhalt und Status
+PASS Gesetzlicher Vorschlag übernimmt Hinweis, Serie und Wiedervorlage
+PASS Vorschlag erneut übernehmen erzeugt keine Dublette
+PASS Suche filtert alle Fälle
+PASS Fall- und Prioritätsfilter greifen gemeinsam
+PASS Dokumentenerkennung zeigt prüfbare Ergebnisse vor dem Speichern
+PASS Nur ausgewähltes, korrigiertes Erkennungsergebnis wird gespeichert
+PASS Fehler beim Löschen erhält die Frist für einen erneuten Versuch
+PASS Löschen entfernt Frist und Verknüpfungen
+PASS Schnelleinstieg erhält programmgesteuerte Feldwerte
+PASS Fehlende Bestätigung des Fallspeichers bleibt sichtbar
+PASS Layout 1440 hell liste
+PASS Layout 1440 hell details
+PASS Layout 1440 hell formular
+PASS Layout 1440 hell filter
+PASS Layout 1440 hell erkennung
+PASS Layout 1440 dunkel liste
+PASS Layout 1440 dunkel details
+PASS Layout 1440 dunkel formular
+PASS Layout 1440 dunkel filter
+PASS Layout 1440 dunkel erkennung
+PASS Layout 1024 hell liste
+PASS Layout 1024 hell details
+PASS Layout 1024 hell formular
+PASS Layout 1024 hell filter
+PASS Layout 1024 hell erkennung
+PASS Layout 1024 dunkel liste
+PASS Layout 1024 dunkel details
+PASS Layout 1024 dunkel formular
+PASS Layout 1024 dunkel filter
+PASS Layout 1024 dunkel erkennung
+PASS Layout 880 hell liste
+PASS Layout 880 hell details
+PASS Layout 880 hell formular
+PASS Layout 880 hell filter
+PASS Layout 880 hell erkennung
+PASS Layout 880 dunkel liste
+PASS Layout 880 dunkel details
+PASS Layout 880 dunkel formular
+PASS Layout 880 dunkel filter
+PASS Layout 880 dunkel erkennung
+PASS Layout 768 hell liste
+PASS Layout 768 hell details
+PASS Layout 768 hell formular
+PASS Layout 768 hell filter
+PASS Layout 768 hell erkennung
+PASS Layout 768 dunkel liste
+PASS Layout 768 dunkel details
+PASS Layout 768 dunkel formular
+PASS Layout 768 dunkel filter
+PASS Layout 768 dunkel erkennung
+PASS Layout 390 hell liste
+PASS Layout 390 hell details
+PASS Layout 390 hell formular
+PASS Layout 390 hell filter
+PASS Layout 390 hell erkennung
+PASS Layout 390 dunkel liste
+PASS Layout 390 dunkel details
+PASS Layout 390 dunkel formular
+PASS Layout 390 dunkel filter
+PASS Layout 390 dunkel erkennung
+PASS Layout 320 hell liste
+PASS Layout 320 hell details
+PASS Layout 320 hell formular
+PASS Layout 320 hell filter
+PASS Layout 320 hell erkennung
+PASS Layout 320 dunkel liste
+PASS Layout 320 dunkel details
+PASS Layout 320 dunkel formular
+PASS Layout 320 dunkel filter
+PASS Layout 320 dunkel erkennung
+PASS Formularaktionen bei geringer Höhe erreichbar
+PASS Mobiler Bereichswechsel schützt den Entwurf
+PASS Chat und Rückkehr bewahren das Formular
+PASS Verwerfen speichert keinen Entwurf
+PASS Vorführung zeigt Fristen aller lokalen Fälle
+PASS Vorführung speichert im richtigen Fremdfall und kehrt zurück
+PASS Keine JavaScript-Laufzeitfehler

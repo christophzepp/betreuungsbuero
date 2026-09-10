@@ -1,0 +1,5 @@
+PASS Abgleichaktion spannt den Detailbereich, übrige Aktionen stehen nebeneinander
+PASS Abgleichaktionen bleiben auf schmalem Bildschirm erreichbar
+PASS Formular bleibt bei 320 mal 568 Pixeln nutzbar
+PASS Verwerfen und Weiterbearbeiten sind auch bei geringer Höhe sichtbar
+PASS Keine JavaScript-Laufzeitfehler

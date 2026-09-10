@@ -1,0 +1,65 @@
+{
+  "stand": "2026-09-10",
+  "anwendung_sha256": "ea22cf3ad10eb8bd16dab63d5cafaea3864dee1819b5bc0deed81ab6aa46a6b2",
+  "gesamtsuite": {
+    "aufruf": "npm test",
+    "verzeichnis": "server",
+    "bestanden": 1381,
+    "fehlgeschlagen": 0,
+    "protokoll": "suite.txt"
+  },
+  "browser": [
+    {
+      "engine": "chromium",
+      "aufruf": "MOBILE_QA_BROWSER=chromium node server/scripts/qa-fristen-workspace.cjs",
+      "bestanden": 114,
+      "protokoll": "chromium.txt",
+      "breiten": [
+        1440,
+        1024,
+        880,
+        768,
+        390,
+        320
+      ],
+      "themen": [
+        "hell",
+        "dunkel"
+      ],
+      "zusaetzliche_layoutpruefung": {
+        "bestanden": 5,
+        "protokoll": "layout-chromium.txt",
+        "kleinste_fenstergroesse": "320 × 568"
+      }
+    },
+    {
+      "engine": "webkit",
+      "aufruf": "MOBILE_QA_BROWSER=webkit node server/scripts/qa-fristen-workspace.cjs",
+      "bestanden": 114,
+      "protokoll": "webkit.txt",
+      "breiten": [
+        1440,
+        1024,
+        880,
+        768,
+        390,
+        320
+      ],
+      "themen": [
+        "hell",
+        "dunkel"
+      ],
+      "zusaetzliche_layoutpruefung": {
+        "bestanden": 5,
+        "protokoll": "layout-webkit.txt",
+        "kleinste_fenstergroesse": "320 × 568"
+      }
+    }
+  ],
+  "grenzen": [
+    "Die echte HTML-Anwendung wurde mit synthetischen Fällen und abgefangenen externen Schreibzugriffen geprüft.",
+    "Die KI-Antwort für die Dokumentenerkennung war simuliert.",
+    "Nach der vollständigen Funktionsprüfung wurde die sichtbare Schaltflächenbeschriftung „Änderungen verwerfen“ auf „Verwerfen“ gekürzt; anschließend wurde die Darstellung in beiden Browserengines erneut geprüft."
+  ],
+  "push": false
+}

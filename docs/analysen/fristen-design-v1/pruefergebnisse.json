@@ -1,0 +1,96 @@
+{
+  "stand": "2026-09-10",
+  "branch": "codex/mobile-foundation-chats",
+  "ausgangscommit": "bc486edd3c846e5dbc79d1d5b1115f58affcef14",
+  "main_unveraendert": "9b28c434343743b116da66f37cb88d0b7cbc2019",
+  "push": false,
+  "anwendung": {
+    "datei": "outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html",
+    "sha256": "58ea02ace23834dff9e153d98f17688aca8fb84bca48d2dfa59ab369d53793b7"
+  },
+  "gesamtsuite": {
+    "aufruf": "npm test",
+    "verzeichnis": "server",
+    "tests": 1380,
+    "bestanden": 1380,
+    "fehlgeschlagen": 0,
+    "protokoll": "gesamtsuite.txt"
+  },
+  "gezielte_tests": {
+    "aufruf": "node --test server/tests/html-fristen-workspace.test.cjs",
+    "tests": 9,
+    "bestanden": 9,
+    "fehlgeschlagen": 0,
+    "protokoll": "gezielte-tests.txt"
+  },
+  "browser": [
+    {
+      "engine": "chromium",
+      "aufruf": "MOBILE_QA_BROWSER=chromium node server/scripts/qa-fristen-workspace.cjs",
+      "umgebung": "PLAYWRIGHT_MODULE verweist auf die lokal installierte Playwright-Bibliothek; MOBILE_QA_OUTPUT bestimmt den Aufnahmeordner.",
+      "breiten": [
+        1440,
+        1024,
+        880,
+        768,
+        390,
+        320
+      ],
+      "themen": [
+        "hell",
+        "dunkel"
+      ],
+      "bestanden": 98,
+      "protokoll": "chromium-pruefung.txt",
+      "abschluss": {
+        "aufruf": "QA_FAST=1 MOBILE_QA_BROWSER=chromium node server/scripts/qa-fristen-workspace.cjs",
+        "bestanden": 49,
+        "protokoll": "chromium-abschluss.txt"
+      }
+    },
+    {
+      "engine": "webkit",
+      "aufruf": "MOBILE_QA_BROWSER=webkit node server/scripts/qa-fristen-workspace.cjs",
+      "umgebung": "PLAYWRIGHT_MODULE verweist auf die lokal installierte Playwright-Bibliothek; MOBILE_QA_OUTPUT bestimmt den Aufnahmeordner.",
+      "breiten": [
+        1440,
+        1024,
+        880,
+        768,
+        390,
+        320
+      ],
+      "themen": [
+        "hell",
+        "dunkel"
+      ],
+      "bestanden": 98,
+      "protokoll": "webkit-pruefung.txt",
+      "abschluss": {
+        "aufruf": "QA_FAST=1 MOBILE_QA_BROWSER=webkit node server/scripts/qa-fristen-workspace.cjs",
+        "bestanden": 49,
+        "protokoll": "webkit-abschluss.txt"
+      }
+    }
+  ],
+  "regression": [
+    {
+      "bereich": "aufgaben",
+      "aufruf": "node server/scripts/qa-todo-workspace-edge.cjs",
+      "bestanden": 10,
+      "protokoll": "aufgaben-regression.txt"
+    },
+    {
+      "bereich": "kalender",
+      "aufruf": "CALENDAR_QA_DRAG=1 node server/scripts/qa-calendar-design.cjs",
+      "bestanden": 19,
+      "protokoll": "kalender-regression.txt"
+    }
+  ],
+  "grenzen": [
+    "Echte ausgelieferte Anwendung mit kontrollierten Testfällen und abgefangenen externen Schreibzugriffen.",
+    "Dokumentenerkennung liest echte Testdateien; die KI-Antwort wird simuliert.",
+    "Browser-Layout in Hell und Dunkel; Bildschirmaufnahmen liegen in chromium/ und webkit/.",
+    "Vollständige Browserläufe erfolgten vor der letzten Absicherung für fehlgeschlagenes Nachladen; anschließend liefen sämtliche Funktionsabläufe nochmals in beiden Browsern mit 390 Pixel Breite."
+  ]
+}

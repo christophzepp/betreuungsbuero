@@ -1,0 +1,19 @@
+PASS Echtes Ziehen speichert 12:15 einschließlich Dauer, Erinnerung und Zielvorschau
+PASS Greifposition und Hintergrundaktualisierung erhalten den laufenden Ziehvorgang
+PASS Erneutes Laden zeigt die gespeicherte Verschiebung
+PASS Gescrolltes 24-Stunden-Raster speichert 13:30 und erhält die Scrollposition
+PASS Tagesansicht erlaubt Verschieben auf eine andere Uhrzeit
+PASS Serverfehler erhält den ursprünglichen Termin und wird direkt im Kalender angezeigt
+PASS Ladefehler beim Ablegen bleibt sichtbar und schreibt keine Ersatzdaten
+PASS Ablegen außerhalb bricht ohne Speicherung und ohne Geisterrahmen ab
+PASS Nach Abbruch und Speicherfehler funktioniert der nächste Versuch
+PASS Echtes Ziehen verschiebt task in der Aufgabenablage
+PASS Echtes Ziehen verschiebt followup in der Aufgabenablage
+PASS Echtes Ziehen verschiebt deadline in der Aufgabenablage
+PASS Ganztagstermin wird beim Ablegen auf 11 Uhr zu einem einstündigen Termin
+PASS Monatsraster verschiebt das Datum unter Erhalt von Uhrzeit und Dauer
+PASS Der lokale Test verwendet den echten Demo-Arbeitsspeicher der Anwendung
+PASS Lokale UTC-Termine werden auf den gewählten Tag und die lokale Stunde gespeichert
+PASS Numerische lokale Kennungen werden statt eines stillen Abbruchs korrekt gespeichert
+PASS Lokale Änderungen bleiben nach erneutem Öffnen des Kalenders erhalten
+PASS Lokaler Speicherfehler wird angezeigt und erhält die ursprüngliche Uhrzeit
