@@ -1,6 +1,7 @@
 'use strict';
 
 const assert = require('assert');
+const { assertScriptInventory } = require('./helpers/html-scripts.cjs');
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
@@ -18,28 +19,6 @@ function between(source, start, end, name) {
   const last = source.indexOf(end, first + start.length);
   assert.notEqual(last, -1, `${name}: Endmarke fehlt`);
   return source.slice(first, last);
-}
-
-function scripts(source) {
-  const blocks = [];
-  const expression = /<script\b([^>]*)>([\s\S]*?)<\/script>/gi;
-  let match;
-  while ((match = expression.exec(source))) blocks.push({ attributes: match[1], body: match[2] });
-  /* 09.09.2026: Dokumenteneditor, Dokumentauswahl sowie mobile und Desktop-Fallassistenten ergänzen vier JS-Blöcke. */
-  assert.equal(blocks.length, 315, 'Scriptblockzahl');
-  let javascript = 0;
-  const failures = [];
-  blocks.forEach((block, index) => {
-    if (/\btype\s*=/i.test(block.attributes)) return;
-    javascript++;
-    try {
-      new vm.Script(block.body, { filename: `html-case-id-script-${index + 1}.js` });
-    } catch (error) {
-      failures.push({ index: index + 1, message: error.message });
-    }
-  });
-  assert.equal(javascript, 233, 'JavaScriptblockzahl');
-  assert.deepEqual(failures, [], `JavaScript-Syntaxfehler: ${JSON.stringify(failures)}`);
 }
 
 function testPureMatchingContract() {
@@ -76,7 +55,7 @@ function testPureMatchingContract() {
   assert.equal(match({ caseId: 'case-u' }, '', 'Einzig, Erika', records, titleMatcher), true);
 }
 
-scripts(html);
+assertScriptInventory(html, htmlPath);
 testPureMatchingContract();
 
 const calendarBlock = between(html, 'function caseRefRecords(extra){', '\n\n/* ===== KI-Kontext', 'Kalender-Fallfilter');
@@ -136,4 +115,4 @@ assert.match(mailBlock, /priority:g\('priority'\)\|\|'normal',caseId:caseId\|\|'
 assert.match(mailBlock, /window\.__caseRefMatches\(e,caseId,label,MX\.cases\|\|\[\]\)/);
 assert.match(mailBlock, /esc\(mxCaseDisplay\(k\)\)/);
 
-console.log('HTML Case-ID-Integration: 289 Blöcke, 0 Syntaxfehler, Doppel-Label-Verträge erfüllt');
+console.log('HTML Case-ID-Integration: Scriptbestand und Syntax geprüft, Doppel-Label-Verträge erfüllt');

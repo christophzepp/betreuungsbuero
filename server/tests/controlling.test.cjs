@@ -25,6 +25,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const { assertScriptInventory } = require('./helpers/html-scripts.cjs');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
@@ -882,10 +883,8 @@ test('Reiter: eine unvollstaendige Auswertung sagt das ueber ihrer ersten Zahl',
 
 /* ───────── 8. Auslieferung ───────── */
 
-/* 06.09.2026 Briefkopf-Editor P3: zwei neue Schriftblöcke (tpl_font_dejavu_oblique, tpl_font_dejavu_bold_oblique) für Kursiv im Briefkopf - Nutzerentscheidung, 309 + 2 = 311; JS-Blöcke bleiben 229. */
-test('Auslieferung: die Zahl der Skriptbloecke ist unveraendert 311', () => {
-  assert.equal((html.match(/\n<script/g) || []).length, 311,
-    'es wurde ein Skriptblock angelegt oder entfernt - neuer Code gehoert in einen vorhandenen Block');
+test('Auslieferung: vollständiger Scriptbestand und fehlerfreie Syntax', () => {
+  assertScriptInventory(html);
 });
 
 /* ─── Nachtrag 25.08.2026: der Rueckfall auf den Verguetungsantrag ───

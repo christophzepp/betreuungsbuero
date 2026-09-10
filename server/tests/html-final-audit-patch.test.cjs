@@ -5,12 +5,13 @@
    Patch-Sitzung, keine Regressionspruefung: jede weitere Aenderung an der HTML machte sie
    rot - und der temporaere Ordner ueberlebt keinen Rechnerneustart, danach waere sie
    ohnehin gescheitert.
-   Geblieben ist, was dauerhaft gilt: 289 Scriptbloecke, davon 214 mit JavaScript, alle
+   Geblieben ist, was dauerhaft gilt: der gemeinsame Auslieferungsstand der Scriptbloecke, alle
    syntaktisch fehlerfrei - und die inhaltlichen Belege, dass die Umbauten drin sind und
    Altes draussen ist. Wer hier wieder einen Hash eintraegt, baut die Quittung nach.
    (2026-07-28) */
 
 const assert = require('assert');
+const { assertScriptInventory } = require('./helpers/html-scripts.cjs');
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
@@ -21,24 +22,7 @@ const htmlPath = path.resolve(
 );
 const current = fs.readFileSync(htmlPath);
 
-function validateScripts(buffer, label) {
-  const source = buffer.toString('utf8');
-  const blocks = [];
-  const expression = /<script\b([^>]*)>([\s\S]*?)<\/script>/gi;
-  let match;
-  while ((match = expression.exec(source))) blocks.push({ attributes: match[1], body: match[2] });
-  /* 06.09.2026 Briefkopf-Editor P3: zwei neue Schriftblöcke (tpl_font_dejavu_oblique, tpl_font_dejavu_bold_oblique) für Kursiv im Briefkopf - Nutzerentscheidung, 309 + 2 = 311; JS-Blöcke bleiben 229. */
-  assert.equal(blocks.length, 311, `${label}: Scriptblöcke`);
-  let javascript = 0;
-  for (let index = 0; index < blocks.length; index++) {
-    if (/\btype\s*=/i.test(blocks[index].attributes)) continue;
-    javascript++;
-    new vm.Script(blocks[index].body, { filename: `${label}-script-${index + 1}.js` });
-  }
-  assert.equal(javascript, 229, `${label}: JavaScriptblöcke`);
-}
-
-validateScripts(current, 'HTML');
+assertScriptInventory(current, htmlPath);
 
 const html = current.toString('utf8');
 assert.doesNotMatch(html, /Modulordner \/ Betreuerausweis/);
@@ -88,4 +72,4 @@ assert.equal(
   '11 - Betreuungsführung/Falldokumentation'
 );
 
-console.log('HTML-Audit: Betriebsarten, echte Ordner, OCR, Wartung, Restore und Fall-ID-Integration; 289 Blöcke, 0 Syntaxfehler');
+console.log('HTML-Audit: Betriebsarten, echte Ordner, OCR, Wartung, Restore und Fall-ID-Integration; Scriptbestand und Syntax geprüft');

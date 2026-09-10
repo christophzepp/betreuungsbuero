@@ -1,0 +1,110 @@
+PASS Echte Aufgaben und Wiedervorlagen, eindeutige Icons und Suche sichtbar
+PASS Neue Aufgabe aus Details öffnet leeres Formular
+PASS Abbrechen kehrt zum zuvor ausgewählten Eintrag zurück
+PASS Alle Originalfelder, Wiederholung und Explorer vorhanden
+PASS Realtime erhält Formular-DOM und Eingaben
+PASS Abgebrochener Statuswechsel hinterlässt kein falsches Häkchen
+PASS Fenster schließen und Escape schützen den Entwurf
+PASS Datei hochladen bewahrt Eingaben und verwendet echte Anlagenroute
+PASS Anlage an externe Aufgabe übertragen
+PASS Fehlgeschlagenes Entfernen erhält Anlage und Entwurf
+PASS Fehler beim Speichern erhält Eingaben
+PASS Deaktivierte Wiederholung blockiert nicht
+PASS Fälligkeit vor Beginn wird abgewiesen
+PASS Serienende vor erster Fälligkeit wird abgewiesen
+PASS Teilerfolg behält fehlgeschlagene Datei am bereits gespeicherten Eintrag
+PASS Erneutes Speichern erzeugt keine Dublette und erhält Fall, Liste und Serie
+PASS Erledigen einer Serie schreibt nächste Fälligkeit fort
+PASS Status lässt sich erledigen und wieder öffnen
+PASS Suche filtert nach Titel
+PASS Kombinierter Filter zählt einzelnen Treffer korrekt
+PASS Listeneinstellungen erhalten den vorherigen Filterentwurf
+PASS Sichtbarkeit wird in vorhandener Präferenz gespeichert
+PASS Individuelle Listenfarbe erscheint am Eintrag
+PASS Manuelle Reihenfolge per Pfeil
+PASS Drag-and-drop folgt der sichtbaren Einfügemarkierung
+PASS ICS-Gesamtexport erzeugt Download
+PASS ICS-Import speichert über vorhandene Datenroute
+PASS Synchronisierung erreicht echte Route
+PASS Einzelexport erzeugt Download
+PASS Löschen entfernt ausschließlich den ausgewählten Eintrag
+PASS Bearbeitete Wiedervorlage erhält Ursprung und Eintragsart
+PASS Schließen und erneutes Öffnen funktioniert
+PASS Ladefehler erhalten zuletzt geladene Daten und Wiederholen
+PASS Layout 1440 hell list
+PASS Layout 1440 hell detail
+PASS Layout 1440 hell edit
+PASS Layout 1440 hell filter
+PASS Layout 1440 hell lists
+PASS Layout 1440 hell tools
+PASS Layout 1440 dunkel list
+PASS Layout 1440 dunkel detail
+PASS Layout 1440 dunkel edit
+PASS Layout 1440 dunkel filter
+PASS Layout 1440 dunkel lists
+PASS Layout 1440 dunkel tools
+PASS Layout 1024 hell list
+PASS Layout 1024 hell detail
+PASS Layout 1024 hell edit
+PASS Layout 1024 hell filter
+PASS Layout 1024 hell lists
+PASS Layout 1024 hell tools
+PASS Layout 1024 dunkel list
+PASS Layout 1024 dunkel detail
+PASS Layout 1024 dunkel edit
+PASS Layout 1024 dunkel filter
+PASS Layout 1024 dunkel lists
+PASS Layout 1024 dunkel tools
+PASS Layout 880 hell list
+PASS Layout 880 hell detail
+PASS Layout 880 hell edit
+PASS Layout 880 hell filter
+PASS Layout 880 hell lists
+PASS Layout 880 hell tools
+PASS Layout 880 dunkel list
+PASS Layout 880 dunkel detail
+PASS Layout 880 dunkel edit
+PASS Layout 880 dunkel filter
+PASS Layout 880 dunkel lists
+PASS Layout 880 dunkel tools
+PASS Layout 768 hell list
+PASS Layout 768 hell detail
+PASS Layout 768 hell edit
+PASS Layout 768 hell filter
+PASS Layout 768 hell lists
+PASS Layout 768 hell tools
+PASS Layout 768 dunkel list
+PASS Layout 768 dunkel detail
+PASS Layout 768 dunkel edit
+PASS Layout 768 dunkel filter
+PASS Layout 768 dunkel lists
+PASS Layout 768 dunkel tools
+PASS Layout 390 hell list
+PASS Layout 390 hell detail
+PASS Layout 390 hell edit
+PASS Layout 390 hell filter
+PASS Layout 390 hell lists
+PASS Layout 390 hell tools
+PASS Layout 390 dunkel list
+PASS Layout 390 dunkel detail
+PASS Layout 390 dunkel edit
+PASS Layout 390 dunkel filter
+PASS Layout 390 dunkel lists
+PASS Layout 390 dunkel tools
+PASS Layout 320 hell list
+PASS Layout 320 hell detail
+PASS Layout 320 hell edit
+PASS Layout 320 hell filter
+PASS Layout 320 hell lists
+PASS Layout 320 hell tools
+PASS Layout 320 dunkel list
+PASS Layout 320 dunkel detail
+PASS Layout 320 dunkel edit
+PASS Layout 320 dunkel filter
+PASS Layout 320 dunkel lists
+PASS Layout 320 dunkel tools
+PASS Formularaktionen bleiben bei geringer Höhe vor Navigation erreichbar
+PASS Mobiler Bereichswechsel schützt ungespeicherte Eingaben
+PASS Chats und Rückkehr bewahren Formular-DOM
+PASS Verwerfen erzeugt keine Aufgabe
+PASS Keine JavaScript-Laufzeitfehler

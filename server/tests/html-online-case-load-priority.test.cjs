@@ -2,6 +2,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const { assertScriptInventory } = require('./helpers/html-scripts.cjs');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
@@ -33,16 +34,7 @@ function region(start, end) {
 }
 
 test('HTML bleibt syntaktisch unverändert prüfbar', () => {
-  const allScripts = scripts();
-  /* 09.09.2026: Dokumenteneditor, Dokumentauswahl sowie mobile und Desktop-Fallassistenten ergänzen vier JS-Blöcke. */
-  assert.equal(allScripts.length, 315, 'Scriptblockzahl hat sich verändert.');
-  let jsCount = 0;
-  allScripts.forEach((script, index) => {
-    if (/\btype\s*=\s*(['"]?)(?!text\/javascript|application\/javascript|module)\w/i.test(script.attrs)) return;
-    jsCount += 1;
-    new vm.Script(script.body, { filename: `html-online-case-load-priority-${index + 1}.js` });
-  });
-  assert.equal(jsCount, 233, 'JavaScript-Blockzahl hat sich verändert.');
+  assertScriptInventory(html, htmlPath);
 });
 
 test('Online-Erstfall bekommt beim appLoginReady Vorrang vor optionalen GET-/api-Abrufen', async () => {

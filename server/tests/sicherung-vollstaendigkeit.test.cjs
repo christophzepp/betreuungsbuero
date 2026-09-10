@@ -16,7 +16,7 @@
      4.-6. JSON-Sicherung: ZIP nutzt die angereicherte Sammlung (ohne /api/admin/-Text),
         der Online-Export traegt datenschutz, und die fuenf nur-lokalen Bestaende stehen
         in Export-Zweig UND Import-Merge UND loadBueroLocal-Whitelist.
-     7. Blockzahl 311 (Zeilenanfaenge "<script").
+     7. Vollständiger Scriptbestand und fehlerfreie JavaScript-Syntax.
 
    Wie in datenschutz.test.cjs/html-master-zusatzblaetter.test.cjs wird Code AUS DER
    AUSLIEFERUNGSDATEI geschnitten und ausgefuehrt - gemessen wird die Auslieferung,
@@ -24,6 +24,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const { assertScriptInventory } = require('./helpers/html-scripts.cjs');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
@@ -388,8 +389,6 @@ test('loadBueroLocal-Whitelist: die fuenf Bestaende ueberleben das Neuladen (aus
 
 /* ═══════════ 7. Blockzahl ═══════════ */
 
-/* 06.09.2026 Briefkopf-Editor P3: zwei neue Schriftblöcke (tpl_font_dejavu_oblique, tpl_font_dejavu_bold_oblique) für Kursiv im Briefkopf - Nutzerentscheidung, 309 + 2 = 311; JS-Blöcke bleiben 229. */
-test('die Auslieferung behaelt exakt 311 Script-Bloecke', () => {
-  const bloecke = html.split('\n').filter((zeile) => zeile.startsWith('<script')).length;
-  assert.equal(bloecke, 311, 'Blockzahl-Regel verletzt: neue Bloecke einfuegen ist verboten, Code gehoert in bestehende');
+test('Auslieferung: vollständiger Scriptbestand und fehlerfreie Syntax', () => {
+  assertScriptInventory(html);
 });

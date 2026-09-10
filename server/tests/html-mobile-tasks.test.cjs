@@ -16,7 +16,7 @@ test('Wiedervorlagen und Aufgaben beachten die vorhandenen getrennten Sichtbarke
 test('Ungültige oder fehlende Daten werden als ohne Termin behandelt',()=>{const f=fixture();assert.deepEqual(f.filter([{id:'bad',dueAt:'kaputt'},{id:'none'}],{due:'none'}),['bad','none'])});
 test('Mobile Oberfläche nutzt Originalformular und Speicherlogik, keine zweite Aufgaben-Datenbank',()=>{
  const pilot=html.slice(html.indexOf('/* ===== Aufgaben-Pilot:'),html.indexOf('/* ===== Vollständige Aufgabenliste'));
- assert.match(pilot,/window\.__mobileUI\.createView/);assert.match(html,/if\(todoMobileActive\(\)\)todoMobileAdoptForm\(t,formLabel\)/);
+ assert.match(pilot,/root.dataset.mobileModule='tasks'/);assert.match(html,/if\(todoWorkActive\(\)\|\|todoMobileActive\(\)\)todoMobileAdoptForm\(t,formLabel\)/);
  assert.match(pilot,/await todoUpdate\(todoFormEditId,payload\)/);assert.match(pilot,/await todoCreate\(payload\)/);assert.match(pilot,/todoFormPendingFiles=failed/);
  assert.match(pilot,/todoMobileRefreshAttachments/);assert.match(pilot,/mobileBeforeNavigate/);
  const css=html.slice(html.indexOf('/* Aufgaben-Pilot: Dokumentationsstil'),html.indexOf('html.mobile-online-active.mobile-keyboard-open .mobile-ui-nav'));

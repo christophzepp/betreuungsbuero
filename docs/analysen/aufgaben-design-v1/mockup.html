@@ -1,0 +1,389 @@
+<div id="aufgaben-entwurf" lang="de" aria-label="Aufgaben – neuer Arbeitsbereich">
+  <div class="at-window">
+    <div class="at-chrome"><span class="at-brand"><i data-lucide="panels-top-left" aria-hidden="true"></i> Betreuungsbüro</span><span class="at-breadcrumb">Organisation <span>/</span> Aufgaben</span><span class="at-demo">Entwurf · Beispieldaten</span></div>
+    <header class="at-header"><div><h1>Aufgaben</h1><p>Aufgaben und Wiedervorlagen im Blick</p></div><div class="at-header-actions"><button class="at-button at-tools-button" data-action="tools"><i data-lucide="ellipsis" aria-hidden="true"></i><span>Werkzeuge</span></button><button class="at-button at-primary" data-action="new"><i data-lucide="plus" aria-hidden="true"></i><span>Neue Aufgabe</span></button></div></header>
+    <div class="at-searchbar"><label class="at-search"><i data-lucide="search" aria-hidden="true"></i><input type="search" id="at-search" aria-label="Aufgaben durchsuchen" placeholder="Titel, Notiz, Fall oder Liste suchen"><button class="at-icon-button" data-action="clear-search" aria-label="Suche löschen" hidden><i data-lucide="x" aria-hidden="true"></i></button></label><button class="at-button" data-action="filter"><i data-lucide="sliders-horizontal" aria-hidden="true"></i><span>Filter</span><span id="at-filter-count" class="at-count" hidden></span></button></div>
+    <div class="at-layout">
+      <aside class="at-sidebar" aria-label="Aufgaben eingrenzen"></aside>
+      <main class="at-main"><div class="at-toolbar"><div class="at-status" aria-label="Aufgabenstatus"></div><label class="at-sort"><i data-lucide="arrow-down-wide-narrow" aria-hidden="true"></i><select id="at-sort" aria-label="Aufgaben sortieren"><option value="due">Fälligkeit</option><option value="priority">Priorität</option><option value="title">Titel A–Z</option><option value="manual">Manuell</option></select></label></div><div class="at-active-filters"></div><div class="at-resultbar"><span id="at-result-count" role="status"></span><span class="at-date">Mi., 9. September 2026</span></div><div class="at-rows"></div></main>
+      <aside class="at-panel" aria-label="Aufgabendetails" hidden></aside>
+    </div>
+    <footer class="at-footer"><span><span class="at-connection-dot"></span><span id="at-sync-status">Mit Büro verbunden</span></span><span>Änderungen im Entwurf bleiben in dieser Vorschau</span></footer>
+
+  </div>
+</div>
+<style>
+#aufgaben-entwurf{--at-paper:light-dark(#ffffff,#172735);--at-page:light-dark(#f5f8fa,#10202d);--at-side:light-dark(#f0f5f8,#142431);--at-ink:light-dark(#213c4c,#e4edf2);--at-muted:light-dark(#617787,#a0b6c4);--at-line:light-dark(#dae5ec,#304654);--at-accent:light-dark(#246080,#73b8d8);--at-on-accent:light-dark(#ffffff,#102536);--at-soft:light-dark(#e9f2f7,#223e50);--at-red:light-dark(#a64737,#ffac99);--at-red-soft:light-dark(#fff1eb,#442f2c);--at-green:light-dark(#37765b,#96d5b8);--at-green-soft:light-dark(#edf6ef,#233e34);--at-row-space:17px;color:var(--at-ink);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;width:100%;container-type:inline-size;color-scheme:light dark}
+#aufgaben-entwurf *{box-sizing:border-box}
+#aufgaben-entwurf [hidden]{display:none!important}
+#aufgaben-entwurf button,#aufgaben-entwurf input,#aufgaben-entwurf textarea,#aufgaben-entwurf select{font:inherit}
+#aufgaben-entwurf button,#aufgaben-entwurf select{cursor:pointer}
+#aufgaben-entwurf button:disabled{opacity:.45;cursor:default}
+#aufgaben-entwurf button{color:inherit}
+#aufgaben-entwurf input,#aufgaben-entwurf textarea,#aufgaben-entwurf select{min-width:0;color:var(--at-ink);background:var(--at-paper);border:1px solid var(--at-line);border-radius:8px;padding:9px 10px;max-width:100%}
+#aufgaben-entwurf input[type=checkbox]{width:17px;height:17px;accent-color:var(--at-accent);padding:0;margin:0;flex:none}
+#aufgaben-entwurf input[type=color]{width:32px;height:32px;padding:3px;flex:none}
+#aufgaben-entwurf svg{width:17px;height:17px;flex:none;stroke-width:1.7}
+#aufgaben-entwurf h1,#aufgaben-entwurf h2,#aufgaben-entwurf h3,#aufgaben-entwurf p{margin:0}
+#aufgaben-entwurf h1{font-size:25px;line-height:1.25;font-weight:650;letter-spacing:-.6px}
+#aufgaben-entwurf h2{font-size:19px;line-height:1.4;font-weight:620;letter-spacing:-.3px}
+#aufgaben-entwurf h3{font-size:12px;font-weight:600;letter-spacing:.7px;text-transform:uppercase;color:var(--at-muted)}
+#aufgaben-entwurf .at-window{background:var(--at-paper);border:1px solid var(--at-line);border-radius:16px;position:relative;overflow:clip}
+#aufgaben-entwurf .at-chrome{display:flex;align-items:center;gap:22px;padding:12px 22px;background:var(--at-side);border-bottom:1px solid var(--at-line);font-size:12px}
+#aufgaben-entwurf .at-brand{display:flex;align-items:center;gap:8px;font-weight:600}
+#aufgaben-entwurf .at-breadcrumb{display:flex;gap:10px;color:var(--at-muted)}
+#aufgaben-entwurf .at-demo{margin-left:auto;color:var(--at-muted);font-size:11px}
+#aufgaben-entwurf .at-header{padding:25px 25px 19px;display:flex;gap:20px;justify-content:space-between;align-items:center}
+#aufgaben-entwurf .at-header p{color:var(--at-muted);font-size:12px;margin-top:5px}
+#aufgaben-entwurf .at-header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#aufgaben-entwurf .at-button,#aufgaben-entwurf .at-icon-button{border:1px solid var(--at-line);background:var(--at-paper);border-radius:8px;display:inline-flex;justify-content:center;align-items:center;gap:7px;min-height:37px;padding:8px 12px;font-size:12px;font-weight:600;text-decoration:none}
+#aufgaben-entwurf .at-button:hover,#aufgaben-entwurf .at-icon-button:hover{background:var(--at-soft)}
+#aufgaben-entwurf .at-icon-button{padding:7px;min-width:33px;min-height:33px}
+#aufgaben-entwurf .at-primary{background:var(--at-accent);border-color:var(--at-accent);color:var(--at-on-accent)}
+#aufgaben-entwurf .at-primary:hover{background:var(--at-accent);filter:brightness(.94)}
+#aufgaben-entwurf .at-danger{color:var(--at-red)}
+#aufgaben-entwurf .at-quiet{border-color:transparent;background:transparent}
+#aufgaben-entwurf .at-searchbar{display:flex;gap:10px;padding:0 25px 20px;border-bottom:1px solid var(--at-line)}
+#aufgaben-entwurf .at-search{display:flex;align-items:center;gap:9px;min-width:0;flex:1;background:var(--at-page);border:1px solid var(--at-line);border-radius:9px;padding:0 11px;color:var(--at-muted)}
+#aufgaben-entwurf .at-search input{background:transparent;border:0;flex:1;width:100%;padding:10px 0;font-size:13px}
+#aufgaben-entwurf .at-search input::placeholder{color:var(--at-muted);opacity:1}
+#aufgaben-entwurf .at-search input::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none}
+#aufgaben-entwurf .at-layout{display:grid;grid-template-columns:204px minmax(0,1fr);align-items:stretch;min-height:665px}
+#aufgaben-entwurf .at-sidebar{background:var(--at-side);border-right:1px solid var(--at-line);padding:20px 16px}
+#aufgaben-entwurf .at-sidebar section+section{border-top:1px solid var(--at-line);padding-top:19px;margin-top:20px}
+#aufgaben-entwurf .at-sidebar h3{margin-bottom:10px}
+#aufgaben-entwurf .at-field{display:flex;flex-direction:column;gap:6px;min-width:0;font-size:12px;color:var(--at-muted)}
+#aufgaben-entwurf .at-field select,#aufgaben-entwurf .at-field input,#aufgaben-entwurf .at-field textarea{width:100%;font-size:13px}
+#aufgaben-entwurf .at-select-wrap{position:relative;display:block;min-width:0}
+#aufgaben-entwurf .at-select-wrap select{appearance:none;-webkit-appearance:none;min-height:40px;padding-right:34px;text-overflow:ellipsis}
+#aufgaben-entwurf .at-select-wrap>svg{position:absolute;right:11px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--at-muted)}
+#aufgaben-entwurf .at-select-wrap select:disabled{opacity:.65;cursor:default}
+#aufgaben-entwurf .at-field textarea{resize:vertical;min-height:96px;line-height:1.6}
+#aufgaben-entwurf .at-side-nav{display:flex;flex-direction:column;gap:3px;margin-top:16px}
+#aufgaben-entwurf .at-side-nav button{width:100%;text-align:left;display:flex;align-items:center;gap:9px;border:0;background:transparent;border-radius:7px;padding:8px 9px;font-size:12px;min-height:36px}
+#aufgaben-entwurf .at-side-nav button[aria-pressed=true]{background:var(--at-soft);color:var(--at-accent);font-weight:600}
+#aufgaben-entwurf .at-side-nav button:hover{background:var(--at-soft)}
+#aufgaben-entwurf .at-side-nav button .at-count{margin-left:auto;font-variant-numeric:tabular-nums}
+#aufgaben-entwurf .at-count{font-size:11px;line-height:1.5;font-weight:500}
+#aufgaben-entwurf .at-side-check{display:flex;align-items:center;gap:8px;min-height:35px;font-size:12px}
+#aufgaben-entwurf .at-side-check .at-dot{width:7px;height:7px;border-radius:50%;flex:none}
+#aufgaben-entwurf .at-sidebar .at-button{width:100%;margin-top:10px;padding-inline:6px}
+#aufgaben-entwurf .at-main{padding:19px 22px 25px;min-width:0}
+#aufgaben-entwurf .at-toolbar{display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap}
+#aufgaben-entwurf .at-status{display:flex;background:var(--at-side);padding:3px;border:1px solid var(--at-line);border-radius:9px;gap:2px}
+#aufgaben-entwurf .at-status button{display:flex;align-items:center;gap:7px;border:0;background:transparent;padding:7px 11px;border-radius:6px;font-size:12px;min-height:33px;color:var(--at-muted)}
+#aufgaben-entwurf .at-status button[aria-pressed=true]{background:var(--at-paper);color:var(--at-accent);box-shadow:0 1px 4px #112a3d0d;font-weight:600}
+#aufgaben-entwurf .at-sort{display:flex;align-items:center;gap:5px;color:var(--at-muted);min-width:0}
+#aufgaben-entwurf .at-sort select{font-size:12px;border:0;background:transparent;padding:6px 2px;max-width:145px}
+#aufgaben-entwurf .at-active-filters{display:flex;gap:5px;flex-wrap:wrap}
+#aufgaben-entwurf .at-active-filters:not(:empty){margin-top:12px}
+#aufgaben-entwurf .at-chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--at-line);border-radius:20px;padding:3px 8px;background:var(--at-soft);font-size:11px;color:var(--at-accent)}
+#aufgaben-entwurf .at-chip svg{width:12px;height:12px}
+#aufgaben-entwurf .at-resultbar{display:flex;gap:10px;justify-content:space-between;align-items:center;font-size:11px;color:var(--at-muted);padding:16px 0 8px}
+#aufgaben-entwurf .at-group{display:flex;align-items:center;gap:9px;padding:13px 0 5px;font-size:11px;font-weight:600;color:var(--at-muted);letter-spacing:.55px;text-transform:uppercase}
+#aufgaben-entwurf .at-group.at-overdue{color:var(--at-red)}
+#aufgaben-entwurf .at-row{display:grid;grid-template-columns:26px minmax(0,1fr) auto;gap:9px;border-bottom:1px solid var(--at-line);padding:var(--at-row-space) 0;align-items:start;position:relative}
+#aufgaben-entwurf .at-row:last-child{border-bottom:0}
+#aufgaben-entwurf .at-row.at-selected{background:var(--at-soft);box-shadow:-9px 0 var(--at-soft),9px 0 var(--at-soft);border-radius:7px}
+#aufgaben-entwurf .at-row.at-drop{box-shadow:inset 0 3px var(--at-accent)}
+#aufgaben-entwurf .at-row.at-drop.at-drop-after{box-shadow:inset 0 -3px var(--at-accent)}
+#aufgaben-entwurf .at-checkbox{display:flex;justify-content:center;align-items:center;min-height:26px;cursor:pointer}
+#aufgaben-entwurf .at-open-row{background:transparent;border:0;padding:0;text-align:left;min-width:0;display:block;width:100%}
+#aufgaben-entwurf .at-row-title{display:flex;align-items:flex-start;gap:8px;font-size:13px;font-weight:600;line-height:1.5}
+#aufgaben-entwurf .at-type-icon{color:var(--at-accent);padding-top:2px;display:inline-flex;flex:none}
+#aufgaben-entwurf .at-type-icon.at-followup{color:light-dark(#936b32,#dec098)}
+#aufgaben-entwurf .at-row-title .at-title-text{min-width:0;overflow-wrap:anywhere}
+#aufgaben-entwurf .at-row.at-done .at-title-text{text-decoration:line-through;color:var(--at-muted)}
+#aufgaben-entwurf .at-context{font-size:11px;color:var(--at-muted);display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:5px}
+#aufgaben-entwurf .at-case{color:var(--at-accent);font-weight:500}
+#aufgaben-entwurf .at-context .at-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px;vertical-align:1px}
+#aufgaben-entwurf .at-excerpt{color:var(--at-muted);font-size:12px;margin-top:5px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden}
+#aufgaben-entwurf .at-meta{display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:11px;color:var(--at-muted);margin-top:8px}
+#aufgaben-entwurf .at-meta span{display:inline-flex;align-items:center;gap:4px}
+#aufgaben-entwurf .at-meta svg{width:13px;height:13px}
+#aufgaben-entwurf .at-due{border-radius:5px;padding:2px 6px;background:var(--at-side);color:var(--at-ink)}
+#aufgaben-entwurf .at-due.at-overdue{color:var(--at-red);background:var(--at-red-soft)}
+#aufgaben-entwurf .at-due.at-today{color:var(--at-accent);background:var(--at-soft)}
+#aufgaben-entwurf .at-priority-high{color:var(--at-red)}
+#aufgaben-entwurf .at-row-end{display:flex;align-items:center;gap:4px;padding-top:1px}
+#aufgaben-entwurf .at-row-end>.at-icon-button{border:0;background:transparent;color:var(--at-muted)}
+#aufgaben-entwurf .at-moves{display:flex;flex-direction:column;gap:3px}
+#aufgaben-entwurf .at-moves button{padding:3px;min-height:25px;min-width:25px}
+#aufgaben-entwurf .at-empty{padding:52px 15px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px;color:var(--at-muted)}
+#aufgaben-entwurf .at-empty>svg{width:28px;height:28px}
+#aufgaben-entwurf .at-layout.at-has-panel{grid-template-columns:minmax(0,1fr) 418px}
+#aufgaben-entwurf .at-has-panel .at-sidebar{display:none}
+#aufgaben-entwurf .at-panel{border-left:1px solid var(--at-line);background:var(--at-page);min-width:0}
+#aufgaben-entwurf .at-panel-head{padding:18px 21px;display:flex;align-items:center;gap:8px;background:var(--at-paper);border-bottom:1px solid var(--at-line)}
+#aufgaben-entwurf .at-panel-head>div{flex:1;min-width:0}
+#aufgaben-entwurf .at-panel-head h2{font-size:15px;font-weight:600}
+#aufgaben-entwurf .at-panel-head small{color:var(--at-muted);font-size:11px}
+#aufgaben-entwurf .at-panel-body{padding:23px 22px;overflow-wrap:anywhere}
+#aufgaben-entwurf .at-panel-body>h2{margin:12px 0 19px}
+#aufgaben-entwurf .at-panel-body section+section{margin-top:24px}
+#aufgaben-entwurf .at-panel-body h3{margin-bottom:10px}
+#aufgaben-entwurf .at-detail-meta{display:grid;grid-template-columns:1fr 1fr;gap:18px 16px;margin:23px 0}
+#aufgaben-entwurf .at-detail-meta div{min-width:0}
+#aufgaben-entwurf .at-detail-meta dt{display:flex;align-items:center;gap:6px;color:var(--at-muted);font-size:11px;margin-bottom:5px}
+#aufgaben-entwurf .at-detail-meta dd{margin:0;font-size:12px;line-height:1.6}
+#aufgaben-entwurf .at-note{font-size:13px;line-height:1.7;white-space:pre-wrap}
+#aufgaben-entwurf .at-source{display:flex;gap:7px;font-size:12px;background:var(--at-soft);padding:10px;border-radius:7px;margin-top:16px;color:var(--at-accent)}
+#aufgaben-entwurf .at-panel-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:24px;padding-top:18px;border-top:1px solid var(--at-line)}
+#aufgaben-entwurf .at-panel-actions .at-primary{flex:1;max-width:280px}
+#aufgaben-entwurf .at-file{display:flex;align-items:center;gap:8px;background:var(--at-paper);border:1px solid var(--at-line);border-radius:8px;padding:10px;margin-top:7px}
+#aufgaben-entwurf .at-file>div{flex:1;min-width:0;font-size:12px}
+#aufgaben-entwurf .at-file small{display:block;color:var(--at-muted);font-size:11px}
+#aufgaben-entwurf .at-file>svg{color:var(--at-accent)}
+#aufgaben-entwurf .at-file-actions{display:flex;gap:2px;flex-wrap:wrap;justify-content:flex-end}
+#aufgaben-entwurf .at-file-actions button{min-width:28px;min-height:29px;padding:5px;border:0;background:transparent}
+#aufgaben-entwurf .at-field-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px 12px}
+#aufgaben-entwurf .at-wide{grid-column:1/-1}
+#aufgaben-entwurf .at-form section+section{border-top:1px solid var(--at-line);padding-top:20px;margin-top:23px}
+#aufgaben-entwurf .at-hint{font-size:11px;color:var(--at-muted);margin-top:8px;line-height:1.6}
+#aufgaben-entwurf .at-attach-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+#aufgaben-entwurf .at-action-list{display:flex;flex-direction:column;gap:8px}
+#aufgaben-entwurf .at-action-list .at-button{justify-content:flex-start;text-align:left;min-height:45px}
+#aufgaben-entwurf .at-filter-options{display:flex;gap:6px;flex-wrap:wrap}
+#aufgaben-entwurf .at-filter-options .at-button[aria-pressed=true]{background:var(--at-soft);color:var(--at-accent);border-color:var(--at-accent)}
+#aufgaben-entwurf .at-color-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--at-line)}
+#aufgaben-entwurf .at-color-row label{display:flex;align-items:center;gap:8px;font-size:12px;min-width:0}
+#aufgaben-entwurf .at-color-row .at-icon-button{background:transparent;border:0}
+#aufgaben-entwurf .at-inline-confirm{background:var(--at-red-soft);border-radius:8px;padding:15px;margin-top:16px;font-size:13px}
+#aufgaben-entwurf .at-inline-confirm .at-panel-actions{margin-top:10px;padding-top:10px;border:0}
+#aufgaben-entwurf .at-message{background:var(--at-soft);color:var(--at-accent);border-radius:7px;padding:10px 12px;font-size:12px;margin-top:14px}
+#aufgaben-entwurf .at-error{background:var(--at-red-soft);color:var(--at-red);border-radius:7px;padding:10px;font-size:12px;margin-top:12px}
+#aufgaben-entwurf .at-footer{border-top:1px solid var(--at-line);padding:10px 21px;background:var(--at-side);display:flex;gap:12px;justify-content:space-between;font-size:11px;color:var(--at-muted)}
+#aufgaben-entwurf .at-footer>span:first-child{display:flex;align-items:center;gap:7px}
+#aufgaben-entwurf .at-connection-dot{background:var(--at-green);height:6px;width:6px;border-radius:50%;display:inline-block}
+#aufgaben-entwurf .at-toast{background:var(--at-soft);color:var(--at-accent);padding:12px 22px;border-top:1px solid var(--at-line);font-size:12px}
+#aufgaben-entwurf .at-feedback{display:flex;align-items:center;gap:8px;background:var(--at-soft);color:var(--at-accent);padding:10px 14px;border-bottom:1px solid var(--at-line);font-size:12px}
+#aufgaben-entwurf .at-feedback>span{flex:1;min-width:0;overflow-wrap:anywhere}
+#aufgaben-entwurf .at-file-input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+#aufgaben-entwurf .at-upload{position:relative;overflow:hidden}
+#aufgaben-entwurf .at-upload:focus-within{outline:2px solid var(--at-accent);outline-offset:2px}
+#aufgaben-entwurf.at-mobile{max-width:390px;margin-inline:auto}
+@container(max-width:880px){
+ #aufgaben-entwurf .at-layout{grid-template-columns:minmax(0,1fr);min-height:0}
+ #aufgaben-entwurf .at-sidebar{display:none}
+ #aufgaben-entwurf .at-layout.at-has-panel{grid-template-columns:minmax(0,1fr)}
+ #aufgaben-entwurf .at-has-panel .at-main{display:none}
+ #aufgaben-entwurf .at-panel{border-left:0}
+}
+@container(max-width:760px){
+ #aufgaben-entwurf .at-layout{grid-template-columns:minmax(0,1fr);min-height:0}
+ #aufgaben-entwurf .at-sidebar{display:none}
+ #aufgaben-entwurf .at-layout.at-has-panel{grid-template-columns:minmax(0,1fr)}
+ #aufgaben-entwurf .at-has-panel .at-main{display:none}
+ #aufgaben-entwurf .at-panel{border-left:0}
+ #aufgaben-entwurf .at-header{padding:19px 18px 15px}
+ #aufgaben-entwurf .at-header h1{font-size:23px}
+ #aufgaben-entwurf .at-header p{max-width:210px}
+ #aufgaben-entwurf .at-searchbar{padding:0 18px 16px}
+ #aufgaben-entwurf .at-main{padding:16px 18px}
+ #aufgaben-entwurf .at-breadcrumb{display:none}
+ #aufgaben-entwurf .at-chrome{padding:10px 17px;gap:10px}
+ #aufgaben-entwurf .at-tools-button span{display:none}
+ #aufgaben-entwurf .at-header-actions{gap:5px;flex-wrap:nowrap}
+ #aufgaben-entwurf .at-panel-body{padding:20px 18px}
+ #aufgaben-entwurf .at-panel-head{padding:15px 18px}
+ #aufgaben-entwurf .at-footer{padding:11px 17px;flex-wrap:wrap}
+}
+@container(max-width:460px){
+ #aufgaben-entwurf .at-header-actions .at-primary span{display:none}
+ #aufgaben-entwurf .at-header-actions .at-primary{width:44px;height:44px;flex:none}
+ #aufgaben-entwurf .at-header-actions .at-primary::after{content:none}
+ #aufgaben-entwurf .at-demo{font-size:11px}
+ #aufgaben-entwurf .at-header p{font-size:11px;max-width:190px}
+ #aufgaben-entwurf .at-searchbar>.at-button{padding-inline:10px}
+ #aufgaben-entwurf .at-searchbar>.at-button>span:not(.at-count){display:none}
+ #aufgaben-entwurf .at-search input{font-size:16px}
+ #aufgaben-entwurf .at-toolbar{gap:12px}
+ #aufgaben-entwurf .at-status{width:100%;justify-content:space-between}
+ #aufgaben-entwurf .at-status button{flex:1;justify-content:center;min-height:44px;padding-inline:8px}
+ #aufgaben-entwurf .at-sort{margin-left:auto}
+ #aufgaben-entwurf .at-sort select{font-size:13px}
+ #aufgaben-entwurf .at-resultbar{padding-top:10px}
+ #aufgaben-entwurf .at-date{font-size:11px}
+ #aufgaben-entwurf .at-row{grid-template-columns:44px minmax(0,1fr);gap:4px;padding-block:15px}
+ #aufgaben-entwurf .at-checkbox{min-width:44px;min-height:44px;align-items:flex-start;padding-top:3px}
+ #aufgaben-entwurf .at-row-end{grid-column:2;justify-content:flex-end;padding:0}
+ #aufgaben-entwurf .at-row-end:has(>.at-icon-button:only-child){display:none}
+ #aufgaben-entwurf .at-moves{flex-direction:row}
+ #aufgaben-entwurf .at-moves button{min-width:44px;min-height:44px}
+ #aufgaben-entwurf .at-row-title{font-size:14px;gap:6px}
+ #aufgaben-entwurf .at-excerpt{-webkit-line-clamp:2}
+ #aufgaben-entwurf .at-field-grid{grid-template-columns:1fr}
+ #aufgaben-entwurf .at-field select,#aufgaben-entwurf .at-field input,#aufgaben-entwurf .at-field textarea{font-size:16px;min-height:44px}
+ #aufgaben-entwurf .at-button,#aufgaben-entwurf .at-icon-button{min-height:44px}
+ #aufgaben-entwurf .at-icon-button{min-width:44px}
+ #aufgaben-entwurf .at-color-row label{min-height:44px}
+ #aufgaben-entwurf .at-color-row input[type=color]{width:44px;height:44px}
+ #aufgaben-entwurf .at-chip{min-height:36px}
+ #aufgaben-entwurf .at-detail-meta{gap:18px 12px}
+ #aufgaben-entwurf .at-panel-actions .at-button{min-height:44px}
+ #aufgaben-entwurf .at-file{flex-wrap:wrap}
+ #aufgaben-entwurf .at-file-actions{margin-left:auto}
+ #aufgaben-entwurf .at-file-actions .at-icon-button{min-width:44px;min-height:44px}
+ #aufgaben-entwurf .at-file-actions:has(button:nth-child(2)){width:100%;border-top:1px solid var(--at-line);padding-top:4px;margin-top:4px}
+}
+@media(prefers-reduced-motion:reduce){#aufgaben-entwurf *{scroll-behavior:auto}}
+</style>
+<script>
+(()=>{
+ const root=document.getElementById('aufgaben-entwurf'),q=s=>root.querySelector(s),qa=s=>[...root.querySelectorAll(s)];
+ const e=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const icon=(name,cls='')=>`<i data-lucide="${name}" class="${cls}" aria-hidden="true"></i>`;
+ const button=(label,action,ico='',cls='',attrs='')=>`<button type="button" class="at-button ${cls}" data-action="${action}" ${attrs}>${ico?icon(ico):''}${label}</button>`;
+ const ib=(label,action,ico,attrs='')=>`<button type="button" class="at-icon-button" aria-label="${e(label)}" data-action="${action}" ${attrs}>${icon(ico)}</button>`;
+ const today='2026-09-09',endWeek='2026-09-13';
+ const cases=['Kilic, Emre','Rothenberg, Dieter','Auerbach, Margarete','Nowak, Halina','Weidmann, Jonas'];
+ const lists=[{id:'office',name:'Aufgaben Büro',color:'#2c6584',connection:'Vikunja · Büro'},{id:'personal',name:'Persönlich',color:'#538776',connection:'Nextcloud · Büro'},{id:'local',name:'In dieser Software',color:'#6f8394',connection:'In dieser Software'},{id:'followup',name:'Wiedervorlagen',color:'#97713e',connection:'In dieser Software'}];
+ const seed=[
+ {id:1,title:'Widerspruch gegen Betriebskostenabrechnung 2025',type:'followup',case:cases[0],due:'2026-09-07',start:'2026-09-01',priority:'high',list:'followup',note:'Institution/Gegenüber: Wohnbau Musterbrück GmbH\nKategorie: Widerspruch\n\nNachforderung prüfen und Rückmeldung des Mietervereins einholen. Prüfbericht wegen Fehlern bei der Heizkostenverteilung zur Fallakte nehmen.',source:'Dokument · Widerspruch Betriebskostenabrechnung',files:[{name:'Prüfbericht Mieterverein.pdf',size:248,remote:false}],freq:'',interval:1,until:'',done:false},
+ {id:2,title:'Vergütungsantrag für das 3. Quartal vorbereiten',type:'task',case:cases[3],due:'2026-09-07',start:'2026-09-03',priority:'normal',list:'office',note:'Seit dem Erbfall vermögend; Vergütung aus dem Vermögen. Angaben für den Antrag aktualisieren.',files:[],freq:'',interval:1,until:'',done:false},
+ {id:3,title:'Stellungnahme zur Teilfreigabe des Sparguthabens',type:'followup',case:cases[2],due:'2026-09-08',start:'',priority:'high',list:'followup',note:'Institution/Gegenüber: Amtsgericht Musterstadt\nKategorie: Stellungnahme\n\nDas Gericht hat um eine ergänzende Begründung und eine Kopie des Vorsorgevertrages gebeten.',source:'Fallakte · Stellungnahme',files:[],freq:'',interval:1,until:'',done:false},
+ {id:4,title:'Barbetrag-Abrechnung prüfen',type:'task',case:cases[1],due:today,start:'2026-09-08',priority:'normal',list:'office',note:'Quartalsabrechnung der Wohngruppe prüfen. Belege mit den Auszahlungen abgleichen und offene Rückfragen für den nächsten Besuch notieren.',source:'Wünsche und Bedarfe · Selbstbestimmte Ausgaben',files:[{name:'Abrechnung Wohngruppe.pdf',size:186,remote:true},{name:'Belegübersicht September.xlsx',size:42,remote:true}],freq:'',interval:1,until:'',done:false},
+ {id:5,title:'Kontoauszüge an das Jobcenter senden',type:'task',case:cases[0],due:today,start:'2026-09-08',priority:'high',list:'office',note:'Mitwirkung zur Weiterbewilligung. Vollständigkeit der Kontoauszüge prüfen und die Unterlagen anschließend einreichen.',files:[],freq:'',interval:1,until:'',done:false},
+ {id:6,title:'Monatlicher Rückruf bei der Wohngruppe',type:'task',case:cases[4],due:today,start:'',priority:'normal',list:'personal',note:'Entwicklung in der Werkstatt und anstehende Termine besprechen. Wünsche von Herrn Weidmann aufnehmen.',files:[],freq:'monthly',interval:1,until:'2026-12-31',done:false},
+ {id:7,title:'Nebenkostenabrechnung nachrechnen',type:'task',case:cases[3],due:'2026-09-11',start:'2026-09-10',priority:'normal',list:'office',note:'Die Nachzahlung erscheint zu hoch. Abschläge und Verteilerschlüssel mit dem Vorjahr vergleichen.',files:[],freq:'',interval:1,until:'',done:false},
+ {id:8,title:'Kontakt der Wohnberatung aktualisieren',type:'task',case:cases[2],due:'',start:'',priority:'low',list:'local',note:'Neue Ansprechpartnerin und Telefonnummer in den Unterlagen ergänzen.',files:[],freq:'',interval:1,until:'',done:false},
+ {id:9,title:'Brillenrechnung zur Erstattung eingereicht',type:'task',case:cases[4],due:'2026-09-08',start:'2026-09-04',priority:'normal',list:'office',note:'Rechnung und Zahlungsnachweis eingereicht.',files:[],freq:'',interval:1,until:'',done:true}
+ ];
+ let items=structuredClone(seed),s={status:'open',due:'all',priority:'all',case:'all',type:'all',list:'all',search:'',sort:'due',hidden:[],colors:{personal:'#538776',local:'#6f8394',followup:'#97713e'},defaultColor:'#2c6584',panel:null,id:null,draft:null,dirty:false,confirm:null};
+ const design={density:'comfortable',grouped:true,mobile:false};
+ const names={open:'Offen',done:'Erledigt',all:'Alle',high:'Hoch',normal:'Normal',low:'Niedrig',task:'Aufgabe',followup:'Wiedervorlage'};
+ const frequencies={daily:'Täglich',weekly:'Wöchentlich',monthly:'Monatlich',yearly:'Jährlich'};
+ const dueNames={all:'Alle Fälligkeiten',overdue:'Überfällig',today:'Heute',week:'Diese Woche',none:'Ohne Termin'};
+ const entryCount=n=>n+' '+(n===1?'Eintrag':'Einträge');
+ const listName=id=>lists.find(l=>l.id===id)?.name||'In dieser Software';
+ const color=id=>s.colors[id]||s.defaultColor;
+ const fmt=d=>d?new Date(d+'T12:00:00').toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'}):'Ohne Termin';
+ const dueLabel=t=>!t.due?'Ohne Termin':t.due===today?'Heute':t.due==='2026-09-10'?'Morgen':fmt(t.due);
+ const overdue=t=>!t.done&&t.due&&t.due<today;
+ function filtered(overrides={}){const f={...s,...overrides};return items.filter(t=>{
+  if(f.hidden.includes(t.list)||f.case!=='all'&&t.case!==f.case||f.status==='open'&&t.done||f.status==='done'&&!t.done)return false;
+  if(f.priority!=='all'&&t.priority!==f.priority||f.type!=='all'&&t.type!==f.type||f.list!=='all'&&t.list!==f.list)return false;
+  if(f.due==='overdue'&&!overdue(t)||f.due==='today'&&t.due!==today||f.due==='week'&&(!t.due||t.due<today||t.due>endWeek)||f.due==='none'&&t.due)return false;
+  return !f.search||[t.title,t.note,t.case,listName(t.list)].join(' ').toLocaleLowerCase('de').includes(f.search.toLocaleLowerCase('de'));
+ })}
+ function sorted(){const a=filtered(),rank={high:0,normal:1,low:2};if(s.sort!=='manual')a.sort((a,b)=>Number(a.done)-Number(b.done)||(s.sort==='title'?a.title.localeCompare(b.title,'de'):s.sort==='priority'?rank[a.priority]-rank[b.priority]||String(a.due||'9999').localeCompare(b.due||'9999'):String(a.due||'9999').localeCompare(b.due||'9999')));return a}
+ function option(value,label,selected){return `<option value="${e(value)}" ${value===selected?'selected':''}>${e(label)}</option>`}
+ function select(label,key,options,value,scope='filter',extra=''){return `<label class="at-field">${label}<span class="at-select-wrap"><select data-${scope}="${key}" ${extra}>${options.map(([v,l])=>option(v,l,value)).join('')}</select>${icon('chevron-down')}</span></label>`}
+ function input(label,key,type,value,extra=''){return `<label class="at-field">${label}<input type="${type}" data-field="${key}" value="${e(value)}" ${extra}></label>`}
+ function renderFeedback(){
+  qa('.at-feedback').forEach(el=>el.remove());if(!s.message)return;
+  const box=document.createElement('div');box.className='at-feedback';box.setAttribute('role','status');box.innerHTML=`<span>${e(s.message)}</span>${ib('Meldung schließen','dismiss-message','x')}`;
+  const anchor=s.panel?(q('.at-panel-body .at-panel-actions')||q('.at-panel-head')):q('.at-resultbar');anchor?.after(box);icons();
+ }
+ function announce(message){s.message=message;renderFeedback()}
+ function icons(){if(globalThis.lucide)globalThis.lucide.createIcons({attrs:{width:17,height:17}})}
+ function growNote(){const note=q('[data-field="note"]');if(note){note.style.height='auto';note.style.height=Math.max(96,note.scrollHeight+2)+'px'}}
+ function renderSidebar(){q('.at-sidebar').innerHTML=`<section>${select('Fall auswählen','case',[['all','Alle Fälle'],...cases.map(c=>[c,c])],s.case)}<nav class="at-side-nav" aria-label="Fälligkeit">${Object.entries(dueNames).map(([key,label])=>`<button data-action="due" data-value="${key}" aria-pressed="${s.due===key}">${icon({all:'inbox',overdue:'circle-alert',today:'calendar-check',week:'calendar-days',none:'calendar-minus'}[key])}<span>${label}</span><span class="at-count">${filtered({due:key,status:s.status}).length}</span></button>`).join('')}</nav></section><section><h3>Eintragsarten</h3><nav class="at-side-nav" style="margin-top:0">${[['all','Alle Einträge','layers'],['task','Aufgaben','square-check'],['followup','Wiedervorlagen','history']].map(([key,label,ico])=>`<button data-action="type" data-value="${key}" aria-pressed="${s.type===key}">${icon(ico)}${label}</button>`).join('')}</nav></section><section><h3>Meine Listen</h3>${lists.map(l=>`<label class="at-side-check"><input type="checkbox" data-visibility="${l.id}" ${!s.hidden.includes(l.id)?'checked':''}><span class="at-dot" style="background:${color(l.id)}"></span>${l.name}</label>`).join('')}${button('Listen & Farben','lists','palette')}</section>`}
+ function renderList(){
+  q('.at-status').innerHTML=['open','done','all'].map(v=>`<button data-action="status" data-value="${v}" aria-pressed="${s.status===v}">${names[v]} <span class="at-count">${filtered({status:v}).length}</span></button>`).join('');
+  q('#at-sort').value=s.sort;let chips=[];
+  for(const [key,label] of [['case',s.case],['due',dueNames[s.due]],['priority',names[s.priority]],['type',names[s.type]],['list',listName(s.list)]])if(s[key]!=='all')chips.push(`<button class="at-chip" data-action="clear-filter" data-key="${key}">${e(label)} ${icon('x')}</button>`);
+  if(s.hidden.length)chips.push(`<button class="at-chip" data-action="lists">${s.hidden.length} ${s.hidden.length===1?'Liste ausgeblendet':'Listen ausgeblendet'} ${icon('settings-2')}</button>`);
+  q('.at-active-filters').innerHTML=chips.join('');q('#at-filter-count').hidden=!chips.length;q('#at-filter-count').textContent=chips.length;
+  const visible=sorted();q('#at-result-count').textContent=`${visible.length} ${visible.length===1?'Eintrag':'Einträge'}`;let last='',html='';
+  visible.forEach((t,i)=>{
+   const group=t.done?'Erledigt':overdue(t)?'Überfällig':t.due===today?'Heute':t.due?'Anstehend':'Ohne Termin';
+   if(design.grouped&&s.sort==='due'&&group!==last){html+=`<div class="at-group ${group==='Überfällig'?'at-overdue':''}">${group}<span class="at-count">${visible.filter(x=>(x.done?'Erledigt':overdue(x)?'Überfällig':x.due===today?'Heute':x.due?'Anstehend':'Ohne Termin')===group).length}</span></div>`;last=group}
+   html+=`<article class="at-row ${t.done?'at-done':''} ${s.id===t.id?'at-selected':''}" data-id="${t.id}" ${s.sort==='manual'?'draggable="true"':''}><label class="at-checkbox"><input type="checkbox" data-complete="${t.id}" ${t.done?'checked':''} aria-label="${e(t.title)} ${t.done?'wieder öffnen':'erledigen'}"></label><button class="at-open-row" data-action="detail" data-id="${t.id}" aria-label="Details: ${e(t.title)}"><span class="at-row-title"><span class="at-type-icon ${t.type==='followup'?'at-followup':''}">${icon(t.type==='followup'?'history':'square-check')}</span><span class="at-title-text">${e(t.title)}</span></span><span class="at-context"><span class="at-case">${e(t.case||'Ohne Fall')}</span><span>·</span><span><span class="at-dot" style="background:${color(t.list)}"></span>${e(listName(t.list))}</span></span>${t.note?`<span class="at-excerpt">${e(t.note.replace(/\n/g,' '))}</span>`:''}<span class="at-meta"><span class="at-due ${overdue(t)?'at-overdue':t.due===today?'at-today':''}">${icon(overdue(t)?'circle-alert':'calendar-days')}${dueLabel(t)}</span><span class="at-priority-${t.priority}">${icon('flag')}${names[t.priority]}</span>${t.freq?`<span>${icon('repeat')}Serie</span>`:''}${t.files.length?`<span>${icon('paperclip')}${t.files.length}</span>`:''}${t.type==='followup'?'<span>Wiedervorlage</span>':''}</span></button><div class="at-row-end">${s.sort==='manual'?`<div class="at-moves">${ib('Nach oben','move-up','chevron-up',`data-id="${t.id}" ${i===0?'disabled':''}`)}${ib('Nach unten','move-down','chevron-down',`data-id="${t.id}" ${i===visible.length-1?'disabled':''}`)}</div>`:''}${ib('Aktionen: '+t.title,'detail','chevron-right',`data-id="${t.id}"`)}</div></article>`;
+  });q('.at-rows').innerHTML=html||`<div class="at-empty">${icon('list-filter')}<p>Keine passenden Einträge.</p>${button('Filter zurücksetzen','reset','rotate-ccw')}</div>`;
+ }
+ function panelHead(title,subtitle='',extra=''){return `<div class="at-panel-head">${panelTrail.length?ib('Zurück','close','arrow-left'):''}<div><h2>${title}</h2>${subtitle?`<small>${subtitle}</small>`:''}</div>${extra}${panelTrail.length?'':ib('Bereich schließen','close','x')}</div>`}
+ function recurrence(t){return t.freq?`${Number(t.interval)===1?frequencies[t.freq]:'Alle '+t.interval+' '+({daily:'Tage',weekly:'Wochen',monthly:'Monate',yearly:'Jahre'})[t.freq]}${t.until?' · bis '+fmt(t.until):''}`:'Keine Wiederholung'}
+ function filesHTML(t,edit=false){return t.files.length?t.files.map((f,i)=>`<div class="at-file">${icon('file-text')}<div>${e(f.name)}<small>${f.size} KB${f.pending?' · Ausstehend':''}</small></div><span class="at-file-actions">${!f.pending?ib('Herunterladen: '+f.name,'download-file','download',`data-index="${i}"`):''}${edit?`${f.remote?ib('An verknüpfte Aufgabe übertragen','send-file','external-link',`data-index="${i}"`):''}${ib('Anlage entfernen: '+f.name,'remove-file','x',`data-index="${i}"`)}`:''}</span></div>`).join(''):'<p class="at-hint">Keine Anlagen hinterlegt.</p>'}
+ function detailPanel(t){const index=sorted().findIndex(x=>x.id===t.id);return panelHead(names[t.type],`${listName(t.list)}${index>=0?' · '+(index+1)+' von '+sorted().length:''}`,`${ib('Vorheriger Eintrag','prev','chevron-left',index<=0?'disabled':'')}${ib('Nächster Eintrag','next','chevron-right',index<0||index>=sorted().length-1?'disabled':'')}`)+`<div class="at-panel-body"><span class="at-chip">${icon(t.done?'circle-check':t.type==='followup'?'history':'square-check')}${t.done?'Erledigt':names[t.type]+' · Offen'}</span><h2>${e(t.title)}</h2><dl class="at-detail-meta">${[['user-round','Fall',t.case||'Ohne Fall'],['flag','Priorität',names[t.priority]],['calendar-days','Fällig am',fmt(t.due)],['calendar-clock','Bearbeitungsstart',t.start?fmt(t.start):'Nicht festgelegt'],['list-todo','Aufgabenliste',listName(t.list)],['repeat','Wiederholung',recurrence(t)]].map(([ico,k,v])=>`<div><dt>${icon(ico)}${k}</dt><dd>${e(v)}</dd></div>`).join('')}</dl><section><h3>Notiz</h3><p class="at-note">${e(t.note||'Keine Notiz hinterlegt.')}</p>${t.source?`<div class="at-source">${icon('link')}<span>Quelle: ${e(t.source)}</span></div>`:''}</section><section><h3>Anlagen · ${t.files.length}</h3>${filesHTML(t)}</section>${t.freq&&!t.done?'<div class="at-message">Beim Erledigen rückt diese Serienaufgabe auf die nächste Fälligkeit vor.</div>':''}<div class="at-panel-actions">${button(t.done?'Wieder öffnen':'Erledigen','complete',t.done?'rotate-ccw':'check','at-primary')}${button('Bearbeiten','edit','pencil')}</div><div class="at-panel-actions" style="margin-top:9px;padding-top:9px;border:0">${button('Als ICS exportieren','export-single','download','at-quiet')}${button('Löschen','delete','trash-2','at-quiet at-danger')}</div>${s.confirm==='delete'?`<div class="at-inline-confirm">Diesen Eintrag wirklich löschen?<div class="at-panel-actions">${button('Abbrechen','cancel-delete')}${button('Eintrag löschen','confirm-delete','trash-2','at-danger')}</div></div>`:''}</div>`}
+ function editPanel(){const t=s.draft,locked=!!t.id&&t.list!=='local'&&t.list!=='followup';return panelHead(t.id?names[t.type]+' bearbeiten':'Neue Aufgabe','Noch nicht gespeichert')+`<form class="at-panel-body at-form" id="at-editor"><section><h3>${names[t.type]}</h3><div class="at-field-grid"><div class="at-wide">${input('Titel','title','text',t.title,'required aria-label="Titel"')}</div>${select('Fall','case',[['','Ohne Fall'],...cases.map(c=>[c,c])],t.case,'field')}${select('Priorität','priority',[['normal','Normal'],['high','Hoch'],['low','Niedrig']],t.priority,'field')}</div></section><section><h3>Termin & Wiederholung</h3><div class="at-field-grid">${input('Bearbeitungsstart','start','date',t.start)}${input('Fällig am','due','date',t.due)}<div class="at-wide">${select('Wiederholung','freq',[['','Keine'],...Object.entries(frequencies)],t.freq,'field')}</div><div class="at-recur-fields at-wide" ${!t.freq?'hidden':''}><div class="at-field-grid">${input('Intervall','interval','number',t.interval,'min="1"')}${input('Enddatum (optional)','until','date',t.until)}</div><p class="at-hint" id="at-recur-hint">${e(recurrence(t))}</p></div></div></section><section><h3>Zuordnung</h3><div class="at-field-grid"><div class="at-wide">${select('Speicherort','connection',[['local','In dieser Software'],['vikunja','Vikunja · Büro'],['nextcloud','Nextcloud · Büro']],t.connection,'field',locked?'disabled':'')}</div><div class="at-wide">${select('Aufgabenliste','list',listOptions(t.connection,t.type),t.list,'field',locked?'disabled':'')}</div></div>${locked?'<p class="at-hint">Die bestehende externe Liste bleibt erhalten. Für eine andere Liste eine neue Aufgabe anlegen.</p>':''}${t.source?`<div class="at-source">${icon('link')}<span>${e(t.source)}</span></div>`:''}</section><section><h3>Notiz</h3><label class="at-field"><textarea data-field="note" aria-label="Notiz" rows="4">${e(t.note)}</textarea></label></section><section><h3>Anlagen</h3><div id="at-form-files">${filesHTML(t,true)}</div><div class="at-attach-actions"><label class="at-button at-upload">${icon('paperclip')}Datei hinzufügen<input type="file" class="at-file-input" aria-label="Datei hinzufügen" id="at-file-input" multiple></label>${button('Aus Datei-Explorer','explorer','folder-open')}</div><div id="at-explorer" hidden><p class="at-hint">Datei aus der Fallakte übernehmen</p><div class="at-action-list" style="margin-top:8px">${button('Besuchsnotiz September.pdf','pick-file','file-text')}${button('Abbrechen','close-explorer')}</div></div></section><div id="at-form-error" role="alert" class="at-error" hidden></div><div id="at-confirm-host"></div><div class="at-panel-actions"><button type="button" data-action="save" class="at-button at-primary">${icon('check')}${t.id?'Änderungen speichern':'Aufgabe speichern'}</button>${button('Abbrechen','close')}</div></form>`}
+ function listOptions(conn,type){return type==='followup'?[['followup','Wiedervorlagen']]:conn==='vikunja'?[['office','Aufgaben Büro']]:conn==='nextcloud'?[['personal','Persönlich']]:[['local','In dieser Software']]}
+ function connection(t){return t.list==='office'?'vikunja':t.list==='personal'?'nextcloud':'local'}
+ function filterPanel(){const f=s.filterDraft;return panelHead('Filter','Aufgaben gezielt eingrenzen')+`<div class="at-panel-body"><section><h3>Fälligkeit</h3><div class="at-filter-options">${Object.entries(dueNames).map(([v,l])=>button(l,'draft-due','', '',`data-value="${v}" aria-pressed="${f.due===v}"`)).join('')}</div></section><section><h3>Eingrenzen</h3><div class="at-field-grid"><div class="at-wide">${select('Fall','case',[['all','Alle Fälle'],...cases.map(c=>[c,c])],f.case,'draft')}</div>${select('Priorität','priority',[['all','Alle Prioritäten'],['high','Hoch'],['normal','Normal'],['low','Niedrig']],f.priority,'draft')}${select('Eintragsart','type',[['all','Alle Einträge'],['task','Aufgaben'],['followup','Wiedervorlagen']],f.type,'draft')}<div class="at-wide">${select('Aufgabenliste','list',[['all','Alle eingeblendeten Listen'],...lists.map(l=>[l.id,l.name])],f.list,'draft')}</div></div></section>${f.search?`<p class="at-hint">Suche: ${e(f.search)}</p>`:''}<div class="at-panel-actions">${button('Anwenden · '+entryCount(filtered(f).length),'apply-filter','check','at-primary')}${button('Zurücksetzen','reset-draft','rotate-ccw')}</div>${button('Listen & Farben','lists','palette','at-quiet')}</div>`}
+ function listsPanel(){const d=s.listDraft;return panelHead('Listen & Farben','Sichtbarkeit und persönliche Farben')+`<div class="at-panel-body"><div class="at-filter-options">${button('Alle anzeigen','all-lists','check-check')}${button('Keine anzeigen','no-lists')}</div><div class="at-color-row" style="margin-top:14px"><label for="at-default-color">Standardfarbe</label><input type="color" id="at-default-color" value="${d.defaultColor}" aria-label="Standardfarbe">${ib('Standardfarbe zurücksetzen','reset-default','rotate-ccw')}</div>${lists.map(l=>`<div class="at-color-row"><label><input type="checkbox" data-list-visible="${l.id}" ${d.hidden.includes(l.id)?'':'checked'}>${l.name}</label><input type="color" aria-label="Farbe: ${l.name}" data-color="${l.id}" value="${d.colors[l.id]||d.defaultColor}">${ib('Farbe zurücksetzen: '+l.name,'reset-color','rotate-ccw',`data-list="${l.id}"`)}</div>`).join('')}<p class="at-hint">Die Farben kennzeichnen die Listen auch in der Aufgabenübersicht. Ausgeblendete Einträge bleiben gespeichert.</p><div class="at-panel-actions">${button('Übernehmen','apply-lists','check','at-primary')}${button('Abbrechen','close')}</div></div>`}
+ function toolsPanel(){return panelHead('Werkzeuge','Aufgaben verwalten')+`<div class="at-panel-body"><section><h3>Austausch</h3><div class="at-action-list"><label class="at-button at-upload">${icon('upload')}ICS importieren<input type="file" class="at-file-input" aria-label="ICS importieren" accept=".ics" id="at-import"></label>${button('Aufgaben als ICS exportieren','export-all','download')}</div><p class="at-hint">Exportiert alle Aufgaben des gewählten Falls, einschließlich erledigter und ausgeblendeter Aufgaben. Wiedervorlagen lassen sich einzeln exportieren.</p><p class="at-hint">Fallfilter: ${e(s.case==='all'?'Alle Fälle':s.case)}</p></section><section><h3>Verbundene Listen</h3><div class="at-action-list">${button('Aufgaben synchronisieren','sync','refresh-cw')}${button('Listen & Farben','lists','palette')}</div><p class="at-hint">Vikunja · Büro / Nextcloud · Büro</p></section></div>`}
+ function renderPanel(){const panel=q('.at-panel');panel.hidden=!s.panel;q('.at-layout').classList.toggle('at-has-panel',!!s.panel);if(!s.panel){panel.innerHTML='';return}const t=items.find(x=>x.id===s.id);panel.innerHTML=s.panel==='detail'&&t?detailPanel(t):s.panel==='edit'?editPanel():s.panel==='filter'?filterPanel():s.panel==='lists'?listsPanel():toolsPanel();icons();growNote();renderFeedback()}
+ function render(){root.style.setProperty('--at-row-space',design.density==='compact'?'10px':'17px');root.classList.toggle('at-mobile',design.mobile);renderSidebar();renderList();renderPanel();q('[data-action="clear-search"]').hidden=!s.search;icons();renderFeedback()}
+ let panelTrail=[],returnFocus=null,pending=null;
+ function revealPanel(){const head=q('.at-panel-head');if(!head)return;const r=head.getBoundingClientRect();if(r.top<8||r.top>innerHeight-70)head.scrollIntoView({block:'start'})}
+ function closePanel(){s.panel=null;s.id=null;s.draft=null;s.dirty=false;s.confirm=null;panelTrail=[];pending=null;render();const target=returnFocus?.id?root.querySelector(`[data-action="detail"][data-id="${returnFocus.id}"]`):returnFocus?.element;returnFocus=null;(target?.isConnected?target:q('#at-search')).focus({preventScroll:false})}
+ function backPanel(){const back=panelTrail.pop();if(!back){closePanel();return}s.draft=null;s.dirty=false;s.confirm=null;s.panel=back.panel;s.id=back.id;if(back.filterDraft)s.filterDraft=back.filterDraft;render();q('.at-panel-head [data-action="close"]')?.focus({preventScroll:true});revealPanel()}
+ function leave(next){if(s.panel==='edit'&&s.dirty){pending=next;q('#at-confirm-host').innerHTML=`<div class="at-inline-confirm" role="alert">Ungespeicherte Änderungen verwerfen?<div class="at-panel-actions">${button('Weiter bearbeiten','keep-editing','pencil')}${button('Verwerfen','discard','trash-2','at-danger')}</div></div>`;icons();q('[data-action="keep-editing"]').focus();return}next()}
+ function open(kind,id=null){leave(()=>{
+  if(!s.panel){const element=document.activeElement;returnFocus={element,id:element?.dataset.action==='detail'?Number(element.dataset.id):null}}
+  if(kind==='edit'&&s.panel==='detail'||kind==='lists'&&['filter','tools'].includes(s.panel))panelTrail.push({panel:s.panel,id:s.id,filterDraft:s.panel==='filter'?{...s.filterDraft}:null});else panelTrail=[];
+  s.message='';s.panel=kind;s.id=id;s.confirm=null;s.dirty=false;
+  if(kind==='edit'){const t=id?items.find(x=>x.id===id):{title:'',type:'task',case:s.case==='all'?'':s.case,start:'',due:'',priority:'normal',list:'office',note:'',files:[],freq:'',interval:1,until:'',done:false};s.draft={...structuredClone(t),connection:connection(t)}}
+  if(kind==='filter')s.filterDraft={due:s.due,case:s.case,priority:s.priority,type:s.type,list:s.list,search:s.search};
+  if(kind==='lists')s.listDraft={hidden:[...s.hidden],colors:{...s.colors},defaultColor:s.defaultColor};
+  render();if(kind==='edit')q('[data-field="title"]').focus({preventScroll:true});else q('.at-panel-head [data-action="close"]')?.focus({preventScroll:true});revealPanel();
+ })}
+ function nextDue(t){if(!t.freq||!t.due)return '';const d=new Date(t.due+'T12:00:00'),n=Number(t.interval)||1;if(t.freq==='daily')d.setDate(d.getDate()+n);if(t.freq==='weekly')d.setDate(d.getDate()+7*n);if(t.freq==='monthly'){const day=d.getDate();d.setDate(1);d.setMonth(d.getMonth()+n);d.setDate(Math.min(day,new Date(d.getFullYear(),d.getMonth()+1,0).getDate()))}if(t.freq==='yearly'){const month=d.getMonth();d.setFullYear(d.getFullYear()+n);if(d.getMonth()!==month)d.setDate(0)}const out=[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');return t.until&&out>t.until?'':out}
+ function complete(id){const t=items.find(x=>x.id===id);if(!t)return;const due=!t.done?nextDue(t):'';if(due){t.due=due;announce('Serienaufgabe erledigt. Nächste Fälligkeit: '+fmt(due))}else{t.done=!t.done;announce(t.done?'Eintrag erledigt.':'Eintrag wieder geöffnet.')}render()}
+ function reset(){Object.assign(s,{case:'all',due:'all',type:'all',priority:'all',list:'all',search:'',hidden:[]});q('#at-search').value='';render()}
+ function move(id,delta){const visible=sorted(),idx=visible.findIndex(x=>x.id===id),target=visible[idx+delta];if(!target)return;const a=items.findIndex(x=>x.id===id),b=items.findIndex(x=>x.id===target.id);[items[a],items[b]]=[items[b],items[a]];render();announce('Manuelle Reihenfolge geändert.')}
+ function download(name,content){const url=URL.createObjectURL(new Blob([content],{type:'text/calendar;charset=utf-8'})),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+ const icsEscape=v=>String(v||'').replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/,/g,'\\,').replace(/;/g,'\\;');
+ function exportItems(tasks){const content=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Betreuungsbuero//Aufgaben Entwurf//DE',...tasks.flatMap(t=>['BEGIN:VTODO','UID:mock-'+t.id,'SUMMARY:'+icsEscape(t.title),'DESCRIPTION:'+icsEscape(t.note),'STATUS:'+(t.done?'COMPLETED':'NEEDS-ACTION'),'PRIORITY:'+({high:1,normal:5,low:9})[t.priority],...(t.start?['DTSTART;VALUE=DATE:'+t.start.replace(/-/g,'')]:[]),...(t.due?['DUE;VALUE=DATE:'+t.due.replace(/-/g,'')]:[]),...(t.freq?['RRULE:FREQ='+t.freq.toUpperCase()+';INTERVAL='+t.interval+(t.until?';UNTIL='+t.until.replace(/-/g,''):'')]:[]),'END:VTODO']),'END:VCALENDAR'].join('\r\n');download('Aufgaben-Entwurf.ics',content);announce('ICS-Export mit '+tasks.length+' Einträgen aus den Beispieldaten vorbereitet.')}
+ function refreshFiles(){q('#at-form-files').innerHTML=filesHTML(s.draft,true);icons()}
+ function addFile(name,size){s.draft.files.push({name,size,pending:true,remote:false});s.dirty=true;refreshFiles()}
+ root.addEventListener('input',ev=>{
+  const el=ev.target;if(el.id==='at-search'){s.search=el.value;renderSidebar();renderList();q('[data-action="clear-search"]').hidden=!s.search;icons();return}
+  if(el.dataset.field){const key=el.dataset.field;s.draft[key]=key==='interval'?Math.max(1,Number(el.value)||1):el.value;s.dirty=true;if(key==='note')growNote()}
+ });
+ root.addEventListener('change',async ev=>{
+  const el=ev.target;
+  if(el.dataset.complete){const id=Number(el.dataset.complete);el.checked=!!items.find(t=>t.id===id)?.done;leave(()=>{s.panel=null;s.id=null;s.draft=null;s.dirty=false;panelTrail=[];complete(id)});return}
+  if(el.id==='at-sort'){s.sort=el.value;render();return}
+  if(el.dataset.filter){s[el.dataset.filter]=el.value;render();return}
+  if(el.dataset.visibility){s.hidden=el.checked?s.hidden.filter(x=>x!==el.dataset.visibility):[...s.hidden,el.dataset.visibility];render();return}
+  if(el.dataset.draft){s.filterDraft[el.dataset.draft]=el.value;renderPanel();return}
+  if(el.dataset.field){s.draft[el.dataset.field]=el.dataset.field==='interval'?Math.max(1,Number(el.value)||1):el.value;s.dirty=true;if(['freq','interval','until'].includes(el.dataset.field)){q('.at-recur-fields').hidden=!s.draft.freq;q('#at-recur-hint').textContent=recurrence(s.draft)}if(el.dataset.field==='connection'){const opts=listOptions(el.value,s.draft.type);s.draft.list=opts[0][0];q('[data-field="list"]').innerHTML=opts.map(([v,l])=>option(v,l,s.draft.list)).join('')}return}
+  if(el.dataset.listVisible){const id=el.dataset.listVisible;s.listDraft.hidden=el.checked?s.listDraft.hidden.filter(x=>x!==id):[...s.listDraft.hidden,id];return}
+  if(el.dataset.color){s.listDraft.colors[el.dataset.color]=el.value;return}
+  if(el.id==='at-default-color'){s.listDraft.defaultColor=el.value;renderPanel();return}
+  if(el.id==='at-file-input'){for(const file of el.files)addFile(file.name,Math.max(1,Math.ceil(file.size/1024)));el.value='';return}
+  if(el.id==='at-import'&&el.files[0]){try{const text=await el.files[0].text();const components=text.replace(/\r?\n[ \t]/g,'').match(/BEGIN:VTODO[\s\S]*?END:VTODO/g)||[];let count=0;for(const component of components){const prop=k=>component.match(new RegExp('^'+k+'(?:;[^:]*)?:(.*)$','m'))?.[1]?.trim()||'';const title=prop('SUMMARY').replace(/\\n/g,'\n').replace(/\\([,;\\])/g,'$1');if(!title)continue;const date=k=>{const x=prop(k).slice(0,8);return /^\d{8}$/.test(x)?x.slice(0,4)+'-'+x.slice(4,6)+'-'+x.slice(6):''};const rule=Object.fromEntries(prop('RRULE').split(';').filter(Boolean).map(x=>x.split('=')));items.push({id:Math.max(...items.map(t=>t.id),0)+1,title,type:'task',case:s.case==='all'?'':s.case,note:prop('DESCRIPTION').replace(/\\n/g,'\n'),due:date('DUE'),start:date('DTSTART'),priority:Number(prop('PRIORITY'))<5&&Number(prop('PRIORITY'))>0?'high':Number(prop('PRIORITY'))>5?'low':'normal',list:'local',files:[],freq:rule.FREQ?.toLowerCase()||'',interval:Number(rule.INTERVAL)||1,until:rule.UNTIL?rule.UNTIL.slice(0,4)+'-'+rule.UNTIL.slice(4,6)+'-'+rule.UNTIL.slice(6,8):'',done:prop('STATUS')==='COMPLETED'});count++}closePanel();announce(count?count+' Aufgaben in die Vorschau importiert.':'Keine Aufgaben in dieser ICS-Datei gefunden.')}catch{announce('Die ICS-Datei konnte nicht gelesen werden.')}}
+ });
+ function save(){if(!q('#at-editor').reportValidity())return;const t=s.draft,error=q('#at-form-error');if(!t.title.trim()||t.start&&t.due&&t.due<t.start||t.freq&&t.until&&t.due&&t.until<t.due){error.hidden=false;error.textContent=!t.title.trim()?'Bitte einen Titel angeben.':t.start&&t.due<t.start?'Die Fälligkeit darf nicht vor dem Bearbeitungsstart liegen.':'Das Serienende darf nicht vor der ersten Fälligkeit liegen.';return}t.title=t.title.trim();t.files.forEach(f=>f.pending=false);if(t.id)items[items.findIndex(x=>x.id===t.id)]=structuredClone(t);else{t.id=Math.max(...items.map(x=>x.id),0)+1;items.push(structuredClone(t))}s.id=t.id;s.panel='detail';s.dirty=false;panelTrail=[];render();revealPanel();announce('Aufgabe in der Vorschau gespeichert.')}
+ root.addEventListener('submit',ev=>{if(ev.target.id==='at-editor'){ev.preventDefault();save()}});
+ root.addEventListener('click',ev=>{
+  const el=ev.target.closest('[data-action]');if(!el||!root.contains(el))return;const a=el.dataset.action,id=Number(el.dataset.id||s.id),v=el.dataset.value;
+  if(['new','detail','tools','filter','lists'].includes(a)){open(a==='new'?'edit':a,a==='new'?null:a==='detail'?id:null);return}
+  if(a==='dismiss-message'){s.message='';renderFeedback();return}if(a==='save'){save();return}if(a==='close'){leave(backPanel);return}if(a==='edit'){open('edit',s.id);return}
+  if(a==='keep-editing'){pending=null;q('#at-confirm-host').innerHTML='';q('[data-field=title]').focus({preventScroll:true});return}if(a==='discard'){const next=pending;pending=null;s.dirty=false;s.draft=null;s.panel=null;s.id=null;next?.();return}
+  if(a==='status'){leave(()=>{s.status=v;s.panel=null;s.id=null;s.draft=null;s.dirty=false;panelTrail=[];render()});return}if(a==='due'||a==='type'){s[a]=v;render();return}
+  if(a==='clear-filter'){s[el.dataset.key]='all';render();return}if(a==='reset'){reset();return}
+  if(a==='clear-search'){s.search='';q('#at-search').value='';render();q('#at-search').focus();return}
+  if(a==='complete'){complete(s.id);return}
+  if(a==='prev'||a==='next'){const arr=sorted(),i=arr.findIndex(x=>x.id===s.id);if(arr[i+(a==='next'?1:-1)]){s.id=arr[i+(a==='next'?1:-1)].id;render()}return}
+  if(a==='delete'||a==='cancel-delete'){s.confirm=a==='delete'?'delete':null;renderPanel();return}
+  if(a==='confirm-delete'){items=items.filter(t=>t.id!==s.id);closePanel();announce('Eintrag in der Vorschau gelöscht.');return}
+  if(a==='draft-due'){s.filterDraft.due=v;renderPanel();return}if(a==='reset-draft'){s.filterDraft={due:'all',case:'all',priority:'all',type:'all',list:'all',search:''};renderPanel();return}
+  if(a==='apply-filter'){Object.assign(s,s.filterDraft);q('#at-search').value=s.search;closePanel();return}
+  if(a==='all-lists'||a==='no-lists'){s.listDraft.hidden=a==='all-lists'?[]:lists.map(l=>l.id);renderPanel();return}
+  if(a==='reset-color'){delete s.listDraft.colors[el.dataset.list];renderPanel();return}
+  if(a==='reset-default'){s.listDraft.defaultColor='#2c6584';renderPanel();return}
+  if(a==='apply-lists'){Object.assign(s,s.listDraft);backPanel();announce('Listenauswahl und Farben übernommen.');return}
+  if(a==='move-up'||a==='move-down'){move(id,a==='move-up'?-1:1);return}
+  if(a==='explorer'){q('#at-explorer').hidden=false;return}if(a==='close-explorer'){q('#at-explorer').hidden=true;return}if(a==='pick-file'){addFile('Besuchsnotiz September.pdf',94);q('#at-explorer').hidden=true;return}
+  if(a==='remove-file'){const i=Number(el.dataset.index),host=q('#at-confirm-host');host.innerHTML=`<div class="at-inline-confirm">Anlage „${e(s.draft.files[i].name)}“ entfernen?<div class="at-panel-actions">${button('Abbrechen','cancel-file')}${button('Entfernen','confirm-file','trash-2','at-danger',`data-index="${i}"`)}</div></div>`;icons();return}
+  if(a==='cancel-file'){q('#at-confirm-host').innerHTML='';return}if(a==='confirm-file'){s.draft.files.splice(Number(el.dataset.index),1);s.dirty=true;q('#at-confirm-host').innerHTML='';refreshFiles();return}
+  if(a==='send-file'){announce('Vorschau: Anlage zur verknüpften Vikunja-/OpenProject-Aufgabe übertragen.');return}
+  if(a==='download-file'){const t=s.panel==='edit'?s.draft:items.find(x=>x.id===s.id);announce('Vorschau des Downloads: '+t.files[Number(el.dataset.index)].name);return}
+  if(a==='export-single'){exportItems([items.find(x=>x.id===s.id)]);return}
+  if(a==='export-all'){const arr=items.filter(t=>t.type==='task'&&(s.case==='all'||t.case===s.case));if(arr.length)exportItems(arr);else announce('Keine Aufgaben im gewählten Fall vorhanden.');return}
+  if(a==='sync'){el.disabled=true;el.textContent='Wird synchronisiert …';setTimeout(()=>{q('#at-sync-status').textContent='Vorschau: soeben synchronisiert';announce('Vorschau: Aufgabenlisten sind aktuell.');if(s.panel==='tools')renderPanel()},600);return}
+ });
+ let dragged=null;
+ root.addEventListener('dragstart',ev=>{const row=ev.target.closest('.at-row[draggable]');if(!row)return;dragged=Number(row.dataset.id);ev.dataTransfer.setData('text/plain',String(dragged));ev.dataTransfer.effectAllowed='move'});
+ root.addEventListener('dragover',ev=>{const row=ev.target.closest('.at-row[draggable]');if(!row||dragged===null||Number(row.dataset.id)===dragged)return;ev.preventDefault();qa('.at-drop').forEach(x=>x.classList.remove('at-drop','at-drop-after'));const box=row.getBoundingClientRect();row.classList.add('at-drop');row.classList.toggle('at-drop-after',ev.clientY>box.top+box.height/2)});
+ root.addEventListener('drop',ev=>{const row=ev.target.closest('.at-row[draggable]');if(!row||dragged===null)return;ev.preventDefault();const ids=sorted().map(t=>t.id),target=Number(row.dataset.id);if(ids.includes(dragged)&&ids.includes(target)&&dragged!==target){ids.splice(ids.indexOf(dragged),1);ids.splice(ids.indexOf(target)+(row.classList.contains('at-drop-after')?1:0),0,dragged);const ordered=ids.map(id=>items.find(t=>t.id===id));let i=0;items=items.map(t=>ids.includes(t.id)?ordered[i++]:t);render();announce('Manuelle Reihenfolge geändert.')}dragged=null;qa('.at-drop').forEach(x=>x.classList.remove('at-drop','at-drop-after'))});
+ root.addEventListener('dragend',()=>{dragged=null;qa('.at-drop').forEach(x=>x.classList.remove('at-drop','at-drop-after'))});
+ root.addEventListener('keydown',ev=>{if(ev.key==='Enter'&&s.panel==='edit'&&ev.target.matches('input[type=text],input[type=number]')){ev.preventDefault();save();return}if(ev.key==='Escape'&&s.panel){ev.preventDefault();if(pending){pending=null;q('#at-confirm-host').innerHTML='';q('[data-field=title]').focus({preventScroll:true})}else leave(backPanel)}});
+ q('[data-action="new"]').setAttribute('aria-label','Neue Aufgabe');q('[data-action="filter"]').setAttribute('aria-label','Filter');q('[data-action="tools"]').setAttribute('aria-label','Werkzeuge');
+ render();
+ let lastWidth=0;const resize=new ResizeObserver(()=>{const width=root.getBoundingClientRect().width;if(width===lastWidth)return;lastWidth=width;q('#at-search').placeholder=width<=460?'Aufgaben durchsuchen':'Titel, Notiz, Fall oder Liste suchen';growNote()});resize.observe(root);
+ if(globalThis.Tweak){const tweak=new Tweak({container:root,onChange:render});tweak.addSelect(design,'density',{label:'Listendichte',options:[{label:'Komfortabel',value:'comfortable'},{label:'Kompakt',value:'compact'}]});tweak.addToggle(design,'grouped',{label:'Nach Fälligkeit gruppieren'});tweak.addToggle(design,'mobile',{label:'Mobile Vorschau'})}
+})();
+</script>

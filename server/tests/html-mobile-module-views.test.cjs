@@ -430,10 +430,8 @@ test('Die Auslösebedingung der mobilen Ansicht bleibt unverändert', () => {
     'Die enge Zusatzabfrage des Feinschliffs fehlt.');
 });
 
-/* Nutzerentscheid 30.08.2026: Archiv und Export-/Versandhistorie kommen aufs Telefon; die
-   übrigen fehlenden Bereiche (Ordnergenerator, Fallorganisation, Berichte, Online-Formulare,
-   Sicherung, Einstellungen, Admin) bleiben bewusst Schreibtischarbeit. Die Registry wird
-   AUSGEFÜHRT geprüft: Doppelte Wurzeln sind der Fehler, der hier wehtut - adaptMobileTopLevelView
+/* Die mobilen Freigaben für Archiv, Versandhistorie und die im September ergänzten
+   Fachbereiche werden anhand der ausgeführten Registry geprüft: Doppelte Wurzeln sind der Fehler, der hier wehtut - adaptMobileTopLevelView
    nimmt den ERSTEN Treffer, ein zweites Modul mit derselben Wurzel bekäme nie sein Profil. */
 test('Mobil-Registry: Archiv und Versandhistorie sind eingetragen, jede Wurzel bleibt eindeutig', () => {
   const vm = require('node:vm');
@@ -501,8 +499,26 @@ test('Mobil-Registry: Archiv und Versandhistorie sind eingetragen, jede Wurzel b
   assert.ok(ordnung.indexOf("'case-archive'") > ordnung.indexOf("'tasks'"),
     'Sie dürfen nicht in die vorderen Plätze rutschen, die als Favoriten in der Leiste landen.');
 
-  /* Was bewusst NICHT mitkommt (Nutzerentscheid) - schützt vor stillem Nachrutschen. */
-  for (const draussen of ['folder-generator', 'case-list', 'case-intake', 'case-outtake', 'reports', 'backup', 'settings', 'admin']) {
+  /* Im September freigegeben (e7cf3f7 / 6a0e9df): Diese Bereiche müssen jetzt
+     erreichbar sein und ihre eigenen mobilen Wurzeln behalten. */
+  for (const [id, profil, wurzel] of [
+    ['report-library', 'bespoke', '.mobile-document-library'],
+    ['folder-generator', 'bespoke', '.mobile-folder-generator'],
+    ['cases', 'bespoke', '.mobile-cases-view'],
+    ['case-archive-management', 'bespoke', '.mobile-case-archive-view'],
+    ['case-intake', 'standalone', '#ciOverlay'],
+    ['case-outtake', 'standalone', '#coOverlay']
+  ]) {
+    const action = actions.find((a) => a.id === id);
+    assert.ok(action, `${id} fehlt trotz mobiler Freigabe.`);
+    assert.strictEqual(action.mobileProfile, profil, `${id}: falsches Mobil-Profil.`);
+    assert.strictEqual(action.mobileRoot, wurzel, `${id}: falsche Mobil-Wurzel.`);
+    assert.ok(action.fns?.length || typeof action.run === 'function', `${id}: kein Einstieg.`);
+    assert.ok(ordnung.includes(`'${id}'`), `${id}: fehlt in der Standardreihenfolge.`);
+  }
+
+  /* Nicht freigegebene / veraltete Haupteinträge bleiben ausgeschlossen. */
+  for (const draussen of ['case-list', 'reports', 'backup', 'settings', 'admin']) {
     assert.ok(!ids.includes(draussen), `${draussen} sollte mobil NICHT angeboten werden.`);
   }
 });

@@ -15,6 +15,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const { assertScriptInventory } = require('./helpers/html-scripts.cjs');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
@@ -805,11 +806,8 @@ test('Lokalsicherung: die Datenschutz-Dokumentation wird gesammelt UND zurueckge
 
 /* ════════════════════════ 9. Auslieferungsdatei unversehrt ════════════════════════ */
 
-/* 06.09.2026 Briefkopf-Editor P3: zwei neue Schriftblöcke (tpl_font_dejavu_oblique, tpl_font_dejavu_bold_oblique) für Kursiv im Briefkopf - Nutzerentscheidung, 309 + 2 = 311; JS-Blöcke bleiben 229. */
-test('Auslieferung: die Blockzahl bleibt bei 311', () => {
-  const bloecke = (html.match(/\n<script/g) || []).length;
-  assert.equal(bloecke, 311,
-    `Die Auslieferungsdatei hat ${bloecke} <script>-Bloecke statt 311 - neuer Code gehoert in einen vorhandenen Block.`);
+test('Auslieferung: vollständiger Scriptbestand und fehlerfreie Syntax', () => {
+  assertScriptInventory(html);
 });
 
 test('Auslieferung: der Datenschutz-Baustein haengt an denselben Rechten wie der Server', () => {

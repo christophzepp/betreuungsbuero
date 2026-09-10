@@ -1,25 +1,12 @@
 const assert = require('assert');
+const { assertScriptInventory } = require('./helpers/html-scripts.cjs');
 const fs = require('fs');
 const path = require('path');
-const vm = require('vm');
 
 const htmlPath = path.join(__dirname, '..', '..', 'outputs', 'Betreuungsbuero_Dokumentenassistent_v0_7.html');
 const html = fs.readFileSync(htmlPath, 'utf8');
 
-const scripts = [];
-const scriptRe = /<script\b([^>]*)>([\s\S]*?)<\/script>/gi;
-let match;
-while ((match = scriptRe.exec(html))) scripts.push({ attrs: match[1] || '', body: match[2] || '' });
-
-/* 06.09.2026 Briefkopf-Editor P3: zwei neue Schriftblöcke (tpl_font_dejavu_oblique, tpl_font_dejavu_bold_oblique) für Kursiv im Briefkopf - Nutzerentscheidung, 309 + 2 = 311; JS-Blöcke bleiben 229. */
-assert.equal(scripts.length, 311, 'Scriptblockzahl hat sich verändert.');
-let jsCount = 0;
-scripts.forEach((script, index) => {
-  if (/\btype\s*=\s*(['"]?)(?!text\/javascript|application\/javascript|module)\w/i.test(script.attrs)) return;
-  jsCount += 1;
-  new vm.Script(script.body, { filename: `html-desktop-view-lock-${index + 1}.js` });
-});
-assert.equal(jsCount, 229, 'JavaScript-Blockzahl hat sich verändert.');
+assertScriptInventory(html, htmlPath);
 
 assert(
   !html.includes('@media(max-width:900px) and (hover:hover) and (pointer:fine)'),
@@ -57,4 +44,4 @@ assert(
   'Alle mobilen Fallauswahlen müssen den Zusatz „aktueller Fall“ ausblenden; Desktop muss ihn behalten.'
 );
 
-console.log('HTML Desktop-Ansicht: Smartphone-Erkennung schließt Desktop/iPad/Desktop-Website aus; schmale Desktop-Browser klappen nur die Sidebar ein; 311 Blöcke, 229 JS, 0 Syntaxfehler');
+console.log('HTML Desktop-Ansicht: Smartphone-Erkennung schließt Desktop/iPad/Desktop-Website aus; schmale Desktop-Browser klappen nur die Sidebar ein; Scriptbestand und Syntax geprüft');

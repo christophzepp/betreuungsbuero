@@ -15,11 +15,13 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const { assertScriptInventory } = require('./helpers/html-scripts.cjs');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const vm = require('node:vm');
 const http = require('node:http');
+const { once } = require('node:events');
 
 const APP_HTML = path.join(__dirname, '..', '..', 'outputs', 'Betreuungsbuero_Dokumentenassistent_v0_7.html');
 const html = fs.readFileSync(APP_HTML, 'utf8');
@@ -60,19 +62,28 @@ function serverStarten() {
   app.use((req, _res, next) => { req.session = Object.assign({ userId: 1, mode: 'online' }, sitzung); next(); });
   app.use('/api/office-json', require('../src/modules/office/json-routes'));
   app.use('/api/einstellungen-status', require('../src/modules/settings/status-routes'));
-  server = app.listen(0);
+  server = app.listen(0, '127.0.0.1');
   return server;
 }
+
+test.before(async () => {
+  // Auch einzeln ausgewählte Datenbank-/Statustests brauchen den Prüfbenutzer.
+  const srv = serverStarten();
+  if (!srv.listening) await once(srv, 'listening');
+});
 
 function ruf(methode, pfad, koerper) {
   const port = serverStarten().address().port;
   const daten = koerper === undefined ? null : JSON.stringify(koerper);
   return new Promise((auf, ab) => {
     const anfrage = http.request({
-      port, method: methode, path: pfad,
+      // Lange synchrone HTML-Prüfungen zwischen Anfragen können die Bearbeitung
+      // eines Keep-alive-Timeouts verzögern. Keine alten Pool-Sockets wiederverwenden.
+      hostname: '127.0.0.1', port, agent: false, method: methode, path: pfad,
       headers: daten ? { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(daten) } : {}
     }, (antwort) => {
       let text = '';
+      antwort.on('error', ab);
       antwort.on('data', (c) => { text += c; });
       antwort.on('end', () => auf({ status: antwort.statusCode, text }));
     });
@@ -82,8 +93,10 @@ function ruf(methode, pfad, koerper) {
   });
 }
 
-test.after(() => {
-  if (server) server.close();
+test.after(async () => {
+  if (server) await new Promise((resolve, reject) => server.close((err) => err ? reject(err) : resolve()));
+  const db = require('../src/database/index');
+  db.close();
   fs.rmSync(TEMP, { recursive: true, force: true });
 });
 
@@ -507,11 +520,12 @@ test('Mail-Prefs (ausgeführt): ein Teil-PUT löscht keine fremden Felder', asyn
   app.use(express.json());
   app.use((req, _res, next) => { req.session = { userId: 2, mode: 'online' }; next(); });
   app.use('/api/mailbox', require('../src/modules/mail/mailbox-routes'));
-  const srv = app.listen(0);
+  const srv = app.listen(0, '127.0.0.1');
+  if (!srv.listening) await once(srv, 'listening');
   const port = srv.address().port;
   const ruf2 = (methode, pfad, koerper) => new Promise((auf, ab) => {
     const daten = koerper === undefined ? null : JSON.stringify(koerper);
-    const a = http.request({ port, method: methode, path: pfad,
+    const a = http.request({ hostname: '127.0.0.1', port, agent: false, method: methode, path: pfad,
       headers: daten ? { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(daten) } : {} },
     (r) => { let t = ''; r.on('data', (c) => { t += c; }); r.on('end', () => auf({ status: r.statusCode, daten: JSON.parse(t || '{}') })); });
     a.on('error', ab); if (daten) a.write(daten); a.end();
@@ -547,7 +561,7 @@ test('Mail-Prefs (ausgeführt): ein Teil-PUT löscht keine fremden Felder', asyn
     const nach3 = (await ruf2('GET', '/api/mailbox/prefs')).daten.prefs;
     assert.equal(nach3.fristenVorlauf, undefined,
       'Der eigene Vorlauf lässt sich nicht löschen - kein Weg zurück zur Büro-Vorgabe');
-  } finally { srv.close(); }
+  } finally { await new Promise((resolve, reject) => srv.close((err) => err ? reject(err) : resolve())); }
 });
 
 test('Layout: die Dialoggröße überlebt eingebettete Bausteine', () => {
@@ -656,10 +670,8 @@ function EIN_KAT_KEYS() {
   return [...html.slice(a, b).matchAll(/\{key:'([^']+)'/g)].map((m) => m[1]);
 }
 
-test('Struktur: Blockzahl unverändert (NEUER script-Block ist verboten)', () => {
-  /* 06.09.2026 Briefkopf-Editor P3: zwei neue Schriftblöcke (tpl_font_dejavu_oblique, tpl_font_dejavu_bold_oblique) für Kursiv im Briefkopf - Nutzerentscheidung, 309 + 2 = 311; JS-Blöcke bleiben 229. */
-  assert.equal((html.match(/\n<script/g) || []).length, 311,
-    'Die Zahl der script-Blöcke hat sich verändert - neuer Code gehört in bestehende Blöcke.');
+test('Auslieferung: vollständiger Scriptbestand und fehlerfreie Syntax', () => {
+  assertScriptInventory(html);
 });
 
 test('Nutzer-Menü: Reihenfolge der Unterpunkte (Nutzervorgabe 30.08.2026)', () => {

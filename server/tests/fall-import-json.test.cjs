@@ -12,6 +12,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const { assertScriptInventory } = require('./helpers/html-scripts.cjs');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
@@ -115,7 +116,6 @@ test('Der Datei-Weg bietet die JSON als eigenstaendigen Weg an', () => {
     'die alte Sackgassen-Meldung lebt noch');
 });
 
-/* 06.09.2026 Briefkopf-Editor P3: zwei neue Schriftblöcke (tpl_font_dejavu_oblique, tpl_font_dejavu_bold_oblique) für Kursiv im Briefkopf - Nutzerentscheidung, 309 + 2 = 311; JS-Blöcke bleiben 229. */
-test('Blockzahl bleibt bei 311', () => {
-  assert.equal((html.match(/\n<script/g) || []).length, 311);
+test('Auslieferung: vollständiger Scriptbestand und fehlerfreie Syntax', () => {
+  assertScriptInventory(html);
 });

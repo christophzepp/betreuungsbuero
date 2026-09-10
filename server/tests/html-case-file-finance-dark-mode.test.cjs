@@ -1,9 +1,9 @@
 'use strict';
 
 const assert = require('assert');
+const { assertScriptInventory } = require('./helpers/html-scripts.cjs');
 const fs = require('fs');
 const path = require('path');
-const vm = require('vm');
 
 const files = [
   path.join(__dirname, '..', '..', 'outputs', 'Betreuungsbuero_Dokumentenassistent_v0_7.html')
@@ -13,13 +13,6 @@ function blockOf(html) {
   const match = html.match(/<style id="case-file-finance-dark-mode-v1">[\s\S]*?<\/style>/);
   assert(match, 'Der Dark-Mode-Nachzug für Fallakten und Finanzen fehlt.');
   return match[0];
-}
-function scriptsOf(html) {
-  const scripts = [];
-  const re = /<script\b([^>]*)>([\s\S]*?)<\/script>/gi;
-  let match;
-  while ((match = re.exec(html))) scripts.push({ attrs: match[1] || '', body: match[2] || '' });
-  return scripts;
 }
 
 const htmls = files.map((file) => fs.readFileSync(file, 'utf8'));
@@ -93,16 +86,7 @@ assert(block.includes(':is(.phase6-table,.phase6-table tbody,.phase6-table tr,.p
 assert(block.includes('.phase6-toolbar button.danger'), 'Die gefährliche Diagnoseaktion ist im Dunkelmodus nicht eindeutig erkennbar.');
 
 for (const [index, html] of htmls.entries()) {
-  const scripts = scriptsOf(html);
-  /* 06.09.2026 Briefkopf-Editor P3: zwei neue Schriftblöcke (tpl_font_dejavu_oblique, tpl_font_dejavu_bold_oblique) für Kursiv im Briefkopf - Nutzerentscheidung, 309 + 2 = 311; JS-Blöcke bleiben 229. */
-  assert.equal(scripts.length, 311, `${files[index]}: Scriptblockzahl hat sich verändert.`);
-  let js = 0;
-  scripts.forEach((script, scriptIndex) => {
-    if (/\btype\s*=\s*(['"]?)(?!text\/javascript|application\/javascript|module)\w/i.test(script.attrs)) return;
-    js += 1;
-    new vm.Script(script.body, { filename: `case-file-finance-dark-${index}-${scriptIndex + 1}.js` });
-  });
-  assert.equal(js, 229, `${files[index]}: JavaScript-Blockzahl hat sich verändert.`);
+  assertScriptInventory(html, files[index]);
 }
 
 console.log('Dark-Mode: Fallakten-, Finanz- und Übersichtsmenüs geprüft.');

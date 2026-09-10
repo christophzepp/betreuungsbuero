@@ -1,9 +1,9 @@
 'use strict';
 
 const assert = require('assert');
+const { assertScriptInventory } = require('./helpers/html-scripts.cjs');
 const fs = require('fs');
 const path = require('path');
-const vm = require('vm');
 
 const files = [
   path.join(__dirname, '..', '..', 'outputs', 'Betreuungsbuero_Dokumentenassistent_v0_7.html')
@@ -18,13 +18,6 @@ function readerToolbarBlock(html) {
   const match = html.match(/<style id="documents-reader-toolbar-v1">[\s\S]*?<\/style>/);
   assert(match, 'Der Leseansicht fehlt die zusammenhängende Werkzeuggruppe.');
   return match[0];
-}
-function scriptsOf(html) {
-  const out = [];
-  const re = /<script\b([^>]*)>([\s\S]*?)<\/script>/gi;
-  let match;
-  while ((match = re.exec(html))) out.push({ attrs: match[1] || '', body: match[2] || '' });
-  return out;
 }
 
 const htmls = files.map((file) => fs.readFileSync(file, 'utf8'));
@@ -52,16 +45,7 @@ for (const [index, html] of htmls.entries()) {
     !html.includes('>_Verwaltung &amp; Sicherungen</option>'),
     `${files[index]}: Der technische Unterstrich ist im Bereichswähler noch sichtbar.`
   );
-  const scripts = scriptsOf(html);
-  /* 06.09.2026 Briefkopf-Editor P3: zwei neue Schriftblöcke (tpl_font_dejavu_oblique, tpl_font_dejavu_bold_oblique) für Kursiv im Briefkopf - Nutzerentscheidung, 309 + 2 = 311; JS-Blöcke bleiben 229. */
-  assert.equal(scripts.length, 311, `${files[index]}: Scriptblockzahl hat sich verändert.`);
-  let js = 0;
-  scripts.forEach((script, scriptIndex) => {
-    if (/\btype\s*=\s*(['"]?)(?!text\/javascript|application\/javascript|module)\w/i.test(script.attrs)) return;
-    js += 1;
-    new vm.Script(script.body, { filename: `documents-dark-${index}-${scriptIndex + 1}.js` });
-  });
-  assert.equal(js, 229, `${files[index]}: JavaScript-Blockzahl hat sich verändert.`);
+  assertScriptInventory(html, files[index]);
 }
 
 console.log('Datei-Explorer-Dunkelmodus: Explorer, Einstellungen und Leseansicht geprüft.');

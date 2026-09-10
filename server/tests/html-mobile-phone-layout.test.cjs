@@ -156,13 +156,10 @@ assert(
   'Die mobile Stammdaten-Überschrift muss auf „Stammdaten“ verkürzt sein.'
 );
 assert(
-  source.includes('class="btn light todo-import-ics-btn"') &&
-  css.includes('.todo-full-toolbar > .todo-import-ics-btn') &&
-  css.includes('justify-content: center !important;') &&
-  css.includes('text-align: center !important;'),
-  '„ICS importieren“ muss in der mobilen Aufgabenleiste dauerhaft zentriert sein.'
-);
-assert(
+  source.includes('data-tw-import accept=".ics,text/calendar" aria-label="ICS-Datei importieren"') &&
+  source.includes('#todoWorkspace input[type=file].at-file-input'),
+  'ICS-Import muss im Aufgaben-Werkzeugbereich als erreichbarer Datei-Dialog verfügbar bleiben.'
+);assert(
   css.includes('#modal.todo-mobile-form-open[data-mobile-view-profile="workspace"] #modalBody.mobile-top-view-body-v171') &&
     css.includes('#modal.todo-mobile-form-open[data-mobile-view-profile="workspace"] .todo-full-list') &&
   css.includes('#modal.todo-mobile-form-open[data-mobile-view-profile="workspace"] #todoFullNewForm') &&

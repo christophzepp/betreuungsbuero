@@ -1,9 +1,9 @@
 'use strict';
 
 const assert = require('assert');
+const { assertScriptInventory } = require('./helpers/html-scripts.cjs');
 const fs = require('fs');
 const path = require('path');
-const vm = require('vm');
 
 const htmlPath = path.resolve(
   __dirname,
@@ -23,15 +23,6 @@ assert.ok(
   'Schnellzugriff berücksichtigt den bedarfsgerecht noch fehlenden Unterordner nicht.'
 );
 
-const scripts = [];
-const expression = /<script\b([^>]*)>([\s\S]*?)<\/script>/gi;
-let match;
-while ((match = expression.exec(html))) scripts.push({ attributes: match[1], body: match[2] });
-/* 06.09.2026 Briefkopf-Editor P3: zwei neue Schriftblöcke (tpl_font_dejavu_oblique, tpl_font_dejavu_bold_oblique) für Kursiv im Briefkopf - Nutzerentscheidung, 309 + 2 = 311; JS-Blöcke bleiben 229. */
-assert.equal(scripts.length, 311, 'Scriptblockzahl hat sich verändert.');
-for (let index = 0; index < scripts.length; index++) {
-  if (/\btype\s*=/i.test(scripts[index].attributes)) continue;
-  new vm.Script(scripts[index].body, { filename: `app-script-${index + 1}.js` });
-}
+assertScriptInventory(html, htmlPath);
 
-console.log('Explorer ohne Modulordner: zentraler Falldokumentationspfad, 289 Blöcke, 0 Syntaxfehler');
+console.log('Explorer ohne Modulordner: zentraler Falldokumentationspfad, Scriptbestand und Syntax geprüft');
