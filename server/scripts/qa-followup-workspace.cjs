@@ -12,7 +12,7 @@ const out=process.env.MOBILE_QA_OUTPUT||'/tmp/followup-workspace-qa';fs.mkdirSyn
  await page.route('http://wv-qa.invalid/api/**',r=>r.fulfill({contentType:'application/json',body:'{}'}));
  await page.route('http://wv-qa.invalid/',r=>r.fulfill({contentType:'text/html',body:fs.readFileSync(path.resolve(__dirname,'../../outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html'))}));
  await page.goto('http://wv-qa.invalid/',{waitUntil:'domcontentloaded',timeout:90000});
- await page.evaluate(()=>{
+ const seed=()=>{
   const iso=(n=0)=>{const d=new Date();d.setDate(d.getDate()+n);return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};window.__qaDay=iso;
   window.__appMode='online';window.__demoModus=false;window.__currentUser={id:1,displayName:'Prüfung'};window.__activeServerCaseId='a';window.__offenerFallId=()=>window.__activeServerCaseId;
   const ca={person:{firstName:'Mara',lastName:'Hoffmann'},fristen:[{id:'fr1',todoId:'deadline-old',dueDate:iso(14),remindDays:14,title:'Frist'}]},cb={person:{firstName:'Jonas',lastName:'Weber'},fristen:[]};state.caseData=ca;
@@ -41,13 +41,37 @@ const out=process.env.MOBILE_QA_OUTPUT||'/tmp/followup-workspace-qa';fs.mkdirSyn
    else if(u.startsWith('/api/cases/'))data={stammdaten:{data:u.includes('/b/')?cb:ca},dokuEntries:{entries:[]}};
    return new Response(JSON.stringify(data),{status,headers:{'Content-Type':'application/json'}})};
   document.getElementById('loginGateOverlay')?.classList.add('hidden');const start=document.getElementById('startPage');start.hidden=false;start.classList.remove('hidden');window.dispatchEvent(new Event('resize'));
- });
+ };await page.evaluate(seed);
  await page.waitForTimeout(400);if(await page.locator('#modeIntroNext').isVisible())await page.locator('#modeIntroNext').click();
  const root=page.locator('#wiedervorlagenWorkspace'),act=a=>root.locator(`[data-action="${a}"]:visible`),panel=root.locator('.wv-panel'),check=async(name,fn)=>{await fn();console.log('PASS '+name)},shot=async name=>page.screenshot({path:path.join(out,name+'.png')}),open=async id=>{await root.locator(`[data-open="${id}"]`).first().click();await panel.waitFor()};
  if(process.env.FOLLOWUP_LAYOUT_AUDIT){await require('./qa-followup-layout.cjs')({page,root,act,panel,check,shot,errors,out});return;}
+ if(process.env.FOLLOWUP_NAV_AUDIT){await require('./qa-followup-nav.cjs')({page,root,act,panel,check,shot,errors,seed});return;}
+ if(process.env.FOLLOWUP_EDITOR_AUDIT){await require('./qa-followup-editor.cjs')({page,root,act,panel,check,shot,errors,out});return;}
  await page.setViewportSize({width:1440,height:1000});await page.evaluate(()=>window.__caseOverview.openFollowups());await root.waitFor();
  await check('Alle echten Quellen, keine Fristerinnerung oder freie Aufgabe',async()=>{assert.equal(await root.locator('.wv-row').count(),4);assert.equal(await root.getByText('Später / ohne Datum').count(),1)});await shot('desktop-liste');
  await check('Navigation direkt nach Fristen mit Schnellaktionen und Tooltip',async()=>{assert.ok(await page.locator('[data-fristen-menu] + [data-wiedervorlagen-menu]').count());assert.ok(await page.locator('[data-wiedervorlagen-menu] [data-wv-new]').first().getAttribute('title'))});
+ // Click actual row padding, rather than a title/icon that already opened the panel.
+ const entry=id=>root.locator(`.wv-row[data-id="${id}"]`);
+ const clickRowPadding=async id=>{const row=entry(id),box=await row.boundingBox();assert.ok(box);await row.click({position:{x:box.width/2,y:5}})};
+ await clickRowPadding('todo:f1');
+ await check('Weißraum öffnet die zugehörigen Details',async()=>{assert.equal(await root.getAttribute('data-page'),'detail');assert.equal(await panel.locator('.wv-panel-content>h2').innerText(),'Kostenübernahme erneut prüfen');assert.equal(await entry('todo:f1').locator('.wv-row-title').getAttribute('aria-expanded'),'true')});
+ await clickRowPadding('todo:f2');
+ await check('Weißraum eines anderen Eintrags wechselt die Details',async()=>{assert.equal(await panel.locator('.wv-panel-content>h2').innerText(),'Arztbrief besprechen');assert.equal(await root.locator('.wv-selected').getAttribute('data-id'),'todo:f2')});
+ await clickRowPadding('todo:f2');
+ await check('Erneuter Klick in dieselbe Zeile schließt die Details',async()=>{assert.equal(await root.getAttribute('data-page'),'list');assert.equal(await panel.isVisible(),false);assert.equal(await root.locator('.wv-selected').count(),0);assert.equal(await entry('todo:f2').locator('.wv-row-title').getAttribute('aria-expanded'),'false')});
+ await root.locator('.wv-list').click({position:{x:3,y:3}});
+ await check('Klick außerhalb der Einträge öffnet keine Details',async()=>assert.equal(await root.getAttribute('data-page'),'list'));
+ await entry('todo:f1').locator('.wv-case').evaluate(el=>{const range=document.createRange();range.selectNodeContents(el);const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);el.dispatchEvent(new MouseEvent('click',{bubbles:true}))});
+ await check('Markieren von Eintragstext öffnet keine Details',async()=>assert.equal(await root.getAttribute('data-page'),'list'));await page.evaluate(()=>window.getSelection().removeAllRanges());
+ await entry('todo:f1').locator('.wv-row-title').focus();await page.keyboard.press('Enter');
+ await check('Tastatur öffnet die Details genau einmal',async()=>assert.equal(await root.getAttribute('data-page'),'detail'));
+ await entry('todo:f1').locator('.wv-row-title').focus();await page.keyboard.press('Space');
+ await check('Leertaste schließt und erhält den Fokus am Eintrag',async()=>{assert.equal(await root.getAttribute('data-page'),'list');assert.equal(await entry('todo:f1').locator('.wv-row-title').evaluate(el=>el===document.activeElement),true)});
+ await entry('todo:f1').locator('.wv-row-right [data-open]').click();
+ await check('Pfeil öffnet die Details genau einmal',async()=>assert.equal(await root.getAttribute('data-page'),'detail'));
+ await entry('todo:f1').locator('.wv-row-right [data-open]').click();
+ await check('Schließsymbol am ausgewählten Eintrag schließt die Details',async()=>assert.equal(await root.getAttribute('data-page'),'list'));
+ if(!desktop){await page.setViewportSize({width:390,height:844});const row=entry('todo:f1'),box=await row.boundingBox();await page.touchscreen.tap(box.x+box.width/2,box.y+5);await check('Mobil öffnet auch Antippen des Weißraums die Details',async()=>assert.equal(await root.getAttribute('data-page'),'detail'));await act('back').click();await page.setViewportSize({width:1440,height:1000})}
  await open('todo:f1');await shot('desktop-details');await act('edit').click();await panel.getByRole('textbox',{name:'Titel',exact:true}).fill('Bescheid erneut sorgfältig prüfen');await panel.getByRole('textbox',{name:'Notiz',exact:true}).fill('Geänderte Prüfnotiz');
  await page.evaluate(()=>window.__qaFailSave=true);await act('save').click();await check('Schreibfehler erhält den Formularentwurf',async()=>{await root.locator('#wv-form-error').filter({hasText:'aktualisiert'}).waitFor();assert.equal(await panel.getByRole('textbox',{name:'Titel',exact:true}).inputValue(),'Bescheid erneut sorgfältig prüfen')});
  await page.evaluate(()=>window.__qaFailSave=false);await act('save').click();await act('edit').waitFor();await check('Speichern erhält Dokument und Fall',async()=>{const t=await page.evaluate(()=>__qaTodos.find(x=>x.id==='f1'));assert.equal(t.title,'Wiedervorlage: Bescheid erneut sorgfältig prüfen');assert.equal(t.sourceId,'doc1');assert.equal(t.caseId,'a')});

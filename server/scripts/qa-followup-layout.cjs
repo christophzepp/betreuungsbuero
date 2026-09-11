@@ -21,7 +21,7 @@ module.exports=async({page,root,act,panel,check,shot,errors})=>{
   await verify(`Detailaktionen per Scrollen erreichbar ${width}×${height}`,async()=>assert.ok(await reachable(panel,'[data-action=more]')));
   if(!diag){await act('edit').click();}else await act('edit').evaluate(el=>el.click());
   await verify(`Formular beginnt bei Fall und Original ${width}×${height}`,async()=>assert.equal(Math.round((await metrics('.wv-panel')).top),0));
-  await verify(`Speichern per Scrollen erreichbar ${width}×${height}`,async()=>assert.ok(await reachable(panel,'[data-action=save]')));
+  await verify(`Speichern bei gescrollten Formularfeldern erreichbar ${width}×${height}`,async()=>assert.ok(await reachable(panel.locator('.wv-panel-content'),'[data-action=save]')));
   await verify(`Notizfeld hat eine passende Ausgangshöhe ${width}×${height}`,async()=>assert.ok(await panel.locator('textarea[data-draft=note]').evaluate(el=>el.clientHeight<=180)));
   await shot('form-bottom-'+width+'-'+height);
   if(diag)await act('close').first().evaluate(el=>el.click());else await act('close').first().click();
