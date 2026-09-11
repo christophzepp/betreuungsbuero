@@ -2,7 +2,8 @@
    Bedienelemente angebunden. Kein Demodatensatz und kein paralleler Browser-Speicher im Online-Modus. */
 (function(){
 'use strict';
-const M={root:null,rows:[],selected:'',tab:'data',editor:null,small:null,bundle:null,load:0,editRequest:0,width:42,personIds:new Map()};
+const PAGE_SIZE=200;
+const M={page:0,viewKey:'',view:null,root:null,rows:[],selected:'',tab:'data',editor:null,small:null,bundle:null,load:0,editRequest:0,width:42,personIds:new Map()};
 const $=s=>M.root?.querySelector(s),E=(t,cls,text)=>{const e=document.createElement(t);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e};
 const B=(label,action,cls='',skipFlush=false)=>{const b=E('button','am-btn '+cls,label);b.type='button';b.onclick=async()=>{if(b.disabled)return;b.disabled=true;try{if(skipFlush||await flush())await action()}catch(e){message(e.message,true)}finally{b.disabled=false;if(b.closest('.am-selection'))selectionCount()}};return b};
 const api=()=>window.__abModernLegacy;
@@ -14,7 +15,7 @@ const name=c=>[c.institution,[c.title,c.firstName,c.lastName].filter(Boolean).jo
 const isEnded=c=>String(c.status||'').toLowerCase()==='beendet';
 const selected=()=>M.rows.find(c=>identity(c)===M.selected);
 async function request(path,body,method){const r=await fetch('/api/addressbook/'+path,{method:method||(body?'POST':'GET'),credentials:'same-origin',headers:body?{'Content-Type':'application/json'}:{},body:body?JSON.stringify(body):undefined});const j=await r.json().catch(()=>({}));if(!r.ok){const e=new Error(j.error||'Das Adressbuch ist momentan nicht erreichbar.');e.status=r.status;throw e}return j}
-function message(text,error=false){const el=$('.am-save');if(el){el.textContent=text;el.classList.toggle('error',error)}if(error)window.toast?.(text)}
+function message(text,error=false){const el=$('.am-save');if(el){el.textContent=text;el.classList.toggle('error',error)}M.errorToast?.remove?.();M.errorToast=error?window.toast?.(text):null}
 function status(){message(online()?'Online · Änderungen werden automatisch gespeichert':window.__demoModus?'Vorführung · Änderungen nur in dieser Sitzung':'Lokal · Excel zusätzlich zur Sicherung exportieren')}
 function section(title){const e=E('section','am-section');e.append(E('h3','',title));return e}
 function buttonSet(parent,buttons){for(const b of buttons)parent.append(b)}
@@ -30,6 +31,7 @@ function closeMenus(except){for(const menu of M.root?.querySelectorAll('.am-menu
 function personal(c,p){return p?{...c,key:c.key||window.phase5ContactKey?.(c)||api().key(c),salutation:p.salutation||c.salutation,_personId:p.id,firstName:p.name,lastName:'',title:'',email:p.email||c.email,phone:p.phone||c.phone,fax:p.fax||c.fax}:c}
 function mount(){
  const host=document.getElementById('modalBody');if(!host||!api())return;
+ M.page=0;M.viewKey='';
  const action=host.querySelector('.addressbook-action-row'),toolbar=host.querySelector('.addressbook-toolbar-v154'),scope=host.querySelector('.ab-case-switcher'),bulk=host.querySelector('.addressbook-select-row'),letters=host.querySelector('#abLetterBar'),list=host.querySelector('#phase5AddressListV154');
  if(!action||!toolbar||!list)return;
  M.root=E('div','am addressbook-view mobile-module-view');M.root.id='addressbookModern';M.root.dataset.mobileModule='contacts';M.root.setAttribute('aria-label','Adressbuch');M.editor=null;M.small=null;M.bundle=null;M.load++;M.editRequest++;
@@ -53,7 +55,7 @@ function mount(){
   const b=B(label,()=>{document.getElementById('phase5AddressStatusV154').value=v;window.phase5RenderAddressbookV154()});b.dataset.status=v;tabs.append(b);
  }
  left.append(tabs);const listmeta=E('div','am-list-meta');const count=toolbar.querySelector('#phase5AddressCountV154');if(count)listmeta.append(count);left.append(listmeta);
- const selection=E('div','am-selection');selection.append(B('Alle auswählen',()=>window.__abCsvSelectAll(true)),B('Auswahl aufheben',()=>window.__abCsvSelectAll(false)),B('Als aktiv markieren',()=>bulkStatus('Aktiv')),B('Als beendet markieren',()=>bulkStatus('Beendet')));left.append(selection);if(letters)left.append(letters);left.append(list);
+ const selection=E('div','am-selection');selection.append(B('Alle auswählen',()=>window.__abCsvSelectAll(true)),B('Auswahl aufheben',()=>window.__abCsvSelectAll(false)),B('Als aktiv markieren',()=>bulkStatus('Aktiv')),B('Als beendet markieren',()=>bulkStatus('Beendet')));left.append(selection);if(letters)left.append(letters);left.append(list,E('nav','am-pages'));left.lastElementChild.setAttribute('aria-label','Kontaktseiten');
  const grip=E('div','am-resizer');grip.tabIndex=0;grip.setAttribute('role','separator');grip.setAttribute('aria-orientation','vertical');grip.setAttribute('aria-label','Breite der Kontaktliste');
  board.append(left,grip,right);M.root.append(board);host.classList.remove('mobile-top-view-body-v171');host.replaceChildren(M.root);
  document.getElementById('modal').classList.remove('addressbook-mobile-filters-collapsed');
@@ -76,19 +78,22 @@ function mount(){
  const root=M.root;if(online())Promise.resolve(window.__baLoadServerBuero?.()).then(()=>{if(M.root===root&&root.isConnected&&!M.editor&&!M.small)window.phase5RenderAddressbookV154()}).catch(e=>{if(M.root===root&&root.isConnected)message(e.message,true)});
 }
 function render(rows,v){
- if(!M.root?.isConnected)return;M.rows=rows;
+ if(!M.root?.isConnected)return;const viewKey=JSON.stringify(v);if(M.viewKey!==viewKey){M.page=0;M.viewKey=viewKey}M.view=v;M.rows=rows;M.page=Math.max(0,Math.min(M.page,Math.ceil(rows.length/PAGE_SIZE)-1));
+ const pages=$('.am-pages');pages.replaceChildren();pages.hidden=rows.length<=PAGE_SIZE;
+ if(!pages.hidden){const prev=B('Zurück',()=>{M.page--;render(M.rows,M.view);$('#phase5AddressListV154').scrollTop=0}),next=B('Weiter',()=>{M.page++;render(M.rows,M.view);$('#phase5AddressListV154').scrollTop=0});prev.disabled=M.page===0;next.disabled=(M.page+1)*PAGE_SIZE>=rows.length;pages.append(prev,E('span','',`${M.page*PAGE_SIZE+1}–${Math.min((M.page+1)*PAGE_SIZE,rows.length)} von ${rows.length}`),next)}
  const list=$('#phase5AddressListV154'),scroll=list.scrollTop;list.replaceChildren();
  for(const b of M.root.querySelectorAll('[data-status]'))b.setAttribute('aria-pressed',String(b.dataset.status===v.status));selectionCount();
  if(!rows.length){list.append(E('p','am-empty','Keine Kontakte für diese Filter.'));M.selected='';if(!M.editor&&!M.small){M.bundle=null;M.load++;M.root.classList.remove('am-show-detail');$('.am-detail').classList.remove('am-editing');$('.am-detail').replaceChildren(E('p','am-empty','Filter anpassen oder einen neuen Kontakt anlegen.'))}return}
  if(!rows.some(c=>identity(c)===M.selected))M.selected=identity(rows[0]);
- for(const c of rows){const row=E('article','addressbook-card am-row');row.dataset.abLetter=api().letter(c,v);row.classList.toggle('selected',identity(c)===M.selected);
+ const fragment=document.createDocumentFragment();for(const c of rows.slice(M.page*PAGE_SIZE,(M.page+1)*PAGE_SIZE)){const row=E('article','addressbook-card am-row');row.dataset.abLetter=api().letter(c,v);row.classList.toggle('selected',identity(c)===M.selected);
   const check=E('input');check.type='checkbox';check.checked=api().selected().has(api().key(c));check.setAttribute('aria-label',name(c)+' auswählen');check.onchange=()=>{window.__abCsvToggle(api().key(c),check.checked);selectionCount()};row.append(check);
   const open=B('',()=>choose(c));open.className='am-row-open';const icon=E('span','am-avatar',c.institution?'▤':([c.firstName?.[0],c.lastName?.[0]].filter(Boolean).join('')||'○'));
-  const text=E('span','am-row-copy');text.append(E('strong','',api().title(c,v.nameOrder)),E('span','am-sub',[c.role,api().person(c,v.nameOrder),c.__cases||'',isEnded(c)?'Beendet':''].filter(Boolean).join(' · ')));open.append(icon,text);row.append(open);list.append(row);
+  const text=E('span','am-row-copy');text.append(E('strong','',api().title(c,v.nameOrder)),E('span','am-sub',[c.role,api().person(c,v.nameOrder),c.__cases||'',isEnded(c)?'Beendet':''].filter(Boolean).join(' · ')));open.append(icon,text);row.append(open);fragment.append(row);
  }
- list.scrollTop=scroll;for(const b of M.root.querySelectorAll('[data-status]'))b.setAttribute('aria-pressed',String(b.dataset.status===v.status));selectionCount();
+ list.append(fragment);list.scrollTop=scroll;for(const b of M.root.querySelectorAll('[data-status]'))b.setAttribute('aria-pressed',String(b.dataset.status===v.status));selectionCount();
  if(!M.editor&&!M.small)drawDetail(selected());
 }
+function jumpToLetter(letter){const index=M.rows.findIndex(c=>api().letter(c,M.view)===letter);if(index<0)return;M.page=Math.floor(index/PAGE_SIZE);render(M.rows,M.view);M.root.classList.remove('am-show-detail');const list=$('#phase5AddressListV154'),card=list.querySelector('[data-ab-letter="'+letter+'"]');if(!card)return;const scroller=getComputedStyle(list).overflowY==='visible'?list.closest('.am-list-pane'):list;scroller.scrollTo({top:scroller.scrollTop+card.getBoundingClientRect().top-scroller.getBoundingClientRect().top,behavior:'smooth'})}
 function selectionCount(){const n=api().selected().size;let el=$('#amSelectionCount');if(!el){el=E('span');el.id='amSelectionCount';$('.am-list-meta')?.append(el)}el.textContent=n?n+' ausgewählt':'';$('.am-selection')?.classList.toggle('has-selection',!!n);for(const b of M.root.querySelectorAll('.am-selection button'))if(!b.textContent.startsWith('Alle'))b.disabled=!n}
 async function bulkStatus(status){M.editor=null;const rows=api().contacts().filter(c=>api().selected().has(api().key(c)));let saved=0,errors=[];for(const c of rows){const key=api().key(c);try{await savePatch(c,{status});api().selected().delete(key);saved++}catch(e){errors.push(e.message)}}window.phase5RenderAddressbookV154();message(saved+' Kontakt(e) geändert.'+(errors.length?' '+errors.length+' nicht gespeichert: '+errors[0]:''),!!errors.length)}
 async function choose(c){if(!await flush())return;M.editRequest++;M.editor=null;M.selected=identity(c);M.tab='data';M.root.classList.add('am-show-detail');window.phase5RenderAddressbookV154()}
@@ -136,14 +141,17 @@ function drawTab(c){
  }else if(M.tab==='history'){
   if(!M.bundle.history.length)body.append(E('p','am-empty','Noch keine protokollierten Änderungen. Neue Änderungen werden mit Datum, Bearbeiter und vorherigem Wert erfasst.'));
   for(const h of M.bundle.history){const s=section(new Date(h.at).toLocaleString('de-DE')+' · '+h.actor);for(const [k,v] of Object.entries(h.changes)){s.append(E('p','am-history-line',(LABELS[k]||k)+': '+displayValue(v.before)+' → '+displayValue(v.after)))}if(Object.keys(h.changes).some(k=>Object.hasOwn(LABELS,k)&&k!=='_standardRecipients'))s.append(B('Diese Änderung rückgängig machen',()=>restore(c,h)));else s.append(E('p','am-sub','Fallzuordnungen und Standardempfänger lassen sich unter „Fälle & Standard“ anpassen.'));body.append(s)}
+  if(M.bundle.historyCursor)body.append(B('Weitere Änderungen laden',()=>loadMore(c,'history')));
  }else{
   body.append(B('+ Kommunikation dokumentieren',()=>documentContact(c,person()),'primary'));
   if(!M.bundle.communications.length)body.append(E('p','am-empty','Noch keine verknüpfte Kommunikation. Einträge werden gemeinsam mit der Falldokumentation geführt.'));
   for(const item of M.bundle.communications){const s=section(item.title);s.append(E('p','am-sub',[item.date,item.caseLabel,item.contactType,item.person].filter(Boolean).join(' · ')),E('p','am-note',item.text),B('In Falldokumentation öffnen',()=>openDoku(item)));body.append(s)}
+  if(M.bundle.communicationCursor)body.append(B('Weitere Kommunikation laden',()=>loadMore(c,'communications')));
  }
 }
+async function loadMore(c,kind){const bundle=M.bundle,key=kind==='history'?'historyCursor':'communicationCursor',cursor=bundle?.[key];if(!cursor)return;const result=await request(kind+'?'+new URLSearchParams({...ref(c),cursor}));if(M.bundle!==bundle||M.selected!==identity(c))return;const field=kind==='history'?'history':'communications',existing=new Set(bundle[field].map(x=>x.id));bundle[field].push(...result.items.filter(x=>!existing.has(x.id)));bundle[key]=result.nextCursor;drawTab(c)}
 function displayValue(v){return v==null||v===''?'—':Array.isArray(v)?v.map(x=>x.name||'').join(', '):typeof v==='object'?JSON.stringify(v):String(v)}
-function localHistory(before,after){const changes={};for(const k of Object.keys(LABELS))if(JSON.stringify(before?.[k]??null)!==JSON.stringify(after[k]??null))changes[k]={before:before?.[k]??null,after:after[k]??null};return Object.keys(changes).length?[{id:crypto.randomUUID(),at:new Date().toISOString(),actor:'Lokal',changes},...(before?._addressHistory||[])].slice(0,100):before?._addressHistory||[]}
+function localHistory(before,after){const changes={};for(const k of Object.keys(LABELS))if(JSON.stringify(before?.[k]??null)!==JSON.stringify(after[k]??null))changes[k]={before:before?.[k]??null,after:after[k]??null};return Object.keys(changes).length?[{id:crypto.randomUUID(),at:new Date().toISOString(),actor:'Lokal',changes},...(before?._addressHistory||[])]:before?._addressHistory||[]}
 async function refreshCase(id){if(!online())return;const response=await fetch('/api/cases/'+encodeURIComponent(id)+'/contacts',{credentials:'same-origin'});if(!response.ok)throw Error('Fallkontakte konnten nicht aktualisiert werden. Bitte das Adressbuch erneut öffnen.');const j=await response.json(),list=(j.contacts||[]).map(x=>({...x.data,id:x.id}));const cached=window.__onlineCaseCache?.get(id);if(cached?.data)cached.data.contacts=list;if(id===activeCase())state.caseData.contacts=list}
 async function cacheBundle(bundle,r){
  const row={...bundle.contact};if(row.institution||row.lastName)row.key=window.phase5ContactKey?.(row)||row.key;
@@ -199,7 +207,7 @@ async function savePending(){
  })();const ok=await e.saving;if(ok&&Object.keys(e.pending).length)return savePending();return ok;
 }
 function smallDirty(){return !!M.small&&JSON.stringify(Object.fromEntries(new FormData(M.small.form)))!==M.small.initial}
-async function flush(){if(M.small){if(M.small.saving){message('Bitte das Speichern abwarten.');return false}if(smallDirty()&&!confirm('Noch nicht übernommene Formulareingaben verwerfen?'))return false;M.small=null}return !M.editor||await savePending()}
+async function flush(){if(M.small){if(!await saveSmall())return false;clearTimeout(M.small.timer);M.small=null}return !M.editor||await savePending()}
 async function resolveConflict(){const e=M.editor;if(!e||e.new)return;const fresh=await request('contact?'+new URLSearchParams(e.ref));const differences=Object.keys(e.pending).filter(k=>JSON.stringify(e.bundle.contact[k])!==JSON.stringify(fresh.contact[k])).map(k=>(LABELS[k]||k)+': gespeichert „'+displayValue(fresh.contact[k])+'“ / Ihre Eingabe „'+displayValue(e.pending[k])+'“');if(!confirm('Aktuellen Stand laden und Ihre noch offenen Eingaben darauf anwenden?'+(differences.length?'\n\nDiese Felder würden überschrieben:\n'+differences.join('\n'):' Andere zwischenzeitliche Änderungen bleiben erhalten.')))return;e.bundle=fresh;e.draft={...fresh.contact,...e.pending};for(const input of M.root.querySelectorAll('.am-edit [name]'))input.value=e.draft[input.name]||'';e.error=false;$('.am-conflict').hidden=true;await savePending()}
 async function finishEdit(){if(!await flush())return;M.editor=null;window.showImportedAddressbook();if(M.rows.length)M.root?.classList.add('am-show-detail')}
 async function discard(){const e=M.editor;if(!e)return;if(e.saving)await e.saving;if(Object.keys(e.pending).length&&!confirm('Noch nicht gespeicherte Eingaben verwerfen? Bereits automatisch gespeicherte Änderungen bleiben erhalten.'))return;clearTimeout(e.timer);M.editor=null;window.showImportedAddressbook()}
@@ -218,13 +226,74 @@ async function mail(c,p,internal){const email=p?.email||c.email;if(!email)throw 
 }
 async function documentContact(c,p){const r=ref(c),id=r.scope==='case'?r.caseId:activeCase();if(!id)throw Error('Bitte zuerst einen Fall öffnen.');M.editor=null;window.openDokuEntryForm(id,-1);window.__fdKontaktUebernehmen?.(personal(c,p),r.scope,id)}
 async function openDoku(item){let cd=item.caseId===activeCase()?state.caseData:window.__onlineCaseCache?.get(item.caseId)?.data;if(online()){const r=await fetch('/api/cases/'+encodeURIComponent(item.caseId)+'/doku-entries',{credentials:'same-origin'});if(!r.ok)throw Error('Dokumentation nicht verfügbar.');const j=await r.json();if(cd)cd.documentationEntries=j.entries.map(x=>({...x.data,id:x.id}))}const index=(cd?.documentationEntries||[]).findIndex(x=>x.id===item.id);if(index<0)throw Error('Eintrag nicht gefunden.');window.openDokuEntryForm(item.caseId,index)}
-function smallForm(title,fields,submit){const pane=$('.am-tab-body');pane.replaceChildren();const form=E('form','am-small-form');form.append(E('h3','',title));for(const [k,label,value,options] of fields){const l=E('label','',label),input=E(options?'select':'input');input.name=k;if(k==='email')input.type='email';if(options){input.append(new Option('Bitte wählen …',''));for(const [val,text] of options)input.append(new Option(text,val));input.required=true}input.value=value||'';l.append(input);form.append(l)}const error=E('p','am-error');form.append(error);const save=E('button','am-btn primary','Übernehmen');save.type='submit';form.append(save,B('Abbrechen',()=>drawTab(selected())));const small=M.small={form,initial:JSON.stringify(Object.fromEntries(new FormData(form))),saving:false};form.onsubmit=async ev=>{ev.preventDefault();if(small.saving)return;small.saving=true;save.disabled=true;try{await submit(Object.fromEntries(new FormData(form)));if(M.small===small&&form.isConnected){M.small=null;drawDetail(selected())}}catch(e){error.textContent=e.message}finally{small.saving=false;save.disabled=false}};pane.append(form)}
-function editPerson(c,p){const current=[...(M.bundle?.contact.people||c.people||[])];smallForm(p?'Ansprechpartner bearbeiten':'Neuer Ansprechpartner',[['name','Name',p?.name],['department','Abteilung',p?.department],['role','Funktion',p?.role],['email','E-Mail',p?.email],['phone','Telefon',p?.phone],['fax','Fax',p?.fax],['salutation','Anrede',p?.salutation]],async values=>{if(!values.name.trim())throw Error('Bitte einen Namen angeben.');const people=[...current],next={...values,id:p?.id||crypto.randomUUID()},i=people.findIndex(x=>x.id===next.id);if(i>=0)people[i]=next;else people.push(next);await savePatch(c,{people})})}
-async function deletePerson(c,p){if(confirm('Ansprechpartner „'+p.name+'“ entfernen? Historische Dokumentation bleibt erhalten.'))await savePatch(c,{people:(M.bundle?.contact.people||c.people||[]).filter(x=>x.id!==p.id)})}
-function assign(c){const entries=[...(window.__onlineCaseCache?.entries()||[])].map(([id,e])=>[id,e.label||id]);if(!entries.length)throw Error('Keine Fälle geladen.');smallForm('Einem weiteren Fall zuordnen',[['targetCaseId','Fall','',entries],['role','Rolle in diesem Fall',c.role],['fileNumber','Aktenzeichen im Zielfall',''],['processNumber','Vorgangsnummer im Zielfall','']],async values=>{const bundle=await request('assign',{...ref(c),...values});await cacheBundle(bundle,ref(c));M.bundle=bundle})}
+function smallValues(s){return Object.fromEntries(new FormData(s.form))}
+async function saveSmall(){
+ const s=M.small;if(!s)return true;clearTimeout(s.timer);if(s.saving){await s.saving;return s.error?false:saveSmall()}
+ if(s.conflict)return false;if(!smallDirty())return true;
+ if(!s.form.checkValidity()){s.error=true;s.errorNode.textContent='Bitte die markierten Felder vollständig und gültig ausfüllen.';message('Noch nicht gespeichert · Angaben prüfen',true);return false}
+ const sent=smallValues(s);s.error=false;s.errorNode.textContent='';message('Wird gespeichert …');
+ s.saving=(async()=>{try{await s.submit(sent,s);s.initial=JSON.stringify(sent);s.everSaved=true;s.error=false;s.retry.hidden=true;message(online()?'Gespeichert':'Lokal übernommen');return true}catch(e){s.error=true;s.conflict=e.status===409;s.errorNode.textContent=e.message;s.retry.hidden=s.conflict;s.resolveButton.hidden=!s.conflict;message('Noch nicht gespeichert · '+e.message,true);return false}finally{s.saving=null}})();
+ const ok=await s.saving;if(ok&&smallDirty())return saveSmall();return ok;
+}
+function smallForm(title,fields,submit,resolve){
+ const pane=$('.am-tab-body');pane.replaceChildren();const form=E('form','am-small-form');form.append(E('h3','',title),E('p','am-sub',online()?'Gültige Änderungen werden automatisch gespeichert.':'Änderungen mit „Fertig“ übernehmen.'));
+ for(const [k,label,value,options] of fields){const l=E('label','',label),input=E(options?'select':'input');input.name=k;if(k==='email')input.type='email';if(k==='name')input.required=true;if(options){input.append(new Option('Bitte wählen …',''));for(const [val,text] of options)input.append(new Option(text,val));input.required=true}input.value=value||'';l.append(input);form.append(l)}
+ const error=E('p','am-error');error.setAttribute('role','status');form.append(error);const footer=E('div','am-small-footer'),save=E('button','am-btn primary','Fertig');save.type='submit';
+ const s=M.small={form,initial:JSON.stringify(Object.fromEntries(new FormData(form))),saving:null,timer:null,error:false,conflict:false,everSaved:false,submit,errorNode:error};
+ s.retry=B('Speichern erneut versuchen',saveSmall,'',true);s.retry.hidden=true;s.resolveButton=B('Aktuellen Stand prüfen',async()=>{if(resolve&&await resolve(s)){s.conflict=false;s.resolveButton.hidden=true;await saveSmall()}},'',true);s.resolveButton.hidden=true;
+ footer.append(save,s.retry,s.resolveButton,B('Ungespeicherte Eingaben verwerfen',async()=>{clearTimeout(s.timer);if(s.saving)await s.saving;if(smallDirty()&&!confirm('Ungespeicherte Eingaben verwerfen? Bereits automatisch gespeicherte Änderungen bleiben erhalten.'))return;M.small=null;drawDetail(selected())},'quiet',true));form.append(footer);
+ form.oninput=()=>{clearTimeout(s.timer);message('Änderungen noch nicht gespeichert …');if(online())s.timer=setTimeout(saveSmall,650)};form.onchange=form.oninput;
+ form.onsubmit=async e=>{e.preventDefault();if(await saveSmall()){clearTimeout(s.timer);M.small=null;drawDetail(selected())}};pane.append(form);return s;
+}
+function editPerson(c,p){
+ const id=p?.id||crypto.randomUUID();let base=p||{},baseVersion=M.bundle?.personVersions?.[id]||'';
+ const fields=[['name','Name'],['department','Abteilung'],['role','Funktion'],['email','E-Mail'],['phone','Telefon'],['fax','Fax'],['salutation','Anrede']];
+ smallForm(p?'Ansprechpartner bearbeiten':'Neuer Ansprechpartner',fields.map(([k,label])=>[k,label,base[k]]),async values=>{
+  let bundle;if(online())bundle=await request('person',{...ref(c),personId:id,baseVersion,patch:values},'PATCH');else{const people=[...(api().contacts().find(x=>identity(x)===identity(c))?.people||c.people||[])],next={...values,id},i=people.findIndex(x=>x.id===id);if(i>=0)people[i]=next;else people.push(next);bundle=await savePatch(c,{people})}
+  base=bundle.contact.people.find(x=>x.id===id)||{};baseVersion=bundle.personVersions?.[id]||'';await cacheBundle(bundle,ref(c));M.bundle=bundle;
+ },async s=>{
+  const fresh=await request('contact?'+new URLSearchParams(ref(c))),remote=fresh.contact.people?.find(x=>x.id===id)||{},own=smallValues(s),changed=Object.fromEntries(fields.filter(([k])=>String(own[k]||'')!==String(base[k]||'')).map(([k])=>[k,own[k]]));
+  const difference=Object.keys(changed).map(k=>(fields.find(x=>x[0]===k)?.[1]||k)+': aktuell „'+(remote[k]||'—')+'“ / Ihre Eingabe „'+changed[k]+'“').join('\n');
+  if(!confirm('Aktuellen Ansprechpartner laden und Ihre Änderungen darauf anwenden? Andere Felder bleiben erhalten.\n\n'+difference))return false;
+  base=remote;baseVersion=fresh.personVersions?.[id]||'';for(const [k] of fields)s.form.elements[k].value=changed[k]??remote[k]??'';return true;
+ });
+}
+async function deletePerson(c,p){if(!confirm('Ansprechpartner „'+p.name+'“ entfernen? Historische Dokumentation bleibt erhalten.'))return;if(!online()){await savePatch(c,{people:(api().contacts().find(x=>identity(x)===identity(c))?.people||c.people||[]).filter(x=>x.id!==p.id)});return}const bundle=await request('person',{...ref(c),personId:p.id,baseVersion:M.bundle?.personVersions?.[p.id]||'',remove:true},'PATCH');await cacheBundle(bundle,ref(c));M.bundle=bundle;window.phase5RenderAddressbookV154()}
+function assign(c){
+ const associated=new Set((M.bundle?.associations||[]).map(a=>a.caseId));const entries=[...(window.__onlineCaseCache?.entries()||[])].filter(([id])=>!associated.has(id)).map(([id,e])=>[id,e.label||id]);if(!entries.length)throw Error('Der Kontakt ist bereits allen verfügbaren Fällen zugeordnet.');
+ const assignmentId=crypto.randomUUID();let targetVersion='',targetCaseId='';
+ smallForm('Einem weiteren Fall zuordnen',[['targetCaseId','Fall','',entries],['role','Rolle in diesem Fall',c.role],['fileNumber','Aktenzeichen im Zielfall',''],['processNumber','Vorgangsnummer im Zielfall','']],async(values,s)=>{
+  if(!targetCaseId)targetCaseId=values.targetCaseId;s.form.elements.targetCaseId.setAttribute('aria-readonly','true');
+  const bundle=await request('assign',{...ref(c),...values,targetCaseId,assignmentId,targetVersion});targetVersion=bundle.assignment.version;await cacheBundle(bundle,ref(c));M.bundle=bundle;
+ },async s=>{
+  if(!targetCaseId)return false;const fresh=await request('contact?'+new URLSearchParams({scope:'case',caseId:targetCaseId,id:assignmentId}));
+  if(!confirm('Die Fallzuordnung wurde geändert. Ihre offenen Angaben zu Rolle, Aktenzeichen und Vorgangsnummer auf den aktuellen Stand anwenden?'))return false;targetVersion=fresh.version;return true;
+ });
+ const input=M.small.form.elements.targetCaseId;input.addEventListener('change',()=>{if(targetCaseId){input.value=targetCaseId;message('Für einen weiteren Fall bitte eine neue Zuordnung öffnen.')}});
+}
+
 async function detach(c,a){if(!confirm('Die zentrale Verknüpfung für „'+a.label+'“ lösen? Der Kontakt bleibt als eigenständiger Fallkontakt erhalten.'))return;const bundle=await request('detach',{...ref(c),targetCaseId:a.caseId,contactId:a.contactId});await cacheBundle(bundle,ref(c));await refreshCase(a.caseId);if(M.selected===identity(c)){M.bundle=bundle;drawTab(c)}}
 async function setStandard(c,a,purpose,remove){const p=person();const bundle=await request('standard',{caseId:a.caseId,id:a.contactId,purpose,personId:p?.id||'',remove});await cacheBundle(bundle,{scope:'case',caseId:a.caseId,id:a.contactId});await refreshCase(a.caseId);if(M.selected===identity(c)){const fresh=await loadDetails(c);if(fresh)drawTab(c)}}
 async function restore(c,h){if(!confirm('Die angezeigte Änderung rückgängig machen? Dies wird als neue Änderung protokolliert.'))return;if(!online()){const patch={};for(const [k,v] of Object.entries(h.changes))if(Object.hasOwn(LABELS,k)&&k!=='_standardRecipients')patch[k]=v.before??(k==='people'?[]:'');if(!(patch.institution??c.institution)&&!(patch.lastName??c.lastName))throw Error('Die Anlage eines Kontakts lässt sich hier nicht rückgängig machen.');await savePatch(c,patch);return}const bundle=await request('restore',{...ref(c),historyId:h.id,version:M.bundle.version});await cacheBundle(bundle,ref(c));M.bundle=bundle;window.phase5RenderAddressbookV154()}
+const mergeRequests=new Map();let mergeEpoch=0;
+const mergeScore=c=>['institution','firstName','lastName','role','email','phone','mobile','street','city','postal','fileNumber','iban'].filter(k=>String(c[k]||'').trim()).length;
+function applyMergeResult(caseId,result,removedId){
+ const targets=[caseId===activeCase()?state.caseData:null,window.__onlineCaseCache?.get(caseId)?.data].filter(Boolean);
+ for(const cd of new Set(targets)){cd.contacts=result.contacts;cd.contactMerges=[...(cd.contactMerges||[]).filter(x=>!x._serverMerge&&x.id!==removedId),...result.merges]}
+ if(caseId===activeCase())saveState();
+}
+window.__abLoadModernMerges=async caseId=>{const epoch=mergeEpoch,result=await request('merges?'+new URLSearchParams({caseId}));if(epoch===mergeEpoch&&!window.__abMergeBusy)applyMergeResult(caseId,result);return result};
+window.__abModernMerge=async(groups,caseId)=>{
+ if(window.__abMergeBusy)throw Error('Bitte die laufende Zusammenführung abwarten.');window.__abMergeBusy=true;mergeEpoch++;
+ try{const snapshot=await request('merges?'+new URLSearchParams({caseId}));const plans=groups.map(g=>({ids:g.map(c=>c.id),survivorId:g.slice().sort((a,b)=>(Number(!!b.centralContactId)-Number(!!a.centralContactId))||(Number(!!b.id)-Number(!!a.id))||(mergeScore(b)-mergeScore(a)))[0].id,versions:Object.fromEntries(g.map(c=>[c.id,snapshot.versions[c.id]]))}));
+  const key=JSON.stringify([caseId,plans.map(p=>[p.ids,p.survivorId])]),operationId=mergeRequests.get(key)||crypto.randomUUID();mergeRequests.set(key,operationId);
+  const result=await request('merge',{caseId,operationId,groups:plans});applyMergeResult(caseId,result);mergeRequests.delete(key);return result;
+ }finally{window.__abMergeBusy=false}
+};
+window.__abModernUnmerge=async(record,caseId)=>{
+ if(window.__abMergeBusy)throw Error('Bitte den laufenden Vorgang abwarten.');window.__abMergeBusy=true;mergeEpoch++;
+ try{const snapshot=await request('merges?'+new URLSearchParams({caseId}));const result=await request('unmerge',{caseId,id:record.id,...(!record._serverMerge?{legacy:record,versions:snapshot.versions}:{})});applyMergeResult(caseId,result,record.id);return result}finally{window.__abMergeBusy=false}
+};
 window.__abMailDokuLink=function(caseId,to,preferred){
  const emails=String(to||'').toLowerCase().match(/[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9.-]+\.[a-z]{2,}/g)||[];
  const cd=String(caseId)===activeCase()?state.caseData:window.__onlineCaseCache?.get(String(caseId))?.data;
@@ -235,7 +304,7 @@ window.__abMailDokuLink=function(caseId,to,preferred){
 window.__abPersonView=(c,id)=>personal(c,(c.people||[]).find(p=>p.id===id));
 window.__abModernLink=currentLink;
 const visible=()=>!!M.root?.isConnected&&!document.getElementById('modal')?.classList.contains('hidden');
-window.__abModern={mount,render,active:visible,hold:()=>!!(visible()&&(M.editor||M.small)),selected,flush,edit,savePatch};
+window.__abModern={mount,render,jumpToLetter,active:visible,hold:()=>!!(visible()&&(M.editor||M.small)),selected,flush,edit,savePatch};
 window.__abDefaultRecipient=function(purpose='document'){const c=(state.caseData.contacts||[]).find(x=>!isEnded(x)&&Object.hasOwn(x._standardRecipients||{},purpose));if(!c)return null;const p=(c.people||[]).find(x=>x.id===c._standardRecipients[purpose]);return {contact:c,person:p||null,...personal(c,p)}};
 // Die Anwendung hat mehrere spätere Empfänger-Renderer. Ansprechpartner deshalb auch an
 // deren öffentlichen Ausgabegrenzen auflösen; die dauerhafte Schlüsselreferenz bleibt die Institution.
@@ -244,9 +313,9 @@ function recipientLines(c){return [c.institution,[c.title,c.firstName,c.lastName
 for(const key of ['exportRecipientHTML','phase3RecipientLines','resolveExportRecipientLabel']){const previous=window[key];if(typeof previous!=='function')continue;window[key]=function(eo){const c=recipientPerson(eo);if(!c)return previous.apply(this,arguments);const lines=recipientLines(c);return key==='phase3RecipientLines'?lines:key==='resolveExportRecipientLabel'?lines.join(', '):lines.map(s=>{const d=E('div','',s);return d.innerHTML}).join('<br>')}}
 const previousOptions=window.getExportOptions;window.getExportOptions=function(){const eo=previousOptions.apply(this,arguments),c=recipientPerson(eo);if(c){eo._effectiveContact=c;eo.recipientEmail=c.email||'';eo.recipientFax=c.fax||''}return eo};
 window.addEventListener('beforeunload',e=>{if((M.editor&&(M.editor.saving||Object.keys(M.editor.pending).length))||smallDirty()||M.small?.saving){e.preventDefault();e.returnValue=''}});
-window.addEventListener('mobileBeforeNavigate',e=>{if(!visible()||(!M.editor&&!M.small))return;e.preventDefault();flush().then(ok=>{if(ok){M.editor=null;M.editRequest++;e.detail.proceed()}})});
+window.addEventListener('mobileBeforeNavigate',e=>{if(window.__abMergeBusy){e.preventDefault();message('Bitte den laufenden Vorgang abwarten.');return}if(!visible()||(!M.editor&&!M.small))return;e.preventDefault();flush().then(ok=>{if(ok){M.editor=null;M.editRequest++;e.detail.proceed()}})});
 document.addEventListener('pointerdown',e=>{if(visible()&&!e.target.closest('#addressbookModern .am-menu,#addressbookModern .am-filters'))closeMenus()});
 window.addEventListener('resize',positionMenus);window.visualViewport?.addEventListener('resize',positionMenus);
-const previousClose=window.closeModal;window.closeModal=function(){if(visible()&&(M.editor||M.small)){const self=this,args=arguments;return flush().then(ok=>{if(ok){M.editor=null;M.editRequest++;return previousClose.apply(self,args)}})}M.editRequest++;return previousClose.apply(this,arguments)};
+const previousClose=window.closeModal;window.closeModal=function(){if(window.__abMergeBusy){window.toast?.('Bitte den laufenden Vorgang abwarten.');return}if(visible()&&(M.editor||M.small)){const self=this,args=arguments;return flush().then(ok=>{if(ok){M.editor=null;M.editRequest++;return previousClose.apply(self,args)}})}M.editRequest++;return previousClose.apply(this,arguments)};
 const observer=new MutationObserver(()=>{if(!document.querySelector('#addressbookModern'))document.getElementById('modal')?.classList.remove('am-modal')});const modal=document.getElementById('modalBody');if(modal)observer.observe(modal,{childList:true});
 })();

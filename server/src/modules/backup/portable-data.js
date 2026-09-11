@@ -143,6 +143,7 @@ const TABLE_REGISTRY = Object.freeze([
   { key: 'cases', table: 'cases', groups: ['module', 'case'], casePrimary: true },
   { key: 'caseDokuEntries', table: 'case_doku_entries', groups: ['module', 'case'], caseColumn: 'case_id', caseOrder: 'created_at,id' },
   { key: 'caseContacts', table: 'case_contacts', groups: ['module', 'case'], caseColumn: 'case_id', caseOrder: 'created_at,id' },
+  { key: 'addressbookMerges', table: 'addressbook_merges', groups: ['module', 'case'], caseColumn: 'case_id', caseOrder: 'created_at,id' },
   { key: 'caseDocuments', table: 'case_documents', groups: ['module', 'case'], caseColumn: 'case_id', metadataOnly: true },
   { key: 'calendarEvents', table: 'calendar_events', groups: ['calendar', 'module', 'case'], caseColumn: 'case_id', order: 'start_at,id' },
   { key: 'todos', table: 'todos', groups: ['calendar', 'module', 'case'], caseColumn: 'case_id', order: 'due_at,id' },

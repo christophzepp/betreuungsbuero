@@ -6,6 +6,13 @@ router.use(requireAuth,requireViewCases);
 router.use(require('../office/events').middleware('officeContacts'));
 const handle=fn=>(req,res)=>{try{res.json(fn(req))}catch(e){res.status(e.status||500).json({error:e.status?e.message:'Adressbuch konnte nicht gespeichert werden.'})}};
 router.get('/contact',handle(r=>A.details(r.query.scope,r.query.caseId||'',r.query.id,r.session)));
+router.get('/history',handle(r=>A.historyPage(r.query.scope,r.query.caseId||'',r.query.id,r.session,r.query.cursor)));
+router.get('/communications',handle(r=>A.communicationPage(r.query.scope,r.query.caseId||'',r.query.id,r.session,r.query.cursor)));
+router.patch('/person',requireEditCases,handle(r=>A.savePerson(r.body,r.session)));
+const merge=require('./addressbook-merge');
+router.get('/merges',handle(r=>merge.result(r.query.caseId,r.session)));
+router.post('/merge',requireEditCases,handle(r=>merge.merge(r.body,r.session)));
+router.post('/unmerge',requireEditCases,handle(r=>merge.unmerge(r.body,r.session)));
 router.patch('/contact',requireEditCases,handle(r=>{
  const {scope,caseId='',id,patch,version}=r.body;A.authorize(r.session,scope,caseId,true);const changes=A.validatePatch(patch);
  const row=A.get(scope,caseId,id);if(!row)A.fail(404,'Kontakt nicht gefunden.');const next={...A.data(row),...changes};

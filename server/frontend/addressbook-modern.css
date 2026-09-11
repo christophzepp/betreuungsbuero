@@ -81,7 +81,10 @@
 #addressbookModern .am-editing>h2,#addressbookModern .am-editing>.am-sub{flex:none}
 #addressbookModern .am-edit{min-height:0;flex:1;overflow-y:auto;overflow-x:hidden;padding-right:4px;scrollbar-gutter:stable}
 #addressbookModern .am-edit-footer{display:flex;flex:none;flex-wrap:wrap;gap:8px;padding:10px 0;background:var(--am-bg);border-top:1px solid var(--am-line)}
-#addressbookModern .am-small-form{display:grid;gap:12px;padding:18px 0}
+#addressbookModern .am-small-form{display:grid;gap:12px;padding:18px 0;min-width:0}
+#addressbookModern .am-small-footer{display:flex;flex-wrap:wrap;gap:8px;padding:12px 0;background:var(--am-bg);border-top:1px solid var(--am-line)}
+#addressbookModern .am-small-form label{min-width:0}
+#addressbookModern .am-small-form input,#addressbookModern .am-small-form select{min-width:0;width:100%;box-sizing:border-box}
 #addressbookModern .am-back{display:none}
 html[data-theme=dark] #addressbookModern .am-badge{background:#203f32;color:#9cd1b4}
 html[data-theme=dark] #addressbookModern{--am-accent:#8bc9f5}
@@ -150,3 +153,7 @@ html.mobile-online-active #modal.am-modal #addressbookModern{padding:12px 10px 0
  #modal.am-modal #addressbookModern #abLetterBar{flex-wrap:nowrap;overflow-x:auto}
  #modal.am-modal #addressbookModern #abLetterBar .ab-letter{flex:none}
 }
+
+#addressbookModern .am-pages{display:flex;flex:none;gap:8px;align-items:center;justify-content:space-between;padding:8px 12px;border-top:1px solid var(--am-line);font-size:12px}
+#addressbookModern .am-pages[hidden]{display:none!important}
+#addressbookModern .am-pages .am-btn{padding:6px;min-height:32px}

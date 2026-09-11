@@ -38,6 +38,7 @@ let server,browser;
   document.getElementById('loginGateOverlay')?.remove();window.showImportedAddressbook();
  });
  await page.locator('#addressbookModern').waitFor();await page.waitForTimeout(300);
+ if(process.env.QA_EXTENDED){await require('./qa-addressbook-extended.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_REGRESSIONS){await require('./qa-addressbook-regressions.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_LAYOUT_ONLY){
   const select=await page.locator('.ab-case-switcher select').boundingBox();assert.ok(select.height>=36,'Safari-Auswahlfeld muss volle Höhe haben');
@@ -128,7 +129,7 @@ let server,browser;
  await check('Zusammenführen ist umkehrbar und stellt Original-IDs dauerhaft wieder her',async()=>{
   await page.evaluate(async()=>{for(const d of [{id:'merge-a',institution:'QA Dublette',email:'dup@example.org'},{id:'merge-b',institution:'QA Dublette',email:'dup@example.org',phone:'0123/77'}]){await fetch('/api/cases/a/contacts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:d.id,data:d})})}const r=await(await fetch('/api/cases/a/contacts')).json();state.caseData.contacts=r.contacts.map(x=>({...x.data,id:x.id}));window.showImportedAddressbook()});
   await page.locator('.am-menu summary').click();await page.getByRole('button',{name:'Duplikate & Kontakte zusammenführen',exact:true}).click();await page.getByRole('heading',{name:/Duplikate/}).first().waitFor();
-  page.once('dialog',d=>d.accept());await page.evaluate(()=>{window.__abCsvSelectAll(false);for(const c of state.caseData.contacts.filter(c=>c.id.startsWith('merge-')))window.__abCsvToggle(window.__abModernLegacy.key(c),true);window.__abMergeSelected()});
+  page.once('dialog',d=>d.accept());await page.evaluate(()=>{window.__abCsvSelectAll(false);for(const c of state.caseData.contacts.filter(c=>c.id.startsWith('merge-')))window.__abCsvToggle(window.__abModernLegacy.key(c),true);return window.__abMergeSelected()});
   await page.waitForFunction(async()=>{const r=await(await fetch('/api/cases/a/contacts')).json();return r.contacts.filter(x=>x.id.startsWith('merge-')).length===1});const record=await page.evaluate(()=>state.caseData.contactMerges.find(m=>m.survivorId.startsWith('merge-')).id);await page.evaluate(async id=>window.__abUnmergeContacts(id),record);assert.equal(db.prepare("SELECT count(*) n FROM case_contacts WHERE id IN ('merge-a','merge-b')").get().n,2);
   await page.evaluate(()=>{window.__baBack=null;window.showImportedAddressbook()});
  });

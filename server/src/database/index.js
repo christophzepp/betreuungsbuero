@@ -99,6 +99,15 @@ db.exec(`
     at TEXT NOT NULL, actor TEXT NOT NULL, changes_json TEXT NOT NULL
   );
   CREATE INDEX IF NOT EXISTS addressbook_history_contact ON addressbook_history(scope,contact_id,at);
+  CREATE TABLE IF NOT EXISTS addressbook_merges (
+    id TEXT PRIMARY KEY,
+    case_id TEXT NOT NULL REFERENCES cases(id) ON DELETE CASCADE,
+    operation_id TEXT NOT NULL,
+    data_json TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT (datetime('now')),
+    undone_at TEXT
+  );
+  CREATE INDEX IF NOT EXISTS addressbook_merges_case ON addressbook_merges(case_id,operation_id);
 
   -- Generischer büroweiter JSON-Speicher (Nutzerwunsch 2026-07-17): geteilte, fallübergreifende
   -- Client-Zustände, für die keine eigene Tabelle lohnt - je Schlüssel EIN JSON-Blob. Erste Nutzer:

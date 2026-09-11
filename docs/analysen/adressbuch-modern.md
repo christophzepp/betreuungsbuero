@@ -1,6 +1,6 @@
 # Produktives Adressbuch – Funktionsabgleich
 
-Stand: 11.09.2026. Umsetzung in der ausgelieferten Anwendung und den bestehenden Serverdaten. Das HTML-Mockup ist keine Datenquelle und wird nicht als separate Anwendung eingebunden.
+Stand: 12.09.2026. Umsetzung in der ausgelieferten Anwendung und den bestehenden Serverdaten. Das HTML-Mockup ist keine Datenquelle und wird nicht als separate Anwendung eingebunden.
 
 ## Bestehende Funktionen
 
@@ -74,3 +74,28 @@ Die anschließende Prüfung des neuen Adressbuchs hat folgende Fehler gezielt na
 `QA_REGRESSIONS=1 node server/scripts/qa-addressbook-modern.cjs` führt die ergänzenden Browserprüfungen aus (`QA_BROWSER=webkit` für Safari/WebKit; `PLAYWRIGHT_MODULE` kann auf die lokale Playwright-Installation zeigen). Der Lauf verwendet die echte ausgelieferte Anwendung, echte Kontaktrouten und ausschließlich eine temporäre Datenbank. Er prüft Desktop 1100 × 650 und 800 × 650 sowie Mobil 390 × 700 und 320 × 640, einschließlich Hell-/Dunkelansicht. Verzögerte Antworten werden vor dem echten HTTP-Aufruf angehalten und anschließend freigegeben.
 
 Ergebnis: 25 ergänzende Browserprüfungen je Engine erfolgreich, dazu der vollständige Funktionstest in Chromium und WebKit sowie weiterhin 43 gezielte Tests. Sichtgeprüfte Beispiele der Korrektur: [mobile Filter](adressbuch-modern/korrekturen/mobil-filter.png), [mobiles Formular](adressbuch-modern/korrekturen/mobil-formular.png), [mobile Liste](adressbuch-modern/korrekturen/mobil-liste.png), [320 Pixel hell](adressbuch-modern/korrekturen/mobil-schmal-hell.png), [320 Pixel dunkel](adressbuch-modern/korrekturen/mobil-schmal-dunkel.png), [schmaler Desktop hell](adressbuch-modern/korrekturen/desktop-schmal-hell.png), [schmaler Desktop dunkel](adressbuch-modern/korrekturen/desktop-schmal-dunkel.png).
+
+
+## Abschluss der Restarbeiten vom 12.09.2026
+
+- Zusammenführen und Trennen sind online jeweils eine Datenbanktransaktion. Kontakte, zentrale Projektionen, Änderungsnachweise und Wiederherstellungsdaten werden gemeinsam gespeichert. Erst danach werden verbundene Fenster benachrichtigt. Ein Vorgang mit verlorener HTTP-Antwort kann mit seiner Vorgangs-ID wiederholt werden. Neuere Änderungen verhindern ein überschreibendes Trennen.
+- Der Server verwahrt Originaldaten einschließlich Kontakt-IDs und Verbindungsmetadaten in `addressbook_merges`. Die Tabelle ist in der Modul- und Fallsicherung registriert. Altbestände ohne Serverarchiv werden ebenfalls atomar getrennt. Ein in einen anderen Fall importiertes Archiv darf den Ursprungsfall nicht verändern.
+- Ansprechpartner haben einen eigenen versionsgesicherten Speicherweg. Änderungen verschiedener Personen erhalten sich auch über zentrale Fallprojektionen hinweg. Gleichzeitige Änderungen derselben Person werden ausdrücklich aufgelöst; unveränderte Felder des anderen Bearbeiters bleiben erhalten.
+- Online speichern Ansprechpartner und neue Fallzuordnungen gültige Eingaben automatisch. Weitere Eingaben während eines laufenden Speicherns werden anschließend gespeichert. Eine stabile ID verhindert doppelte Personen oder Zuordnungen bei Wiederholungen. Fehler und ungültige Angaben bleiben im Formular; Navigation und Schließen warten auf eine erfolgreiche Speicherung. „Fertig“ schließt das Formular. Lokal wird weiterhin beim Übernehmen gespeichert.
+- Die Suche berücksichtigt Namen, Abteilung, Funktion, E-Mail, Telefon und Fax der Ansprechpartner innerhalb einer Institution.
+- Änderungsverlauf und Kommunikation besitzen eine Fortsetzung über „Weitere … laden“ (100 bzw. 200 Einträge pro Abruf). Zeitgleiche Einträge werden stabil sortiert; Fallrechte werden bei jedem Abruf geprüft. Historische Kontaktverknüpfungen bleiben auch über mehrfache Zusammenführungen und deren Rücknahme auffindbar.
+- Große Kontaktlisten zeigen jeweils 200 Treffer. Suche, Filter, Alphabet, Gesamtauswahl und Export verwenden den vollständigen Trefferbestand. A–Z lädt die passende Seite. Ein gemeinsamer DOM-Aufbau reduziert die Zahl der Darstellungsänderungen.
+- Über mehrere Merkmale verbundene Dublettengruppen werden vollständig vereinigt, sodass kein Kontakt doppelt in einer Zusammenführung vorkommt. Eine gemeinsame E-Mail allein reicht weiterhin nicht für einen Dublettenvorschlag.
+- Echtzeit-Nachrichten entfernen gelöschte Dubletten samt Auswahl in anderen Fenstern und ergänzen wiederhergestellte Kontakte genau einmal. Erledigte Speicherfehler verschwinden auch aus den Hinweismeldungen.
+
+### Nachweise
+
+63 gezielte Server-, Integrations- und Oberflächentests erfolgreich, einschließlich des echten WebSocket-Prüflaufs.
+
+`server/tests/addressbook-reliability.test.cjs` prüft unter anderem parallele Personenänderungen, idempotente Fallzuordnungen, Transaktionsabbruch in einer zweiten Merge-Gruppe, keine vorzeitigen Echtzeit-Nachrichten, verlorene Antworten, Versionskonflikte, Metadatenwiederherstellung, zentrale Projektionen, Altbestände, verschachtelte Zusammenführungen und lückenlose Fortsetzungen mit 305 Änderungen bzw. 505 Dokumentationen. `server/tests/addressbook-realtime.test.cjs` führt den tatsächlichen Empfangscode der ausgelieferten Anwendung mit Create-, Update- und Delete-Nachrichten aus.
+
+`QA_EXTENDED=1 node server/scripts/qa-addressbook-modern.cjs` ergänzt die Browserprüfung um Autosave ohne Bestätigung, weiteres Tippen während des Speicherns, Abbruch und Wiederholung, Personen-Konfliktauflösung, automatische Fallzuordnung, Nachladen, verlorene Merge-/Undo-Antworten und 5.000 zusätzliche Kontakte. Die Browserläufe verwenden echte App-Datei, HTTP-Routen und SQLite-Daten, getrennt von den Benutzerdaten.
+
+Die vollständigen Funktionsläufe, 25 Darstellungs-/Navigationsprüfungen und 15 erweiterte Prüfungen sind jeweils in Chromium und WebKit für Desktop und emulierte Mobilansicht erfolgreich. Die kleinen Ansichten umfassen 320 × 640, 390 × 700 und 800 × 650 Pixel. Beim letzten Chromium-Belastungslauf lagen der Aufbau bei 124–147 ms und die Suche bei 200–319 ms; in WebKit bei 49–55 ms und 46–75 ms. Dies sind lokale Messungen ohne CPU-Drosselung, keine Messungen auf einem physischen Smartphone. Sichtgeprüfte Beispiele: [Ansprechpartner mobil](adressbuch-modern/restarbeiten/ansprechpartner-mobil.png), [5.000 Kontakte mit Seitenauswahl](adressbuch-modern/restarbeiten/kontaktseiten-mobil.png).
+
+Die laufende Demo unter `http://localhost:8935` wurde mit dem freigegebenen Vorführkonto geöffnet. Adressbuch, Kontaktinformationen und Übergabe an die Falldokumentation wurden geprüft: Der gewählte Kontakt sowie Bereich und Gegenüber waren passend vorausgewählt; Kontaktart, Themenfeld und Vorgang blieben frei. Der eigene ungespeicherte Testentwurf wurde verworfen. Der Demomodus hält Änderungen ausdrücklich nur in der Sitzung; die dauerhaften neuen Online-Speicherwege wurden deshalb mit der isolierten Serverdatenbank geprüft. Ein physisches Smartphone sowie Schreibvorgänge in verbundenen externen Konten waren nicht Teil dieser Prüfung.

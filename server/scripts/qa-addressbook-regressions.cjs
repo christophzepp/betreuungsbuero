@@ -19,11 +19,11 @@ module.exports=async function({page,mobile,db,errors}){
   await page.waitForFunction(()=>window.__abDefaultRecipient('document')?.contact.id==='court'&&!window.__abDefaultRecipient('document')?.person);
   await page.locator('#amPerson').selectOption('sach');await section.getByRole('button',{name:'Als Standard für Dokumente',exact:true}).click();await page.waitForFunction(()=>window.__abDefaultRecipient('document')?.person?.id==='sach');
  });
- await check('Unübernommene Ansprechpartner bleiben bei Listenaktualisierung und abgelehntem Wechsel erhalten',async()=>{
-  await page.getByRole('button',{name:'Ansprechpartner',exact:true}).click();await page.getByRole('button',{name:'+ Ansprechpartner',exact:true}).click();await page.locator('.am-small-form [name=name]').fill('Entwurf erhalten');
+ await check('Ungültige Ansprechpartner bleiben bei Listenaktualisierung und beim Wechsel erhalten',async()=>{
+  await page.getByRole('button',{name:'Ansprechpartner',exact:true}).click();await page.getByRole('button',{name:'+ Ansprechpartner',exact:true}).click();await page.locator('.am-small-form [name=name]').fill('Entwurf erhalten');await page.locator('.am-small-form [name=email]').fill('ungueltig');
   await page.evaluate(()=>window.phase5RenderAddressbookV154());assert.equal(await page.locator('.am-small-form [name=name]').inputValue(),'Entwurf erhalten');
-  page.once('dialog',d=>d.dismiss());await page.getByRole('button',{name:'Kontaktdaten',exact:true}).click();assert.equal(await page.locator('.am-small-form [name=name]').inputValue(),'Entwurf erhalten');
-  page.once('dialog',d=>d.accept());await page.getByRole('button',{name:'Abbrechen',exact:true}).click();await page.locator('.am-small-form').waitFor({state:'detached'});
+  await page.getByRole('button',{name:'Kontaktdaten',exact:true}).click();assert.equal(await page.locator('.am-small-form [name=name]').inputValue(),'Entwurf erhalten');
+  page.once('dialog',d=>d.accept());await page.getByRole('button',{name:'Ungespeicherte Eingaben verwerfen',exact:true}).click();await page.locator('.am-small-form').waitFor({state:'detached'});
  });
  await page.getByRole('button',{name:'Kontaktdaten',exact:true}).click();
  await page.locator('.am-detail-top').getByRole('button',{name:'Bearbeiten',exact:true}).click();await page.locator('#amEdit_institution').waitFor();await page.screenshot({path:prefix+'-edit.png'});
