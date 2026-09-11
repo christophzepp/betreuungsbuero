@@ -30,6 +30,14 @@ test('Lokaler Abgleich aktualisiert IDs und erhält fremde Daten und Anlagen',as
 test('Voller lokaler Speicher meldet Fehler und vergibt keine falschen Verknüpfungen',async()=>{
  const {context:c,record}=fixture(),fr=record();c.failLocal=true;await assert.rejects(()=>c.frWorkspaceReconcile(fr),/Speicher voll/);assert.equal(fr.calEventId,'');assert.equal(fr.todoId,'');c.failLocal=false;await c.frWorkspaceReconcile(fr);assert.ok(fr.calEventId&&fr.todoId);assert.equal(fr.linkSyncError,'');
 });
+test('Fristabgleich bestätigt wirkungslose Schreibversuche nicht als gespeichert',async()=>{
+ const {context:c,record,storage}=fixture(),fr=record();
+ const write=c.localStorage.setItem;c.localStorage.setItem=()=>{};
+ await assert.rejects(()=>c.frWorkspaceReconcile(fr),/Speicherung wurde nicht bestätigt/);
+ assert.equal(fr.calEventId,'');assert.equal(fr.todoId,'');assert.equal(storage.size,0);
+ c.localStorage.setItem=write;await c.frWorkspaceReconcile(fr);
+ assert.ok(fr.calEventId&&fr.todoId);assert.equal(fr.linkSyncError,'');
+});
 test('Online-Teilfehler wird ohne zusätzliche Kalender-Dublette wiederholt',async()=>{
  const {context:c,links,record,requests}=fixture(true),fr=record();c.fail='todos';await assert.rejects(()=>c.frWorkspaceReconcile(fr),/unvollständig/);const saved=fr.calEventId;assert.ok(saved);assert.equal(fr.todoId,'');c.fail='';await c.frWorkspaceReconcile(fr);assert.equal(fr.calEventId,saved);assert.equal(links.calendar.length,1);assert.equal(links.todos.length,1);assert.ok(requests.some(r=>r.method==='PUT'));
 });

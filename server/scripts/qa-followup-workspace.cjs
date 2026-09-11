@@ -48,6 +48,8 @@ const out=process.env.MOBILE_QA_OUTPUT||'/tmp/followup-workspace-qa';fs.mkdirSyn
  if(process.env.FOLLOWUP_NAV_AUDIT){await require('./qa-followup-nav.cjs')({page,root,act,panel,check,shot,errors,seed});return;}
  if(process.env.FOLLOWUP_EDITOR_AUDIT){await require('./qa-followup-editor.cjs')({page,root,act,panel,check,shot,errors,out});return;}
  if(process.env.FOLLOWUP_NOTE_AUDIT){await require('./qa-followup-note.cjs')({page,root,act,panel,check,shot,errors});return;}
+ if(process.env.PLANNING_REGRESSION_AUDIT){await require('./qa-planning-regressions.cjs')({page,root,act,panel,check,shot,errors});return;}
+ if(process.env.FOLLOWUP_REGRESSION_AUDIT){await require('./qa-followup-regressions.cjs')({page,root,act,panel,check,shot,errors});return;}
  await page.setViewportSize({width:1440,height:1000});await page.evaluate(()=>window.__caseOverview.openFollowups());await root.waitFor();
  await check('Alle echten Quellen, keine Fristerinnerung oder freie Aufgabe',async()=>{assert.equal(await root.locator('.wv-row').count(),4);assert.equal(await root.getByText('Später / ohne Datum').count(),1)});await shot('desktop-liste');
  await check('Navigation direkt nach Fristen mit Schnellaktionen und Tooltip',async()=>{assert.ok(await page.locator('[data-fristen-menu] + [data-wiedervorlagen-menu]').count());assert.ok(await page.locator('[data-wiedervorlagen-menu] [data-wv-new]').first().getAttribute('title'))});
