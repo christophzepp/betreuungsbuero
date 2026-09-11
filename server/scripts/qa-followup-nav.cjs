@@ -34,6 +34,32 @@ module.exports=async({page,root,act,panel,check,shot,errors,seed})=>{
  }finally{await popup.close()}
  await page.evaluate(()=>{__soloEnhanceNav();__soloEnhanceNav();__soloEnhanceNav()});
  await check('Erneutes Aktualisieren erzeugt keine doppelten Schnellaktionen',async()=>assert.equal(await quick.count(),3));
- await menu.scrollIntoViewIfNeeded();await shot('wiedervorlagen-schnellaktionen');
+ await page.evaluate(()=>{
+  __qaTodos.find(t=>t.id==='f1').title='Wiedervorlage: Eingangsbestätigung des Jobcenters zu den ergänzenden Unterlagen prüfen';
+  __qaTodos.find(t=>t.id==='f2').caseLabel='Auerbach-Mustermann, Margarete mit einem ausführlichen Fallnamen';
+  __qaTodos.push({id:'mini-extra',itemType:'followup',title:'Wiedervorlage: Rückmeldung der Pflegekasse',caseId:'a',caseLabel:'Hoffmann, Mara',sourceType:'note',sourceId:'mini-original',dueAt:__qaDay(7),priority:'normal',done:false});
+  return __followupWorkspace.refresh();
+ });
+ await menu.evaluate(el=>el.open=true);await menu.locator('[data-wv-entry="todo:mini-extra"]').waitFor();
+ await check('Vorschau zeigt fünf offene Einträge chronologisch, undatierte zuletzt',async()=>assert.deepEqual(await menu.locator('[data-wv-entry]').evaluateAll(es=>es.map(el=>el.dataset.wvEntry)),['todo:f1','todo:f2','mail:s1','todo:mini-extra','todo:nodate']));
+ await check('Offene und überfällige Einträge sind wie bei Aufgaben zusammengefasst',async()=>assert.equal((await menu.locator('.todomini-summary').innerText()).replace(/\s+/g,' '),'1 überfällig 5 offen'));
+ for(const [width,height,theme] of [[1440,1000,'light'],[1024,800,'dark'],[390,844,'light']]){
+  await page.setViewportSize({width,height});await page.evaluate(t=>{document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t},theme);
+  if(width<700)await page.evaluate(()=>{document.body.classList.add('sb-open')});
+  await menu.scrollIntoViewIfNeeded();
+  await check(`Titel, Fall und Datum sind ruhig ausgerichtet ${width} ${theme}`,async()=>{
+   const rows=await menu.locator('[data-wv-entry]').evaluateAll(es=>es.map(el=>{const box=n=>n.getBoundingClientRect().toJSON();return {row:box(el),title:box(el.querySelector('.todomini-title')),date:box(el.querySelector('.todomini-due')),case:box(el.querySelector('.case-ref-line')),overflow:el.scrollWidth>el.clientWidth+1}}));
+   for(const r of rows){assert.equal(r.overflow,false);assert.ok(Math.abs(r.title.top-r.date.top)<2);assert.ok(r.title.right<=r.date.left);assert.ok(r.case.top>=r.title.bottom);assert.ok(Math.abs(r.case.left-r.title.left)<2);assert.ok(Math.abs(r.row.height-rows[0].row.height)<2)}
+   assert.ok(await menu.evaluate(el=>el.scrollWidth<=el.clientWidth+1));
+  });
+  await shot(`wiedervorlagen-vorschau-${width}-${theme}`);
+ }
+ await page.setViewportSize({width:1440,height:1000});await page.evaluate(()=>{document.documentElement.dataset.theme='light';document.documentElement.style.colorScheme='light'});
+ await check('Abgekürzte Texte bleiben im Tooltip und zugänglichen Namen vollständig',async()=>{const row=menu.locator('[data-wv-entry="todo:f2"]');assert.match(await row.getAttribute('title'),/Auerbach-Mustermann, Margarete mit einem ausführlichen Fallnamen/);assert.equal(await row.getAttribute('title'),await row.getAttribute('aria-label'))});
+ const first=menu.locator('[data-wv-entry="todo:f1"]');await first.scrollIntoViewIfNeeded();const box=await first.boundingBox();await first.click({position:{x:box.width/2,y:box.height-3}});await act('edit').waitFor();
+ await check('Auch der freie Bereich einer Vorschauzeile öffnet den richtigen Eintrag',async()=>assert.match(await panel.innerText(),/Eingangsbestätigung des Jobcenters/));await act('exit').click();
+ await menu.locator('[data-wv-entry="todo:f2"]').focus();await page.keyboard.press('Enter');await act('edit').waitFor();
+ await check('Vorschauzeilen öffnen sich mit der Tastatur',async()=>assert.match(await panel.innerText(),/Arztbrief besprechen/));await act('exit').click();
+ await menu.locator('[data-wv-open]').click();await root.waitFor();await check('Vollständige Wiedervorlagen bleiben unterhalb der Vorschau erreichbar',async()=>assert.equal(await root.getAttribute('data-page'),'list'));await act('exit').click();
  await check('Keine Laufzeitfehler bei den Schnellaktionen',async()=>assert.deepEqual(errors,[]));console.log('NAV DONE');
 };

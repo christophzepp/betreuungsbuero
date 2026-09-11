@@ -22,7 +22,11 @@ module.exports=async({page,root,act,panel,check,shot,errors})=>{
   if(!diag){await act('edit').click();}else await act('edit').evaluate(el=>el.click());
   await verify(`Formular beginnt bei Fall und Original ${width}×${height}`,async()=>assert.equal(Math.round((await metrics('.wv-panel')).top),0));
   await verify(`Speichern bei gescrollten Formularfeldern erreichbar ${width}×${height}`,async()=>assert.ok(await reachable(panel.locator('.wv-panel-content'),'[data-action=save]')));
-  await verify(`Notizfeld hat eine passende Ausgangshöhe ${width}×${height}`,async()=>assert.ok(await panel.locator('textarea[data-draft=note]').evaluate(el=>el.clientHeight<=180)));
+  await verify(`Notizfeld bleibt vollständig im erreichbaren Formularbereich ${width}×${height}`,async()=>{
+   const field=await panel.locator('textarea[data-draft=note]').boundingBox(),content=await panel.locator('.wv-panel-content').boundingBox();
+   assert.ok(field.height>=88&&field.y+field.height<=content.y+content.height+1);
+   if(width<800)assert.ok(field.height<=180);
+  });
   await shot('form-bottom-'+width+'-'+height);
   if(diag)await act('close').first().evaluate(el=>el.click());else await act('close').first().click();
   await act('filter').click();
@@ -32,7 +36,7 @@ module.exports=async({page,root,act,panel,check,shot,errors})=>{
  await page.setViewportSize({width:1024,height:700});await act('new').click();
  await panel.locator('.wv-source-option').last().click();
  await verify('Ausgewähltes Original bleibt sichtbar und fokussiert',async()=>assert.equal(await panel.locator('.wv-source-option[aria-pressed=true]').evaluate(el=>document.activeElement===el),true));
- await verify('Große Originalauswahl besitzt einen eigenen Scrollbereich',async()=>assert.ok(await panel.locator('.wv-source-choices').evaluate(el=>el.scrollHeight>el.clientHeight&&el.clientHeight<=280)));
+ await verify('Große Originalauswahl scrollt innerhalb des Formularbereichs',async()=>assert.ok(await panel.locator('.wv-source-choices').evaluate(el=>{const r=el.getBoundingClientRect(),content=el.closest('.wv-panel-content').getBoundingClientRect();return el.scrollHeight>el.clientHeight&&r.top>=content.top&&r.bottom<=content.bottom})));
  await panel.locator('.wv-source-option').first().focus();await page.keyboard.press('Enter');
  await verify('Originalauswahl bleibt mit der Tastatur bedienbar',async()=>assert.equal(await panel.locator('.wv-source-option').first().evaluate(el=>document.activeElement===el&&el.getAttribute('aria-pressed')==='true'),true));
  await shot('source-selected');
