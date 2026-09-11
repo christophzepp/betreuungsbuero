@@ -23,8 +23,9 @@ let server,browser;
 (async()=>{
  server=await new Promise(resolve=>{const s=app.listen(0,'127.0.0.1',()=>resolve(s))});const origin='http://127.0.0.1:'+server.address().port;
  browser=await playwright[process.env.QA_BROWSER||'chromium'].launch({headless:true});
- for(const mobile of [false,true]){
- const page=await browser.newPage({viewport:mobile?{width:390,height:844}:{width:1440,height:1000},isMobile:mobile,hasTouch:mobile,...(mobile?{userAgent:'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Version/18.0 Mobile/15E148 Safari/604.1'}:{})});
+ for(const mobile of (process.env.QA_MOBILE_ONLY?[true]:[false,true])){
+ if(process.env.QA_REGRESSIONS){const ended=JSON.parse(db.prepare('SELECT data_json FROM case_contacts WHERE id=?').get('ended').data_json);ended.status='Beendet';db.prepare('UPDATE case_contacts SET data_json=? WHERE id=?').run(JSON.stringify(ended),'ended')}
+ const page=await browser.newPage({viewport:mobile?{width:390,height:process.env.QA_REGRESSIONS?700:844}:{width:1440,height:1000},isMobile:mobile,hasTouch:mobile,...(mobile?{userAgent:'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Version/18.0 Mobile/15E148 Safari/604.1'}:{})});
  page.setDefaultTimeout(15000);const errors=[];page.on('pageerror',e=>{errors.push(e.message);console.log('PAGEERROR',e.message)});
  await page.route('**/*',r=>r.request().url().startsWith(origin)?r.continue():r.abort());
  await page.goto(origin,{waitUntil:'domcontentloaded',timeout:90000});await page.locator('#modeIntroNext').click();await page.waitForTimeout(250);
@@ -37,6 +38,7 @@ let server,browser;
   document.getElementById('loginGateOverlay')?.remove();window.showImportedAddressbook();
  });
  await page.locator('#addressbookModern').waitFor();await page.waitForTimeout(300);
+ if(process.env.QA_REGRESSIONS){await require('./qa-addressbook-regressions.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_LAYOUT_ONLY){
   const select=await page.locator('.ab-case-switcher select').boundingBox();assert.ok(select.height>=36,'Safari-Auswahlfeld muss volle Höhe haben');
   for(const theme of ['light','dark']){await page.evaluate(t=>document.documentElement.dataset.theme=t,theme);await page.screenshot({path:'/tmp/addressbook-final-'+(mobile?'mobile':'desktop')+'-'+theme+'.png'})}

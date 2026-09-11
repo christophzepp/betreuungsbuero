@@ -57,3 +57,20 @@ Zusätzlich geprüft werden die vorhandenen Tests für Falldokumentations-Verkn�
 43 gezielte Tests erfolgreich. Der vollständige Browserlauf mit temporärer Datenbank ist in Chromium und WebKit jeweils für Desktop (1440 × 1000) und Mobilansicht (390 × 844) erfolgreich. Ein zusätzlicher WebKit-Darstellungslauf prüft Auswahlfeldhöhen und 320 Pixel Bildschirmbreite. Geprüfte Bildschirmansichten: [Desktop hell](adressbuch-modern/desktop-light.png), [Desktop dunkel](adressbuch-modern/desktop-dark.png), [Mobil hell](adressbuch-modern/mobile-light.png), [Mobil dunkel](adressbuch-modern/mobile-dark.png).
 
 Die lokalen Kommunikationstests sichern zusätzlich ab, dass importierte Kontakte ohne ID keine unverknüpften oder fremden Dokumentationen zugewiesen bekommen. Die Safari-Darstellung verwendet durchgehend ausreichend hohe Auswahlfelder.
+
+## Korrekturlauf vom 11.09.2026
+
+Die anschließende Prüfung des neuen Adressbuchs hat folgende Fehler gezielt nachgestellt und behoben:
+
+- Mobile Filter wurden durch ältere Layoutregeln auf Knopfbreite reduziert und unten abgeschnitten. Menüs nutzen jetzt die verfügbare Breite und Höhe innerhalb der sichtbaren Arbeitsfläche; außerhalb klicken oder Escape schließt sie.
+- Im mobilen Bearbeitungsformular war „Fertig“ erst nach dem gesamten Formular erreichbar. Das Formular scrollt jetzt getrennt von seinen ständig sichtbaren Aktionen. Vorschlagslisten bleiben innerhalb der Formularfläche und verdecken diese Aktionen nicht. „Speichern erneut versuchen“ erscheint nur bei einem Speicherfehler.
+- Leere Trefferlisten konnten in der mobilen Detailansicht festhängen. Sie führen zurück zur Liste und halten Suche, Filter und Statusanzeige verfügbar.
+- Die Auswahl eines Ansprechpartners ging beim Neuaufbau der Liste verloren. Sie bleibt kontaktbezogen erhalten und wird auch beim Kopieren der Kontaktdaten berücksichtigt.
+- Ein bereits gesetzter Standard ließ sich nicht direkt von der Institution auf einen Ansprechpartner umstellen. Der markierte Standard berücksichtigt jetzt die konkrete Person.
+- Offene Ansprechpartner- und Zuordnungsformulare konnten durch Aktualisierungen ersetzt werden. Sie bleiben erhalten; unübernommene Eingaben sind beim Verlassen geschützt. Wiederholtes Auslösen während des Speicherns wird abgefangen.
+- Verspätete Kontaktantworten konnten ein neueres Formular ersetzen. Sie werden beim Wechsel oder Schließen verworfen. Mobile Navigation wartet auf die Speicherung und lässt fehlerhafte Eingaben geöffnet.
+- A–Z berücksichtigt auf niedrigen Mobilbildschirmen den tatsächlich scrollenden Listenbereich. Die Alphabetleiste bleibt einheitlich ausgerichtet. Kompakte Fenster erhalten mehr Platz für Kontakte; bei schmalen geteilten Ansichten bleibt der Detailbereich ausreichend breit.
+
+`QA_REGRESSIONS=1 node server/scripts/qa-addressbook-modern.cjs` führt die ergänzenden Browserprüfungen aus (`QA_BROWSER=webkit` für Safari/WebKit; `PLAYWRIGHT_MODULE` kann auf die lokale Playwright-Installation zeigen). Der Lauf verwendet die echte ausgelieferte Anwendung, echte Kontaktrouten und ausschließlich eine temporäre Datenbank. Er prüft Desktop 1100 × 650 und 800 × 650 sowie Mobil 390 × 700 und 320 × 640, einschließlich Hell-/Dunkelansicht. Verzögerte Antworten werden vor dem echten HTTP-Aufruf angehalten und anschließend freigegeben.
+
+Ergebnis: 25 ergänzende Browserprüfungen je Engine erfolgreich, dazu der vollständige Funktionstest in Chromium und WebKit sowie weiterhin 43 gezielte Tests. Sichtgeprüfte Beispiele der Korrektur: [mobile Filter](adressbuch-modern/korrekturen/mobil-filter.png), [mobiles Formular](adressbuch-modern/korrekturen/mobil-formular.png), [mobile Liste](adressbuch-modern/korrekturen/mobil-liste.png), [320 Pixel hell](adressbuch-modern/korrekturen/mobil-schmal-hell.png), [320 Pixel dunkel](adressbuch-modern/korrekturen/mobil-schmal-dunkel.png), [schmaler Desktop hell](adressbuch-modern/korrekturen/desktop-schmal-hell.png), [schmaler Desktop dunkel](adressbuch-modern/korrekturen/desktop-schmal-dunkel.png).

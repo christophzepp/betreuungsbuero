@@ -2,9 +2,9 @@
    Bedienelemente angebunden. Kein Demodatensatz und kein paralleler Browser-Speicher im Online-Modus. */
 (function(){
 'use strict';
-const M={root:null,rows:[],selected:'',tab:'data',editor:null,bundle:null,load:0,width:42};
+const M={root:null,rows:[],selected:'',tab:'data',editor:null,small:null,bundle:null,load:0,editRequest:0,width:42,personIds:new Map()};
 const $=s=>M.root?.querySelector(s),E=(t,cls,text)=>{const e=document.createElement(t);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e};
-const B=(label,action,cls='',skipFlush=false)=>{const b=E('button','am-btn '+cls,label);b.type='button';b.onclick=async()=>{try{if(skipFlush||await flush())await action()}catch(e){message(e.message,true)}};return b};
+const B=(label,action,cls='',skipFlush=false)=>{const b=E('button','am-btn '+cls,label);b.type='button';b.onclick=async()=>{if(b.disabled)return;b.disabled=true;try{if(skipFlush||await flush())await action()}catch(e){message(e.message,true)}finally{b.disabled=false;if(b.closest('.am-selection'))selectionCount()}};return b};
 const api=()=>window.__abModernLegacy;
 const online=()=>window.__appMode==='online';
 const activeCase=()=>String(window.__activeServerCaseId||window.caseIdentityOf?.(state)||'');
@@ -19,13 +19,20 @@ function status(){message(online()?'Online · Änderungen werden automatisch ges
 function section(title){const e=E('section','am-section');e.append(E('h3','',title));return e}
 function buttonSet(parent,buttons){for(const b of buttons)parent.append(b)}
 function currentLink(c,person){const r=ref(c),p=person||null;return {...r,contactId:r.id,personId:p?.id||'',contactKey:c.key||window.phase5ContactKey?.(c)||api().key(c),snapshot:{label:p?[c.institution,p.name].filter(Boolean).join(' – '):name(c),institution:c.institution||'',person:p?.name||[c.title,c.firstName,c.lastName].filter(Boolean).join(' '),role:c.role||'',fileNumber:c.fileNumber||'',processNumber:c.processNumber||'',email:p?.email||c.email||'',phone:p?.phone||c.phone||''}}}
-function person(){const id=$('#amPerson')?.value;return (selected()?.people||[]).find(p=>p.id===id)||null}
+function person(){const id=$('#amPerson')?.value;return (M.bundle?.contact.people||selected()?.people||[]).find(p=>p.id===id)||null}
+function positionMenus(){
+ if(!M.root?.isConnected)return;const r=M.root.getBoundingClientRect(),vv=window.visualViewport,left=Math.max(r.left+4,vv?.offsetLeft||0),right=Math.min(r.right-4,(vv?.offsetLeft||0)+(vv?.width||innerWidth)),top=Math.max(r.top+4,vv?.offsetTop||0),bottom=Math.min(r.bottom-4,(vv?.offsetTop||0)+(vv?.height||innerHeight));
+ for(const menu of M.root.querySelectorAll('.am-menu[open],.am-filters[open]')){const popup=menu.lastElementChild,a=menu.firstElementChild.getBoundingClientRect(),width=Math.max(0,Math.min(menu.classList.contains('am-filters')?680:300,right-left)),below=bottom-a.bottom-8,above=a.top-top-8,up=below<160&&above>below,height=Math.max(60,up?above:below);
+  for(const [key,value] of Object.entries({position:'fixed',width:width+'px','max-width':width+'px',left:Math.max(left,Math.min(a.right-width,right-width))+'px',right:'auto','max-height':height+'px',top:(up?Math.max(top,a.top-8-Math.min(popup.scrollHeight,height)):a.bottom+8)+'px'}))popup.style.setProperty(key,value,'important');
+ }
+}
+function closeMenus(except){for(const menu of M.root?.querySelectorAll('.am-menu[open],.am-filters[open]')||[])if(menu!==except)menu.open=false}
 function personal(c,p){return p?{...c,key:c.key||window.phase5ContactKey?.(c)||api().key(c),salutation:p.salutation||c.salutation,_personId:p.id,firstName:p.name,lastName:'',title:'',email:p.email||c.email,phone:p.phone||c.phone,fax:p.fax||c.fax}:c}
 function mount(){
  const host=document.getElementById('modalBody');if(!host||!api())return;
  const action=host.querySelector('.addressbook-action-row'),toolbar=host.querySelector('.addressbook-toolbar-v154'),scope=host.querySelector('.ab-case-switcher'),bulk=host.querySelector('.addressbook-select-row'),letters=host.querySelector('#abLetterBar'),list=host.querySelector('#phase5AddressListV154');
  if(!action||!toolbar||!list)return;
- M.root=E('div','am addressbook-view');M.root.id='addressbookModern';M.editor=null;M.bundle=null;
+ M.root=E('div','am addressbook-view mobile-module-view');M.root.id='addressbookModern';M.root.dataset.mobileModule='contacts';M.root.setAttribute('aria-label','Adressbuch');M.editor=null;M.small=null;M.bundle=null;M.load++;M.editRequest++;
  const head=E('header','am-head'),title=E('div');title.append(E('h2','','Adressbuch'),E('p','am-sub','Kontakte, Ansprechpartner und Fallzuordnungen'));head.append(title);
  const tools=E('div','am-actions');
  tools.append(B('+ Neuer Kontakt',()=>edit(null),'primary'));
@@ -48,7 +55,7 @@ function mount(){
  left.append(tabs);const listmeta=E('div','am-list-meta');const count=toolbar.querySelector('#phase5AddressCountV154');if(count)listmeta.append(count);left.append(listmeta);
  const selection=E('div','am-selection');selection.append(B('Alle auswählen',()=>window.__abCsvSelectAll(true)),B('Auswahl aufheben',()=>window.__abCsvSelectAll(false)),B('Als aktiv markieren',()=>bulkStatus('Aktiv')),B('Als beendet markieren',()=>bulkStatus('Beendet')));left.append(selection);if(letters)left.append(letters);left.append(list);
  const grip=E('div','am-resizer');grip.tabIndex=0;grip.setAttribute('role','separator');grip.setAttribute('aria-orientation','vertical');grip.setAttribute('aria-label','Breite der Kontaktliste');
- board.append(left,grip,right);M.root.append(board);host.replaceChildren(M.root);
+ board.append(left,grip,right);M.root.append(board);host.classList.remove('mobile-top-view-body-v171');host.replaceChildren(M.root);
  document.getElementById('modal').classList.remove('addressbook-mobile-filters-collapsed');
  document.getElementById('modal').classList.add('am-modal');
  try{M.width=Math.max(28,Math.min(65,Number(localStorage.getItem('addressbook.split.v1'))||42))}catch(_e){}
@@ -60,17 +67,19 @@ function mount(){
  grip.onkeydown=e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();resize(e.key==='Home'?28:e.key==='End'?65:M.width+(e.key==='ArrowLeft'?-2:2));saveWidth()}};
  grip.ondblclick=()=>{resize(42);saveWidth()};
  // Original-Menüaktionen vor dem Verlassen des Autosave-Formulars abwarten.
- M.root.addEventListener('click',async e=>{const b=e.target.closest('.am-menu-body button,.am-menu-body label');if(!b||!M.editor||b.__amReplay)return;e.preventDefault();e.stopImmediatePropagation();if(await flush()){M.editor=null;b.__amReplay=true;b.click();b.__amReplay=false}},true);
- M.root.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();$('#phase5AddressSearchV154')?.focus()}if(e.key==='Escape'&&filter.open){e.stopPropagation();filter.open=false}},false);
+ M.root.addEventListener('click',async e=>{const b=e.target.closest('.am-menu-body button,.am-menu-body label');if(!b||(!M.editor&&!M.small)||b.__amReplay)return;e.preventDefault();e.stopImmediatePropagation();if(await flush()){M.editor=null;b.__amReplay=true;b.click();b.__amReplay=false}},true);
+ for(const menu of [more,filter])menu.addEventListener('toggle',()=>{if(menu.open){closeMenus(menu);positionMenus()}});
+ M.root.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();M.root.classList.remove('am-show-detail');$('#phase5AddressSearchV154')?.focus()}if(e.key==='Escape'&&M.root.querySelector('.am-menu[open],.am-filters[open]')){e.stopPropagation();closeMenus()}},false);
  const scopeValue=scope?.querySelector('select')?.value;
- M.root.addEventListener('change',async e=>{const el=e.target;if(!M.editor||!el.closest('.ab-case-switcher')||el.__amReplay)return;e.stopImmediatePropagation();if(await flush()){M.editor=null;el.__amReplay=true;el.dispatchEvent(new Event('change',{bubbles:true}));el.__amReplay=false}else el.value=scopeValue},true);
+ M.root.addEventListener('change',async e=>{const el=e.target;if((!M.editor&&!M.small)||!el.closest('.ab-case-switcher')||el.__amReplay)return;e.stopImmediatePropagation();if(await flush()){M.editor=null;el.__amReplay=true;el.dispatchEvent(new Event('change',{bubbles:true}));el.__amReplay=false}else el.value=scopeValue},true);
  status();
- const root=M.root;if(online())Promise.resolve(window.__baLoadServerBuero?.()).then(()=>{if(M.root===root&&root.isConnected&&!M.editor)window.phase5RenderAddressbookV154()});
+ const root=M.root;if(online())Promise.resolve(window.__baLoadServerBuero?.()).then(()=>{if(M.root===root&&root.isConnected&&!M.editor&&!M.small)window.phase5RenderAddressbookV154()}).catch(e=>{if(M.root===root&&root.isConnected)message(e.message,true)});
 }
 function render(rows,v){
  if(!M.root?.isConnected)return;M.rows=rows;
  const list=$('#phase5AddressListV154'),scroll=list.scrollTop;list.replaceChildren();
- if(!rows.length){list.append(E('p','am-empty','Keine Kontakte für diese Filter.'));M.selected='';if(!M.editor)$('.am-detail').replaceChildren(E('p','am-empty','Filter anpassen oder einen neuen Kontakt anlegen.'));return}
+ for(const b of M.root.querySelectorAll('[data-status]'))b.setAttribute('aria-pressed',String(b.dataset.status===v.status));selectionCount();
+ if(!rows.length){list.append(E('p','am-empty','Keine Kontakte für diese Filter.'));M.selected='';if(!M.editor&&!M.small){M.bundle=null;M.load++;M.root.classList.remove('am-show-detail');$('.am-detail').classList.remove('am-editing');$('.am-detail').replaceChildren(E('p','am-empty','Filter anpassen oder einen neuen Kontakt anlegen.'))}return}
  if(!rows.some(c=>identity(c)===M.selected))M.selected=identity(rows[0]);
  for(const c of rows){const row=E('article','addressbook-card am-row');row.dataset.abLetter=api().letter(c,v);row.classList.toggle('selected',identity(c)===M.selected);
   const check=E('input');check.type='checkbox';check.checked=api().selected().has(api().key(c));check.setAttribute('aria-label',name(c)+' auswählen');check.onchange=()=>{window.__abCsvToggle(api().key(c),check.checked);selectionCount()};row.append(check);
@@ -78,11 +87,11 @@ function render(rows,v){
   const text=E('span','am-row-copy');text.append(E('strong','',api().title(c,v.nameOrder)),E('span','am-sub',[c.role,api().person(c,v.nameOrder),c.__cases||'',isEnded(c)?'Beendet':''].filter(Boolean).join(' · ')));open.append(icon,text);row.append(open);list.append(row);
  }
  list.scrollTop=scroll;for(const b of M.root.querySelectorAll('[data-status]'))b.setAttribute('aria-pressed',String(b.dataset.status===v.status));selectionCount();
- if(!M.editor)drawDetail(selected());
+ if(!M.editor&&!M.small)drawDetail(selected());
 }
 function selectionCount(){const n=api().selected().size;let el=$('#amSelectionCount');if(!el){el=E('span');el.id='amSelectionCount';$('.am-list-meta')?.append(el)}el.textContent=n?n+' ausgewählt':'';$('.am-selection')?.classList.toggle('has-selection',!!n);for(const b of M.root.querySelectorAll('.am-selection button'))if(!b.textContent.startsWith('Alle'))b.disabled=!n}
-async function bulkStatus(status){const rows=api().contacts().filter(c=>api().selected().has(api().key(c)));let saved=0,errors=[];for(const c of rows){const key=api().key(c);try{await savePatch(c,{status});api().selected().delete(key);saved++}catch(e){errors.push(e.message)}}window.phase5RenderAddressbookV154();message(saved+' Kontakt(e) geändert.'+(errors.length?' '+errors.length+' nicht gespeichert: '+errors[0]:''),!!errors.length)}
-async function choose(c){if(!await flush())return;M.editor=null;M.selected=identity(c);M.tab='data';M.root.classList.add('am-show-detail');window.phase5RenderAddressbookV154()}
+async function bulkStatus(status){M.editor=null;const rows=api().contacts().filter(c=>api().selected().has(api().key(c)));let saved=0,errors=[];for(const c of rows){const key=api().key(c);try{await savePatch(c,{status});api().selected().delete(key);saved++}catch(e){errors.push(e.message)}}window.phase5RenderAddressbookV154();message(saved+' Kontakt(e) geändert.'+(errors.length?' '+errors.length+' nicht gespeichert: '+errors[0]:''),!!errors.length)}
+async function choose(c){if(!await flush())return;M.editRequest++;M.editor=null;M.selected=identity(c);M.tab='data';M.root.classList.add('am-show-detail');window.phase5RenderAddressbookV154()}
 async function loadDetails(c){
  const token=++M.load;const r=ref(c);if(!online()||!r.id){M.bundle={contact:c,history:c._addressHistory||[],associations:[],communications:localCommunications(c)};return M.bundle}
  const result=await request('contact?'+new URLSearchParams(r));if(token!==M.load||M.selected!==identity(c))return null;M.bundle=result;return result;
@@ -91,8 +100,8 @@ function localCommunications(c){const r=ref(c),caseId=r.scope==='case'?r.caseId:
 function info(parent,label,value,kind){if(!value)return;const wrap=E('div','am-info'),copy=B('Kopieren',()=>navigator.clipboard.writeText(String(value)),'quiet');copy.setAttribute('aria-label',label+' kopieren');const content=E('div');content.append(E('span','am-sub',label));
  if(kind==='address'&&window.__mapAddressLinkHTML){const d=E('div');d.innerHTML=window.__mapAddressLinkHTML(String(value));content.append(d)}else if(kind==='phone'){const a=E('a','',value);a.href='tel:'+String(value).replace(/[^+\d]/g,'');content.append(a)}else content.append(E('div','',value));wrap.append(content,copy);parent.append(wrap)}
 function drawDetail(c){
- if(!c)return;const pane=$('.am-detail');pane.replaceChildren();const top=E('div','am-detail-top');top.append(B('← Kontakte',()=>M.root.classList.remove('am-show-detail'),'am-back quiet'),E('span','am-badge'+(isEnded(c)?' ended':''),isEnded(c)?'Beendet':'Aktiv'),B(c.__viewMergeId?'Fallkontakte öffnen':'Bearbeiten',()=>edit(c)));pane.append(top,E('h2','',name(c)),E('p','am-sub',c.role||'Ohne Rolle'));
- const people=E('div','am-person');if(c.people?.length){const label=E('label','','Ansprechpartner'),select=E('select');select.id='amPerson';select.append(new Option('Institution / allgemeiner Kontakt',''));for(const p of c.people)select.append(new Option([p.name,p.department].filter(Boolean).join(' · '),p.id));select.onchange=()=>drawTab(c);label.append(select);people.append(label)}pane.append(people);
+ if(!c)return;const pane=$('.am-detail');pane.classList.remove('am-editing');const scroll=pane.dataset.contact===identity(c)?pane.scrollTop:0;pane.dataset.contact=identity(c);pane.replaceChildren();const top=E('div','am-detail-top');top.append(B('← Kontakte',()=>M.root.classList.remove('am-show-detail'),'am-back quiet'),E('span','am-badge'+(isEnded(c)?' ended':''),c.status||'Aktiv'),B(c.__viewMergeId?'Fallkontakte öffnen':'Bearbeiten',()=>edit(c)));pane.append(top,E('h2','',name(c)),E('p','am-sub',c.role||'Ohne Rolle'));
+ const people=E('div','am-person');if(c.people?.length){const label=E('label','','Ansprechpartner'),select=E('select');select.id='amPerson';select.append(new Option('Institution / allgemeiner Kontakt',''));for(const p of c.people)select.append(new Option([p.name,p.department].filter(Boolean).join(' · '),p.id));const chosen=M.personIds.get(identity(c));select.value=c.people.some(p=>p.id===chosen)?chosen:'';select.onchange=()=>{M.personIds.set(identity(c),select.value);drawTab(c)};label.append(select);people.append(label)}pane.append(people);
  const actions=E('div','am-detail-actions');
  const k=api().key(c),r=ref(c);
  if(!c.__viewMergeId&&r.scope==='case'&&r.caseId===activeCase())actions.append(B('Für aktuelles Dokument verwenden',()=>useDocument(c,person()),'primary'));
@@ -105,10 +114,10 @@ function drawDetail(c){
  other.append(B('Daten kopieren',()=>copyContact(c)),B('Faxnummer kopieren',()=>navigator.clipboard.writeText(person()?.fax||c.fax||'')));if(!c.__viewMergeId)other.append(B(isEnded(c)?'Aktivieren':'Beenden',()=>saveStatus(c,!isEnded(c))),B('Löschen',()=>removeContact(c),'danger'));
  if(r.scope==='case'&&r.caseId!==activeCase())other.append(B('Fall öffnen & bearbeiten',()=>window.__abSwitchCase(r.caseId)));
  more.append(other);pane.append(more);
- M.bundle=null;drawTab(c);loadDetails(c).then(x=>{if(x&&!M.editor&&M.selected===identity(c))drawTab(c)}).catch(e=>{if(M.selected===identity(c)){$('.am-tab-body').append(E('p','am-error',e.message));$('.am-tab-body').append(B('Erneut laden',()=>drawDetail(c)))}});
+ M.bundle=null;drawTab(c);pane.scrollTop=scroll;const root=M.root;loadDetails(c).then(x=>{if(x&&M.root===root&&root.isConnected&&!M.editor&&!M.small&&M.selected===identity(c))drawTab(c)}).catch(e=>{const body=$('.am-tab-body');if(body&&M.root===root&&!M.editor&&!M.small&&M.selected===identity(c)){body.append(E('p','am-error',e.message),B('Erneut laden',()=>drawDetail(c)))}});
 }
 function drawTab(c){
- const body=$('.am-tab-body');if(!body||M.editor)return;body.replaceChildren();for(const b of M.root.querySelectorAll('[data-tab]'))b.setAttribute('aria-pressed',String(b.dataset.tab===M.tab));
+ const body=$('.am-tab-body');if(!body||M.editor||M.small)return;body.replaceChildren();for(const b of M.root.querySelectorAll('[data-tab]')){const active=b.dataset.tab===M.tab;b.setAttribute('aria-pressed',String(active));if(active){const a=b.getBoundingClientRect(),r=b.parentElement.getBoundingClientRect();if(a.left<r.left||a.right>r.right)b.parentElement.scrollLeft+=a.left<r.left?a.left-r.left:a.right-r.right}}
  const data=M.tab==='data'?personal(M.bundle?.contact||c,person()):M.bundle?.contact||c;
  if(M.tab==='data'){
   const s=section(person()?.name||'Kontaktinformationen');info(s,'Anschrift',api().address(data),'address');info(s,'E-Mail',data.email);info(s,'Telefon',data.phone,'phone');info(s,'Mobil',data.mobile,'phone');info(s,'Fax',data.fax);info(s,'Aktenzeichen',data.fileNumber);info(s,'Vorgangsnummer',data.processNumber);info(s,'IBAN',data.iban);info(s,'BIC',data.bic);info(s,'Bank',data.bankName);if(data.note)s.append(E('p','am-note',data.note));body.append(s);return;
@@ -121,7 +130,7 @@ function drawTab(c){
  }else if(M.tab==='cases'){
   body.append(E('p','am-sub','Gemeinsame Stammdaten werden in allen zugeordneten Fällen aktualisiert. Aktenzeichen und Rolle bleiben fallspezifisch.'));
   for(const a of M.bundle.associations){const s=section(a.label);s.append(E('p','am-sub',[a.role,a.fileNumber||'Ohne Aktenzeichen',a.status].filter(Boolean).join(' · ')));
-   for(const [purpose,label] of [['document','Dokumente'],['mail','E-Mail']]){const marked=Object.hasOwn(a.standards||{},purpose);s.append(B((marked?'✓ Standard für ':'Als Standard für ')+label,()=>setStandard(c,a,purpose,marked)))}
+   for(const [purpose,label] of [['document','Dokumente'],['mail','E-Mail']]){const marked=Object.hasOwn(a.standards||{},purpose)&&a.standards[purpose]===(person()?.id||'');s.append(B((marked?'✓ Standard für ':'Als Standard für ')+label,()=>setStandard(c,a,purpose,marked)))}
    if(M.bundle.centralId&&online())s.append(B('Zentrale Zuordnung lösen',()=>detach(c,a),'quiet'));body.append(s)}
   if(online())body.append(B('+ Weiterem Fall zuordnen',()=>assign(c),'primary'));else body.append(E('p','am-sub','Zentrale Fallzuordnungen werden im Online-Modus verwaltet.'));
  }else if(M.tab==='history'){
@@ -151,12 +160,12 @@ const GROUPS=[['Grunddaten',['_category','status','role','salutation','title','f
 const LABELS={_category:'Kategorie',status:'Status',role:'Rolle',salutation:'Anrede',title:'Titel',firstName:'Vorname',lastName:'Nachname',institution:'Institution',street:'Straße',house:'Hausnummer',houseLetter:'Zusatz',postal:'PLZ',city:'Ort',postbox:'Postfach',phoneArea:'Vorwahl Telefon',phoneNumber:'Telefon',mobileArea:'Vorwahl Mobil',mobileNumber:'Mobil',email:'E-Mail',faxArea:'Vorwahl Fax',faxNumber:'Fax',fileNumber:'Aktenzeichen',processNumber:'Vorgangsnummer',iban:'IBAN',bic:'BIC',bankName:'Bankname',note:'Notizen',people:'Ansprechpartner',_standardRecipients:'Standardempfänger'};
 async function edit(c){
  if(c?.__viewMergeId){window.__abSwitchCase(ref(c).caseId);return}
- if(!await flush())return;const r=c?ref(c):{scope:window.__abScope==='case'?'case':'office',caseId:window.__abScope==='case'?activeCase():'',id:''};
- let bundle=c?await loadDetails(c):{contact:{status:'Aktiv',_category:'soziales'},version:''};if(!bundle)return;
+ if(!await flush())return;const root=M.root,token=++M.editRequest,r=c?ref(c):{scope:window.__abScope==='case'?'case':'office',caseId:window.__abScope==='case'?activeCase():'',id:''};if(!c)M.load++;
+ let bundle=c?await loadDetails(c):{contact:{status:'Aktiv',_category:'soziales'},version:''};if(!bundle||M.root!==root||!root.isConnected||token!==M.editRequest)return;
  const draft=structuredClone(bundle.contact);for(const k of ['phone','mobile','fax'])if(!draft[k+'Number']&&draft[k]){const parts=String(draft[k]).split('/');draft[k+'Area']=parts.length>1?parts.shift():'';draft[k+'Number']=parts.join('/')}
  window.__abModernSetupCombos?.(draft._category);
  M.editor={ref:r,c,bundle,draft,pending:{},saving:null,timer:null,error:false,new:!c};M.root.classList.add('am-show-detail');
- const pane=$('.am-detail');pane.replaceChildren();pane.append(E('h2','',c?'Kontakt bearbeiten':'Neuer Kontakt'),E('p','am-sub',online()?'Änderungen werden automatisch gespeichert, sobald Institution oder Nachname angegeben ist.':'Lokaler Kontakt · Änderungen mit „Fertig“ übernehmen.'));
+ const pane=$('.am-detail');pane.classList.add('am-editing');pane.scrollTop=0;pane.replaceChildren();pane.append(E('h2','',c?'Kontakt bearbeiten':'Neuer Kontakt'),E('p','am-sub',online()?'Änderungen werden automatisch gespeichert, sobald Institution oder Nachname angegeben ist.':'Lokaler Kontakt · Änderungen mit „Fertig“ übernehmen.'));
  const form=E('form','am-edit');form.onsubmit=e=>{e.preventDefault();finishEdit()};
  for(const [title,fields] of GROUPS){const group=section(title),grid=E('div','am-form-grid');for(const k of fields){const l=E('label','',LABELS[k]);let input;
   if(k==='_category'){input=E('select');const categories=window.__abModernCategories?.()||[{id:'soziales',label:'Soziales'}];input.append(new Option('Bitte wählen …',''));for(const cat of categories)input.append(new Option(cat.label,cat.id));if(draft[k]&&!categories.some(c=>c.id===draft[k]))input.append(new Option('Bisherige Kategorie: '+draft[k],draft[k]))}
@@ -164,7 +173,7 @@ async function edit(c){
   if(['status','role','salutation','title','houseLetter','phoneArea','mobileArea','faxArea'].includes(k)){input.setAttribute('data-combo','ab_'+k);input.autocomplete='off'}
   if(['postal','city','institution','house'].includes(k))input.setAttribute('data-combo',({postal:'ab_plz',city:'ab_ort',institution:'sd_institution',house:'sd_hausnummer'})[k]);
   input.oninput=()=>changed(k,input.value);input.onchange=()=>changed(k,input.value);l.append(input);grid.append(l)}group.append(grid);form.append(group)}
- const footer=E('div','am-edit-footer');const conflict=B('Änderungskonflikt auflösen',resolveConflict,'am-conflict',true);conflict.hidden=true;footer.append(B('Fertig',finishEdit,'primary'),B('Speichern erneut versuchen',()=>savePending(),'am-retry',true),conflict,B('Ungespeicherte Eingaben verwerfen',discard,'quiet',true));form.append(footer);pane.append(form);status();
+ const footer=E('div','am-edit-footer');const conflict=B('Änderungskonflikt auflösen',resolveConflict,'am-conflict',true),retry=B('Speichern erneut versuchen',()=>savePending(),'am-retry',true);conflict.hidden=true;retry.hidden=true;footer.append(B('Fertig',finishEdit,'primary'),retry,conflict,B('Ungespeicherte Eingaben verwerfen',discard,'quiet',true));pane.append(form,footer);status();
 }
 function changed(k,v){const e=M.editor;if(!e)return;if(k==='_category')window.__abModernSetupCombos?.(v);e.draft[k]=v;e.pending[k]=v;e.error=false;
  for(const field of ['phone','mobile','fax'])if(k===field+'Area'||k===field+'Number'){e.pending[field]=[e.draft[field+'Area'],e.draft[field+'Number']].filter(Boolean).join('/');e.draft[field]=e.pending[field]}
@@ -181,17 +190,18 @@ async function savePending(){
   let bundle;
   if(online())bundle=await request('contact',{...e.ref,patch:sent,version:e.bundle.version},e.new?'POST':'PATCH');
   else{const value={...e.draft,id:e.ref.id||crypto.randomUUID(),key:window.phase5ContactKey?.(e.draft),_pendingWrite:true};value._addressHistory=localHistory(e.bundle.contact,value);bundle={contact:value,version:'',associations:[],history:value._addressHistory,communications:[]};if(e.ref.scope==='office')await window.__baModernSaveLocal?.(value);}
-  const wasNew=e.new;e.new=false;e.ref.id=bundle.contact.id;e.bundle=bundle;e.error=false;
+  const wasNew=e.new;e.new=false;e.ref.id=bundle.contact.id;e.bundle=bundle;e.error=false;if($('.am-retry'))$('.am-retry').hidden=true;if($('.am-conflict'))$('.am-conflict').hidden=true;
   await cacheBundle(bundle,e.ref);M.bundle=bundle;
   if(wasNew){const row={...bundle.contact,__buero:e.ref.scope==='office',__caseId:e.ref.caseId};M.rows.push(row);M.selected=identity(row);e.c=row}
   if(!Object.keys(e.pending).length)message(online()?'Gespeichert · '+new Date().toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'}):'Lokal übernommen · Excel zur zusätzlichen Sicherung exportieren');return true;
- }catch(err){e.pending={...sent,...e.pending};e.error=true;const conflict=$('.am-conflict');if(conflict)conflict.hidden=err.status!==409;message(err.message,true);return false}
+ }catch(err){e.pending={...sent,...e.pending};e.error=true;const conflict=$('.am-conflict');if(conflict)conflict.hidden=err.status!==409;const retry=$('.am-retry');if(retry)retry.hidden=err.status===409;message(err.message,true);return false}
  finally{e.saving=null}
  })();const ok=await e.saving;if(ok&&Object.keys(e.pending).length)return savePending();return ok;
 }
-async function flush(){return !M.editor||await savePending()}
+function smallDirty(){return !!M.small&&JSON.stringify(Object.fromEntries(new FormData(M.small.form)))!==M.small.initial}
+async function flush(){if(M.small){if(M.small.saving){message('Bitte das Speichern abwarten.');return false}if(smallDirty()&&!confirm('Noch nicht übernommene Formulareingaben verwerfen?'))return false;M.small=null}return !M.editor||await savePending()}
 async function resolveConflict(){const e=M.editor;if(!e||e.new)return;const fresh=await request('contact?'+new URLSearchParams(e.ref));const differences=Object.keys(e.pending).filter(k=>JSON.stringify(e.bundle.contact[k])!==JSON.stringify(fresh.contact[k])).map(k=>(LABELS[k]||k)+': gespeichert „'+displayValue(fresh.contact[k])+'“ / Ihre Eingabe „'+displayValue(e.pending[k])+'“');if(!confirm('Aktuellen Stand laden und Ihre noch offenen Eingaben darauf anwenden?'+(differences.length?'\n\nDiese Felder würden überschrieben:\n'+differences.join('\n'):' Andere zwischenzeitliche Änderungen bleiben erhalten.')))return;e.bundle=fresh;e.draft={...fresh.contact,...e.pending};for(const input of M.root.querySelectorAll('.am-edit [name]'))input.value=e.draft[input.name]||'';e.error=false;$('.am-conflict').hidden=true;await savePending()}
-async function finishEdit(){if(!await flush())return;M.editor=null;window.showImportedAddressbook();M.root?.classList.add('am-show-detail')}
+async function finishEdit(){if(!await flush())return;M.editor=null;window.showImportedAddressbook();if(M.rows.length)M.root?.classList.add('am-show-detail')}
 async function discard(){const e=M.editor;if(!e)return;if(e.saving)await e.saving;if(Object.keys(e.pending).length&&!confirm('Noch nicht gespeicherte Eingaben verwerfen? Bereits automatisch gespeicherte Änderungen bleiben erhalten.'))return;clearTimeout(e.timer);M.editor=null;window.showImportedAddressbook()}
 async function savePatch(c,patch){if(c.__viewMergeId)throw Error('Zusammengeführte Ansichten bitte in den zugehörigen Fallkontakten bearbeiten.');const r=ref(c);let bundle;if(online()){const fresh=await request('contact?'+new URLSearchParams(r));bundle=await request('contact',{...r,patch,version:fresh.version},'PATCH')}else{const next={...c,...patch,id:c.id||crypto.randomUUID(),_pendingWrite:true};next._addressHistory=localHistory(c,next);bundle={contact:next,associations:[],history:next._addressHistory,communications:localCommunications(c)};if(r.scope==='office')await window.__baModernSaveLocal?.(next)}await cacheBundle(bundle,r);M.bundle=bundle;window.phase5RenderAddressbookV154();return bundle}
 async function saveStatus(c,end){await savePatch(c,{status:end?'Beendet':'Aktiv'})}
@@ -201,19 +211,19 @@ async function removeContact(c){if(!confirm('Kontakt „'+name(c)+'“ unwiderru
  if(r.scope==='office')await window.__baModernDelete?.(r.id);else{for(const cd of [r.caseId===activeCase()?state.caseData:null,window.__onlineCaseCache?.get(r.caseId)?.data].filter(Boolean))cd.contacts=(cd.contacts||[]).filter(x=>r.id?x.id!==r.id:api().key(x)!==api().key(c));if(!online())saveState()}
  M.selected='';window.showImportedAddressbook();
 }
-async function copyContact(c){await navigator.clipboard.writeText([name(c),api().address(c),c.email,c.phone,c.mobile,c.fax,c.fileNumber,c.processNumber].filter(Boolean).join('\n'));message('Kontaktdaten kopiert')}
+async function copyContact(c){c=personal(c,person());await navigator.clipboard.writeText([name(c),api().address(c),c.email,c.phone,c.mobile,c.fax,c.fileNumber,c.processNumber].filter(Boolean).join('\n'));message('Kontaktdaten kopiert')}
 async function useDocument(c,p){const k=c.key||window.phase5ContactKey?.(c)||api().key(c);window.phase5ApplyContact(k);{const eo=window.getExportOptions?.(currentReport);if(eo){state.ui.exportOptions[currentReport]={...(state.ui.exportOptions[currentReport]||{}),recipientPersonId:p?.id||'',recipientEmail:p?.email||c.email||''};saveState();window.renderReport?.()}}}
 async function mail(c,p,internal){const email=p?.email||c.email;if(!email)throw Error('Für diesen Kontakt ist keine E-Mail-Adresse hinterlegt.');const target={name:p?.name||name(c),email,subject:['Betreuungsangelegenheit',c.fileNumber].filter(Boolean).join(' '),contactLink:currentLink(c,p)};
  if(internal)await window.__mxComposeTo(target);else window.location.href='mailto:'+encodeURIComponent(email)+'?subject='+encodeURIComponent(target.subject);
 }
 async function documentContact(c,p){const r=ref(c),id=r.scope==='case'?r.caseId:activeCase();if(!id)throw Error('Bitte zuerst einen Fall öffnen.');M.editor=null;window.openDokuEntryForm(id,-1);window.__fdKontaktUebernehmen?.(personal(c,p),r.scope,id)}
 async function openDoku(item){let cd=item.caseId===activeCase()?state.caseData:window.__onlineCaseCache?.get(item.caseId)?.data;if(online()){const r=await fetch('/api/cases/'+encodeURIComponent(item.caseId)+'/doku-entries',{credentials:'same-origin'});if(!r.ok)throw Error('Dokumentation nicht verfügbar.');const j=await r.json();if(cd)cd.documentationEntries=j.entries.map(x=>({...x.data,id:x.id}))}const index=(cd?.documentationEntries||[]).findIndex(x=>x.id===item.id);if(index<0)throw Error('Eintrag nicht gefunden.');window.openDokuEntryForm(item.caseId,index)}
-function smallForm(title,fields,submit){const pane=$('.am-tab-body');pane.replaceChildren();const form=E('form','am-small-form');form.append(E('h3','',title));for(const [k,label,value,options] of fields){const l=E('label','',label),input=E(options?'select':'input');input.name=k;if(options)for(const [val,text] of options)input.append(new Option(text,val));input.value=value||'';l.append(input);form.append(l)}const error=E('p','am-error');form.append(error);const save=E('button','am-btn primary','Übernehmen');save.type='submit';form.append(save,B('Abbrechen',()=>drawTab(selected())));form.onsubmit=async ev=>{ev.preventDefault();save.disabled=true;try{await submit(Object.fromEntries(new FormData(form)));drawDetail(selected())}catch(e){error.textContent=e.message}finally{save.disabled=false}};pane.append(form)}
-function editPerson(c,p){smallForm(p?'Ansprechpartner bearbeiten':'Neuer Ansprechpartner',[['name','Name',p?.name],['department','Abteilung',p?.department],['role','Funktion',p?.role],['email','E-Mail',p?.email],['phone','Telefon',p?.phone],['fax','Fax',p?.fax],['salutation','Anrede',p?.salutation]],async values=>{if(!values.name.trim())throw Error('Bitte einen Namen angeben.');const people=[...(M.bundle?.contact.people||c.people||[])],next={...values,id:p?.id||crypto.randomUUID()},i=people.findIndex(x=>x.id===next.id);if(i>=0)people[i]=next;else people.push(next);await savePatch(c,{people})})}
+function smallForm(title,fields,submit){const pane=$('.am-tab-body');pane.replaceChildren();const form=E('form','am-small-form');form.append(E('h3','',title));for(const [k,label,value,options] of fields){const l=E('label','',label),input=E(options?'select':'input');input.name=k;if(k==='email')input.type='email';if(options){input.append(new Option('Bitte wählen …',''));for(const [val,text] of options)input.append(new Option(text,val));input.required=true}input.value=value||'';l.append(input);form.append(l)}const error=E('p','am-error');form.append(error);const save=E('button','am-btn primary','Übernehmen');save.type='submit';form.append(save,B('Abbrechen',()=>drawTab(selected())));const small=M.small={form,initial:JSON.stringify(Object.fromEntries(new FormData(form))),saving:false};form.onsubmit=async ev=>{ev.preventDefault();if(small.saving)return;small.saving=true;save.disabled=true;try{await submit(Object.fromEntries(new FormData(form)));if(M.small===small&&form.isConnected){M.small=null;drawDetail(selected())}}catch(e){error.textContent=e.message}finally{small.saving=false;save.disabled=false}};pane.append(form)}
+function editPerson(c,p){const current=[...(M.bundle?.contact.people||c.people||[])];smallForm(p?'Ansprechpartner bearbeiten':'Neuer Ansprechpartner',[['name','Name',p?.name],['department','Abteilung',p?.department],['role','Funktion',p?.role],['email','E-Mail',p?.email],['phone','Telefon',p?.phone],['fax','Fax',p?.fax],['salutation','Anrede',p?.salutation]],async values=>{if(!values.name.trim())throw Error('Bitte einen Namen angeben.');const people=[...current],next={...values,id:p?.id||crypto.randomUUID()},i=people.findIndex(x=>x.id===next.id);if(i>=0)people[i]=next;else people.push(next);await savePatch(c,{people})})}
 async function deletePerson(c,p){if(confirm('Ansprechpartner „'+p.name+'“ entfernen? Historische Dokumentation bleibt erhalten.'))await savePatch(c,{people:(M.bundle?.contact.people||c.people||[]).filter(x=>x.id!==p.id)})}
 function assign(c){const entries=[...(window.__onlineCaseCache?.entries()||[])].map(([id,e])=>[id,e.label||id]);if(!entries.length)throw Error('Keine Fälle geladen.');smallForm('Einem weiteren Fall zuordnen',[['targetCaseId','Fall','',entries],['role','Rolle in diesem Fall',c.role],['fileNumber','Aktenzeichen im Zielfall',''],['processNumber','Vorgangsnummer im Zielfall','']],async values=>{const bundle=await request('assign',{...ref(c),...values});await cacheBundle(bundle,ref(c));M.bundle=bundle})}
-async function detach(c,a){if(!confirm('Die zentrale Verknüpfung für „'+a.label+'“ lösen? Der Kontakt bleibt als eigenständiger Fallkontakt erhalten.'))return;const bundle=await request('detach',{...ref(c),targetCaseId:a.caseId,contactId:a.contactId});await cacheBundle(bundle,ref(c));await refreshCase(a.caseId);M.bundle=bundle;drawTab(c)}
-async function setStandard(c,a,purpose,remove){const p=person();const bundle=await request('standard',{caseId:a.caseId,id:a.contactId,purpose,personId:p?.id||'',remove});await cacheBundle(bundle,{scope:'case',caseId:a.caseId,id:a.contactId});await refreshCase(a.caseId);M.bundle=await loadDetails(c);drawTab(c)}
+async function detach(c,a){if(!confirm('Die zentrale Verknüpfung für „'+a.label+'“ lösen? Der Kontakt bleibt als eigenständiger Fallkontakt erhalten.'))return;const bundle=await request('detach',{...ref(c),targetCaseId:a.caseId,contactId:a.contactId});await cacheBundle(bundle,ref(c));await refreshCase(a.caseId);if(M.selected===identity(c)){M.bundle=bundle;drawTab(c)}}
+async function setStandard(c,a,purpose,remove){const p=person();const bundle=await request('standard',{caseId:a.caseId,id:a.contactId,purpose,personId:p?.id||'',remove});await cacheBundle(bundle,{scope:'case',caseId:a.caseId,id:a.contactId});await refreshCase(a.caseId);if(M.selected===identity(c)){const fresh=await loadDetails(c);if(fresh)drawTab(c)}}
 async function restore(c,h){if(!confirm('Die angezeigte Änderung rückgängig machen? Dies wird als neue Änderung protokolliert.'))return;if(!online()){const patch={};for(const [k,v] of Object.entries(h.changes))if(Object.hasOwn(LABELS,k)&&k!=='_standardRecipients')patch[k]=v.before??(k==='people'?[]:'');if(!(patch.institution??c.institution)&&!(patch.lastName??c.lastName))throw Error('Die Anlage eines Kontakts lässt sich hier nicht rückgängig machen.');await savePatch(c,patch);return}const bundle=await request('restore',{...ref(c),historyId:h.id,version:M.bundle.version});await cacheBundle(bundle,ref(c));M.bundle=bundle;window.phase5RenderAddressbookV154()}
 window.__abMailDokuLink=function(caseId,to,preferred){
  const emails=String(to||'').toLowerCase().match(/[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9.-]+\.[a-z]{2,}/g)||[];
@@ -224,7 +234,8 @@ window.__abMailDokuLink=function(caseId,to,preferred){
 };
 window.__abPersonView=(c,id)=>personal(c,(c.people||[]).find(p=>p.id===id));
 window.__abModernLink=currentLink;
-window.__abModern={mount,render,active:()=>!!M.root?.isConnected,hold:()=>!!(M.root?.isConnected&&M.editor),selected,flush,edit,savePatch};
+const visible=()=>!!M.root?.isConnected&&!document.getElementById('modal')?.classList.contains('hidden');
+window.__abModern={mount,render,active:visible,hold:()=>!!(visible()&&(M.editor||M.small)),selected,flush,edit,savePatch};
 window.__abDefaultRecipient=function(purpose='document'){const c=(state.caseData.contacts||[]).find(x=>!isEnded(x)&&Object.hasOwn(x._standardRecipients||{},purpose));if(!c)return null;const p=(c.people||[]).find(x=>x.id===c._standardRecipients[purpose]);return {contact:c,person:p||null,...personal(c,p)}};
 // Die Anwendung hat mehrere spätere Empfänger-Renderer. Ansprechpartner deshalb auch an
 // deren öffentlichen Ausgabegrenzen auflösen; die dauerhafte Schlüsselreferenz bleibt die Institution.
@@ -232,7 +243,10 @@ function recipientPerson(eo){if((eo?.recipientType!=='contact'&&eo?._resolvedRec
 function recipientLines(c){return [c.institution,[c.title,c.firstName,c.lastName].filter(Boolean).join(' '),[c.street,[c.house,c.houseLetter].filter(Boolean).join('')].filter(Boolean).join(' ')||(c.postbox?'Postfach '+c.postbox:''),[c.postal,c.city].filter(Boolean).join(' ')].filter(Boolean)}
 for(const key of ['exportRecipientHTML','phase3RecipientLines','resolveExportRecipientLabel']){const previous=window[key];if(typeof previous!=='function')continue;window[key]=function(eo){const c=recipientPerson(eo);if(!c)return previous.apply(this,arguments);const lines=recipientLines(c);return key==='phase3RecipientLines'?lines:key==='resolveExportRecipientLabel'?lines.join(', '):lines.map(s=>{const d=E('div','',s);return d.innerHTML}).join('<br>')}}
 const previousOptions=window.getExportOptions;window.getExportOptions=function(){const eo=previousOptions.apply(this,arguments),c=recipientPerson(eo);if(c){eo._effectiveContact=c;eo.recipientEmail=c.email||'';eo.recipientFax=c.fax||''}return eo};
-window.addEventListener('beforeunload',e=>{if(M.editor&&(M.editor.saving||Object.keys(M.editor.pending).length)){e.preventDefault();e.returnValue=''}});
-const previousClose=window.closeModal;window.closeModal=function(){if(M.root?.isConnected&&M.editor){const self=this,args=arguments;return flush().then(ok=>{if(ok){M.editor=null;return previousClose.apply(self,args)}})}return previousClose.apply(this,arguments)};
+window.addEventListener('beforeunload',e=>{if((M.editor&&(M.editor.saving||Object.keys(M.editor.pending).length))||smallDirty()||M.small?.saving){e.preventDefault();e.returnValue=''}});
+window.addEventListener('mobileBeforeNavigate',e=>{if(!visible()||(!M.editor&&!M.small))return;e.preventDefault();flush().then(ok=>{if(ok){M.editor=null;M.editRequest++;e.detail.proceed()}})});
+document.addEventListener('pointerdown',e=>{if(visible()&&!e.target.closest('#addressbookModern .am-menu,#addressbookModern .am-filters'))closeMenus()});
+window.addEventListener('resize',positionMenus);window.visualViewport?.addEventListener('resize',positionMenus);
+const previousClose=window.closeModal;window.closeModal=function(){if(visible()&&(M.editor||M.small)){const self=this,args=arguments;return flush().then(ok=>{if(ok){M.editor=null;M.editRequest++;return previousClose.apply(self,args)}})}M.editRequest++;return previousClose.apply(this,arguments)};
 const observer=new MutationObserver(()=>{if(!document.querySelector('#addressbookModern'))document.getElementById('modal')?.classList.remove('am-modal')});const modal=document.getElementById('modalBody');if(modal)observer.observe(modal,{childList:true});
 })();

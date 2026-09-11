@@ -47,6 +47,7 @@
 #addressbookModern .addressbook-count{background:none;padding:0;border:0;min-width:0;font-size:12px;color:var(--am-muted);font-weight:400}
 #addressbookModern .am-selection{margin:0;padding:6px 12px;background:var(--am-soft);display:flex;flex-wrap:wrap;gap:4px;flex:none}
 #addressbookModern .am-selection .am-btn{font-size:11px;line-height:1.4;padding:5px;min-height:30px;border:0;background:none;color:var(--am-accent)}
+#addressbookModern .am-selection:not(.has-selection) .am-btn:not(:first-child){display:none}
 #addressbookModern #abLetterBar{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:3px;padding:8px 12px;position:static;margin:0;box-shadow:none;border-bottom:1px solid var(--am-line);min-height:0;flex:none}
 #addressbookModern #abLetterBar .ab-letter{font-size:11px;min-width:19px;padding:2px 3px;line-height:20px;height:auto}
 #addressbookModern #phase5AddressListV154{overflow-y:auto;overflow-x:hidden;min-height:0;flex:1;padding:0;margin:0;display:block;max-height:none;scrollbar-gutter:stable}
@@ -76,7 +77,10 @@
 #addressbookModern .am-history-line{font-size:12px;overflow-wrap:anywhere}
 #addressbookModern .am-empty{padding:30px 18px;text-align:center;color:var(--am-muted)}
 #addressbookModern .am-edit .am-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-#addressbookModern .am-edit-footer{display:flex;flex-wrap:wrap;gap:8px;position:sticky;bottom:-22px;padding:12px 0;background:var(--am-bg);border-top:1px solid var(--am-line)}
+#addressbookModern .am-detail.am-editing{display:flex;flex-direction:column;overflow:hidden;padding-bottom:0}
+#addressbookModern .am-editing>h2,#addressbookModern .am-editing>.am-sub{flex:none}
+#addressbookModern .am-edit{min-height:0;flex:1;overflow-y:auto;overflow-x:hidden;padding-right:4px;scrollbar-gutter:stable}
+#addressbookModern .am-edit-footer{display:flex;flex:none;flex-wrap:wrap;gap:8px;padding:10px 0;background:var(--am-bg);border-top:1px solid var(--am-line)}
 #addressbookModern .am-small-form{display:grid;gap:12px;padding:18px 0}
 #addressbookModern .am-back{display:none}
 html[data-theme=dark] #addressbookModern .am-badge{background:#203f32;color:#9cd1b4}
@@ -106,7 +110,7 @@ html[data-theme=dark] #addressbookModern .am-btn.primary{background:#245f86;bord
  #addressbookModern .am-detail h2{font-size:21px}
  #addressbookModern .am-tabs{gap:13px}
  #addressbookModern .am-head h2{font-size:24px}
- #addressbookModern .am-edit-footer{bottom:-18px}
+ #addressbookModern.am-show-detail .am-detail.am-editing{display:flex}
  #addressbookModern .am-selection{display:grid;grid-template-columns:1fr 1fr;gap:0;padding:4px 8px}
  #addressbookModern .am-selection .am-btn{min-height:36px}
  #addressbookModern.am-show-detail .am-head .am-sub{display:none}
@@ -121,4 +125,28 @@ html[data-theme=dark] #addressbookModern .am-btn.primary{background:#245f86;bord
 @media(max-width:680px) and (max-height:700px){
  #addressbookModern .am-list-pane{overflow-y:auto}
  #addressbookModern #phase5AddressListV154{flex:none;overflow:visible}
+ #addressbookModern .am-head .am-sub{display:none}
+}
+
+/* Die alte Mobilanpassung darf das neue Filtermenü nicht auf die Knopfbreite reduzieren. */
+#modal.am-modal #addressbookModern .am-filters>.addressbook-toolbar-v154{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+#modal.am-modal #addressbookModern .am-filters>.addressbook-toolbar-v154>div{min-width:0;grid-column:auto}
+#modal.am-modal #addressbookModern #abLetterBar{position:static!important;box-shadow:none!important;background:var(--am-bg)!important;align-items:center}
+html.mobile-online-active #modal.am-modal #addressbookModern{padding:12px 10px 0!important}
+@media(max-width:680px){
+ #modal.am-modal #addressbookModern .am-filters>.addressbook-toolbar-v154{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #modal.am-modal #addressbookModern #abLetterBar{flex-wrap:nowrap!important;overflow-x:auto;justify-content:flex-start!important}
+ #modal.am-modal #addressbookModern #abLetterBar .ab-letter{flex:none}
+ #addressbookModern .am-edit-footer>.quiet{flex:1;min-width:0}
+}
+@media(min-width:681px) and (max-width:900px){
+ #addressbookModern .am-board{grid-template-columns:minmax(220px,min(var(--am-split,42%),calc(100% - 288px))) 8px minmax(0,1fr)}
+}
+@media(min-width:681px) and (max-height:740px){
+ #addressbookModern{padding:12px 16px 0}
+ #addressbookModern .am-head,#addressbookModern .am-context{margin-bottom:8px}
+ #addressbookModern .am-head .am-sub{display:none}
+ #addressbookModern .am-tools{margin-bottom:10px}
+ #modal.am-modal #addressbookModern #abLetterBar{flex-wrap:nowrap;overflow-x:auto}
+ #modal.am-modal #addressbookModern #abLetterBar .ab-letter{flex:none}
 }
