@@ -7,7 +7,7 @@
 const express = require('express');
 const crypto = require('crypto');
 const db = require('../../database/index');
-const { requireAuth, requireSendMail, requireViewCases } = require('../../middleware/authentication');
+const { requireAuth, requireSendMail, requireViewCases, hasPermission } = require('../../middleware/authentication');
 const { darfSehen } = require('../cases/case-visibility');
 const cryptoHelper = require('../../security/crypto');
 const nodemailer = require('nodemailer');
@@ -499,14 +499,20 @@ router.post('/accounts/:id/label', async (req, res) => {
 
 // Wiedervorlage (Snooze): Mail in den "Wiedervorlage"-Ordner verschieben; der Scheduler holt sie
 // zum Zeitpunkt per Message-ID zurueck in den Posteingang (auch bei geschlossenem Browser).
+const creatingSnoozes = new Set();
 router.post('/accounts/:id/snooze', async (req, res) => {
   const acc = visibleAccount(req, req.params.id);
   if (!acc) return res.status(404).json({ error: 'Konto nicht gefunden.' });
   const wakeAt = String(req.body?.wakeAt || '').trim();
   const messageId = String(req.body?.messageId || '').trim();
-  if (!wakeAt || isNaN(Date.parse(wakeAt))) return res.status(400).json({ error: 'Bitte einen gültigen Zeitpunkt angeben.' });
+  if (!wakeAt || isNaN(Date.parse(wakeAt)) || Date.parse(wakeAt) <= Date.now()) return res.status(400).json({ error: 'Bitte einen gültigen Zeitpunkt angeben.' });
   if (!messageId) return res.status(400).json({ error: 'Die Nachricht hat keine Message-ID – Wiedervorlage nicht möglich.' });
+  const creationKey = JSON.stringify([acc.id, messageId]);
+  if (creatingSnoozes.has(creationKey)) return res.status(409).json({ error: 'Für diese E-Mail wird bereits eine Wiedervorlage angelegt.' });
+  creatingSnoozes.add(creationKey);
   try {
+    const existingSnooze = db.prepare('SELECT * FROM mail_snoozes WHERE account_id = ? AND message_id = ?').get(acc.id, messageId);
+    if (existingSnooze) return res.status(409).json({ error: 'Für diese E-Mail besteht bereits eine Wiedervorlage.' });
     const engine = engineFor(acc);
     let snoozeFolder;
     if (acc.kind === 'microsoft') {
@@ -527,18 +533,61 @@ router.post('/accounts/:id/snooze', async (req, res) => {
     db.prepare("INSERT INTO mail_snoozes (id, account_id, folder, message_id, subject, wake_at, owner_user_id) VALUES (?,?,?,?,?,?,?)")
       .run(id, acc.id, snoozeFolder, messageId, String(req.body?.subject || '').slice(0, 255), new Date(wakeAt).toISOString(), req.session.userId);
     res.json({ ok: true, id, wakeAt: new Date(wakeAt).toISOString() });
-  } catch (error) { res.status(400).json({ error: error.message || 'Wiedervorlage fehlgeschlagen.' }); }
+  } catch (error) { res.status(400).json({ error: error.message || 'Wiedervorlage fehlgeschlagen.' }); } finally { creatingSnoozes.delete(creationKey); }
 });
 
 router.get('/snoozes', (req, res) => {
   const rows = db.prepare('SELECT * FROM mail_snoozes WHERE owner_user_id = ? ORDER BY wake_at').all(req.session.userId);
-  res.json({ snoozes: rows.map((r) => ({ id: r.id, accountId: r.account_id, subject: r.subject, wakeAt: r.wake_at })) });
+  let links = {};
+  if (hasPermission(req, 'canViewCases')) {
+    try { links = JSON.parse(db.prepare("SELECT data_json FROM office_json WHERE key = 'mailx_case_links'").get()?.data_json || '{}'); } catch (_) { /* no stored links */ }
+  }
+  res.json({ snoozes: rows.filter(r => visibleAccount(req, r.account_id)).map(r => {
+    // Message-ID stays stable when moving into the snooze folder; cached UIDs do not.
+    const link = Object.entries(links).find(([key, value]) => key.startsWith(r.account_id + '|') &&
+      (key === r.account_id + '|' + r.message_id || value?.messageId === r.message_id))?.[1];
+    const caseId = link?.caseId && darfSehen(req.session, link.caseId) ? String(link.caseId) : '';
+    return { id: r.id, accountId: r.account_id, subject: r.subject, wakeAt: r.wake_at,
+      folder: r.folder, messageId: r.message_id, attempts: r.attempts,
+      caseId, caseLabel: caseId ? String(link.caseLabel || '') : '' };
+  }) });
 });
-
+function ownedSnooze(req) {
+  const row = db.prepare('SELECT * FROM mail_snoozes WHERE id = ?').get(req.params.id);
+  return row && row.owner_user_id === req.session.userId && visibleAccount(req, row.account_id) ? row : null;
+}
+router.patch('/snoozes/:id', (req, res) => {
+  const row = ownedSnooze(req);
+  if (!row) return res.status(404).json({ error: 'Wiedervorlage nicht gefunden.' });
+  if (outbox.snoozeBusy(row.id)) return res.status(409).json({ error: 'Die E-Mail wird gerade zurückgeholt.' });
+  const time = Date.parse(String(req.body?.wakeAt || ''));
+  if (!Number.isFinite(time) || time <= Date.now()) return res.status(400).json({ error: 'Bitte einen zukünftigen Zeitpunkt wählen.' });
+  const wakeAt = new Date(time).toISOString();
+  db.prepare('UPDATE mail_snoozes SET wake_at = ?, attempts = 0 WHERE id = ?').run(wakeAt, row.id);
+  res.json({ ok: true, wakeAt });
+});
+router.get('/snoozes/:id/source', async (req, res) => {
+  const row = ownedSnooze(req);
+  if (!row) return res.status(404).json({ error: 'Wiedervorlage nicht gefunden.' });
+  try {
+    const acc = visibleAccount(req, row.account_id);
+    const uid = await engineFor(acc).findByMessageId(acc, row.folder, row.message_id);
+    if (uid == null) return res.status(404).json({ error: 'Die ursprüngliche E-Mail wurde nicht gefunden.' });
+    res.json({ accountId: acc.id, folder: row.folder, uid: String(uid) });
+  } catch (error) { res.status(502).json({ error: error.message || 'E-Mail konnte nicht geöffnet werden.' }); }
+});
+router.post('/snoozes/:id/wake', async (req, res) => {
+  const row = ownedSnooze(req);
+  if (!row) return res.status(404).json({ error: 'Wiedervorlage nicht gefunden.' });
+  try { res.json({ ok: true, ...await outbox.wakeSnooze(row.id) }); }
+  catch (error) { res.status(502).json({ error: error.message || 'E-Mail konnte nicht zurückgeholt werden.' }); }
+});
+// Existing cancel action deliberately keeps its original semantics.
 router.delete('/snoozes/:id', (req, res) => {
-  const r = db.prepare('SELECT * FROM mail_snoozes WHERE id = ?').get(req.params.id);
-  if (!r || r.owner_user_id !== req.session.userId) return res.status(404).json({ error: 'Wiedervorlage nicht gefunden.' });
-  db.prepare('DELETE FROM mail_snoozes WHERE id = ?').run(r.id);
+  const row = ownedSnooze(req);
+  if (!row) return res.status(404).json({ error: 'Wiedervorlage nicht gefunden.' });
+  if (outbox.snoozeBusy(row.id)) return res.status(409).json({ error: 'Die E-Mail wird gerade zurückgeholt.' });
+  db.prepare('DELETE FROM mail_snoozes WHERE id = ?').run(row.id);
   res.json({ ok: true });
 });
 

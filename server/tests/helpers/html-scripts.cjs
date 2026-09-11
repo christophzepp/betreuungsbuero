@@ -10,7 +10,8 @@ const additions = [
   'mobile-document-editor-v1',
   'mobile-document-library-v1',
   'desktop-case-wizard-v1',
-  'mobile-case-wizard-v1'
+  'mobile-case-wizard-v1',
+  'followup-workspace-v1'
 ];
 
 function assertScriptInventory(source, label = 'HTML') {

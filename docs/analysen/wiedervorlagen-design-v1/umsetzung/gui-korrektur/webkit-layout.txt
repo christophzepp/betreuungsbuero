@@ -1,0 +1,56 @@
+PASS Liste per Scrollen bis zum letzten Eintrag 320×568
+PASS Detailaktionen per Scrollen erreichbar 320×568
+PASS Formular beginnt bei Fall und Original 320×568
+PASS Speichern per Scrollen erreichbar 320×568
+PASS Notizfeld hat eine passende Ausgangshöhe 320×568
+PASS Filter anwenden per Scrollen erreichbar 320×568
+PASS Liste per Scrollen bis zum letzten Eintrag 390×420
+PASS Detailaktionen per Scrollen erreichbar 390×420
+PASS Formular beginnt bei Fall und Original 390×420
+PASS Speichern per Scrollen erreichbar 390×420
+PASS Notizfeld hat eine passende Ausgangshöhe 390×420
+PASS Filter anwenden per Scrollen erreichbar 390×420
+PASS Liste per Scrollen bis zum letzten Eintrag 390×844
+PASS Detailaktionen per Scrollen erreichbar 390×844
+PASS Formular beginnt bei Fall und Original 390×844
+PASS Speichern per Scrollen erreichbar 390×844
+PASS Notizfeld hat eine passende Ausgangshöhe 390×844
+PASS Filter anwenden per Scrollen erreichbar 390×844
+PASS Liste per Scrollen bis zum letzten Eintrag 600×700
+PASS Detailaktionen per Scrollen erreichbar 600×700
+PASS Formular beginnt bei Fall und Original 600×700
+PASS Speichern per Scrollen erreichbar 600×700
+PASS Notizfeld hat eine passende Ausgangshöhe 600×700
+PASS Filter anwenden per Scrollen erreichbar 600×700
+PASS Liste per Scrollen bis zum letzten Eintrag 844×390
+PASS Detailaktionen per Scrollen erreichbar 844×390
+PASS Formular beginnt bei Fall und Original 844×390
+PASS Speichern per Scrollen erreichbar 844×390
+PASS Notizfeld hat eine passende Ausgangshöhe 844×390
+PASS Filter anwenden per Scrollen erreichbar 844×390
+PASS Liste per Scrollen bis zum letzten Eintrag 1024×600
+PASS Detailaktionen per Scrollen erreichbar 1024×600
+PASS Formular beginnt bei Fall und Original 1024×600
+PASS Speichern per Scrollen erreichbar 1024×600
+PASS Notizfeld hat eine passende Ausgangshöhe 1024×600
+PASS Filter anwenden per Scrollen erreichbar 1024×600
+PASS Liste per Scrollen bis zum letzten Eintrag 1440×900
+PASS Detailaktionen per Scrollen erreichbar 1440×900
+PASS Formular beginnt bei Fall und Original 1440×900
+PASS Speichern per Scrollen erreichbar 1440×900
+PASS Notizfeld hat eine passende Ausgangshöhe 1440×900
+PASS Filter anwenden per Scrollen erreichbar 1440×900
+PASS Ausgewähltes Original bleibt sichtbar und fokussiert
+PASS Große Originalauswahl besitzt einen eigenen Scrollbereich
+PASS Originalauswahl bleibt mit der Tastatur bedienbar
+PASS Lange Fallnamen ohne Überlauf 320
+PASS Langtext-Test zeigt den echten Dateipfad 320
+PASS Lange Dateipfade bleiben in den Details 320
+PASS Lange Fallnamen ohne Überlauf 768
+PASS Langtext-Test zeigt den echten Dateipfad 768
+PASS Lange Dateipfade bleiben in den Details 768
+PASS Lange Fallnamen ohne Überlauf 1024
+PASS Langtext-Test zeigt den echten Dateipfad 1024
+PASS Lange Dateipfade bleiben in den Details 1024
+PASS Keine Laufzeitfehler im Layoutaudit
+LAYOUT DONE []

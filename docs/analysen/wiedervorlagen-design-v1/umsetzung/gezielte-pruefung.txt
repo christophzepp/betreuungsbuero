@@ -1,0 +1,20 @@
+✔ Shipped followup module and all other scripts compile (147.679084ms)
+✔ Only genuine followups, including legacy records; deadline links excluded (1.094667ms)
+✔ Date validation rejects impossible dates and preserves leap days (2.736333ms)
+✔ Optimistic conflict check protects updated records without blocking irrelevant timestamps (0.5875ms)
+✔ Mail return moves the actual message and removes schedule after success (1.325291ms)
+✔ Provider errors preserve schedule for retry, even beyond old retry cap (3.011125ms)
+✔ Scheduler and manual return cannot move the same message concurrently (1.042208ms)
+✔ Mail source, update, return and cancel require both ownership and account visibility (2.380958ms)
+✔ Rescheduling rejects past dates and persists future ISO timestamp (0.597041ms)
+✔ Local creation and deletion propagate storage failure instead of claiming success (12.546084ms)
+✔ Source mapping keeps planning originals and resolves only unambiguous legacy cases (1.519084ms)
+✔ Mail case assignment survives moved UIDs and respects case permissions (1.209833ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 416.044375

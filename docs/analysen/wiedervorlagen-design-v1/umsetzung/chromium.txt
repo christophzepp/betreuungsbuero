@@ -1,0 +1,41 @@
+PASS Alle echten Quellen, keine Fristerinnerung oder freie Aufgabe
+PASS Navigation direkt nach Fristen mit Schnellaktionen und Tooltip
+PASS Schreibfehler erhält den Formularentwurf
+PASS Speichern erhält Dokument und Fall
+PASS Rückgängig schreibt persistent zurück
+PASS Überfällige ab heute um sieben Tage verschoben
+PASS Erledigen und Wiederöffnen
+PASS Neuanlage mit bestehendem Original
+PASS Doppelte offene Wiedervorlage wird abgefangen
+PASS Löschen entfernt nur die Wiedervorlage
+PASS E-Mail tatsächlich über Rückholroute zurückgeholt
+PASS Neue E-Mail-Wiedervorlage stellt das Original im Postfach zurück
+PASS Wiederkehrende Wiedervorlage rückt zur nächsten Fälligkeit weiter
+PASS Schließen schützt ungespeicherte Änderungen
+PASS Menüknopf überdeckt keine Überschrift 320 light
+PASS Liste ohne horizontalen Überlauf 320 light
+PASS Filter sichtbar 320 light
+PASS Menüknopf überdeckt keine Überschrift 320 dark
+PASS Liste ohne horizontalen Überlauf 320 dark
+PASS Filter sichtbar 320 dark
+PASS Menüknopf überdeckt keine Überschrift 390 light
+PASS Liste ohne horizontalen Überlauf 390 light
+PASS Filter sichtbar 390 light
+PASS Menüknopf überdeckt keine Überschrift 390 dark
+PASS Liste ohne horizontalen Überlauf 390 dark
+PASS Filter sichtbar 390 dark
+PASS Menüknopf überdeckt keine Überschrift 768 light
+PASS Liste ohne horizontalen Überlauf 768 light
+PASS Filter sichtbar 768 light
+PASS Menüknopf überdeckt keine Überschrift 768 dark
+PASS Liste ohne horizontalen Überlauf 768 dark
+PASS Filter sichtbar 768 dark
+PASS Menüknopf überdeckt keine Überschrift 1440 light
+PASS Liste ohne horizontalen Überlauf 1440 light
+PASS Filter sichtbar 1440 light
+PASS Menüknopf überdeckt keine Überschrift 1440 dark
+PASS Liste ohne horizontalen Überlauf 1440 dark
+PASS Filter sichtbar 1440 dark
+PASS Lokale Speicherung übersteht erneutes Öffnen
+PASS Keine neuen Laufzeitfehler
+DONE

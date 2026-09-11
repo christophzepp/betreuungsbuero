@@ -75,28 +75,39 @@ function writeDoku(caseId, ownerUserId, data) {
 // ---- Wiedervorlage (Snooze): faellige Mails per Message-ID zurueck in den Posteingang ------
 const dueSnoozesStmt = db.prepare("SELECT * FROM mail_snoozes WHERE wake_at != '' AND wake_at <= ? ORDER BY wake_at LIMIT 25");
 const deleteSnoozeStmt = db.prepare('DELETE FROM mail_snoozes WHERE id = ?');
-const bumpSnoozeStmt = db.prepare('UPDATE mail_snoozes SET attempts = attempts + 1 WHERE id = ?');
 
+// Shared lock prevents scheduler and manual return from moving the same message twice.
+const wakingSnoozes = new Set();
+async function wakeSnooze(id) {
+  if (wakingSnoozes.has(id)) throw new Error('Diese E-Mail wird bereits zurückgeholt.');
+  wakingSnoozes.add(id);
+  try {
+    const row = db.prepare('SELECT * FROM mail_snoozes WHERE id = ?').get(id);
+    if (!row) throw new Error('Wiedervorlage nicht mehr vorhanden.');
+    const acc = getAccountStmt.get(row.account_id);
+    if (!acc) throw new Error('Das E-Mail-Konto ist nicht mehr verfügbar.');
+    const engine = acc.kind === 'microsoft' ? graphEngine : imapEngine;
+    const inbox = acc.kind === 'microsoft' ? 'inbox' : 'INBOX';
+    const uid = await engine.findByMessageId(acc, row.folder, row.message_id);
+    if (uid != null) await engine.moveMessage(acc, row.folder, uid, inbox);
+    const backUid = await engine.findByMessageId(acc, inbox, row.message_id);
+    if (backUid == null && uid == null) throw new Error('Die E-Mail wurde nicht gefunden. Die Wiedervorlage bleibt erhalten.');
+    if (backUid != null) {
+      try { await engine.setFlags(acc, inbox, backUid, { seen: false }); } catch (_) { /* optional */ }
+    }
+    deleteSnoozeStmt.run(row.id);
+    db.prepare('DELETE FROM mail_cache WHERE account_id = ? AND folder IN (?, ?)').run(acc.id, row.folder, inbox);
+    return { accountId: acc.id, folder: inbox, uid: backUid == null ? null : String(backUid) };
+  } finally { wakingSnoozes.delete(id); }
+}
 async function wakeSnoozes(now) {
   const due = dueSnoozesStmt.all(now);
   for (const row of due) {
-    const acc = getAccountStmt.get(row.account_id);
-    if (!acc) { deleteSnoozeStmt.run(row.id); continue; }
-    const engine = acc.kind === 'microsoft' ? graphEngine : imapEngine;
-    const inbox = acc.kind === 'microsoft' ? 'inbox' : 'INBOX';
-    try {
-      const uid = await engine.findByMessageId(acc, row.folder, row.message_id);
-      if (uid != null) {
-        await engine.moveMessage(acc, row.folder, uid, inbox);
-        try {
-          const backUid = await engine.findByMessageId(acc, inbox, row.message_id);
-          if (backUid != null) await engine.setFlags(acc, inbox, backUid, { seen: false });
-        } catch (_e) { /* ungelesen-Markierung ist Beiwerk */ }
-      }
-      deleteSnoozeStmt.run(row.id);
-    } catch (_e) {
-      if ((row.attempts || 0) + 1 >= MAX_ATTEMPTS) deleteSnoozeStmt.run(row.id);
-      else bumpSnoozeStmt.run(row.id);
+    try { await wakeSnooze(row.id); }
+    catch (_) {
+      // Never discard the only reminder on a provider outage. Retry after five minutes.
+      db.prepare('UPDATE mail_snoozes SET attempts = attempts + 1, wake_at = ? WHERE id = ?')
+        .run(new Date(Date.parse(now) + 300000).toISOString(), row.id);
     }
   }
   return due.length;
@@ -182,3 +193,6 @@ function start() {
 }
 
 module.exports = { tick, start, wakeSnoozes, cleanupRetention };
+
+module.exports.wakeSnooze = wakeSnooze;
+module.exports.snoozeBusy = id => wakingSnoozes.has(id);

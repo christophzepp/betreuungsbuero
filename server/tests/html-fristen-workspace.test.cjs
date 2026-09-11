@@ -53,3 +53,14 @@ test('Fehlgeschlagenes Nachladen erhält die bisherigen Fristenvorschläge',asyn
 test('Lokale Verknüpfungen mit numerischen IDs werden ohne Dublette aktualisiert',async()=>{
  const {context:c,storage,record}=fixture(),fr=record({calEventId:'42',routing:'calendar'}),key='betreuungsbuero.calendarEvents.v1';storage.set(key,JSON.stringify([{id:42,title:'Bisher',attachments:['anlage']}])) ;await c.frWorkspaceReconcile(fr);const list=JSON.parse(storage.get(key));assert.equal(list.length,1);assert.equal(list[0].title,fr.title);assert.deepEqual(list[0].attachments,['anlage']);fr.routing='none';await c.frWorkspaceReconcile(fr);assert.deepEqual(JSON.parse(storage.get(key)),[]);
 });
+
+test('Fristerinnerung behält Vorlauf und zeigt im Kalender keinen zusätzlichen Wiedervorlage-Präfix',()=>{
+ const ctx={Date,Number,String,window:{__activeServerCaseId:'fall-a'},parseIso:parse,isoOf:iso,fmtDE:v=>v,frWithTarget:p=>p,frTitle:f=>f.title,frDesc:()=>'',frCaseLabel:()=>'Fall A',frUrg:()=>({k:'normal'}),todoItemType:t=>t.itemType,todoPseudoDate:t=>t.dueAt,localDateKey:iso,addDays:(d,n)=>{const next=new Date(d);next.setDate(next.getDate()+n);return next}};
+ const start=html.indexOf('function todoPseudoKind('),end=html.indexOf('async function calTodoPseudoEvents(',start);
+ vm.createContext(ctx);vm.runInContext(source('frTodoDueIso','frTarget')+source('frTodoPayload','frPushCal')+html.slice(start,end),ctx);
+ const fr={id:'frist-a',title:'Unterlagen prüfen',dueDate:'2026-09-30',remindDays:14};
+ const reminder=ctx.frTodoPayload(fr),event=ctx.todoAsCalendarEvent({...reminder,id:'todo-a'});
+ assert.equal(reminder.dueAt,'2026-09-16');assert.equal(fr.dueDate,'2026-09-30');assert.equal(reminder.sourceId,'frist-a');
+ assert.equal(reminder.title,'Erinnerung vor Fristablauf: Unterlagen prüfen');assert.equal(event.title,reminder.title);
+ const sameDay=ctx.frTodoPayload({...fr,remindDays:0});assert.equal(sameDay.title,'Frist: Unterlagen prüfen');assert.equal(sameDay.dueAt,fr.dueDate);
+});
