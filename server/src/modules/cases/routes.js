@@ -113,7 +113,7 @@ function publicDokuEntry(row) {
 
 const router = express.Router();
 let realtime = null;
-function setRealtime(rt) { realtime = rt; }
+function setRealtime(rt) { realtime = rt; require('../contacts/addressbook').setRealtime(rt); }
 // v175: req mitgeben, damit die Fensterkennung (X-Window-Id) des Ausloesers durchgereicht
 // werden kann - siehe broadcastToCase in ws.js. Ohne req oder ohne Kopfzeile: wie bisher.
 function broadcast(caseId, message, req) {
@@ -826,9 +826,14 @@ router.get('/:id/contacts', requireViewCases, (req, res) => {
 router.post('/:id/contacts', requireEditCases, (req, res) => {
   const { id } = req.params;
   if (!getCaseStmt.get(id)) return res.status(404).json({ error: 'Fall nicht gefunden.' });
-  const contactId = crypto.randomUUID();
+  // Beim umkehrbaren Zusammenführen bleibt die ursprüngliche Kontakt-ID erhalten,
+  // damit vorhandene Dokumentationsverknüpfungen auch nach dem Trennen wieder passen.
+  const contactId = req.body?.id || crypto.randomUUID();
+  if (typeof contactId !== 'string' || !/^[a-zA-Z0-9_-]{1,128}$/.test(contactId)) return res.status(400).json({ error: 'Ungültige Kontakt-ID.' });
+  if (db.prepare('SELECT id FROM case_contacts WHERE id=?').get(contactId)) return res.status(409).json({ error: 'Die Kontakt-ID ist bereits vergeben.' });
   const data = req.body?.data || {};
   insertContactStmt.run({ id: contactId, caseId: id, dataJson: JSON.stringify(data), userId: req.session.userId });
+  require('../contacts/addressbook').record('case', id, contactId, null, data, req.session);
   broadcast(id, { type: 'contact', action: 'create', contact: { id: contactId, data }, updatedBy: req.session.displayName }, req);
   res.status(201).json({ id: contactId });
 });
@@ -837,8 +842,10 @@ router.put('/:id/contacts/:contactId', requireEditCases, (req, res) => {
   const { id, contactId } = req.params;
   if (!getContactStmt.get(contactId, id)) return res.status(404).json({ error: 'Kontakt nicht gefunden.' });
   const data = req.body?.data || {};
-  updateContactStmt.run(JSON.stringify(data), req.session.userId, contactId, id);
-  broadcast(id, { type: 'contact', action: 'update', contact: { id: contactId, data }, updatedBy: req.session.displayName }, req);
+  let saved;
+  try { const addressbook = require('../contacts/addressbook'); saved = addressbook.data(addressbook.replace('case', id, contactId, data, req.session)); }
+  catch (e) { return res.status(e.status || 500).json({ error: e.message }); }
+  broadcast(id, { type: 'contact', action: 'update', contact: { id: contactId, data: saved }, updatedBy: req.session.displayName }, req);
   res.json({ ok: true });
 });
 

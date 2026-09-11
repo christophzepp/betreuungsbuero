@@ -34,6 +34,7 @@ router.post('/', requireEditCases, (req, res) => {
   const id = crypto.randomUUID();
   const data = (req.body && req.body.data) || {};
   insertStmt.run({ id, dataJson: JSON.stringify(data), userId: req.session.userId });
+  require('../contacts/addressbook').record('office', '', id, null, data, req.session);
   res.status(201).json({ id });
 });
 
@@ -41,7 +42,8 @@ router.post('/', requireEditCases, (req, res) => {
 router.put('/:id', requireEditCases, (req, res) => {
   if (!getStmt.get(req.params.id)) return res.status(404).json({ error: 'Kontakt nicht gefunden.' });
   const data = (req.body && req.body.data) || {};
-  updateStmt.run(JSON.stringify(data), req.session.userId, req.params.id);
+  try { require('../contacts/addressbook').replace('office', '', req.params.id, data, req.session); }
+  catch (e) { return res.status(e.status || 500).json({ error: e.message }); }
   res.json({ ok: true });
 });
 
@@ -204,6 +206,7 @@ router.post('/export', requireEditCases, async (req, res) => {
 });
 
 router.delete('/:id', requireEditCases, (req, res) => {
+  if(require('../contacts/addressbook').linked(req.params.id).length) return res.status(409).json({error:'Dieser zentrale Kontakt ist Fällen zugeordnet. Bitte beenden oder zunächst die Fallzuordnungen entfernen.'});
   if (!getStmt.get(req.params.id)) return res.status(404).json({ error: 'Kontakt nicht gefunden.' });
   deleteStmt.run(req.params.id);
   res.json({ ok: true });

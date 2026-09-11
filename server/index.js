@@ -236,6 +236,7 @@ app.use('/api/persons', personsRoutes);
 // Büroweite (fallübergreifende) Kontakte - geteiltes Büro-Adressbuch (Nutzerwunsch). Eigener Speicher
 // office_contacts, damit büro-eigene Kontakte nutzer-/geräteübergreifend geteilt sind (statt localStorage).
 app.use('/api/office-contacts', require('./src/modules/office/contact-routes'));
+app.use('/api/addressbook', require('./src/modules/contacts/addressbook-routes'));
 app.use('/api/office-json', require('./src/modules/office/json-routes'));
 app.use('/api/ai-relay', require('./src/integrations/ai/routes'));
 // Datei-Zwischenspeicher des gefuehrten Fallbeginns (bis zum Abschluss des Laufs; siehe Route).

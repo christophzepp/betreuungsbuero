@@ -88,6 +88,18 @@ db.exec(`
     updated_by INTEGER REFERENCES users(id)
   );
 
+  -- Der Linkindex ergänzt vollständige Fallkontakt-JSONs; die Historie bleibt in Vollsicherungen.
+  CREATE TABLE IF NOT EXISTS addressbook_links (
+    case_contact_id TEXT PRIMARY KEY REFERENCES case_contacts(id) ON DELETE CASCADE,
+    office_contact_id TEXT NOT NULL REFERENCES office_contacts(id) ON DELETE CASCADE
+  );
+  CREATE INDEX IF NOT EXISTS addressbook_links_office ON addressbook_links(office_contact_id);
+  CREATE TABLE IF NOT EXISTS addressbook_history (
+    id TEXT PRIMARY KEY, scope TEXT NOT NULL, case_id TEXT NOT NULL DEFAULT '', contact_id TEXT NOT NULL,
+    at TEXT NOT NULL, actor TEXT NOT NULL, changes_json TEXT NOT NULL
+  );
+  CREATE INDEX IF NOT EXISTS addressbook_history_contact ON addressbook_history(scope,contact_id,at);
+
   -- Generischer büroweiter JSON-Speicher (Nutzerwunsch 2026-07-17): geteilte, fallübergreifende
   -- Client-Zustände, für die keine eigene Tabelle lohnt - je Schlüssel EIN JSON-Blob. Erste Nutzer:
   -- 'ai_chats' (Verläufe der KI-Fallbesprechungen/Dokument-Interviews), 'case_intakes' und
