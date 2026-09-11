@@ -5,7 +5,8 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const out=process.env.MOBILE_QA_OUTPUT||'/tmp/followup-workspace-qa';fs.mkdirSync(out,{recursive:true});
 (async()=>{const browser=await engine.launch({headless:true});try{
  const desktop=process.env.FOLLOWUP_QA_DESKTOP==='1';
- const page=await browser.newPage({viewport:{width:390,height:844},isMobile:!desktop,hasTouch:!desktop,locale:'de-DE',timezoneId:'Europe/Berlin'});page.setDefaultTimeout(15000);
+ const phone=process.env.PLANNING_MOBILE_LAYOUT_AUDIT&&!desktop?{userAgent:'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1'}:{};
+ const page=await browser.newPage({viewport:{width:390,height:844},isMobile:!desktop,hasTouch:!desktop,locale:'de-DE',timezoneId:'Europe/Berlin',...phone});page.setDefaultTimeout(15000);
  const errors=[];page.on('pageerror',e=>{errors.push(e.message);console.log('PAGEERROR '+e.message)});
  await page.route('**/*',r=>r.abort());
  await page.addInitScript(()=>{window.__onlineInitialCaseNativeFetch=async()=>new Response('{}',{headers:{'Content-Type':'application/json'}})});
@@ -50,6 +51,7 @@ const out=process.env.MOBILE_QA_OUTPUT||'/tmp/followup-workspace-qa';fs.mkdirSyn
  if(process.env.FOLLOWUP_NOTE_AUDIT){await require('./qa-followup-note.cjs')({page,root,act,panel,check,shot,errors});return;}
  if(process.env.PLANNING_REGRESSION_AUDIT){await require('./qa-planning-regressions.cjs')({page,root,act,panel,check,shot,errors});return;}
  if(process.env.FOLLOWUP_REGRESSION_AUDIT){await require('./qa-followup-regressions.cjs')({page,root,act,panel,check,shot,errors});return;}
+ if(process.env.PLANNING_MOBILE_LAYOUT_AUDIT){await require('./qa-planning-mobile-layout.cjs')({page,check,shot,errors});return;}
  await page.setViewportSize({width:1440,height:1000});await page.evaluate(()=>window.__caseOverview.openFollowups());await root.waitFor();
  await check('Alle echten Quellen, keine Fristerinnerung oder freie Aufgabe',async()=>{assert.equal(await root.locator('.wv-row').count(),4);assert.equal(await root.getByText('Später / ohne Datum').count(),1)});await shot('desktop-liste');
  await check('Navigation direkt nach Fristen mit Schnellaktionen und Tooltip',async()=>{assert.ok(await page.locator('[data-fristen-menu] + [data-wiedervorlagen-menu]').count());assert.ok(await page.locator('[data-wiedervorlagen-menu] [data-wv-new]').first().getAttribute('title'))});
