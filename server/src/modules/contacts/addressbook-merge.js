@@ -26,6 +26,7 @@ function merge(input,session){
     if(String(d.status||'').toLowerCase()==='aktiv')merged.status='Aktiv';
     if(Array.isArray(d.caseRefs))merged.caseRefs=[...new Set([...(merged.caseRefs||[]),...d.caseRefs])];
     for(const k of ['note','notes'])if(d[k]&&d[k]!==merged[k])merged[k]=[merged[k],d[k]].filter(Boolean).join('\n');
+    const addresses=new Map((merged.addresses||[]).map(a=>[a.id,a]));for(const a of d.addresses||[]){if(addresses.has(a.id)&&hash(addresses.get(a.id))!==hash(a))A.fail(409,'Eine Anschriften-ID enthält unterschiedliche Angaben. Bitte vor der Zusammenführung prüfen.');addresses.set(a.id,a)}if(addresses.size>30)A.fail(400,'Höchstens 30 Anschriften sind möglich.');if(addresses.size)merged.addresses=[...addresses.values()];
     const people=new Map((merged.people||[]).map(p=>[p.id,p]));for(const p of d.people||[]){if(people.has(p.id)&&hash(people.get(p.id))!==hash(p))A.fail(409,'Gleich benannte Ansprechpartner-IDs enthalten unterschiedliche Daten. Bitte vor dem Zusammenführen prüfen.');people.set(p.id,p)}if(people.size>100)A.fail(400,'Ein Kontakt kann höchstens 100 Ansprechpartner enthalten. Bitte die Auswahl verkleinern.');if(people.size)merged.people=[...people.values()];
    }
    A.replace('case',caseId,survivor.id,merged,session,A.version(survivor),effects);
@@ -50,7 +51,7 @@ function unmerge(input,session){
    const original=clean(legacy.survivorBefore||{}),current=A.data(row);
    if(!original.institution&&!original.lastName)A.fail(400,'Die ursprünglichen Kontaktdaten fehlen.');
    if((original.centralContactId||'')!==(A.centralId('case',row.id)||''))A.fail(409,'Die zentrale Zuordnung wurde geändert. Bitte vor dem Trennen prüfen.');
-   const patch={...original};for(const k of A.FIELDS)if(Object.hasOwn(current,k)&&!Object.hasOwn(original,k))patch[k]=k==='people'?[]:'';
+   const patch={...original};for(const k of A.FIELDS)if(Object.hasOwn(current,k)&&!Object.hasOwn(original,k))patch[k]=['people','addresses'].includes(k)?[]:'';
    A.replace('case',caseId,row.id,patch,session,versions[row.id],effects);
    // Anders als ein normales Bearbeiten entfernt Trennen auch nachträglich ergänzte Felder.
    db.prepare('UPDATE case_contacts SET data_json=? WHERE id=?').run(JSON.stringify(original),row.id);effects.push(['case',caseId,row.id,original]);

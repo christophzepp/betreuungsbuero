@@ -91,6 +91,7 @@ const TABLE_REGISTRY = Object.freeze([
   // SQLite-Vollsicherung, aber kein portables Teilabbild (ein begrenztes JSON hätte beim
   // Recovery sonst die ältere Vollhistorie ersetzt).
   { key: 'syncJournal', table: 'sync_journal', groups: [], restore: false },
+  { key: 'addressbookViews', table: 'addressbook_views', groups: ['office', 'module'] },
   { key: 'addressbookHistory', table: 'addressbook_history', groups: [], restore: false,
     caseExcludedReason: 'Ungekürzter Änderungsnachweis; wie das Audit-Protokoll Teil der SQLite-Vollsicherung, kein ersetzendes JSON-Teilabbild.' },
 
@@ -299,6 +300,7 @@ const RECOVERY_SCHEMA_COLUMNS = Object.freeze({
 const CASE_OWNER_REQUIRED_COLUMNS = Object.freeze(['id', 'owner_user_id']);
 
 const BACKUP_EXCLUDED_TABLES = Object.freeze({
+  addressbook_mail_index: 'Wiederaufbaubarer Nachrichtenindex; Originale bleiben in den verbundenen Postfächern.',
   addressbook_links: 'Aus centralContactId der gesicherten Fallkontakt-JSONs wiederaufbaubarer Verknüpfungsindex; zusätzlich vollständig in SQLite enthalten.',
   recovery_security_state: 'Interner Wiederanlaufzustand; reist nur in der SQLite-Vollsicherung mit und wird nie aus einem JSON-Teilabbild importiert.',
   mail_cache: 'Vom Mailserver erneut ladbarer Nachrichtencache.',

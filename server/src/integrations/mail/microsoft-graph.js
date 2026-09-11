@@ -126,6 +126,15 @@ async function listFolders(account) {
   return folders;
 }
 
+// Vollständiger Ordnerabgleich für den Kontaktverlauf, einschließlich Folgeseiten.
+async function listFoldersComplete(account) {
+ const conn=graphConn(account),special=await wellKnownMap(conn),select='$select=id,displayName,parentFolderId,childFolderCount,unreadItemCount,totalItemCount';
+ async function all(url){const result=[],visited=new Set();while(url){if(visited.has(url)||!url.startsWith(GRAPH_API+'/'))throw Error('Ungültige Ordnerfortsetzung.');visited.add(url);const page=await gjson(conn,url);result.push(...(page.value||[]));url=page['@odata.nextLink']||'';}return result}
+ const queue=(await all(`${GRAPH_API}/me/mailFolders?$top=100&${select}`)).map(f=>({f,parentId:'',prefix:''})),seen=new Set(),out=[];
+ while(queue.length){const {f,parentId,prefix}=queue.shift();if(seen.has(f.id))continue;seen.add(f.id);const item=folderItem(f,special,parentId);item.name=prefix+item.name;out.push(item);if(f.childFolderCount)for(const child of await all(`${GRAPH_API}/me/mailFolders/${encodeURIComponent(f.id)}/childFolders?$top=100&${select}`))queue.push({f:child,parentId:f.id,prefix:item.name+'/'});}
+ return out;
+}
+
 async function renameFolder(account, folderId, newName) {
   const clean = String(newName || '').trim();
   if (!clean) throw new Error('Bitte einen neuen Ordnernamen angeben.');
@@ -170,9 +179,11 @@ function recipientsOf(list) {
 function messageItem(m) {
   return {
     uid: m.id,
+    draft: !!m.isDraft,
     subject: m.subject || '',
     from: m.from ? { name: m.from.emailAddress?.name || '', address: m.from.emailAddress?.address || '' } : null,
     to: recipientsOf(m.toRecipients),
+    cc: recipientsOf(m.ccRecipients),
     date: m.receivedDateTime || m.sentDateTime || '',
     seen: m.isRead !== false,
     flagged: m.flag?.flagStatus === 'flagged',
@@ -188,7 +199,7 @@ function messageItem(m) {
 
 async function listMessages(account, folderId, { offset = 0, limit = 50, search = '', sinceDays = 0 } = {}) {
   const conn = graphConn(account);
-  const select = '$select=id,subject,from,toRecipients,receivedDateTime,sentDateTime,isRead,flag,hasAttachments,bodyPreview,categories,importance,internetMessageId';
+  const select = '$select=id,subject,from,toRecipients,ccRecipients,receivedDateTime,sentDateTime,isDraft,isRead,flag,hasAttachments,bodyPreview,categories,importance,internetMessageId';
   let url;
   if (search) {
     // $search erlaubt weder $orderby noch $skip - Graph liefert relevanzsortiert die erste Seite.
@@ -372,4 +383,4 @@ async function setAutoReply(account, cfg) {
 }
 
 // inboxStatus = Alias fuer den Posteingangs-Zaehlerabruf (nutzt der Mail-Watcher fuers Polling).
-module.exports = { listFolders, createFolder, renameFolder, moveFolder, deleteFolder, listMessages, getMessage, getAttachment, setFlags, moveMessage, deleteMessage, testConnection, inboxStatus: testConnection, getRaw, setLabel, findByMessageId, purgeOlder, getAutoReply, setAutoReply };
+module.exports = { listFolders, listFoldersComplete, createFolder, renameFolder, moveFolder, deleteFolder, listMessages, getMessage, getAttachment, setFlags, moveMessage, deleteMessage, testConnection, inboxStatus: testConnection, getRaw, setLabel, findByMessageId, purgeOlder, getAutoReply, setAutoReply };

@@ -2117,4 +2117,18 @@ addColumnIfMissing('office_ai_config', 'allowed_models', "allowed_models TEXT NO
   }
 })();
 
+// Persönliche benannte Ansichten; der Nachrichtenindex enthält ausschließlich Umschlagdaten.
+db.exec(`
+ CREATE TABLE IF NOT EXISTS addressbook_views (
+  id TEXT NOT NULL, user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  label TEXT NOT NULL, filters_json TEXT NOT NULL, version INTEGER NOT NULL DEFAULT 1,
+  PRIMARY KEY(user_id,id)
+ );
+ CREATE TABLE IF NOT EXISTS addressbook_mail_index (
+  account_id TEXT NOT NULL REFERENCES mail_accounts(id) ON DELETE CASCADE,
+  folder TEXT NOT NULL, uid TEXT NOT NULL, env_json TEXT NOT NULL, scan_id TEXT NOT NULL DEFAULT '',
+  PRIMARY KEY(account_id,folder,uid)
+ );
+`);
+
 module.exports = db;

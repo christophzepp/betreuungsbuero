@@ -99,3 +99,37 @@ Ergebnis: 25 ergänzende Browserprüfungen je Engine erfolgreich, dazu der volls
 Die vollständigen Funktionsläufe, 25 Darstellungs-/Navigationsprüfungen und 15 erweiterte Prüfungen sind jeweils in Chromium und WebKit für Desktop und emulierte Mobilansicht erfolgreich. Die kleinen Ansichten umfassen 320 × 640, 390 × 700 und 800 × 650 Pixel. Beim letzten Chromium-Belastungslauf lagen der Aufbau bei 124–147 ms und die Suche bei 200–319 ms; in WebKit bei 49–55 ms und 46–75 ms. Dies sind lokale Messungen ohne CPU-Drosselung, keine Messungen auf einem physischen Smartphone. Sichtgeprüfte Beispiele: [Ansprechpartner mobil](adressbuch-modern/restarbeiten/ansprechpartner-mobil.png), [5.000 Kontakte mit Seitenauswahl](adressbuch-modern/restarbeiten/kontaktseiten-mobil.png).
 
 Die laufende Demo unter `http://localhost:8935` wurde mit dem freigegebenen Vorführkonto geöffnet. Adressbuch, Kontaktinformationen und Übergabe an die Falldokumentation wurden geprüft: Der gewählte Kontakt sowie Bereich und Gegenüber waren passend vorausgewählt; Kontaktart, Themenfeld und Vorgang blieben frei. Der eigene ungespeicherte Testentwurf wurde verworfen. Der Demomodus hält Änderungen ausdrücklich nur in der Sitzung; die dauerhaften neuen Online-Speicherwege wurden deshalb mit der isolierten Serverdatenbank geprüft. Ein physisches Smartphone sowie Schreibvorgänge in verbundenen externen Konten waren nicht Teil dieser Prüfung.
+
+## Fachliche Erweiterungen vom 12.09.2026
+
+Die folgenden Ergänzungen sind im realen Adressbuch und seinen Speicherwegen umgesetzt:
+
+| Funktion | Umsetzung |
+| --- | --- |
+| Kundennummer je Fall | Eigenes Feld im Kontakteditor, beim Zuordnen und unter „Fallangaben bearbeiten“. Aktenzeichen, Vorgangsnummer und Kundennummer bleiben unabhängig von zentralen Stammdaten. |
+| Benannte Anschriften | Bis zu 30 zusätzliche Anschriften mit Bezeichnung, Postfach und Land; eine bevorzugte Anschrift für Dokumentempfänger und Kopieraktionen. Die bisherige Hauptanschrift bleibt erhalten. |
+| Bevorzugter Kontaktweg | E-Mail, Telefon, Mobiltelefon, Post oder Fax für Institution und Ansprechpartner. Sichtbar in den Kontaktdaten. |
+| Erreichbarkeit und Vertretung | Telefonzeiten, Abwesenheitsbeginn/-ende und Hinweise. Institutionen können einen zentralen Kontakt als Vertretung verknüpfen; Ansprechpartner eine andere Person derselben Institution. |
+| Standardempfänger | Eigene Standards für Gericht, Arzt, Versicherung und jeden vorhandenen Schreibentyp, jeweils mit optionalem Ansprechpartner. Reihenfolge: Schreibentyp → Rolle → allgemeiner Dokumentstandard. Manuelle Empfänger und ausdrücklich für einen Export gewählte Adressen bleiben erhalten. Für das aktuelle Schreiben lässt sich eine Rolle festlegen. |
+| Benannte Ansichten | Persönlich auf dem Server gespeicherte Filteransichten: anlegen, auswählen, umbenennen und löschen. Enthalten Suche, Sortierung, alle bisherigen Filter sowie „Ohne E-Mail“; Versionsprüfung schützt gleichzeitige Änderungen. |
+| Änderungsverlauf | Neue Felder einschließlich Anschriften und Erreichbarkeit werden mit vorherigen/neuen Werten erfasst und können wiederhergestellt werden. Personen- und Anschriftenänderungen werden bei Zusammenführungen erhalten. |
+
+### Gemeinsamer Kommunikationsverlauf
+
+Der Verlauf führt verknüpfte Falldokumentation, empfangene und gesendete Postfachnachrichten, bestätigte Schreiben aus der Versandhistorie und verknüpfte Wiedervorlagen zusammen. „Rückmeldung vereinbaren“ erzeugt eine echte Wiedervorlage und einen verknüpften Dokumentationseintrag in einer Transaktion. Eine stabile Vorgangs-ID verhindert doppelte Anlagen bei wiederholten Anfragen. Die Wiedervorlage kann im bestehenden Modul weiterbearbeitet werden; ihr Ursprung führt zum Kontakt zurück.
+
+Beim Öffnen von „Kommunikation“ und während dieser Ansicht werden erreichbare Postfächer automatisch abgeglichen. Die Oberfläche zeigt Fortschritt und Teilfehler. Alle Nachrichtenseiten werden abgefragt; Microsoft-Ordner werden für diesen Abgleich einschließlich Unterordnern und Folgeseiten geladen. Das normale Volltextsuch-Limit wird dafür nicht verwendet. Der lokale Nachrichtenindex enthält nur Umschlagdaten, keine Nachrichtentexte oder Anlagen, und ist aus den Postfächern wiederaufbaubar. Die Originalnachricht öffnet sich im bestehenden Mailmodul. Entwürfe gelten nicht als versendet.
+
+Explizite Fall- und Kontaktverknüpfungen haben Vorrang. Ansonsten erfolgt die Zuordnung nur über eindeutige E-Mail-Adressen; dokumentierte frühere Adressen werden berücksichtigt. Mehrere Empfänger sind möglich, gemeinsam genutzte uneindeutige Adressen werden nicht geraten. Ältere bestätigte Briefe ohne Kontakt-ID können zusätzlich über einen exakt passenden eindeutigen Empfängernamen bzw. Adressblock zugeordnet werden. Die gleiche Nachricht wird anhand ihrer Message-ID zusammengeführt; bei dokumentiertem SMTP-Versand wird diese ID mitgespeichert. Private Postfächer und Wiedervorlagen bleiben auf ihre Eigentümer beschränkt, auch gegenüber einem Administrator. Fallrechte gelten bei jedem Abruf. Ein unbekannter oder mehrdeutiger Altbestand benötigt weiterhin eine ausdrückliche Verknüpfung.
+
+### Speicherung, Austausch und Prüfung
+
+Online bleibt Autosave die Standardspeicherung. Persönliche Ansichten werden in `addressbook_views` gespeichert und sind in der Büro-/Modulsicherung enthalten. Der Nachrichtenindex ist als wiederaufbaubarer Cache registriert. Die Tabellen werden beim Serverstart ohne Ersetzen bestehender Kontaktdaten angelegt.
+
+Die Excel-Fallliste erhält zusätzliche beschriftete Spalten ab AK für Kundennummer, Anschriften, bevorzugte Wege, Erreichbarkeit, Vertretung, Ansprechpartner, Standards und zentrale Zuordnung. Strukturierte Angaben werden verlustfrei als JSON-Zellwerte ausgetauscht. Der Rückimport liest diese Spalten; ältere Vorlagen ohne die Zusatzspalten bleiben kompatibel. Jede Fallliste enthält weiterhin vollständige Kontaktprojektionen mit ihren eigenen Referenzen.
+
+Geprüft mit temporärer SQLite-Datenbank und der tatsächlichen ausgelieferten Anwendung: 90 gezielte Tests einschließlich Echtzeit, Falldokumentation, Sicherungen, bestehender Mail-/Wiedervorlagenfunktionen und neuer Datenfelder. Die neuen Browserabläufe prüfen Autosave, Falltrennung, bevorzugte Anschriften, Vertretung, Standardvorrang, persönliche Ansichten, Rückmeldungen sowie einen echten Excel-Export mit anschließendem Rückimport. Chromium und WebKit decken Desktop und emulierte Mobilansicht einschließlich 320 Pixel Breite und Hell-/Dunkelmodus ab. Zusätzlich bestehen die 25 bisherigen Darstellungs-/Navigationsprüfungen und der Chromium-Belastungslauf mit 5.000 Kontakten, Nachladen und wiederholten Merge-Anfragen.
+
+Der Postfachabgleich wurde mit simulierten Providerantworten (einschließlich mehrerer Seiten und privater Konten) geprüft; es wurden keine externen Testnachrichten versendet. Eine Prüfung mit realen IMAP-/Microsoft-Postfächern ist damit nicht ersetzt.
+
+Reproduzierbarer neuer Browserlauf: `QA_EXPANSION=1 node server/scripts/qa-addressbook-modern.cjs`, für Safari zusätzlich `QA_BROWSER=webkit`. Bildschirmbeispiele: [Desktop](adressbuch-modern/erweiterungen/desktop.png), [Mobil](adressbuch-modern/erweiterungen/mobil.png).

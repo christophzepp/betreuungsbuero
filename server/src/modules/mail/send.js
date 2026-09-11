@@ -28,7 +28,9 @@ async function sendViaAccount(acc, m) {
   }
   if (!acc.smtp_host) throw new Error('Für dieses Konto ist kein SMTP-Server hinterlegt.');
   const fromAddr = acc.email || acc.smtp_user || acc.imap_user;
+  const messageId='<'+require('node:crypto').randomUUID()+'@betreuungsbuero.local>';
   const mailOptions = {
+    messageId,
     from: acc.from_name ? { name: acc.from_name, address: fromAddr } : fromAddr,
     to: m.to, cc: m.cc || undefined, bcc: m.bcc || undefined,
     replyTo,
@@ -44,7 +46,7 @@ async function sendViaAccount(acc, m) {
   await transport.sendMail({ raw, envelope: { from: fromAddr, to: [...splitAddresses(m.to), ...splitAddresses(m.cc), ...splitAddresses(m.bcc)] } });
   let sentCopy = false;
   try { sentCopy = (await imapEngine.appendSent(acc, raw)).ok === true; } catch (_e) { /* Kopie ist nice-to-have */ }
-  return { sentVia: 'smtp', sentCopy };
+  return { sentVia: 'smtp', sentCopy, messageId };
 }
 
 module.exports = { sendViaAccount, splitAddresses };

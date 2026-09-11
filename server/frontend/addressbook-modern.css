@@ -157,3 +157,15 @@ html.mobile-online-active #modal.am-modal #addressbookModern{padding:12px 10px 0
 #addressbookModern .am-pages{display:flex;flex:none;gap:8px;align-items:center;justify-content:space-between;padding:8px 12px;border-top:1px solid var(--am-line);font-size:12px}
 #addressbookModern .am-pages[hidden]{display:none!important}
 #addressbookModern .am-pages .am-btn{padding:6px;min-height:32px}
+
+#addressbookModern .am-tabs{flex-wrap:nowrap;overflow-x:auto;gap:16px;scrollbar-width:thin}
+#addressbookModern .am-tabs .am-btn{flex:none;white-space:nowrap}
+#addressbookModern .am-section>.am-btn{margin:3px 4px 3px 0}
+#addressbookModern label.am-missing{display:flex;align-items:center;gap:8px}
+#addressbookModern .am-tools>.am-menu{flex:none}
+@media(max-width:480px){
+ #addressbookModern .am-tools{flex-wrap:wrap;gap:6px;margin-bottom:8px}
+ #addressbookModern .am-search{flex-basis:100%}
+ #addressbookModern .am-tools>.am-filters,#addressbookModern .am-tools>.am-menu{flex:1}
+ #addressbookModern .am-tools summary{width:100%}
+}

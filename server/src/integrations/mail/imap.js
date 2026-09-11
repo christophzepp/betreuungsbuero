@@ -239,10 +239,12 @@ function envelopeItem(msg) {
   const flags = msg.flags || new Set();
   return {
     uid: msg.uid,
+    draft: flags.has('\\Draft'),
     labels: [...flags].filter((f) => /^MXLabel[1-6]$/.test(f)).map((f) => Number(f.slice(7))),
     subject: env.subject || '',
     from: addrList(env.from)[0] || null,
     to: addrList(env.to),
+    cc: addrList(env.cc),
     date: env.date ? new Date(env.date).toISOString() : '',
     seen: flags.has('\\Seen'),
     flagged: flags.has('\\Flagged'),

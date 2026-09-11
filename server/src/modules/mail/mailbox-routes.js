@@ -307,6 +307,7 @@ const cacheDeleteMessageStmt = db.prepare('DELETE FROM mail_cache WHERE account_
 const cacheClearFolderStmt = db.prepare('DELETE FROM mail_cache WHERE account_id = ? AND folder = ?');
 const cacheByAccountStmt = db.prepare('SELECT folder, uid, env_json FROM mail_cache WHERE account_id = ? ORDER BY msg_date DESC');
 function cacheUpsert(accountId, folder, messages) {
+  require('../contacts/addressbook-communications').indexMessages(accountId, folder, messages);
   const tx = db.transaction((rows) => {
     for (const m of rows) cacheUpsertStmt.run({ a: accountId, f: folder, u: String(m.uid), j: JSON.stringify(m), d: m.date || '' });
   });
