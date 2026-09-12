@@ -176,6 +176,7 @@ function recipientsOf(list) {
   return (Array.isArray(list) ? list : []).map((r) => ({ name: r.emailAddress?.name || '', address: r.emailAddress?.address || '' }));
 }
 
+const mailIdentity = require('../../modules/mail/identity');
 function messageItem(m) {
   return {
     uid: m.id,
@@ -191,15 +192,16 @@ function messageItem(m) {
     size: 0,
     hasAttachments: !!m.hasAttachments,
     messageId: m.internetMessageId || '',
+    dispatchId: mailIdentity.fromHeaders(m.internetMessageHeaders),
     preview: m.bodyPreview || '',
     categories: Array.isArray(m.categories) ? m.categories : [],
     priority: m.importance === 'high' ? 'high' : (m.importance === 'low' ? 'low' : 'normal')
   };
 }
 
-async function listMessages(account, folderId, { offset = 0, limit = 50, search = '', sinceDays = 0 } = {}) {
+async function listMessages(account, folderId, { offset = 0, limit = 50, search = '', sinceDays = 0, nextLink = '' } = {}) {
   const conn = graphConn(account);
-  const select = '$select=id,subject,from,toRecipients,ccRecipients,receivedDateTime,sentDateTime,isDraft,isRead,flag,hasAttachments,bodyPreview,categories,importance,internetMessageId';
+  const select = '$select=id,subject,from,toRecipients,ccRecipients,receivedDateTime,sentDateTime,isDraft,isRead,flag,hasAttachments,bodyPreview,categories,importance,internetMessageId,internetMessageHeaders';
   let url;
   if (search) {
     // $search erlaubt weder $orderby noch $skip - Graph liefert relevanzsortiert die erste Seite.
@@ -208,15 +210,20 @@ async function listMessages(account, folderId, { offset = 0, limit = 50, search 
     const flt = sinceDays > 0 ? `&$filter=${encodeURIComponent('receivedDateTime ge ' + new Date(Date.now() - sinceDays * 86400000).toISOString())}` : '';
     url = `${GRAPH_API}/me/mailFolders/${encodeURIComponent(folderId)}/messages?$orderby=receivedDateTime desc&$top=${limit}&$skip=${offset}&$count=true${flt}&${select}`;
   }
+  if (nextLink) {
+    const next = new URL(nextLink), expected = new URL(`${GRAPH_API}/me/mailFolders/${encodeURIComponent(folderId)}/messages`);
+    if (next.origin !== expected.origin || next.pathname !== expected.pathname || next.username || next.password) throw Error('Ungültige Microsoft-Fortsetzung.');
+    url = next.href;
+  }
   const d = await gjson(conn, url, search ? { headers: { ConsistencyLevel: 'eventual' } } : undefined);
   const messages = (d.value || []).map(messageItem);
   const total = search ? messages.length + offset : (typeof d['@odata.count'] === 'number' ? d['@odata.count'] : offset + messages.length + (d['@odata.nextLink'] ? limit : 0));
-  return { total, messages };
+  return { total, messages, nextLink: d['@odata.nextLink'] || null, totalKnown: typeof d['@odata.count'] === 'number' };
 }
 
 async function getMessage(account, folderId, uid) {
   const conn = graphConn(account);
-  const d = await gjson(conn, `${GRAPH_API}/me/messages/${encodeURIComponent(uid)}?$select=id,subject,from,toRecipients,ccRecipients,bccRecipients,replyTo,receivedDateTime,sentDateTime,body,internetMessageId,hasAttachments,importance`);
+  const d = await gjson(conn, `${GRAPH_API}/me/messages/${encodeURIComponent(uid)}?$select=id,subject,from,toRecipients,ccRecipients,bccRecipients,replyTo,receivedDateTime,sentDateTime,body,internetMessageId,internetMessageHeaders,hasAttachments,importance`);
   let attachments = [];
   let html = d.body?.contentType === 'html' ? (d.body.content || '') : '';
   const text = d.body?.contentType === 'html' ? '' : (d.body?.content || '');
@@ -252,6 +259,7 @@ async function getMessage(account, folderId, uid) {
     replyTo: recipientsOf(d.replyTo),
     date: d.receivedDateTime || d.sentDateTime || '',
     messageId: d.internetMessageId || '',
+    dispatchId: mailIdentity.fromHeaders(d.internetMessageHeaders),
     inReplyTo: '',
     references: [],
     priority: d.importance === 'high' ? 'high' : (d.importance === 'low' ? 'low' : 'normal'),

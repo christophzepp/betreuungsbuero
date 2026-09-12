@@ -2,6 +2,33 @@
 
 Stand: 12.09.2026. Umsetzung in der ausgelieferten Anwendung und den bestehenden Serverdaten. Das HTML-Mockup ist keine Datenquelle und wird nicht als separate Anwendung eingebunden.
 
+## Mailverknüpfung und vollständiger vCard-Austausch – 12.09.2026
+
+Die beiden zuvor offenen Umbaupunkte sind umgesetzt:
+
+- „Später senden“ speichert den ausgewählten Kontakt und Ansprechpartner mit dem damaligen Datenstand, einschließlich Kundennummer und Fallreferenzen. Empfänger und Kontakt werden serverseitig abgeglichen; Fallrechte gelten beim Planen und nochmals beim Versand. Ältere geplante Entwürfe erhalten bei eindeutiger Empfängerzuordnung ebenfalls eine Kontaktverknüpfung.
+- Sofortiger und geplanter Microsoft-Versand tragen eine zufällige Versandkennung. Die Dokumentation speichert diese gemeinsam mit dem Versandkonto; Graph- und IMAP-Abrufe übernehmen sie in den Kommunikationsindex. Die Kennung enthält keine Kontakt- oder Falldaten. Dieser Weg berücksichtigt, dass Graph `sendMail` nur eine Annahmebestätigung ohne Nachrichtenobjekt zurückgibt. Sie ist keine Zustellbestätigung. [Microsoft: sendMail und zusätzliche Internet-Header](https://learn.microsoft.com/en-us/graph/api/user-sendmail?view=graph-rest-1.0).
+- „In Falldokumentation ablegen“ liest die ausgewählte Mail serverseitig, verknüpft einen eindeutig passenden Ansprechpartner und speichert Konto sowie Message-ID. Wiederholtes Ablegen, auch nach einem Ordnerwechsel, verwendet denselben Dokumentationseintrag. Nachträgliches Ablegen einer bereits dokumentierten geplanten Mail ergänzt die bestehende Dokumentation.
+- Dokumentation und zugehörige Mail erscheinen zusammen. Ein Eintrag bietet beide Öffnen-Aktionen. Die Zuordnung berücksichtigt die Kontosichtbarkeit und Fälle; eine eingehende Antwort mit übernommenem Versand-Header wird nicht als die ausgehende Mail zusammengeführt. Bei erneut abgelegten, verschobenen Mails hat der bekannte aktuelle Speicherort Vorrang.
+- Der vollständige Microsoft-Abgleich folgt den unveränderten `nextLink`-Seiten des Anbieters. Eine Fortsetzung darf nur auf denselben Microsoft-Ordner zeigen. [Microsoft: List messages](https://learn.microsoft.com/en-us/graph/api/user-list-messages?view=graph-rest-1.0).
+- Der geplante Versand besitzt eine Sperre gegen gleichzeitig laufende Scheduler und einen gespeicherten Versandbeleg. Ein anschließender Fehler beim Dokumentieren wird nachgeholt, ohne erneut zu senden. Solche Nachrichten können währenddessen nicht als ungesendeter Entwurf bearbeitet oder gelöscht werden; der Postausgang zeigt den Status. Ungültige oder bereits vergangene Versandzeitpunkte führen nicht versehentlich zum Sofortversand.
+- vCard überträgt alle aktuellen Kontaktfelder, benannte Anschriften, bevorzugte Kontaktwege, Ansprechpartner einschließlich Vertretung und Erreichbarkeit, Referenzen/Kundennummer, Notizen, Bankdaten und Standardempfänger. Standardfelder `ADR`, `LABEL`, `TEL`, `EMAIL`, `AGENT` und Präferenzen bleiben für andere Programme lesbar; die versionierte `X-BETREUUNGSBUERO-DATA`-Erweiterung ermöglicht den verlustfreien Rückimport der Anwendungsdaten. UTF-8-Zeilen werden nach 75 Bytes gefaltet, Sonderzeichen korrekt maskiert. [vCard 3.0 / RFC 2426](https://www.rfc-editor.org/rfc/rfc2426.html).
+- Der Online-vCard-Import prüft die ganze Datei vor einer atomaren Speicherung. Duplikate werden übersprungen; Vertretungen innerhalb eines Büroimports werden auf ihre neuen IDs umgestellt. Bereits belegte Standards im Zielfall bleiben erhalten. Fehlende zentrale Gegenkontakte bzw. Vertretungen und belegte Standards werden ausdrücklich gemeldet. Der lokale Büroimport erhält ebenfalls strukturierte Felder und interne Vertretungsverweise.
+
+Die Umsetzung liegt in `server/frontend/addressbook-vcard.js`, den vorhandenen Mail-/Adressbuchmodulen und der ausgelieferten HTML-Datei. Der bestehende Build bettet den gemeinsam von Browser und Importserver verwendeten vCard-Codec ein; zusätzliche Datenbanktabellen oder eine Datenmigration sind nicht nötig.
+
+### Prüfung dieses Ausbaus
+
+105 automatisierte Prüfungen sind erfolgreich, darunter 16 neue Prüfungen für diesen Ausbau. Zusätzlich bestehen 16 Browserprüfungen in Chromium, 18 in WebKit und die 17 bisherigen Adressbuch-Funktionsprüfungen.
+
+Die neuen gezielten Prüfungen in `server/tests/addressbook-mail-vcard.test.cjs` verwenden eine temporäre SQLite-Datenbank und simulierte Anbieter. Sie prüfen verlustfreien und standardkonformen Rückimport, fehlerhafte Dateien ohne Teiländerung, Offline-Import, Vertretungszuordnung, Empfänger- und Fallrechte, Serverversand ohne Browser, erneute Dokumentation, Kontotrennung, Graph-Seiten, reale SMTP-MIME-Erzeugung und Wiederholung nach einem erzwungenen Datenbankfehler.
+
+Der Browserlauf `QA_MAILVCARD=1` verwendet die vollständige ausgelieferte App, echte HTTP-Routen und isolierte Testdaten. Er prüft Datei-Download und Rückimport in Fall und Büro, Ansprechpartner beim geplanten Versand, die bestehende Mailablagefunktion, den Sofortversand, Fehlerantworten sowie die gemeinsamen Öffnen-Aktionen. Desktop und emulierte Mobilansicht werden in Chromium/WebKit geprüft. Die üblichen Adressbuchprüfungen einschließlich Excel-Export bleiben erfolgreich. Ergebnisse und Grenzen sind von den früheren Prüfläufen unten getrennt zu lesen.
+
+### Verbleibende Grenzen
+
+Ein echter Versand mit dem verbundenen Microsoft-/IMAP-Konto wurde nicht durchgeführt. Alte Dokumentationseinträge ohne Message-ID oder Versandkennung können nicht rückwirkend zweifelsfrei einer bestimmten Mail zugeordnet werden. Andere Adressbuchprogramme können anwendungsspezifische vCard-Erweiterungen beim erneuten Export entfernen; der vollständige Datenerhalt wurde beim Austausch innerhalb dieser Anwendung geprüft. Die laufende lokale Beta muss nach Übernahme des Codes aktualisiert werden.
+
 ## Aktuelle Nachprüfung vom 12.09.2026
 
 Dieser Abschnitt ergänzt die weiter unten dokumentierten früheren Prüfläufe.
@@ -25,14 +52,12 @@ Zusätzlich wurden der bisherige Funktionslauf und 25 Layout-/Navigationsprüfun
 
 Die laufende Demo unter `http://localhost:8935` liefert bei dieser Nachprüfung noch eine ältere Adressbuchversion: Die Bezeichnungen der neuen Bereiche fehlen in der ausgelieferten Anwendung. Dort wurde deshalb keine Abnahme der neuen Funktionen behauptet. Die neuen Speicher- und Browserprüfungen verwendeten ausschließlich isolierte Testdaten. Ein echter IMAP-/Microsoft-Postfachabgleich und ein physisches Smartphone waren nicht Teil dieses Laufs.
 
-### Noch offene Punkte
+### Noch offene Punkte (nach dem oben beschriebenen Ausbau aktualisiert)
 
 | Punkt | Verbleibender Umfang |
 | --- | --- |
 | Laufende lokale Beta aktualisieren | Das aktuelle Server-/Frontend-Paket muss dort noch eingespielt und anschließend live geprüft werden. Ein Git-Push allein aktualisiert den laufenden Container nicht. |
-| Kommunikationsverlauf vervollständigen | Der geplante Versand schreibt noch keine explizite Kontaktverknüpfung und Versand-Message-ID in seine Doku. Der Microsoft-Versand liefert noch keine Message-ID zur sicheren Zusammenführung mit dem Postfacheintrag. Vorhandene Mailzuordnungen über eindeutige Adressen ersetzen diese durchgängige Verknüpfung nicht. |
 | Favoriten und zuletzt verwendet | Aus der ursprünglichen Vorschlagsliste weiterhin nicht umgesetzt; persönliche bzw. fallbezogene Favoriten und eine Nutzungshistorie fehlen. |
-| vCard für die neuen Daten erweitern | Der bisherige vCard-Austausch funktioniert, überträgt aber weiterhin nur die bisherigen flachen Kontaktdaten. Mehrere benannte Anschriften, Ansprechpartner, Kundennummer und Erreichbarkeit sind darin noch nicht vollständig abgebildet. Der erweiterte Excel-Austausch ist vorhanden. |
 | Komfort bei Ansichten und Schreiben | Gespeicherte Ansichten können angelegt, aufgerufen, umbenannt und gelöscht werden; ihre Filter lassen sich noch nicht direkt unter demselben Namen aktualisieren. Ein Schreiben im Kommunikationsverlauf öffnet die Versandhistorie, noch nicht gezielt den einzelnen Eintrag. |
 | Prüfung mit verbundenen Postfächern | Echte Eingänge, geplanter Versand, Microsoft-/IMAP-Ordnerwechsel und große laufend veränderte Postfächer noch Ende zu Ende prüfen. Mehrdeutige gemeinsame E-Mail-Adressen benötigen weiterhin eine ausdrückliche Zuordnung. |
 

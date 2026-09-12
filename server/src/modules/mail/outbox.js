@@ -5,6 +5,8 @@
 // Anläufen in den Postausgang (kind='outbox') überführt, damit der Nutzer sie sieht.
 
 const db = require('../../database/index');
+const contactDoku = require('./contact-documentation');
+const addressbook = require('../contacts/addressbook');
 const mailSend = require('./send');
 const imapEngine = require('../../integrations/mail/imap');
 const graphEngine = require('../../integrations/mail/microsoft-graph');
@@ -19,7 +21,6 @@ const deleteDraftStmt = db.prepare('DELETE FROM mail_drafts WHERE id = ?');
 const updateDraftStmt = db.prepare("UPDATE mail_drafts SET kind = ?, send_at = ?, data_json = ?, updated_at = datetime('now') WHERE id = ?");
 const userNameStmt = db.prepare('SELECT first_name, last_name, username FROM users WHERE id = ?');
 const insertDokuStmt = db.prepare('INSERT INTO case_doku_entries (id, case_id, data_json, updated_by) VALUES (@id, @caseId, @dataJson, @userId)');
-const caseExistsStmt = db.prepare('SELECT id FROM cases WHERE id = ?');
 
 function attachmentsToBuffers(list) {
   const out = [];
@@ -56,20 +57,24 @@ function stripHtmlToText(html) {
     .trim();
 }
 
-function writeDoku(caseId, ownerUserId, data) {
-  try {
-    if (!caseId || !caseExistsStmt.get(caseId)) return;
-    const u = userNameStmt.get(ownerUserId) || {};
-    const actor = [u.first_name, u.last_name].filter(Boolean).join(' ').trim() || u.username || '';
-    const dp = dokuDateParts(new Date());
-    const mailText = stripHtmlToText(data.html || data.text || '').slice(0, 4000);
-    const entry = {
-      year: dp.year, date: dp.date, actorGroup: '', actor, type: 'Schriftverkehr',
-      detail: 'E-Mail versendet (geplant)', freeDetail: '', contactType: 'E-Mail',
-      note: 'An: ' + (data.to || '') + (data.cc ? ' · Cc: ' + data.cc : '') + ' – Betreff: ' + (data.subject || '(ohne Betreff)') + (mailText ? ' – Inhalt: ' + mailText : '')
-    };
-    insertDokuStmt.run({ id: require('crypto').randomUUID(), caseId, dataJson: JSON.stringify(entry), userId: ownerUserId });
-  } catch (_e) { /* Doku ist Beiwerk - der Versand selbst zählt */ }
+function writeDoku(row, data, session) {
+  if (!data.dokuCase) return null;
+  contactDoku.authorize(session, data.dokuCase);
+  const u = userNameStmt.get(row.owner_user_id) || {};
+  const actor = [u.first_name, u.last_name].filter(Boolean).join(' ').trim() || u.username || '';
+  const dp = dokuDateParts(new Date(data.__sentReceipt.at));
+  const mailText = stripHtmlToText(data.html || data.text || '').slice(0, 4000);
+  const entry = {
+    year: dp.year, date: dp.date, actorGroup: '', actor, type: 'Kommunikation & Kontakt',
+    detail: 'E-Mail gesendet (geplant)', freeDetail: '', contactType: 'Schriftlich (E-Mail)',
+    note: 'An: ' + (data.to || '') + (data.cc ? ' · Cc: ' + data.cc : '') + ' – Betreff: ' + (data.subject || '(ohne Betreff)') + (mailText ? ' – Inhalt: ' + mailText : ''),
+    contactLink: data.contactLink || null, mailAccountId: row.account_id,
+    mailMessageId: data.__sentReceipt.messageId || '', mailDispatchId: data.dispatchId,
+    source: { module: 'mail', id: row.id, action: 'sent' }
+  };
+  const id = 'scheduled-mail-' + row.id;
+  if (!db.prepare('SELECT id FROM case_doku_entries WHERE id=?').get(id)) insertDokuStmt.run({ id, caseId: data.dokuCase, dataJson: JSON.stringify(entry), userId: row.owner_user_id });
+  return { id, entry };
 }
 
 // ---- Wiedervorlage (Snooze): faellige Mails per Message-ID zurueck in den Posteingang ------
@@ -149,35 +154,51 @@ async function cleanupRetention() {
   return total;
 }
 
+// Timer and manual ticks may overlap while the provider is responding.
+const sendingDrafts = new Set();
 async function tick(nowIso) {
   const now = nowIso || new Date().toISOString();
-  try { await wakeSnoozes(now); } catch (_e) { /* Snooze-Fehler blockieren den Versand nicht */ }
-  try { await cleanupRetention(); } catch (_e) { /* dito */ }
+  try { await wakeSnoozes(now); } catch (_e) { /* independent queue */ }
+  try { await cleanupRetention(); } catch (_e) { /* independent queue */ }
   const due = dueStmt.all(now);
-  for (const row of due) {
-    let data = {}; try { data = JSON.parse(row.data_json || '{}'); } catch (_e) { data = {}; }
-    const acc = getAccountStmt.get(row.account_id);
-    const owner = row.owner_user_id;
-    // Konto muss existieren und vom Absender nutzbar sein (eigenes privates oder büroweites).
-    const usable = acc && (acc.visibility !== 'private' || acc.owner_user_id === owner);
-    if (!usable) {
-      updateDraftStmt.run('outbox', '', JSON.stringify(Object.assign(data, { __error: 'Versandkonto nicht mehr verfügbar.' })), row.id);
-      continue;
-    }
+  for (const candidate of due) {
+    if (sendingDrafts.has(candidate.id)) continue;
+    sendingDrafts.add(candidate.id);
     try {
-      await mailSend.sendViaAccount(acc, {
-        to: data.to || '', cc: data.cc || '', bcc: data.bcc || '', subject: data.subject || '',
-        html: data.html || '', text: data.text || '', attachments: attachmentsToBuffers(data.attachments),
-        replyTo: data.replyTo || '', priority: data.priority || 'normal'
-      });
-      if (data.dokuCase) writeDoku(String(data.dokuCase), owner, data);
-      deleteDraftStmt.run(row.id);
-    } catch (error) {
-      const attempts = (Number(data.__attempts) || 0) + 1;
-      data.__attempts = attempts; data.__error = error.message || 'Versand fehlgeschlagen.';
-      if (attempts >= MAX_ATTEMPTS) updateDraftStmt.run('outbox', '', JSON.stringify(data), row.id);
-      else updateDraftStmt.run('scheduled', row.send_at, JSON.stringify(data), row.id);
-    }
+      // It may have been edited/deleted while another message was sending.
+      const row = db.prepare("SELECT * FROM mail_drafts WHERE id=? AND kind='scheduled' AND send_at<=?").get(candidate.id, now);
+      if (!row) continue;
+      let data = {}; try { data = JSON.parse(row.data_json || '{}'); } catch (_) { /* invalid draft */ }
+      try {
+        const session = contactDoku.currentSession(row.owner_user_id);
+        if (!session.isAdmin && !session.canSendMail) throw Error('Die Berechtigung zum Mailversand fehlt.');
+        if (data.dokuCase) contactDoku.authorize(session, data.dokuCase);
+        if (!data.__sentReceipt) {
+          const acc = getAccountStmt.get(row.account_id);
+          if (!acc || acc.visibility === 'private' && Number(acc.owner_user_id) !== Number(row.owner_user_id)) throw Error('Versandkonto nicht mehr verfügbar.');
+          if (data.dokuCase && !Object.hasOwn(data, 'contactLink')) data.contactLink = contactDoku.resolve(session, data.dokuCase, data.to);
+          data.dispatchId = require('./identity').dispatchId(data.dispatchId) || require('crypto').randomUUID();
+          // Persist the same identity across retries; no case information goes into mail headers.
+          updateDraftStmt.run('scheduled', row.send_at, JSON.stringify(data), row.id);
+          const result = await mailSend.sendViaAccount(acc, {
+            to: data.to || '', cc: data.cc || '', bcc: data.bcc || '', subject: data.subject || '',
+            html: data.html || '', text: data.text || '', attachments: attachmentsToBuffers(data.attachments),
+            replyTo: data.replyTo || '', priority: data.priority || 'normal', dispatchId: data.dispatchId
+          });
+          data.__sentReceipt = { at: new Date().toISOString(), messageId: result?.messageId || '' };
+          updateDraftStmt.run('scheduled', row.send_at, JSON.stringify(data), row.id);
+        }
+        let doku;
+        db.transaction(() => { doku = writeDoku(row, data, session); deleteDraftStmt.run(row.id); })();
+        if (doku) addressbook.notifyDoku(data.dokuCase, doku.id, doku.entry, session);
+      } catch (error) {
+        data.__attempts = (Number(data.__attempts) || 0) + 1;
+        data.__error = (data.__sentReceipt ? 'Bereits gesendet. Falldokumentation wird erneut versucht: ' : '') + (error.message || 'Versand fehlgeschlagen.');
+        // A documentation failure must never turn into another send, even after five retries.
+        updateDraftStmt.run(data.__sentReceipt || data.__attempts < MAX_ATTEMPTS ? 'scheduled' : 'outbox',
+          data.__sentReceipt || data.__attempts < MAX_ATTEMPTS ? new Date(Date.parse(now) + 300000).toISOString() : '', JSON.stringify(data), row.id);
+      }
+    } finally { sendingDrafts.delete(candidate.id); }
   }
   return due.length;
 }
@@ -196,3 +217,5 @@ module.exports = { tick, start, wakeSnoozes, cleanupRetention };
 
 module.exports.wakeSnooze = wakeSnooze;
 module.exports.snoozeBusy = id => wakingSnoozes.has(id);
+
+module.exports.sendingDraft = id => sendingDrafts.has(id);

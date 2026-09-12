@@ -147,7 +147,7 @@ function drawTab(c){
  }else{
   body.append(B('+ Kommunikation dokumentieren',()=>documentContact(c,person()),'primary'),B('Rückmeldung vereinbaren',()=>followup(c)));if(online()){const sync=E('p','am-sub');sync.id='amMailSync';sync.textContent=(M.mailSync?.key===identity(c)?M.mailSync.text:'')||'Nachrichten werden abgeglichen …';body.append(sync,B('Nachrichten aktualisieren',()=>syncMail(c,true)));syncMail(c).catch(e=>message(e.message,true));}
   if(!M.bundle.communications.length)body.append(E('p','am-empty','Noch keine verknüpfte Kommunikation. Einträge werden gemeinsam mit der Falldokumentation geführt.'));
-  for(const item of M.bundle.communications){const s=section(item.title);s.append(E('p','am-sub',[dateLabel(item.date),item.caseLabel,item.contactType,item.person].filter(Boolean).join(' · ')),E('p','am-note',item.text),B(({mail:'E-Mail öffnen',document:'Versandhistorie öffnen',followup:'Wiedervorlage öffnen'})[item.kind]||'In Falldokumentation öffnen',()=>openCommunication(item)));body.append(s)}
+  for(const item of M.bundle.communications){const s=section(item.title);s.append(E('p','am-sub',[dateLabel(item.date),item.caseLabel,item.contactType,item.person].filter(Boolean).join(' · ')),E('p','am-note',item.text),B(({mail:'E-Mail öffnen',document:'Versandhistorie öffnen',followup:'Wiedervorlage öffnen'})[item.kind]||'In Falldokumentation öffnen',()=>openCommunication(item)));if(item.mail)s.append(B('E-Mail öffnen',()=>window.__mxOpenMsg(item.mail.accountId,item.mail.folder,item.mail.uid)));body.append(s)}
   if(M.bundle.communicationCursor)body.append(B('Weitere Kommunikation laden',()=>loadMore(c,'communications')));
  }
 }

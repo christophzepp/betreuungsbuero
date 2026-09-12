@@ -234,6 +234,7 @@ function priorityFromHeaders(buf) {
   return 'normal';
 }
 
+const mailIdentity = require('../../modules/mail/identity');
 function envelopeItem(msg) {
   const env = msg.envelope || {};
   const flags = msg.flags || new Set();
@@ -252,13 +253,14 @@ function envelopeItem(msg) {
     size: msg.size || 0,
     hasAttachments: hasAttachmentParts(msg.bodyStructure),
     messageId: env.messageId || '',
+    dispatchId: mailIdentity.fromHeaders(msg.headers),
     priority: priorityFromHeaders(msg.headers)
   };
 }
 
 async function listMessages(account, path, { offset = 0, limit = 50, search = '', sinceDays = 0 } = {}) {
   return withMailbox(account, path, async (client) => {
-    const fetchOpts = { envelope: true, flags: true, bodyStructure: true, size: true, uid: true, headers: ['x-priority', 'importance', 'priority'] };
+    const fetchOpts = { envelope: true, flags: true, bodyStructure: true, size: true, uid: true, headers: ['x-priority', 'importance', 'priority', mailIdentity.HEADER] };
     const messages = [];
     if (search) {
       const q = String(search);
@@ -337,6 +339,7 @@ async function getMessage(account, path, uid) {
     replyTo: addrList(parsed.replyTo?.value),
     date: parsed.date ? parsed.date.toISOString() : '',
     messageId: parsed.messageId || '',
+    dispatchId: mailIdentity.fromHeaders(parsed.headers),
     inReplyTo: parsed.inReplyTo || '',
     references: Array.isArray(parsed.references) ? parsed.references : (parsed.references ? [parsed.references] : []),
     priority: (parsed.headers && (String(parsed.headers.get('x-priority') || '').match(/^[12]/) || /high/i.test(String(parsed.headers.get('importance') || '')))) ? 'high'

@@ -7,7 +7,7 @@
 const express = require('express');
 const crypto = require('crypto');
 const db = require('../../database/index');
-const { requireAuth, requireSendMail, requireViewCases, hasPermission } = require('../../middleware/authentication');
+const { requireAuth, requireSendMail, requireViewCases, requireEditCases, hasPermission } = require('../../middleware/authentication');
 const { darfSehen } = require('../cases/case-visibility');
 const cryptoHelper = require('../../security/crypto');
 const nodemailer = require('nodemailer');
@@ -16,6 +16,7 @@ const imapEngine = require('../../integrations/mail/imap');
 const graphEngine = require('../../integrations/mail/microsoft-graph');
 const microsoftMail = require('../../integrations/mail/microsoft-mail');
 const watch = require('./mailbox-watch');
+const contactDoku = require('./contact-documentation');
 const mailSend = require('./send');
 const { schuetzePdfAnlagen } = require('./pdf-kennwort');
 const outbox = require('./outbox');
@@ -441,6 +442,18 @@ router.get('/accounts/:id/message', async (req, res) => {
   } catch (error) { res.status(400).json({ error: error.message || 'Nachricht konnte nicht geladen werden.' }); }
 });
 
+router.post('/accounts/:id/document-message', requireEditCases, async (req, res) => {
+  const acc = visibleAccount(req, req.params.id);
+  if (!acc) return res.status(404).json({ error: 'Konto nicht gefunden.' });
+  const input = { caseId: String(req.body?.caseId || ''), folder: String(req.body?.folder || 'INBOX'), uid: String(req.body?.uid || ''), contactLink: req.body?.contactLink };
+  if (!input.uid) return res.status(400).json({ error: 'Bitte eine E-Mail auswählen.' });
+  try {
+    contactDoku.authorize(req.session, input.caseId);
+    const message = await engineFor(acc).getMessage(acc, input.folder, input.uid);
+    res.json(contactDoku.documentMessage(acc, message, input, req.session));
+  } catch (e) { res.status(e.status || 400).json({ error: e.message || 'E-Mail konnte nicht dokumentiert werden.' }); }
+});
+
 router.get('/accounts/:id/attachment', async (req, res) => {
   const acc = visibleAccount(req, req.params.id);
   if (!acc) return res.status(404).json({ error: 'Konto nicht gefunden.' });
@@ -659,9 +672,13 @@ router.post('/accounts/:id/send', requireSendMail, async (req, res) => {
   // "Später senden": gültiges Zukunfts-Datum -> als geplanter Entwurf ablegen, der Server-Scheduler
   // (mail-outbox.js) verschickt ihn fällig. Anlagen bleiben im data_json (base64) erhalten.
   const sendAt = String(req.body?.sendAt || '').trim();
-  if (sendAt && !isNaN(Date.parse(sendAt)) && Date.parse(sendAt) > Date.now() + 20000) {
+  if (sendAt && (!Number.isFinite(Date.parse(sendAt)) || Date.parse(sendAt) <= Date.now() + 20000)) return res.status(400).json({ error: 'Bitte einen Versandzeitpunkt in der Zukunft auswählen.' });
+  if (sendAt) {
+    let contactLink; const dokuCase = String(req.body?.dokuCase || '');
+    try { contactLink = contactDoku.resolve(req.session, dokuCase, m.to, req.body?.contactLink); }
+    catch (e) { return res.status(e.status || 400).json({ error: e.message }); }
     const id = crypto.randomUUID();
-    const data = { to: m.to, cc: m.cc, bcc: m.bcc, subject: m.subject, html: m.html, text: m.text, attachments: m.attachments.map((a) => ({ filename: a.filename, mimeType: a.mimeType, dataBase64: a.content.toString('base64') })), dokuCase: String(req.body?.dokuCase || ''), replyTo: String(req.body?.replyTo || ''), priority: m.priority };
+    const data = { to: m.to, cc: m.cc, bcc: m.bcc, subject: m.subject, html: m.html, text: m.text, attachments: m.attachments.map((a) => ({ filename: a.filename, mimeType: a.mimeType, dataBase64: a.content.toString('base64') })), dokuCase, contactLink, dispatchId: crypto.randomUUID(), replyTo: String(req.body?.replyTo || ''), priority: m.priority };
     db.prepare("INSERT INTO mail_drafts (id, account_id, kind, data_json, owner_user_id, send_at, updated_at) VALUES (?,?,'scheduled',?,?,?,datetime('now'))").run(id, acc.id, JSON.stringify(data), req.session.userId, new Date(sendAt).toISOString());
     return res.json({ ok: true, scheduled: true, id, sendAt: new Date(sendAt).toISOString() });
   }
@@ -688,9 +705,12 @@ router.get('/drafts', (req, res) => {
 router.post('/drafts', (req, res) => {
   const kind = req.body?.kind === 'outbox' ? 'outbox' : 'draft';
   const accountId = String(req.body?.accountId || '');
-  const dataJson = JSON.stringify(req.body?.data || {});
+  const draftData = { ...(req.body?.data || {}) };
+  for (const key of ['__sentReceipt', '__attempts', '__error', 'dispatchId']) delete draftData[key];
+  const dataJson = JSON.stringify(draftData);
   const existing = req.body?.id ? getDraftStmt.get(String(req.body.id)) : null;
   if (existing && existing.owner_user_id === req.session.userId) {
+    if (outbox.sendingDraft(existing.id) || JSON.parse(existing.data_json || '{}').__sentReceipt) return res.status(409).json({ error: 'Diese Nachricht wird bereits gesendet oder dokumentiert und kann nicht erneut bearbeitet werden.' });
     db.prepare("UPDATE mail_drafts SET account_id = ?, kind = ?, data_json = ?, updated_at = datetime('now') WHERE id = ?").run(accountId, kind, dataJson, existing.id);
     return res.json({ id: existing.id });
   }
@@ -702,6 +722,7 @@ router.post('/drafts', (req, res) => {
 router.delete('/drafts/:id', (req, res) => {
   const d = getDraftStmt.get(req.params.id);
   if (!d || d.owner_user_id !== req.session.userId) return res.status(404).json({ error: 'Entwurf nicht gefunden.' });
+  if (outbox.sendingDraft(d.id) || JSON.parse(d.data_json || '{}').__sentReceipt) return res.status(409).json({ error: 'Diese Nachricht wird bereits gesendet oder dokumentiert.' });
   db.prepare('DELETE FROM mail_drafts WHERE id = ?').run(d.id);
   res.json({ ok: true });
 });

@@ -5,6 +5,7 @@
 // microsoft-calendar.js. Benötigt in der Entra-App den delegierten Scope Mail.Send (siehe SCOPES
 // dort). Basic-Auth-SMTP ist bei Outlook/M365 abgeschaltet - dieser Weg umgeht das per OAuth.
 
+const identity = require('../../modules/mail/identity');
 const db = require('../../database/index');
 const cryptoHelper = require('../../security/crypto');
 const msCal = require('../calendar/microsoft-calendar');
@@ -34,9 +35,10 @@ function toBase64(content) {
   return Buffer.from(String(content)).toString('base64');
 }
 
-function buildGraphMessage({ to, cc, bcc, subject, body, html, attachments, replyTo, importance }) {
+function buildGraphMessage({ to, cc, bcc, subject, body, html, attachments, replyTo, importance, dispatchId }) {
   const message = {
     subject: subject || '',
+    ...(identity.dispatchId(dispatchId) ? { internetMessageHeaders: [{ name: identity.HEADER, value: identity.dispatchId(dispatchId) }] } : {}),
     body: { contentType: html ? 'HTML' : 'Text', content: (html || body || '') },
     toRecipients: recipients(to),
     ccRecipients: recipients(cc),

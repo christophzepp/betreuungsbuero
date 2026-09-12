@@ -13,6 +13,7 @@ const views=require('./addressbook-views');
 router.get('/views',handle(r=>views.list(r.session)));
 router.put('/views',handle(r=>views.save(r.body,r.session)));
 router.delete('/views',handle(r=>views.remove(r.body,r.session)));
+router.post('/import-vcards',requireEditCases,handle(r=>require('./addressbook-vcard-import').importContacts(r.body,r.session)));
 router.post('/communications/sync',handle(r=>require('./addressbook-communications').sync(r.body,r.session)));
 router.patch('/person',requireEditCases,handle(r=>A.savePerson(r.body,r.session)));
 const merge=require('./addressbook-merge');

@@ -22,8 +22,17 @@ function page({scope,caseId,id,session,cursor,ids,contactRefs,contact}){
  const norm=v=>String(v||'').toLocaleLowerCase('de-DE').replace(/[,;–—]/g,' ').replace(/\s+/g,' ').trim();
  function matchesRecipient(value,cid){const v=norm(value);if(!v)return false;const hits=allContacts.filter(c=>c.caseId===cid).filter(c=>{const person=[c.title,c.firstName,c.lastName].filter(Boolean).join(' '),base=[c.institution,person].filter(Boolean),address=[[c.street,[c.house,c.houseLetter].filter(Boolean).join('')].filter(Boolean).join(' ')||(c.postbox?'Postfach '+c.postbox:''),[c.postal,c.city].filter(Boolean).join(' ')];return [base.join(' '),[...base,...address].filter(Boolean).join(' ')].some(s=>norm(s)===v)});return hits.length>0&&hits.every(c=>contactRefs.has(refKey(c.scope,c.caseId,c.id)))}
  const doku=db.prepare('SELECT * FROM case_doku_entries WHERE case_id IN (SELECT value FROM json_each(?))').all(JSON.stringify([...caseMap.keys()]));
- const documentedMail=new Set();
- for(const r of doku){const d=parse(r.data_json);if(!linked(d.contactLink,r.case_id))continue;for(const key of [d.mailMessageId,d.messageId,d.sourceId,d.source?.id,d.source?.sourceId,d.source?.messageId])if(typeof key==='string')documentedMail.add(key);items.push({id:r.id,kind:'doku',caseId:r.case_id,caseLabel:caseMap.get(r.case_id).label,date:d.date||r.created_at,title:d.detail||d.type||'Dokumentation',text:d.freeDetail||d.note||'',contactType:d.contactType||'',source:d.source||'',person:d.contactLink?.snapshot?.person||''})}
+ const documentedMail=new Map(),documentedTerms=new Set(),preferredMailLocations=new Set();
+ const addDocumented=(key,item)=>{const entries=documentedMail.get(key)||[];entries.push(item);documentedMail.set(key,entries)};
+ for(const r of doku){
+  const d=parse(r.data_json);if(!linked(d.contactLink,r.case_id))continue;
+  const item={id:r.id,kind:'doku',caseId:r.case_id,caseLabel:caseMap.get(r.case_id).label,date:d.date||r.created_at,title:d.detail||d.type||'Dokumentation',text:d.freeDetail||d.note||'',contactType:d.contactType||'',source:d.source||'',person:d.contactLink?.snapshot?.person||''};items.push(item);
+  const account=d.mailAccountId||d.source?.accountId||'';
+  if(d.mailSource?.accountId&&d.mailSource.uid)preferredMailLocations.add(JSON.stringify([d.mailSource.accountId,d.mailSource.folder,d.mailSource.uid]));
+  if(account&&d.mailDispatchId){addDocumented('dispatch:'+account+'|'+d.mailDispatchId,item);documentedTerms.add(d.mailDispatchId.toLowerCase())}
+  for(const key of [d.mailMessageId,d.messageId,d.sourceId,d.source?.id,d.source?.sourceId,d.source?.messageId])if(typeof key==='string'&&key){addDocumented('message:'+(account||'*')+'|'+key,item);documentedTerms.add(key.slice(key.indexOf('|')+1).toLowerCase())}
+ }
+
  for(const c of cases){const state=parse(c.stammdaten_json);for(const h of state.exportHistory||state.ui?.exportHistory||[]){if(h.status!=='sent')continue;const addresses=new Set([email(h.recipientEmail)].filter(Boolean));if(!(h.contactLink?linked(h.contactLink,c.id):(matches(addresses,c.id)||matchesRecipient(h.recipient,c.id))))continue;items.push({id:'document:'+c.id+':'+h.id,sourceId:h.id,kind:'document',caseId:c.id,caseLabel:c.label,date:h.sentAt||h.updatedAt||h.createdAt||'',title:h.documentTitle||h.subject||'Versendetes Schreiben',text:h.note||h.subject||'',contactType:'Versendet · '+(h.channel||'Schreiben')})}}
  const exports=new Map();for(const c of cases)for(const h of parse(c.stammdaten_json).exportHistory||[])if(h.exportRef?.fileId)exports.set(c.id+'|'+h.exportRef.fileId,h);
  const docs=new Map(doku.map(r=>[r.id,{...parse(r.data_json),caseId:r.case_id}]));
@@ -38,15 +47,22 @@ function page({scope,caseId,id,session,cursor,ids,contactRefs,contact}){
  }
  const links=parse(db.prepare("SELECT data_json FROM office_json WHERE key='mailx_case_links'").get()?.data_json),seen=new Set();
  for(const acc of db.prepare('SELECT * FROM mail_accounts').all().filter(a=>privateVisible(a,session))){
-  const rows=[...db.prepare('SELECT folder,uid,env_json FROM addressbook_mail_index WHERE account_id=? AND EXISTS(SELECT 1 FROM json_each(?) WHERE instr(lower(env_json),value)>0)').all(acc.id,JSON.stringify([...target])),...db.prepare('SELECT folder,uid,env_json FROM mail_cache WHERE account_id=? AND EXISTS(SELECT 1 FROM json_each(?) WHERE instr(lower(env_json),value)>0)').all(acc.id,JSON.stringify([...target]))];
+  const rows=[...db.prepare('SELECT folder,uid,env_json FROM addressbook_mail_index WHERE account_id=? AND EXISTS(SELECT 1 FROM json_each(?) WHERE instr(lower(env_json),value)>0)').all(acc.id,JSON.stringify([...target,...documentedTerms])),...db.prepare('SELECT folder,uid,env_json FROM mail_cache WHERE account_id=? AND EXISTS(SELECT 1 FROM json_each(?) WHERE instr(lower(env_json),value)>0)').all(acc.id,JSON.stringify([...target,...documentedTerms]))];
+  rows.sort((a,b)=>Number(preferredMailLocations.has(JSON.stringify([acc.id,b.folder,b.uid])))-Number(preferredMailLocations.has(JSON.stringify([acc.id,a.folder,a.uid]))));
   for(const r of rows){const m=parse(r.env_json),key=acc.id+'|'+(m.messageId||r.folder+'|'+r.uid);if(seen.has(key))continue;seen.add(key);if(m.draft||/(^|\/)(drafts|entwürfe)$/i.test(r.folder))continue;
-   const addresses=new Set([m.from,...(m.to||[]),...(m.cc||[])].map(email).filter(Boolean));if(![...target].some(e=>addresses.has(e)))continue;
+   const own=email(acc.email),outgoing=email(m.from)===own;
+   const documented=[...new Set([
+    ...(outgoing&&m.dispatchId?documentedMail.get('dispatch:'+acc.id+'|'+m.dispatchId)||[]:[]),
+    ...(m.messageId?documentedMail.get('message:'+acc.id+'|'+m.messageId)||[]:[]),
+    ...(m.messageId?documentedMail.get('message:*|'+m.messageId)||[]:[]),
+    ...(documentedMail.get('message:*|'+key)||[])
+   ])];
+   const addresses=new Set([m.from,...(m.to||[]),...(m.cc||[])].map(email).filter(Boolean));
    const link=links[acc.id+'|'+m.messageId]||links[acc.id+'|'+r.uid],cid=String(link?.caseId||'');
    if(cid&&!caseMap.has(cid))continue;
-   if(link?.contactLink?!linked(link.contactLink,cid):!matches(addresses,cid))continue;
-   const own=email(acc.email),outgoing=email(m.from)===own;
+   if(!documented.length&&(link?.contactLink?!linked(link.contactLink,cid):!matches(addresses,cid)))continue;
    for(const snooze of db.prepare('SELECT * FROM mail_snoozes WHERE account_id=? AND message_id=? AND owner_user_id=?').all(acc.id,m.messageId||'',session.userId))items.push({id:'snooze:'+snooze.id,workspaceId:'mail:'+snooze.id,kind:'followup',caseId:cid,caseLabel:caseMap.get(cid)?.label||'Ohne Fallzuordnung',date:snooze.wake_at,title:snooze.subject||m.subject||'E-Mail-Rückmeldung',text:'',contactType:'E-Mail zurückgestellt'});
-   if(documentedMail.has(m.messageId)||documentedMail.has(key))continue;
+   if(documented.length){for(const item of documented)item.mail={accountId:acc.id,folder:r.folder,uid:r.uid,accountLabel:acc.label||acc.email};continue}
    items.push({id:'mail:'+key,kind:'mail',accountId:acc.id,folder:r.folder,uid:r.uid,caseId:cid,caseLabel:caseMap.get(cid)?.label||'Ohne Fallzuordnung',date:m.date||'',title:m.subject||'E-Mail ohne Betreff',text:'',contactType:outgoing?'E-Mail gesendet':'E-Mail eingegangen',accountLabel:acc.label||acc.email});
   }
  }
@@ -65,7 +81,7 @@ function pruneSnapshot(accountId,snapshot,missing){
 }
 function indexMessages(accountId,folder,messages,scanId=''){
  const stmt=db.prepare('INSERT INTO addressbook_mail_index VALUES(?,?,?,?,?) ON CONFLICT(account_id,folder,uid) DO UPDATE SET env_json=excluded.env_json,scan_id=excluded.scan_id');
- db.transaction(()=>{for(const m of messages){if(m.uid==null)continue;const {uid,messageId,subject,from,to,cc,date,draft}=m;stmt.run(accountId,folder,String(uid),JSON.stringify({uid,messageId,subject,from,to,cc,date,draft}),scanId)}})();
+ db.transaction(()=>{for(const m of messages){if(m.uid==null)continue;const {uid,messageId,dispatchId,subject,from,to,cc,date,draft}=m;stmt.run(accountId,folder,String(uid),JSON.stringify({uid,messageId,dispatchId,subject,from,to,cc,date,draft}),scanId)}})();
 }
 // Ein Seitenabruf je Anfrage hält die Oberfläche bedienbar. Keine 200-/1000-Mail-Abschneidung,
 // auch bei Graph (dessen Volltextsuche nicht über $skip paginiert werden kann).
@@ -81,12 +97,12 @@ async function sync(input,session,engines){
    const acc=db.prepare('SELECT * FROM mail_accounts WHERE id=?').get(next.accounts[next.account]);if(!acc||!privateVisible(acc,session)){next.account++;next.folders=null;continue}
    const engine=engines?.[acc.kind]||(acc.kind==='microsoft'?require('../../integrations/mail/microsoft-graph'):require('../../integrations/mail/imap'));
    try{
-    if(!next.folders){next.snapshot=cacheSnapshot(acc.id);next.folders=(await (engine.listFoldersComplete||engine.listFolders)(acc)).filter(f=>f.path&&!f.noSelect);next.folder=0;next.offset=0;next.seenUids=[];next.total=null;next.stable=true}
+    if(!next.folders){next.snapshot=cacheSnapshot(acc.id);next.folders=(await (engine.listFoldersComplete||engine.listFolders)(acc)).filter(f=>f.path&&!f.noSelect);next.folder=0;next.offset=0;next.nextLink=null;next.seenUids=[];next.total=null;next.stable=true}
     if(next.folder>=next.folders.length){const folders=new Set(next.folders.map(f=>f.path));pruneSnapshot(acc.id,next.snapshot,row=>!folders.has(row.folder));next.account++;next.folders=null;next.snapshot=null;continue}
-    const folder=next.folders[next.folder].path,result=await engine.listMessages(acc,folder,{offset:next.offset,limit:200});const messages=result.messages||[];
-    if(next.total!=null&&next.total!==result.total)next.stable=false;next.total=result.total;
+    const folder=next.folders[next.folder].path,result=await engine.listMessages(acc,folder,{offset:next.offset,limit:200,...(next.nextLink?{nextLink:next.nextLink}:{})});const messages=result.messages||[];
+    const providerPaging=Object.hasOwn(result,'nextLink');if(next.total!=null&&result.totalKnown!==false&&next.total!==result.total)next.stable=false;next.total=result.totalKnown===false?null:result.total;next.nextLink=result.nextLink||null;
     indexMessages(acc.id,folder,messages,next.scanId);next.seenUids.push(...messages.map(m=>String(m.uid)));next.count+=messages.length;next.offset+=messages.length;
-    if(!messages.length||next.offset>=result.total){const seen=new Set(next.seenUids);if(next.stable&&seen.size===next.seenUids.length&&(next.total==null||seen.size===next.total))pruneSnapshot(acc.id,next.snapshot,row=>row.folder===folder&&!seen.has(row.uid));else next.errors.push((acc.label||acc.email||'Postfach')+': Nachrichtenbestand während des Abgleichs geändert. Bitte erneut aktualisieren.');next.folder++;next.offset=0;next.seenUids=[];next.total=null;next.stable=true}
+    if(providerPaging?!next.nextLink:(!messages.length||next.offset>=result.total)){const seen=new Set(next.seenUids);if(next.stable&&seen.size===next.seenUids.length&&(next.total==null||seen.size===next.total))pruneSnapshot(acc.id,next.snapshot,row=>row.folder===folder&&!seen.has(row.uid));else next.errors.push((acc.label||acc.email||'Postfach')+': Nachrichtenbestand während des Abgleichs geändert. Bitte erneut aktualisieren.');next.folder++;next.offset=0;next.nextLink=null;next.seenUids=[];next.total=null;next.stable=true}
    }catch(e){next.errors.push((acc.label||acc.email||'Postfach')+': Aktualisierung fehlgeschlagen.');next.account++;next.folders=null}
    break;
   }

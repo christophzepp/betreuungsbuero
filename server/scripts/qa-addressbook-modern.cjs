@@ -2,7 +2,7 @@
 // Echte App + echte Adressbuch-/Fall-Routen, ausschließlich gegen eine temporäre Testdatenbank.
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),assert=require('node:assert/strict');
 const temp=fs.mkdtempSync(path.join(os.tmpdir(),'qa-addressbook-'));
-process.env.RUNTIME_ROOT=temp;process.env.DB_PATH=path.join(temp,'test.sqlite3');process.env.DOCUMENTS_DATA_ROOT=path.join(temp,'data');process.env.ENCRYPTION_KEY='54'.repeat(32);
+process.env.MAILBOX_WATCH='0';process.env.RUNTIME_ROOT=temp;process.env.DB_PATH=path.join(temp,'test.sqlite3');process.env.DOCUMENTS_DATA_ROOT=path.join(temp,'data');process.env.ENCRYPTION_KEY='54'.repeat(32);
 const db=require('../src/database'),express=require('express'),playwright=require(process.env.PLAYWRIGHT_MODULE||'playwright');
 const app=express();app.use(express.json({limit:'5mb'}));let failSave=false;const writes=[];
 app.use((req,res,next)=>{req.session={userId:1,isAdmin:true,displayName:'QA Test'};if(req.method==='PATCH'&&req.path==='/api/addressbook/contact'){writes.push(req.body);if(failSave)return res.status(503).json({error:'Testverbindung unterbrochen – Eingaben bleiben erhalten.'})}next()});
@@ -10,6 +10,7 @@ app.use('/api/addressbook',require('../src/modules/contacts/addressbook-routes')
 app.use('/api/cases',require('../src/modules/cases/routes'));app.use('/api/office-contacts',require('../src/modules/office/contact-routes'));
 app.get('/test-address.xlsx',(req,res)=>res.sendFile(path.resolve(__dirname,'../assets/templates/Adressverzeichnis_blank.xlsx')));
 app.get('/',(req,res)=>res.type('html').send(fs.readFileSync(path.resolve(__dirname,'../../outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html'))));
+if(process.env.QA_MAILVCARD)app.use('/api/mailbox',require('../src/modules/mail/mailbox-routes'));
 app.use('/api',(req,res)=>res.json({}));
 db.prepare("INSERT INTO users(id,username,password_hash) VALUES(1,'qa','fixture')").run();
 db.prepare("INSERT INTO cases(id,label,owner_user_id) VALUES('a','Mara Muster',1),('b','Jonas Beispiel',1)").run();
@@ -19,6 +20,7 @@ seed('doctor','a',{institution:'Praxis Dr. Sommer',role:'Hausärztin',status:'Ak
 seed('ended','a',{institution:'Frühere Praxis',role:'Hausarzt',status:'Beendet',_category:'gesundheit'});
 seed('other','b',{institution:'Vermietung Nebenstadt',role:'Vermieter',status:'Aktiv',fileNumber:'B-900',_category:'wohnen'});
 db.prepare('INSERT INTO office_contacts(id,data_json) VALUES(?,?)').run('office',JSON.stringify({institution:'Büro-Kontakt',role:'Notarin',email:'buero@example.org'}));
+if(process.env.QA_MAILVCARD)require('./qa-addressbook-mail-vcard.cjs').setup(db);
 let server,browser;
 (async()=>{
  server=await new Promise(resolve=>{const s=app.listen(0,'127.0.0.1',()=>resolve(s))});const origin='http://127.0.0.1:'+server.address().port;
@@ -38,6 +40,7 @@ let server,browser;
   document.getElementById('loginGateOverlay')?.remove();window.showImportedAddressbook();
  });
  await page.locator('#addressbookModern').waitFor();await page.waitForTimeout(300);
+ if(process.env.QA_MAILVCARD){await require('./qa-addressbook-mail-vcard.cjs')({page,mobile,db,errors,temp});await page.close();continue;}
  if(process.env.QA_AUDIT){await require('./qa-addressbook-audit.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_EXPANSION){await require('./qa-addressbook-expansion.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_EXTENDED){await require('./qa-addressbook-extended.cjs')({page,mobile,db,errors});await page.close();continue;}

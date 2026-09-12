@@ -3,6 +3,7 @@
 // nutzen. SMTP baut die RFC-822-Bytes EINMAL (identischer Versand + Gesendet-Kopie); Microsoft
 // läuft über Graph /me/sendMail. Antwort-an (reply_to des Kontos oder pro Mail) wird berücksichtigt.
 
+const identity = require('./identity');
 const nodemailer = require('nodemailer');
 const MailComposer = require('nodemailer/lib/mail-composer');
 const cryptoHelper = require('../../security/crypto');
@@ -15,6 +16,7 @@ function splitAddresses(v) {
 
 // m: { to, cc, bcc, subject, html, text, replyTo, attachments:[{filename,mimeType,content:Buffer}] }
 async function sendViaAccount(acc, m) {
+  const dispatchId = identity.dispatchId(m.dispatchId) || require('node:crypto').randomUUID();
   const replyTo = String(m.replyTo || acc.reply_to || '').trim() || undefined;
   const priority = m.priority === 'high' ? 'high' : (m.priority === 'low' ? 'low' : 'normal');
   if (acc.kind === 'microsoft') {
@@ -22,15 +24,15 @@ async function sendViaAccount(acc, m) {
     if (!conn) throw new Error('Die hinterlegte Microsoft-Verbindung wurde nicht gefunden.');
     await microsoftMail.sendViaGraph(conn, {
       to: m.to, cc: m.cc, bcc: m.bcc, subject: m.subject, body: m.text, html: m.html, attachments: m.attachments, replyTo,
-      importance: priority
+      importance: priority, dispatchId
     });
-    return { sentVia: 'graph' };
+    return { sentVia: 'graph', dispatchId, accountId: acc.id };
   }
   if (!acc.smtp_host) throw new Error('Für dieses Konto ist kein SMTP-Server hinterlegt.');
   const fromAddr = acc.email || acc.smtp_user || acc.imap_user;
   const messageId='<'+require('node:crypto').randomUUID()+'@betreuungsbuero.local>';
   const mailOptions = {
-    messageId,
+    messageId, headers: { [identity.HEADER]: dispatchId },
     from: acc.from_name ? { name: acc.from_name, address: fromAddr } : fromAddr,
     to: m.to, cc: m.cc || undefined, bcc: m.bcc || undefined,
     replyTo,
@@ -46,7 +48,7 @@ async function sendViaAccount(acc, m) {
   await transport.sendMail({ raw, envelope: { from: fromAddr, to: [...splitAddresses(m.to), ...splitAddresses(m.cc), ...splitAddresses(m.bcc)] } });
   let sentCopy = false;
   try { sentCopy = (await imapEngine.appendSent(acc, raw)).ok === true; } catch (_e) { /* Kopie ist nice-to-have */ }
-  return { sentVia: 'smtp', sentCopy, messageId };
+  return { sentVia: 'smtp', sentCopy, messageId, dispatchId, accountId: acc.id };
 }
 
 module.exports = { sendViaAccount, splitAddresses };
