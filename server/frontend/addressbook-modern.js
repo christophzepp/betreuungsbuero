@@ -36,7 +36,7 @@ function mount(){
  const action=host.querySelector('.addressbook-action-row'),toolbar=host.querySelector('.addressbook-toolbar-v154'),scope=host.querySelector('.ab-case-switcher'),bulk=host.querySelector('.addressbook-select-row'),letters=host.querySelector('#abLetterBar'),list=host.querySelector('#phase5AddressListV154');
  if(!action||!toolbar||!list)return;
  M.root=E('div','am addressbook-view mobile-module-view');M.root.id='addressbookModern';M.utility=false;M.root.dataset.mobileModule='contacts';M.root.setAttribute('aria-label','Adressbuch');M.editor=null;M.small=null;M.bundle=null;M.mailSync=null;M.load++;M.editRequest++;
- const head=E('header','am-head'),title=E('div');title.append(B('← Kontakte',()=>{M.editor=null;M.utility=false;window.showImportedAddressbook()},'am-back quiet'),E('h2','','Adressbuch'),E('p','am-sub','Kontakte, Ansprechpartner und Fallzuordnungen'));head.append(title);
+ const head=E('header','am-head'),title=E('div','am-heading');title.append(B('← Kontakte',()=>{M.editor=null;M.utility=false;window.showImportedAddressbook()},'am-back quiet'),E('h2','','Adressbuch'));head.append(title);
  const tools=E('div','am-actions');
  const create=B('+ Neuer Kontakt',()=>edit(null),'primary');create.setAttribute('aria-label','+ Neuer Kontakt');create.replaceChildren(E('span','am-desktop-label','+ Neuer Kontakt'),E('span','am-mobile-label','+ Kontakt'));tools.append(create);
  const more=E('details','am-menu');const moreSummary=E('summary','am-btn');moreSummary.setAttribute('aria-label','Weitere Aktionen');moreSummary.title='Weitere Aktionen';moreSummary.append(E('span','am-desktop-label','Weitere Aktionen'),E('span','am-mobile-label','•••'));more.append(moreSummary);
@@ -47,10 +47,22 @@ function mount(){
  // Excel bleibt auch in der Büroansicht über die bestehende Datenadministration erreichbar.
  if(!menubody.textContent.includes('Excel'))menubody.append(B('Excel-Sicherung des aktuellen Falls',()=>window.addressbookDownloadUpdated()));
  menubody.append(B('Kontakt aus Signatur',()=>signatureForm()),B('Papierkorb',showTrash));more.append(menubody);tools.append(more);head.append(tools);
- const context=E('div','am-context');if(scope)context.append(scope);else context.append(E('strong','',window.fullName?.()||'Aktueller Fall'));
- context.append(E('div','am-save'));M.root.append(head,context);
+ const save=E('div','am-save');save.setAttribute('role','status');save.setAttribute('aria-live','polite');head.append(save);M.root.append(head);
  const search=toolbar.querySelector('#phase5AddressSearchV154').parentElement;search.className='am-search';
- const top=E('div','am-tools');top.append(search);const filter=E('details','am-filters'),summary=E('summary','am-btn','Filter & Sortierung');filter.append(summary,toolbar);top.append(filter,viewMenu());const missing=E('label','am-missing'),check=E('input');check.type='checkbox';check.id='amMissingEmail';check.checked=state.ui?.addressbookViewV154?.missingEmail==='yes';check.onchange=()=>window.phase5RenderAddressbookV154();missing.append(check,document.createTextNode('Ohne E-Mail'));toolbar.append(missing);M.root.append(top);
+ const top=E('div','am-tools');
+ if(scope){
+  top.append(scope);const label=scope.querySelector('label'),select=scope.querySelector('select');
+  if(label){label.textContent='Fall / Adressbuch';if(select)label.htmlFor=select.id}
+ }else top.append(E('strong','am-current-case',window.fullName?.()||'Aktueller Fall'));
+ search.querySelector('label')?.setAttribute('for','phase5AddressSearchV154');top.append(search);
+ const filter=E('details','am-filters'),summary=E('summary','am-btn');
+ summary.append(E('span','','Filter'),E('span','am-filter-count'),E('span','am-filter-chevron','⌄'));
+ summary.setAttribute('aria-label','Filter & Sortierung');filter.append(summary,toolbar);top.append(filter,viewMenu());
+ const missing=E('label','am-missing'),check=E('input');check.type='checkbox';check.id='amMissingEmail';
+ check.checked=state.ui?.addressbookViewV154?.missingEmail==='yes';check.onchange=()=>window.phase5RenderAddressbookV154();
+ missing.append(check,document.createTextNode('Ohne E-Mail'));toolbar.append(missing);
+ const filterFooter=E('div','am-filter-footer');
+ filterFooter.append(B('Filter schließen',()=>{filter.open=false;summary.focus()},'primary',true));toolbar.append(filterFooter);M.root.append(top);
  const board=E('div','am-board'),left=E('section','am-list-pane'),right=E('section','am-detail');right.setAttribute('aria-label','Kontaktdetails');
  const tabs=E('div','am-status-tabs');for(const [v,label] of [['active','Aktive'],['all','Alle'],['ended','Beendete']]){
   const b=B(label,()=>{document.getElementById('phase5AddressStatusV154').value=v;window.phase5RenderAddressbookV154()});b.dataset.status=v;tabs.append(b);
@@ -76,11 +88,20 @@ function mount(){
  M.root.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();M.root.classList.remove('am-show-detail');$('#phase5AddressSearchV154')?.focus()}if(e.key==='Escape'&&M.root.querySelector('.am-menu[open],.am-filters[open]')){e.stopPropagation();closeMenus()}},false);
  const scopeValue=scope?.querySelector('select')?.value;
  M.root.addEventListener('change',async e=>{const el=e.target;if((!M.editor&&!M.small)||!el.closest('.ab-case-switcher')||el.__amReplay)return;e.stopImmediatePropagation();if(await flush()){M.editor=null;el.__amReplay=true;el.dispatchEvent(new Event('change',{bubbles:true}));el.__amReplay=false}else el.value=scopeValue},true);
- status();X.mount(menubody,top);
+ status();X.mount(menubody,toolbar);
  const root=M.root;if(online())Promise.resolve(window.__baLoadServerBuero?.()).then(()=>{if(M.root===root&&root.isConnected&&!M.editor&&!M.small)window.phase5RenderAddressbookV154()}).catch(e=>{if(M.root===root&&root.isConnected)message(e.message,true)});
 }
+function filterSummary(v){
+ const summary=$('.am-filters>summary');if(!summary)return;
+ const active=[];
+ for(const [key,label,empty] of [['quick','Schnellzugriff',''],['tag','Schlagwort',''],['group','Gruppe',''],['role','Rolle',''],['city','Ort',''],['institution','Institution',''],['kind','Kontaktart','all']])if(v[key]&&v[key]!==empty){const control=$('#'+VIEW_IDS[key]);active.push(label+': '+(control?.selectedOptions?.[0]?.textContent||v[key]))}
+ if(v.missingEmail==='yes')active.push('Ohne E-Mail');
+ const count=summary.querySelector('.am-filter-count');count.textContent=String(active.length);count.hidden=!active.length;summary.classList.toggle('has-filters',!!active.length);
+ summary.setAttribute('aria-label','Filter & Sortierung'+(active.length?' · '+active.length+' aktive Filter':''));
+ summary.title=active.length?active.join('\n'):'Filter und Sortierung öffnen';
+}
 function render(rows,v){
- if(!M.root?.isConnected)return;const viewKey=JSON.stringify(v);if(M.viewKey!==viewKey){M.page=0;M.viewKey=viewKey}M.view=v;M.rows=rows;M.page=Math.max(0,Math.min(M.page,Math.ceil(rows.length/PAGE_SIZE)-1));
+ if(!M.root?.isConnected)return;const viewKey=JSON.stringify(v);if(M.viewKey!==viewKey){M.page=0;M.viewKey=viewKey}M.view=v;filterSummary(v);M.rows=rows;M.page=Math.max(0,Math.min(M.page,Math.ceil(rows.length/PAGE_SIZE)-1));
  const pages=$('.am-pages');pages.replaceChildren();pages.hidden=rows.length<=PAGE_SIZE;
  if(!pages.hidden){const prev=B('Zurück',()=>{M.page--;render(M.rows,M.view);$('#phase5AddressListV154').scrollTop=0}),next=B('Weiter',()=>{M.page++;render(M.rows,M.view);$('#phase5AddressListV154').scrollTop=0});prev.disabled=M.page===0;next.disabled=(M.page+1)*PAGE_SIZE>=rows.length;pages.append(prev,E('span','',`${M.page*PAGE_SIZE+1}–${Math.min((M.page+1)*PAGE_SIZE,rows.length)} von ${rows.length}`),next)}
  const list=$('#phase5AddressListV154'),scroll=list.scrollTop;list.replaceChildren();

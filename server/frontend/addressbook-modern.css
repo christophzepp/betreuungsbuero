@@ -212,3 +212,34 @@ html.mobile-online-active #modal.am-modal #addressbookModern{padding:12px 10px 0
 #addressbookModern .am-sync-error{color:var(--danger,#b43c37);overflow-wrap:anywhere}
 #addressbookModern .am-section>label{display:grid;gap:5px;margin:10px 0}
 #addressbookModern .am-section>label>select{max-width:100%;width:100%;min-width:0}
+
+/* Kompakte Standardansicht: Fall, Suche und Menüs in einer Zeile. */
+#addressbookModern .am-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center;margin-bottom:12px}
+#addressbookModern .am-heading{grid-column:1;grid-row:1;min-width:0}
+#addressbookModern .am-head>.am-actions{grid-column:2;grid-row:1 / span 2}
+#addressbookModern .am-head>.am-save{grid-column:1;grid-row:2;max-width:none;text-align:left;margin:0;min-height:18px}
+#addressbookModern .am-tools{display:grid;grid-template-columns:minmax(160px,1fr) minmax(180px,1.7fr) auto auto;align-items:end;gap:10px;margin-bottom:12px}
+#addressbookModern .am-tools>.ab-case-switcher{width:auto;max-width:none;margin:0}
+#addressbookModern .am-tools>.am-current-case{min-width:0;overflow-wrap:anywhere;align-self:center}
+#addressbookModern .am-tools .am-search{min-width:0}
+#addressbookModern .am-tools>.am-menu,#addressbookModern .am-tools>.am-filters{min-width:0}
+#addressbookModern .am-tools>details>summary{white-space:nowrap;min-height:36px}
+#addressbookModern .am-filter-count{display:inline-grid;place-items:center;min-width:19px;height:19px;padding:0 4px;border-radius:10px;background:var(--am-accent);color:var(--am-bg);font-size:11px}
+#addressbookModern .am-filters>summary.has-filters{border-color:var(--am-accent);color:var(--am-accent);background:var(--am-soft)}
+#addressbookModern .am-filter-chevron{font-size:15px;line-height:1;transition:transform .15s}
+#addressbookModern .am-filters[open] .am-filter-chevron{transform:rotate(180deg)}
+#modal.am-modal #addressbookModern .am-filters>.addressbook-toolbar-v154>*{grid-row:auto!important;grid-column:auto!important;order:0!important;min-width:0}
+#modal.am-modal #addressbookModern .am-filters>.addressbook-toolbar-v154>.am-organizer{grid-column:1 / -1!important;order:-1!important}
+#modal.am-modal #addressbookModern .am-filters>.addressbook-toolbar-v154>.am-filter-footer{grid-column:1 / -1!important;order:1!important;display:flex;justify-content:flex-end;border-top:1px solid var(--am-line);padding-top:10px;position:sticky;bottom:0;background:var(--am-bg)}
+#addressbookModern .am-filters label{font-weight:500}
+#addressbookModern .am-filters :is(input,select){font-weight:400}
+#addressbookModern .am-person:empty{display:none}
+@media(max-width:680px){
+ #addressbookModern .am-head>.am-actions{grid-row:1}
+ #addressbookModern .am-head>.am-save{grid-column:1 / -1;font-size:11px}
+ #addressbookModern .am-tools{grid-template-columns:minmax(0,1fr) auto auto;gap:6px;margin-bottom:8px}
+ #addressbookModern .am-tools>.ab-case-switcher,#addressbookModern .am-tools>.am-current-case{grid-column:1 / -1}
+ #addressbookModern .am-tools>details>summary{min-height:42px;padding:8px}
+ #addressbookModern.am-show-detail .am-tools{display:grid;grid-template-columns:minmax(0,1fr)}
+ #addressbookModern.am-show-detail .am-tools>:not(.ab-case-switcher):not(.am-current-case){display:none}
+}
