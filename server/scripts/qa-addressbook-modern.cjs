@@ -44,6 +44,7 @@ let server,browser;
   document.getElementById('loginGateOverlay')?.remove();window.showImportedAddressbook();
  });
  await page.locator('#addressbookModern').waitFor();await page.waitForTimeout(300);
+ if(process.env.QA_DISPLAY_BUGS){await require('./qa-addressbook-display-bugs.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_ORGANIZER){await require('./qa-addressbook-organizer.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_CONTACT_TOOLS){await require('./qa-addressbook-contact-tools.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_VIEWS_HISTORY){await require('./qa-addressbook-views-history.cjs')({page,mobile,db,errors});await page.close();continue;}

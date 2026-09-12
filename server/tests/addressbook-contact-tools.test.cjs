@@ -80,6 +80,29 @@ test('Zusätzliche E-Mail-Adressen werden bei Dokumentation und Kommunikation zu
  create('email-ways',{contactWays:[way('alias','email','extra@example.org')],people:[{id:'p',name:'Anna Person',contactWays:[way('person','email','person-alias@example.org')]}]},'case','a');const C=require('../src/modules/mail/contact-documentation');assert.equal(C.resolve(admin,'a','extra@example.org').contactId,'email-ways');assert.equal(C.resolve(admin,'a','person-alias@example.org').personId,'p');assert.equal(C.resolve(admin,'a','person-alias@example.org',{scope:'case',caseId:'a',contactId:'email-ways',personId:'p'}).snapshot.email,'person-alias@example.org');
  db.prepare("INSERT INTO mail_accounts(id,label,kind,email,visibility,owner_user_id) VALUES('ways','Büro','imap','me@example.org','public',1)").run();require('../src/modules/contacts/addressbook-communications').indexMessages('ways','INBOX',[{uid:1,messageId:'<alias>',subject:'Alias-Mail',date:'2026-09-12',from:{address:'extra@example.org'},to:[{address:'me@example.org'}]}]);assert.ok(A.details('case','a','email-ways',admin).communications.some(x=>x.title==='Alias-Mail'));
 });
+test('Geprüfte Signatur ersetzt gewählte Hauptwege, behält Alternativen und speichert ohne Rücküberschreibung',()=>{
+ const before={email:'alt@example.org',phone:'01234/111111',contactWays:[way('mail','email','alt@example.org',true),way('tel','phone','01234/111111',true)]};
+ const snapshot=structuredClone(before),proposal=T.signature('neu@example.org\nTel.: 01234/222222\nhttps://example.org');
+ const next=T.signaturePatch(before,{email:proposal.email,phone:proposal.phone},proposal.contactWays);
+ assert.equal(next.phoneArea,'');assert.equal(next.phoneNumber,'01234/222222');
+ assert.deepEqual(before,snapshot);create('signature-overwrite',before);patch('signature-overwrite',next);
+ const saved=A.data(A.get('office','','signature-overwrite'));
+ assert.equal(saved.email,'neu@example.org');assert.equal(saved.phone,'01234/222222');
+ assert.ok(saved.contactWays.some(w=>w.id==='mail'&&!w.preferred));assert.ok(saved.contactWays.some(w=>w.id==='tel'&&!w.preferred));
+ assert.equal(saved.contactWays.filter(w=>w.type==='email'&&w.preferred).length,1);
+});
+test('Signatur berücksichtigt Abwahl, manuelle Angaben und bereits vorhandene Alternativen',()=>{
+ const before={email:'alt@example.org',contactWays:[way('old','email','alt@example.org',true),way('other','email','neu@example.org')]};
+ assert.deepEqual(T.signaturePatch(before,{},[]),{});
+ let next=T.signaturePatch(before,{},[way('web','website','https://example.org',true)]);
+ assert.equal(T.withWays({...before,...next},before).email,'alt@example.org');
+ next=T.signaturePatch(before,{email:'neu@example.org'},[way('new','email','neu@example.org',true)]);
+ assert.equal(next.contactWays.length,2);assert.equal(next.contactWays.find(w=>w.preferred).id,'other');
+ next=T.signaturePatch(before,{email:'manuell@example.org'});
+ assert.equal(T.withWays({...before,...next},before).email,'manuell@example.org');
+ next=T.signaturePatch(before,{email:''},[way('web','website','https://example.org',true)]);
+ assert.equal(T.withWays({...before,...next},before).email,'');assert.equal(next.contactWays.filter(w=>w.type==='email').length,2);
+});
 test('Modulsicherung enthält Papierkorb und Synczuordnungen; portabler Restore pausiert und löst alte Laufsperren',()=>{
  const backup=require('../src/modules/backup/portable-data'),payload=backup.moduleData(db);assert.ok(payload.addressbookTrash.length);assert.ok(payload.addressbookSyncBindings.length);const definitions=backup.restoreDefinitions('module').filter(d=>['addressbook_trash','addressbook_sync_bindings'].includes(d.table));const b=payload.addressbookSyncBindings[0];b.enabled=1;b.lock_token='stale';b.lock_until=Date.now()+100000;backup.restorePayload(db,payload,definitions);const saved=db.prepare('SELECT * FROM addressbook_sync_bindings WHERE id=?').get(b.id);assert.equal(saved.enabled,0);assert.equal(saved.lock_token,'');assert.equal(saved.lock_until,0);assert.equal(backup.moduleData(db).addressbookTrash.length,payload.addressbookTrash.length);
 });

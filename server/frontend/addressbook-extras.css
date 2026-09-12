@@ -23,8 +23,8 @@
 #addressbookModern .am-section>.am-section{padding:12px;border:1px solid var(--am-line);border-radius:8px}
 @media(max-width:680px){
  #addressbookModern .am-organizer{gap:6px;margin-bottom:8px}
- #addressbookModern .am-organizer label{flex:1 1 90px;font-size:11px}
- #addressbookModern .am-organizer select{font-size:13px}
+ #addressbookModern .am-organizer label{flex:1 1 100%;flex-direction:row;align-items:center;gap:10px;font-size:11px}
+ #addressbookModern .am-organizer select{flex:1;width:0;font-size:16px}
  #addressbookModern .am-organizer>.am-btn{width:100%;min-height:28px;text-align:left}
  #addressbookModern.am-show-detail .am-organizer{display:none}
  #addressbookModern .am-row .am-star{font-size:21px;min-height:40px;min-width:40px}

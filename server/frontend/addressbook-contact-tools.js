@@ -20,6 +20,19 @@ function withWays(next,before={}){const out={...next};if(!Object.hasOwn(next,'co
  if(chosen||old&&out[type]!==before[type])if(type!=='email'){out[type+'Area']='';out[type+'Number']=out[type]||''}
 }out.contactWays=ways(out.contactWays);return out}
 function safeUrl(value){try{const u=new URL(value);return ['http:','https:'].includes(u.protocol)&&!!u.hostname&&!u.username&&!u.password?u.href:null}catch(_){return null}}
+// Explicitly selected main fields win; retain previous named ways as alternatives.
+function signaturePatch(before,patch,additions=[]){
+ const original=ways(before.contactWays||[]),combined=original.map(w=>({...w}));
+ for(const w of ways(additions))if(!combined.some(x=>x.type===w.type&&x.value===w.value))combined.push({...w,preferred:w.preferred&&!combined.some(x=>x.type===w.type&&x.preferred)});
+ for(const type of ['email',...PHONE_TYPES])if(Object.hasOwn(patch,type)){
+  let chosen=combined.find(w=>w.type===type&&w.value===patch[type]);
+  if(patch[type]&&!chosen){chosen={id:globalThis.crypto.randomUUID(),type,label:TYPES[type],value:patch[type],preferred:true};combined.push(chosen)}
+  for(const w of combined)if(w.type===type)w.preferred=w===chosen;
+ }
+ const result={...patch,...(JSON.stringify(combined)!==JSON.stringify(original)?{contactWays:ways(combined)}:{})};
+ for(const type of PHONE_TYPES)if(Object.hasOwn(patch,type)){result[type+'Area']='';result[type+'Number']=patch[type]||''}
+ return result;
+}
 const title=c=>[c.institution,[c.title,c.firstName,c.lastName].filter(Boolean).join(' ')].filter(Boolean).join(' – ')||'Kontakt';
 function tokensim(a,b){if(!a||!b)return 0;if(a===b)return 1;const aa=new Set(a.split(' ')),bb=new Set(b.split(' '));return [...aa].filter(x=>bb.has(x)).length/Math.max(aa.size,bb.size)}
 function duplicates(proposal,records){
@@ -47,5 +60,5 @@ function signature(raw){
  if(candidate){const m=/^((?:(?:Dr\.|Prof\.)\s+)*)(.*)$/.exec(candidate);c.title=m[1].trim();const parts=m[2].split(/\s+/);c.lastName=parts.pop();c.firstName=parts.join(' ')}
  if(contactWays.length)c.contactWays=contactWays;return c;
 }
-return {TYPES,PHONE_TYPES,safeUrl,ways,withWays,duplicates,signature,title,norm,phone};
+return {TYPES,PHONE_TYPES,safeUrl,ways,withWays,duplicates,signature,signaturePatch,title,norm,phone};
 });
