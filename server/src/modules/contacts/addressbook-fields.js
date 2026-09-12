@@ -6,7 +6,7 @@ function addresses(value){
  return value.map(a=>{if(!a||typeof a!=='object'||typeof a.id!=='string'||!a.id||a.id.length>128||seen.has(a.id))fail('Jede Anschrift benötigt eine eindeutige ID.');seen.add(a.id);const out={id:a.id};for(const k of addressFields){if(a[k]!=null&&typeof a[k]!=='string')fail('Anschriftenfelder müssen Text enthalten.');out[k]=String(a[k]||'').trim().slice(0,1000)}if(!out.label)fail('Bitte die Anschrift benennen.');return out});
 }
 function validate(v){
- if(v.preferredChannel&&!['email','phone','mobile','post','fax'].includes(v.preferredChannel))fail('Ungültiger bevorzugter Kontaktweg.');
+ if(v.preferredChannel&&!['email','phone','mobile','post','fax','website','portal','messenger','other'].includes(v.preferredChannel))fail('Ungültiger bevorzugter Kontaktweg.');
  for(const k of ['absentFrom','absentUntil'])if(v[k]&&(!/^\d{4}-\d{2}-\d{2}$/.test(v[k])||!Number.isFinite(Date.parse(v[k]))||new Date(v[k]).toISOString().slice(0,10)!==v[k]))fail('Bitte ein gültiges Abwesenheitsdatum angeben.');
  if(v.absentFrom&&v.absentUntil&&v.absentFrom>v.absentUntil)fail('Das Ende der Abwesenheit liegt vor dem Beginn.');
  if(v.substitutePersonId&&v.substitutePersonId===v.id)fail('Ein Ansprechpartner kann sich nicht selbst vertreten.');

@@ -17,6 +17,17 @@ function books(c){const rows=db.prepare("SELECT * FROM connection_calendars WHER
 function connection(id,ref,s){const c=db.prepare('SELECT * FROM calendar_connections WHERE id=?').get(id);if(!allowed(c,s)||!c.enabled||!['google','microsoft','nextcloud','icloud'].includes(c.provider))A.fail(403,'Diese Kontaktverbindung ist nicht verfügbar.');if(!books(c).some(b=>b.remote_id===ref))A.fail(400,'Bitte ein bekanntes Adressbuch auswählen.');return c}
 function publicBinding(b,s){const c=db.prepare('SELECT * FROM calendar_connections WHERE id=?').get(b.connection_id);if(!allowed(c,s))return null;return {id:b.id,connectionId:b.connection_id,label:c.display_name||c.provider,book:books(c).find(x=>x.remote_id===b.addressbook_ref)?.name||'Kontakte',enabled:!!b.enabled,status:b.status,error:b.error,lastSyncedAt:b.last_synced_at,version:b.version,conflict:b.conflict_json?json(b.conflict_json):null,canManage:s.isAdmin||Number(b.owner_user_id)===Number(s.userId)}}
 function state(input,s){const r=target(input,s);return {bindings:db.prepare('SELECT * FROM addressbook_sync_bindings WHERE scope=? AND case_id=? AND contact_id=?').all(r.scope,r.caseId,r.id).map(b=>publicBinding(b,s)).filter(Boolean),sources:db.prepare('SELECT * FROM calendar_connections WHERE enabled=1').all().filter(c=>allowed(c,s)&&['google','microsoft','nextcloud','icloud'].includes(c.provider)).map(c=>({id:c.id,label:c.display_name||c.provider,provider:c.provider,books:books(c).map(b=>({ref:b.remote_id,label:b.name||'Kontakte'}))}))}}
+function overview(input,s){
+ const items=[];for(const b of db.prepare('SELECT * FROM addressbook_sync_bindings').all()){
+  try{target({scope:b.scope,caseId:b.case_id,id:b.contact_id},s)}catch(_){continue}
+  const v=publicBinding(b,s);if(!v)continue;let canManage=v.canManage;try{target({scope:b.scope,caseId:b.case_id,id:b.contact_id},s,true)}catch(_){canManage=false}
+  const c=db.prepare('SELECT enabled FROM calendar_connections WHERE id=?').get(b.connection_id);
+  items.push({...v,canManage,connectionEnabled:!!c.enabled,conflict:!!v.conflict,scope:b.scope,caseId:b.case_id,contactId:b.contact_id,contactLabel:require('../../../frontend/addressbook-contact-tools').title(A.data(A.get(b.scope,b.case_id,b.contact_id)))});
+ }
+ const counts={all:items.length,issues:0,synced:0,paused:0};for(const b of items){if(!b.enabled||!b.connectionEnabled)counts.paused++;else if(b.status==='synced')counts.synced++;else counts.issues++}
+ const query=String(input.query||'').toLocaleLowerCase('de'),filtered=items.filter(b=>(!query||(b.contactLabel+' '+b.label).toLocaleLowerCase('de').includes(query))&&(!input.status||input.status==='all'||(input.status==='paused'?(!b.enabled||!b.connectionEnabled):input.status==='synced'?b.enabled&&b.connectionEnabled&&b.status==='synced':b.enabled&&b.connectionEnabled&&b.status!=='synced'))).sort((a,b)=>a.contactLabel.localeCompare(b.contactLabel,'de')||a.id.localeCompare(b.id));
+ const offset=Math.max(0,parseInt(input.offset,10)||0);return {counts,total:filtered.length,items:filtered.slice(offset,offset+100),nextOffset:filtered.length>offset+100?offset+100:null};
+}
 async function remoteOptions(input,s,adapter=provider){target(input,s,true);const c=connection(input.connectionId,input.book,s);return {contacts:(await adapter.list(c,input.book)).map(r=>({uid:r.uid,label:require('../../../frontend/addressbook-contact-tools').title(r.data),email:r.data.email||''}))}}
 function link(input,s){
  const r=target(input,s,true);connection(input.connectionId,input.book,s);if(typeof input.uid!=='string'||input.uid.length>2048)A.fail(400,'Bitte den Online-Kontakt auswählen.');
@@ -90,4 +101,4 @@ async function runAll(adapter=provider){
 }
 
 function unlink(input,s){const b=manage(input,s);if(b.lock_until>Date.now())A.fail(409,'Bitte den laufenden Abgleich abwarten.');db.prepare('DELETE FROM addressbook_sync_bindings WHERE id=?').run(b.id);return {ok:true}}
-module.exports={state,remoteOptions,link,toggle,unlink,run,runAll,merge,sessionFor,connection,target};
+module.exports={overview,state,remoteOptions,link,toggle,unlink,run,runAll,merge,sessionFor,connection,target};

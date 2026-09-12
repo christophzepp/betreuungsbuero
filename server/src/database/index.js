@@ -2152,4 +2152,18 @@ db.exec(`
 `);
 
 for(const [name,type] of [['lock_token',"TEXT NOT NULL DEFAULT ''"],['lock_until','INTEGER NOT NULL DEFAULT 0']]){if(!db.prepare('PRAGMA table_info(addressbook_sync_bindings)').all().some(c=>c.name===name))db.exec('ALTER TABLE addressbook_sync_bindings ADD COLUMN '+name+' '+type)}
+// Persönliche Nutzung und Favoriten werden nicht in Kontaktdaten oder Anbieterprofile geschrieben.
+db.exec(`
+ CREATE TABLE IF NOT EXISTS addressbook_preferences (
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  scope TEXT NOT NULL, case_id TEXT NOT NULL DEFAULT '', contact_id TEXT NOT NULL,
+  favorite INTEGER NOT NULL DEFAULT 0, last_used_at TEXT NOT NULL DEFAULT '',
+  PRIMARY KEY(user_id,scope,case_id,contact_id)
+ );
+ CREATE TABLE IF NOT EXISTS addressbook_case_favorites (
+  case_id TEXT NOT NULL REFERENCES cases(id) ON DELETE CASCADE,
+  contact_id TEXT NOT NULL, actor_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+  PRIMARY KEY(case_id,contact_id)
+ );
+`);
 module.exports = db;

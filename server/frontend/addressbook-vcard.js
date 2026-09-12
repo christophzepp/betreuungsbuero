@@ -2,6 +2,7 @@
 (function(root,factory){const codec=factory();if(typeof module==='object'&&module.exports)module.exports=codec;else root.__abVcardCodec=codec})(typeof window==='object'?window:globalThis,function(){
  'use strict';
  const T=typeof module==='object'&&module.exports?require('./addressbook-contact-tools'):globalThis.__abContactTools;
+ const D=typeof module==='object'&&module.exports?require('./addressbook-extras-data'):globalThis.__abExtrasData;
  const scalar=['country','salutation','title','firstName','lastName','institution','role','street','house','houseLetter','postal','city','postbox','phone','phoneArea','phoneNumber','mobile','mobileArea','mobileNumber','fax','faxArea','faxNumber','email','status','fileNumber','processNumber','customerNumber','iban','bic','bankName','note','_category','preferredAddressId','preferredChannel','phoneHours','absentFrom','absentUntil','absenceNote','substituteContactId','centralContactId'];
  const addressFields=['id','label','street','house','houseLetter','postal','city','postbox','country'];
  const personFields=['id','name','department','role','email','phone','fax','salutation','preferredChannel','phoneHours','absentFrom','absentUntil','absenceNote','substitutePersonId'];
@@ -10,9 +11,9 @@
  const unesc=v=>String(v||'').replace(/\\([nN\\,;:])/g,(_,c)=>/[nN]/.test(c)?'\n':c);
  function split(value,separator=';',parameters=false){const parts=[''];let escaped=false,quoted=false;for(const c of value){if(c===separator&&!escaped&&!quoted)parts.push('');else parts[parts.length-1]+=c;if(parameters&&c==='"'&&!escaped)quoted=!quoted;escaped=c==='\\'&&!escaped}return parts}
  function texts(source,fields,max=2000){if(!object(source))fail('Ungültige Zusatzdaten.');const out={};for(const key of fields)if(Object.hasOwn(source,key)){if(typeof source[key]!=='string'||source[key].length>(key==='note'?20000:max))fail('Ungültiges Feld '+key+'.');out[key]=source[key]}return out}
- function dates(v){if(v.preferredChannel&&!['email','phone','mobile','fax','post'].includes(v.preferredChannel))fail('Ungültiger Kontaktweg.');for(const key of ['absentFrom','absentUntil'])if(v[key]&&(!/^\d{4}-\d{2}-\d{2}$/.test(v[key])||!Number.isFinite(Date.parse(v[key]))||new Date(v[key]).toISOString().slice(0,10)!==v[key]))fail('Ungültiges Abwesenheitsdatum.');if(v.absentFrom&&v.absentUntil&&v.absentFrom>v.absentUntil)fail('Abwesenheitsende liegt vor dem Beginn.')}
+ function dates(v){if(v.preferredChannel&&!['email','phone','mobile','fax','post','website','portal','messenger','other'].includes(v.preferredChannel))fail('Ungültiger Kontaktweg.');for(const key of ['absentFrom','absentUntil'])if(v[key]&&(!/^\d{4}-\d{2}-\d{2}$/.test(v[key])||!Number.isFinite(Date.parse(v[key]))||new Date(v[key]).toISOString().slice(0,10)!==v[key]))fail('Ungültiges Abwesenheitsdatum.');if(v.absentFrom&&v.absentUntil&&v.absentFrom>v.absentUntil)fail('Abwesenheitsende liegt vor dem Beginn.')}
  function clean(source){
-  const out=texts(source,scalar);dates(out);if(Object.hasOwn(source,'contactWays'))out.contactWays=T.ways(source.contactWays);
+  const out={...texts(source,scalar),...D.clean(source)};dates(out);if(Object.hasOwn(source,'contactWays'))out.contactWays=T.ways(source.contactWays);
   for(const [key,fields,max,required] of [['addresses',addressFields,30,'label'],['people',personFields,100,'name']])if(Object.hasOwn(source,key)){
    if(!Array.isArray(source[key])||source[key].length>max)fail('Zu viele oder ungültige '+key+'.');const ids=new Set();
    out[key]=source[key].map(v=>{const row=texts(v,fields,1000);if(!row.id||row.id.length>128||ids.has(row.id)||!row[required]?.trim())fail('Fehlende oder doppelte Kennung in '+key+'.');ids.add(row.id);dates(row);if(key==='people'&&Object.hasOwn(v,'contactWays'))row.contactWays=T.ways(v.contactWays);return row});
@@ -32,10 +33,12 @@
   if(c.institution)lines.push('ORG:'+esc(c.institution));if(c.role)lines.push('TITLE:'+esc(c.role));
   const pref=channel=>c.preferredChannel===channel?',PREF':'';
   function channels(profile,target,prefix){
-   const used=new Set();for(const [i,w] of (profile.contactWays||[]).entries()){const group=prefix+(i+1)+'.',type=w.type==='email'?'INTERNET':w.type==='mobile'?'CELL':w.type==='fax'?'FAX':'WORK,VOICE';target.push(group+(w.type==='email'?'EMAIL':'TEL')+';TYPE='+type+(w.preferred?',PREF':'')+':'+esc(w.value));target.push(group+'X-ABLABEL:'+esc(w.label));used.add(w.type+'|'+w.value)}
+   const used=new Set();for(const [i,w] of (profile.contactWays||[]).entries()){const group=prefix+(i+1)+'.';if(!['email','phone','mobile','fax'].includes(w.type)){target.push(group+(['website','portal'].includes(w.type)?'URL':'X-BB-CONTACTWAY')+';X-ABKIND='+w.type+(w.preferred?';TYPE=PREF':'')+':'+esc(w.value),group+'X-ABLABEL:'+esc(w.label));continue}const type=w.type==='email'?'INTERNET':w.type==='mobile'?'CELL':w.type==='fax'?'FAX':'WORK,VOICE';target.push(group+(w.type==='email'?'EMAIL':'TEL')+';TYPE='+type+(w.preferred?',PREF':'')+':'+esc(w.value));target.push(group+'X-ABLABEL:'+esc(w.label));used.add(w.type+'|'+w.value)}
    for(const [field,type] of [['email','INTERNET'],['phone','WORK,VOICE'],['mobile','CELL'],['fax','FAX']]){const value=profile[field]||[profile[field+'Area'],profile[field+'Number']].filter(Boolean).join('/');if(value&&!used.has(field+'|'+value))target.push((field==='email'?'EMAIL':'TEL')+';TYPE='+type+(profile.preferredChannel===field?',PREF':'')+':'+esc(value))}
   }
   channels(c,lines,'contactway');
+  if(c.tags?.length)lines.push('CATEGORIES:'+c.tags.map(esc).join(','));
+  if(c.imageData){const [mime,data]=c.imageData.split(',');lines.push((c.imageKind==='logo'?'LOGO':'PHOTO')+';ENCODING=b;TYPE='+(mime.includes('png')?'PNG':'JPEG')+':'+data)}
   const addresses=[...([c.street,c.postbox,c.city,c.postal].some(Boolean)?[{...c,label:'Hauptanschrift',id:''}]:[]),...(c.addresses||[])];
   addresses.forEach((a,i)=>{const group='item'+(i+1)+'.',preferred=c.preferredAddressId?c.preferredAddressId===a.id:!a.id;lines.push(group+'ADR;TYPE=WORK'+(preferred?',PREF':'')+':'+[a.postbox,'',street(a),a.city,'',a.postal,a.country].map(esc).join(';'));lines.push(group+'X-ABLABEL:'+esc(a.label||'Anschrift'));lines.push(group+'LABEL;TYPE=WORK:'+esc([a.label,a.postbox?'Postfach '+a.postbox:street(a),[a.postal,a.city].filter(Boolean).join(' '),a.country].filter(Boolean).join('\n')))});
   for(const p of c.people||[]){const agent=['BEGIN:VCARD','VERSION:3.0','UID:'+esc(p.id),'FN:'+esc(p.name),'N:'+esc(p.name)+';;;;'];if(c.institution||p.department)agent.push('ORG:'+esc(c.institution)+';'+esc(p.department));if(p.role)agent.push('TITLE:'+esc(p.role));channels(p,agent,'personway');agent.push('END:VCARD');lines.push('AGENT:'+esc(agent.join('\n')))}
@@ -55,6 +58,9 @@
    const c={},addresses=[],people=[],contactWays=[],rank={};let fn='',preferredChannel='';
    for(const p of props){const value=unesc(p.value),params=p.params.toUpperCase().replace(/"/g,''),preferred=/(?:^|[=;,])PREF(?:[;,]|$)|(?:^|;)PREF=1(?:;|$)/.test(params),put=(field,v)=>{if(c[field]==null||preferred&&!rank[field]){c[field]=v;rank[field]=preferred}};
     if(['TEL','EMAIL'].includes(p.name)){const type=p.name==='EMAIL'?'email':/FAX/.test(params)?'fax':/CELL|MOBILE/.test(params)?'mobile':'phone',label=props.find(x=>x.group===p.group&&x.name==='X-ABLABEL');contactWays.push({id:'way-'+contactWays.length,type,label:label?unesc(label.value):T.TYPES[type],value:value.replace(/^(mailto|tel):/i,''),preferred:preferred&&!contactWays.some(w=>w.type===type&&w.preferred)})}
+    if(p.name==='URL'||p.name==='X-BB-CONTACTWAY'){const kind=/X-ABKIND=([a-z]+)/i.exec(p.params)?.[1]?.toLowerCase(),type=kind&&Object.hasOwn(T.TYPES,kind)?kind:p.name==='URL'?'website':'other',label=props.find(x=>x.group===p.group&&x.name==='X-ABLABEL');contactWays.push({id:'way-'+contactWays.length,type,label:label?unesc(label.value):T.TYPES[type],value,preferred:preferred&&!contactWays.some(w=>w.type===type&&w.preferred)})}
+    if(p.name==='CATEGORIES')c.tags=split(p.value,',').map(unesc).filter(Boolean);
+    if(['PHOTO','LOGO'].includes(p.name)&&/ENCODING=(B|BASE64)(;|$)/.test(params)&&/TYPE=(PNG|JPEG)(;|$)/.test(params)){c.imageData='data:image/'+(/TYPE=PNG/.test(params)?'png':'jpeg')+';base64,'+value;c.imageKind=p.name==='LOGO'?'logo':'photo'}
     if(p.name==='FN')fn=value;
     else if(p.name==='N'){const n=split(p.value).map(unesc);c.lastName=n[0]||'';c.firstName=n[1]||'';c.title=n[3]||''}
     else if(p.name==='ORG')c.institution=unesc(split(p.value)[0]);

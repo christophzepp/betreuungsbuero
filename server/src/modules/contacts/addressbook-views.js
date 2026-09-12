@@ -1,6 +1,6 @@
 'use strict';
 const db=require('../../database'),A=require('./addressbook');
-const keys=['query','status','city','role','institution','kind','sortBy','direction','nameOrder','missingEmail'];
+const keys=['query','status','city','role','institution','kind','sortBy','direction','nameOrder','missingEmail','quick','tag','group'];
 const list=s=>({views:db.prepare('SELECT * FROM addressbook_views WHERE user_id=? ORDER BY label,id').all(s.userId).map(r=>({id:r.id,label:r.label,filters:JSON.parse(r.filters_json),version:r.version}))});
 function save(b,s){
  if(typeof b.id!=='string'||!b.id||b.id.length>128||typeof b.label!=='string'||!b.label.trim()||b.label.length>100||!b.filters||typeof b.filters!=='object'||Array.isArray(b.filters))A.fail(400,'Bitte eine benannte Ansicht mit gültigen Filtern angeben.');

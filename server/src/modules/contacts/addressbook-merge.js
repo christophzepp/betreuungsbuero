@@ -26,11 +26,13 @@ function merge(input,session){
     if(String(d.status||'').toLowerCase()==='aktiv')merged.status='Aktiv';
     if(Array.isArray(d.caseRefs))merged.caseRefs=[...new Set([...(merged.caseRefs||[]),...d.caseRefs])];
     for(const k of ['note','notes'])if(d[k]&&d[k]!==merged[k])merged[k]=[merged[k],d[k]].filter(Boolean).join('\n');
+    for(const k of ['tags','groups'])if(d[k]?.length)merged[k]=require('../../../frontend/addressbook-extras-data').labels([...(merged[k]||[]),...d[k]]);
+    for(const k of ['customFields','contactWays']){const map=new Map((merged[k]||[]).map(x=>[x.id,x]));for(const x of d[k]||[]){if(map.has(x.id)&&hash(map.get(x.id))!==hash(x))A.fail(409,'Eine Kennung in '+k+' enthält unterschiedliche Angaben. Bitte vor dem Zusammenführen prüfen.');const value={...x};if(k==='contactWays'&&value.preferred&&[...map.values()].some(w=>w.id!==value.id&&w.type===value.type&&w.preferred))value.preferred=false;map.set(x.id,value)}if(map.size)merged[k]=[...map.values()]}
     const addresses=new Map((merged.addresses||[]).map(a=>[a.id,a]));for(const a of d.addresses||[]){if(addresses.has(a.id)&&hash(addresses.get(a.id))!==hash(a))A.fail(409,'Eine Anschriften-ID enthält unterschiedliche Angaben. Bitte vor der Zusammenführung prüfen.');addresses.set(a.id,a)}if(addresses.size>30)A.fail(400,'Höchstens 30 Anschriften sind möglich.');if(addresses.size)merged.addresses=[...addresses.values()];
     const people=new Map((merged.people||[]).map(p=>[p.id,p]));for(const p of d.people||[]){if(people.has(p.id)&&hash(people.get(p.id))!==hash(p))A.fail(409,'Gleich benannte Ansprechpartner-IDs enthalten unterschiedliche Daten. Bitte vor dem Zusammenführen prüfen.');people.set(p.id,p)}if(people.size>100)A.fail(400,'Ein Kontakt kann höchstens 100 Ansprechpartner enthalten. Bitte die Auswahl verkleinern.');if(people.size)merged.people=[...people.values()];
    }
    A.replace('case',caseId,survivor.id,merged,session,A.version(survivor),effects);
-   for(const r of others){db.prepare("UPDATE addressbook_sync_bindings SET enabled=0,status='paused',error='Kontakt zusammengeführt. Nach dem Trennen bei Bedarf wieder aktivieren.',version=version+1 WHERE scope='case' AND case_id=? AND contact_id=?").run(caseId,r.id);db.prepare('DELETE FROM case_contacts WHERE id=? AND case_id=?').run(r.id,caseId);effects.push(['case',caseId,r.id,null])}
+   for(const r of others){require('./addressbook-organizer').mergeUsage(caseId,r.id,survivor.id);db.prepare("UPDATE addressbook_sync_bindings SET enabled=0,status='paused',error='Kontakt zusammengeführt. Nach dem Trennen bei Bedarf wieder aktivieren.',version=version+1 WHERE scope='case' AND case_id=? AND contact_id=?").run(caseId,r.id);db.prepare('DELETE FROM case_contacts WHERE id=? AND case_id=?').run(r.id,caseId);effects.push(['case',caseId,r.id,null])}
    const id=operationId+'_'+index,record={id,_serverMerge:true,at:new Date().toISOString(),survivorId:survivor.id,survivorLabel:merged.institution||[merged.firstName,merged.lastName].filter(Boolean).join(' '),survivorBefore:clean(A.data(survivor)),removed:others.map(r=>({...A.data(r),id:r.id}))};
    const payload={caseId,signature,record,before,removedRows:others,after:before.map(x=>({scope:x.scope,caseId:x.row.case_id||'',id:x.row.id,version:A.version(A.get(x.scope,x.row.case_id||'',x.row.id))}))};
    db.prepare('INSERT INTO addressbook_merges(id,case_id,operation_id,data_json) VALUES(?,?,?,?)').run(id,caseId,operationId,JSON.stringify(payload));
@@ -51,7 +53,7 @@ function unmerge(input,session){
    const original=clean(legacy.survivorBefore||{}),current=A.data(row);
    if(!original.institution&&!original.lastName)A.fail(400,'Die ursprünglichen Kontaktdaten fehlen.');
    if((original.centralContactId||'')!==(A.centralId('case',row.id)||''))A.fail(409,'Die zentrale Zuordnung wurde geändert. Bitte vor dem Trennen prüfen.');
-   const patch={...original};for(const k of A.FIELDS)if(Object.hasOwn(current,k)&&!Object.hasOwn(original,k))patch[k]=['people','addresses'].includes(k)?[]:'';
+   const patch={...original};for(const k of A.FIELDS)if(Object.hasOwn(current,k)&&!Object.hasOwn(original,k))patch[k]=['people','addresses','contactWays','tags','groups','customFields'].includes(k)?[]:'';
    A.replace('case',caseId,row.id,patch,session,versions[row.id],effects);
    // Anders als ein normales Bearbeiten entfernt Trennen auch nachträglich ergänzte Felder.
    db.prepare('UPDATE case_contacts SET data_json=? WHERE id=?').run(JSON.stringify(original),row.id);effects.push(['case',caseId,row.id,original]);

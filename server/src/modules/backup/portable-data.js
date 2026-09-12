@@ -91,6 +91,8 @@ const TABLE_REGISTRY = Object.freeze([
   // SQLite-Vollsicherung, aber kein portables Teilabbild (ein begrenztes JSON hätte beim
   // Recovery sonst die ältere Vollhistorie ersetzt).
   { key: 'syncJournal', table: 'sync_journal', groups: [], restore: false },
+  { key: 'addressbookPreferences', table: 'addressbook_preferences', groups: ['module'], caseExcludedReason: 'Persönliche Nutzung enthält Verweise auf mehrere Fälle.' },
+  { key: 'addressbookCaseFavorites', table: 'addressbook_case_favorites', groups: ['module', 'case'], caseColumn: 'case_id', caseOrder: 'contact_id' },
   { key: 'addressbookViews', table: 'addressbook_views', groups: ['office', 'module'] },
   { key: 'addressbookTrash', table: 'addressbook_trash', groups: ['module'],
     caseExcludedReason: 'Papierkorb kann zentrale Kontakte mit mehreren Fallzuordnungen enthalten; nur gemeinsam im Modul oder in SQLite sichern.' },

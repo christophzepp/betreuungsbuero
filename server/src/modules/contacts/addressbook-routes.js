@@ -4,14 +4,21 @@ const {requireAuth,requireViewCases,requireEditCases}=require('../../middleware/
 const A=require('./addressbook'),router=express.Router();
 router.use(requireAuth,requireViewCases);
 const contactEvents=require('../office/events').middleware('officeContacts');
-router.use((req,res,next)=>['/views','/communications/sync'].includes(req.path)?next():contactEvents(req,res,next));
+router.use((req,res,next)=>['/views','/communications/sync','/preferences','/recent'].includes(req.path)?next():contactEvents(req,res,next));
 const handle=fn=>async(req,res)=>{try{res.json(await fn(req))}catch(e){res.status(e.status||500).json({error:e.status?e.message:'Adressbuch konnte nicht gespeichert werden.',...(e.code?{code:e.code,candidates:e.candidates}:{} )})}};
+const organizer=require('./addressbook-organizer');
+router.get('/preferences',handle(r=>organizer.preferences(r.session)));
+router.post('/preferences',handle(r=>organizer.save(r.body,r.session)));
+router.delete('/recent',handle(r=>organizer.clearRecent(r.session)));
+router.get('/quality',handle(r=>organizer.quality(r.query,r.session)));
 const trash=require('./addressbook-trash');
 router.get('/trash',handle(r=>trash.list(r.session)));
 router.post('/trash',requireEditCases,handle(r=>trash.remove(r.body,r.session)));
+router.post('/trash/purge',requireEditCases,handle(r=>trash.purge(r.body,r.session)));
 router.post('/trash/restore',requireEditCases,handle(r=>trash.restore(r.body,r.session)));
 router.post('/duplicates',handle(r=>require('./addressbook-duplicates').find(r.body,r.session)));
 const sync=require('./addressbook-sync');
+router.get('/sync/overview',handle(r=>sync.overview(r.query,r.session)));
 router.get('/sync',handle(r=>sync.state(r.query,r.session)));
 router.post('/sync/remote',requireEditCases,handle(r=>sync.remoteOptions(r.body,r.session)));
 router.post('/sync/link',requireEditCases,handle(r=>sync.link(r.body,r.session)));
@@ -60,7 +67,7 @@ router.post('/standard',requireEditCases,handle(r=>A.standard(r.body,r.session))
 router.post('/restore',requireEditCases,handle(r=>{
  const {scope,caseId='',id,historyId,version}=r.body;A.authorize(r.session,scope,caseId,true);
  const h=db.prepare('SELECT * FROM addressbook_history WHERE id=? AND scope=? AND contact_id=? AND case_id=?').get(historyId,scope,id,caseId);if(!h)A.fail(404,'Änderung nicht gefunden.');
- const patch={};for(const [k,v] of Object.entries(JSON.parse(h.changes_json)))if(A.FIELDS.includes(k))patch[k]=v.before??(['people','addresses','contactWays'].includes(k)?[]:'');
+ const patch={};for(const [k,v] of Object.entries(JSON.parse(h.changes_json)))if(A.FIELDS.includes(k))patch[k]=v.before??(['people','addresses','contactWays','tags','groups','customFields'].includes(k)?[]:'');
  if(!Object.keys(patch).length)A.fail(400,'Fallzuordnungen und Standardempfänger bitte unter „Fälle & Standard“ ändern.');
  const row=A.get(scope,caseId,id);if(!row)A.fail(404,'Kontakt nicht gefunden.');if(patch.addresses&&!patch.addresses.some(a=>a.id===(patch.preferredAddressId??A.data(row).preferredAddressId)))patch.preferredAddressId='';const next={...A.data(row),...patch};if(!next.institution&&!next.lastName)A.fail(400,'Die Anlage eines Kontakts lässt sich hier nicht rückgängig machen.');
  if(!version)A.fail(400,'Kontaktversion fehlt.');A.replace(scope,caseId,id,patch,r.session,version);return A.details(scope,caseId,id,r.session);

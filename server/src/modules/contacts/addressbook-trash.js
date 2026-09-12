@@ -28,4 +28,23 @@ function restore(input,session){const events=[],warnings=[];let target;
  db.prepare('UPDATE addressbook_trash SET restored_at=? WHERE id=?').run(new Date().toISOString(),item.id);target={scope:item.scope,caseId:item.case_id,id:item.contact_id};
  })();for(const args of events)A.notify(...args);return {ok:true,target,warnings:[...new Set(warnings)]};
 }
-module.exports={list,remove,restore};
+function purge(input,session){
+ if(input.confirm!==true||!Array.isArray(input.ids)||!input.ids.length||input.ids.length>500||input.ids.some(id=>typeof id!=='string'))A.fail(400,'Bitte die endgültig zu löschenden Kontakte ausdrücklich bestätigen.');
+ let deleted=0;
+ db.transaction(()=>{
+  const items=[...new Set(input.ids)].map(id=>db.prepare('SELECT * FROM addressbook_trash WHERE id=?').get(id)).filter(Boolean);
+  for(const item of items){if(!visible(item,session,true))A.fail(403,'Für mindestens einen betroffenen Fall fehlt das Bearbeitungsrecht.');if(item.restored_at)A.fail(409,'Ein Kontakt wurde inzwischen wiederhergestellt. Bitte den Papierkorb neu laden.');
+   for(const r of read(item).rows){if(A.get(r.scope,r.case_id||'',r.id))A.fail(409,'Ein Kontakt ist wieder vorhanden. Bitte den Papierkorb neu laden.');if(db.prepare('SELECT 1 FROM addressbook_sync_bindings WHERE scope=? AND case_id=? AND contact_id=? AND lock_until>?').get(r.scope,r.case_id||'',r.id,Date.now()))A.fail(409,'Ein Abgleich läuft noch. Bitte anschließend erneut löschen.');}
+  }
+  for(const item of items){for(const r of read(item).rows){
+   for(const table of ['addressbook_preferences','addressbook_history','addressbook_sync_bindings'])db.prepare('DELETE FROM '+table+' WHERE scope=? AND case_id=? AND contact_id=?').run(r.scope,r.case_id||'',r.id);
+   if(r.scope==='case')db.prepare('DELETE FROM addressbook_case_favorites WHERE case_id=? AND contact_id=?').run(r.case_id,r.id);
+   // Bereits wiederhergestellte Papierkorbsnapshots dürfen keine zweite Wiederherstellungskopie behalten.
+   for(const previous of db.prepare('SELECT * FROM addressbook_trash WHERE restored_at IS NOT NULL').all()){
+    const payload=read(previous);payload.rows=payload.rows.filter(x=>!(x.scope===r.scope&&(x.case_id||'')===(r.case_id||'')&&x.id===r.id));payload.links=(payload.links||[]).filter(l=>r.scope==='office'?l.officeContactId!==r.id:l.caseContactId!==r.id);
+    if(!payload.rows.length)db.prepare('DELETE FROM addressbook_trash WHERE id=?').run(previous.id);else db.prepare('UPDATE addressbook_trash SET data_json=? WHERE id=?').run(JSON.stringify(payload),previous.id);
+   }
+  }db.prepare('DELETE FROM addressbook_trash WHERE id=?').run(item.id);deleted++}
+ })();return {ok:true,deleted};
+}
+module.exports={list,remove,restore,purge};

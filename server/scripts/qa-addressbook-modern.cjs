@@ -8,6 +8,7 @@ const app=express();app.use(express.json({limit:'5mb'}));let failSave=false;cons
 app.use((req,res,next)=>{req.session={userId:1,isAdmin:true,displayName:'QA Test'};if(req.method==='PATCH'&&req.path==='/api/addressbook/contact'){writes.push(req.body);if(failSave)return res.status(503).json({error:'Testverbindung unterbrochen – Eingaben bleiben erhalten.'})}next()});
 app.use('/api/addressbook',require('../src/modules/contacts/addressbook-routes'));
 app.use('/api/cases',require('../src/modules/cases/routes'));app.use('/api/office-contacts',require('../src/modules/office/contact-routes'));
+if(process.env.QA_ORGANIZER)app.use('/ocr-assets',express.static(path.resolve(__dirname,'../assets/ocr')));
 app.get('/test-address.xlsx',(req,res)=>res.sendFile(path.resolve(__dirname,'../assets/templates/Adressverzeichnis_blank.xlsx')));
 app.get('/',(req,res)=>res.type('html').send(fs.readFileSync(path.resolve(__dirname,'../../outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html'))));
 if(process.env.QA_MAILVCARD)app.use('/api/mailbox',require('../src/modules/mail/mailbox-routes'));
@@ -20,6 +21,7 @@ seed('doctor','a',{institution:'Praxis Dr. Sommer',role:'Hausärztin',status:'Ak
 seed('ended','a',{institution:'Frühere Praxis',role:'Hausarzt',status:'Beendet',_category:'gesundheit'});
 seed('other','b',{institution:'Vermietung Nebenstadt',role:'Vermieter',status:'Aktiv',fileNumber:'B-900',_category:'wohnen'});
 db.prepare('INSERT INTO office_contacts(id,data_json) VALUES(?,?)').run('office',JSON.stringify({institution:'Büro-Kontakt',role:'Notarin',email:'buero@example.org'}));
+if(process.env.QA_ORGANIZER)require('./qa-addressbook-organizer.cjs').setup(db);
 if(process.env.QA_CONTACT_TOOLS)require('./qa-addressbook-contact-tools.cjs').setup(db);
 if(process.env.QA_MAILVCARD)require('./qa-addressbook-mail-vcard.cjs').setup(db);
 if(process.env.QA_VIEWS_HISTORY)require('./qa-addressbook-views-history.cjs').setup(db);
@@ -31,7 +33,7 @@ let server,browser;
  if(process.env.QA_REGRESSIONS){const ended=JSON.parse(db.prepare('SELECT data_json FROM case_contacts WHERE id=?').get('ended').data_json);ended.status='Beendet';db.prepare('UPDATE case_contacts SET data_json=? WHERE id=?').run(JSON.stringify(ended),'ended')}
  const page=await browser.newPage({viewport:mobile?{width:390,height:process.env.QA_REGRESSIONS?700:844}:{width:1440,height:1000},isMobile:mobile,hasTouch:mobile,...(mobile?{userAgent:'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Version/18.0 Mobile/15E148 Safari/604.1'}:{})});
  page.setDefaultTimeout(15000);const errors=[];page.on('pageerror',e=>{errors.push(e.message);console.log('PAGEERROR',e.message)});
- await page.route('**/*',r=>r.request().url().startsWith(origin)?r.continue():r.abort());
+ await page.route('**/*',r=>(r.request().url().startsWith(origin)||r.request().url().startsWith('blob:'+origin)||r.request().url().startsWith('data:image/'))?r.continue():r.abort());
  await page.goto(origin,{waitUntil:'domcontentloaded',timeout:90000});await page.locator('#modeIntroNext').click();await page.waitForTimeout(250);
  await page.evaluate(async()=>{
   window.__appMode='online';window.__activeServerCaseId='a';window.caseIdentityOf=()=> 'a';window.__abScope='case';window.__abBueroWide=false;
@@ -42,6 +44,7 @@ let server,browser;
   document.getElementById('loginGateOverlay')?.remove();window.showImportedAddressbook();
  });
  await page.locator('#addressbookModern').waitFor();await page.waitForTimeout(300);
+ if(process.env.QA_ORGANIZER){await require('./qa-addressbook-organizer.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_CONTACT_TOOLS){await require('./qa-addressbook-contact-tools.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_VIEWS_HISTORY){await require('./qa-addressbook-views-history.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_MAILVCARD){await require('./qa-addressbook-mail-vcard.cjs')({page,mobile,db,errors,temp});await page.close();continue;}

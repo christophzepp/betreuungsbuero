@@ -1,27 +1,30 @@
 /* Gemeinsame Kontaktprüfung für Browser, Server und Austausch. Texte sind Daten, niemals HTML. */
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.__abContactTools=api})(typeof window==='object'?window:globalThis,function(){
 'use strict';
-const TYPES={email:'E-Mail',phone:'Telefon',mobile:'Mobiltelefon',fax:'Fax'};
+const TYPES={email:'E-Mail',phone:'Telefon',mobile:'Mobiltelefon',fax:'Fax',website:'Webseite',portal:'Serviceportal',messenger:'Messenger',other:'Sonstiger Kontaktweg'};
+const PHONE_TYPES=['phone','mobile','fax'];
 const norm=v=>String(v||'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('de').replace(/ß/g,'ss').replace(/[^a-z0-9]+/g,' ').trim();
 const phone=v=>String(v||'').replace(/^\+49|^0049/,'0').replace(/\D/g,'');
 function ways(value){if(!Array.isArray(value))throw Error('Kontaktwege müssen eine Liste sein.');const ids=new Set(),preferred=new Set();return value.map(w=>{
  if(!w||typeof w!=='object'||Array.isArray(w)||typeof w.id!=='string'||!w.id||w.id.length>128||ids.has(w.id))throw Error('Jeder Kontaktweg benötigt eine eindeutige Kennung.');ids.add(w.id);
  if(!Object.hasOwn(TYPES,w.type)||typeof w.label!=='string'||!w.label.trim()||w.label.length>200||typeof w.value!=='string'||!w.value.trim()||w.value.length>1000||w.preferred!=null&&typeof w.preferred!=='boolean')throw Error('Bitte Art, Bezeichnung und Wert des Kontaktwegs prüfen.');
- const out={id:w.id,type:w.type,label:w.label.trim(),value:w.value.trim(),preferred:!!w.preferred};if(out.type==='email'&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(out.value))throw Error('Bitte eine gültige E-Mail-Adresse angeben.');if(out.type!=='email'&&phone(out.value).length<3)throw Error('Bitte eine gültige Rufnummer angeben.');
+ const out={id:w.id,type:w.type,label:w.label.trim(),value:w.value.trim(),preferred:!!w.preferred};if(out.type==='email'&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(out.value))throw Error('Bitte eine gültige E-Mail-Adresse angeben.');if(PHONE_TYPES.includes(out.type)&&phone(out.value).length<3)throw Error('Bitte eine gültige Rufnummer angeben.');
+ if(['website','portal'].includes(out.type)&&!safeUrl(out.value))throw Error('Bitte eine vollständige http- oder https-Adresse angeben.');
  if(out.preferred){if(preferred.has(out.type))throw Error('Je Kontaktart ist nur ein bevorzugter Kontaktweg möglich.');preferred.add(out.type)}return out;
 })}
 // Die bevorzugten benannten Wege speisen auch alle bestehenden Empfänger- und Exportfunktionen.
-function withWays(next,before={}){const out={...next};if(!Object.hasOwn(next,'contactWays'))return out;out.contactWays=ways(next.contactWays);const sameWays=Array.isArray(before.contactWays)&&JSON.stringify(out.contactWays)===JSON.stringify(ways(before.contactWays));for(const type of Object.keys(TYPES)){
+function withWays(next,before={}){const out={...next};if(!Object.hasOwn(next,'contactWays'))return out;out.contactWays=ways(next.contactWays);const sameWays=Array.isArray(before.contactWays)&&JSON.stringify(out.contactWays)===JSON.stringify(ways(before.contactWays));for(const type of ['email',...PHONE_TYPES]){
  let chosen=out.contactWays.find(w=>w.type===type&&w.preferred);const old=(before.contactWays||[]).find(w=>w.type===type&&w.preferred);
  if(chosen&&Object.hasOwn(next,type)&&out[type]!==before[type]&&sameWays){if(out[type])chosen.value=out[type];else{out.contactWays=out.contactWays.filter(w=>w.id!==chosen.id);chosen=null}}
  if(chosen)out[type]=chosen.value;else if(old&&out[type]===old.value)out[type]='';
  if(chosen||old&&out[type]!==before[type])if(type!=='email'){out[type+'Area']='';out[type+'Number']=out[type]||''}
 }out.contactWays=ways(out.contactWays);return out}
+function safeUrl(value){try{const u=new URL(value);return ['http:','https:'].includes(u.protocol)&&!!u.hostname&&!u.username&&!u.password?u.href:null}catch(_){return null}}
 const title=c=>[c.institution,[c.title,c.firstName,c.lastName].filter(Boolean).join(' ')].filter(Boolean).join(' – ')||'Kontakt';
 function tokensim(a,b){if(!a||!b)return 0;if(a===b)return 1;const aa=new Set(a.split(' ')),bb=new Set(b.split(' '));return [...aa].filter(x=>bb.has(x)).length/Math.max(aa.size,bb.size)}
 function duplicates(proposal,records){
- const p=proposal||{},pn=norm([p.firstName,p.lastName].filter(Boolean).join(' ')),pi=norm(p.institution),pe=new Set([p.email,...(p.contactWays||[]).filter(w=>w.type==='email').map(w=>w.value)].filter(Boolean).map(v=>String(v).trim().toLowerCase())),pt=new Set([p.phone,p.mobile,p.fax,...(p.contactWays||[]).filter(w=>w.type!=='email').map(w=>w.value)].map(phone).filter(v=>v.length>=6));
- const matches=[];for(const r of records){const c=r.contact||r,pname=norm([c.firstName,c.lastName].filter(Boolean).join(' ')),institution=norm(c.institution),emails=[c.email,...(c.contactWays||[]).filter(w=>w.type==='email').map(w=>w.value),...(c.people||[]).flatMap(p=>[p.email,...(p.contactWays||[]).filter(w=>w.type==='email').map(w=>w.value)])].filter(Boolean).map(v=>String(v).trim().toLowerCase()),phones=[c.phone,c.mobile,c.fax,...(c.contactWays||[]).filter(w=>w.type!=='email').map(w=>w.value),...(c.people||[]).flatMap(p=>[p.phone,p.fax,...(p.contactWays||[]).filter(w=>w.type!=='email').map(w=>w.value)])].map(phone),reasons=[];let score=0;
+ const p=proposal||{},pn=norm([p.firstName,p.lastName].filter(Boolean).join(' ')),pi=norm(p.institution),pe=new Set([p.email,...(p.contactWays||[]).filter(w=>w.type==='email').map(w=>w.value)].filter(Boolean).map(v=>String(v).trim().toLowerCase())),pt=new Set([p.phone,p.mobile,p.fax,...(p.contactWays||[]).filter(w=>PHONE_TYPES.includes(w.type)).map(w=>w.value)].map(phone).filter(v=>v.length>=6));
+ const matches=[];for(const r of records){const c=r.contact||r,pname=norm([c.firstName,c.lastName].filter(Boolean).join(' ')),institution=norm(c.institution),emails=[c.email,...(c.contactWays||[]).filter(w=>w.type==='email').map(w=>w.value),...(c.people||[]).flatMap(p=>[p.email,...(p.contactWays||[]).filter(w=>w.type==='email').map(w=>w.value)])].filter(Boolean).map(v=>String(v).trim().toLowerCase()),phones=[c.phone,c.mobile,c.fax,...(c.contactWays||[]).filter(w=>PHONE_TYPES.includes(w.type)).map(w=>w.value),...(c.people||[]).flatMap(p=>[p.phone,p.fax,...(p.contactWays||[]).filter(w=>PHONE_TYPES.includes(w.type)).map(w=>w.value)])].map(phone),reasons=[];let score=0;
  if(emails.some(x=>pe.has(x))){score+=6;reasons.push('Gleiche E-Mail-Adresse')}
  if(phones.some(x=>x.length>=6&&pt.has(x))){score+=5;reasons.push('Gleiche Rufnummer')}
  if(pn.length>=5&&tokensim(pn,pname)>=.8){score+=5;reasons.push('Ähnlicher Personenname')}
@@ -39,9 +42,10 @@ function signature(raw){
   const address=/^(?:D[- ]?)?(\d{5})\s+([\p{L}][\p{L}\s().-]+)$/u.exec(line);if(address&&!c.postal){c.postal=address[1];c.city=address[2].trim();const previous=lines[i-1]||'',st=/^(.+?)\s+(\d+(?:[-/]\d+)?)\s*([a-z]?)$/i.exec(previous);if(st&&!/@|tel|fax|mobil/i.test(previous)){c.street=st[1];c.house=st[2];c.houseLetter=st[3]}}
   if(!c.institution&&/\b(GmbH|gGmbH|AG|e\.?\s?V\.?|Amtsgericht|Landgericht|Kanzlei|Praxis|Klinik|Pflegedienst|Krankenkasse|Stadtverwaltung|Stiftung)\b/i.test(line)&&!/@|https?:|\d{5}/i.test(line))c.institution=line;
  }
+ const urls=[...new Set(lines.join(' ').match(/https?:\/\/[^\s<>]+|www\.[^\s<>]+/gi)||[])];for(const [i,raw] of urls.entries()){const value=raw.replace(/[.,;)]$/,'');const url=safeUrl(value.startsWith('www.')?'https://'+value:value);if(url)contactWays.push({id:'signature-url-'+i,type:'website',label:'Webseite',value:url,preferred:i===0})}
  const candidate=lines.find(line=>/^(?:(?:Dr\.|Prof\.)\s+)*[\p{L}][\p{L}'’-]+(?:\s+[\p{L}][\p{L}'’-]+){1,3}$/u.test(line)&&line!==c.institution&&!/grüße|regards|geschäftsführung|abteilung|telefon|postfach|straße|strasse|team|service|datenschutz/i.test(line));
  if(candidate){const m=/^((?:(?:Dr\.|Prof\.)\s+)*)(.*)$/.exec(candidate);c.title=m[1].trim();const parts=m[2].split(/\s+/);c.lastName=parts.pop();c.firstName=parts.join(' ')}
  if(contactWays.length)c.contactWays=contactWays;return c;
 }
-return {TYPES,ways,withWays,duplicates,signature,title,norm,phone};
+return {TYPES,PHONE_TYPES,safeUrl,ways,withWays,duplicates,signature,title,norm,phone};
 });
