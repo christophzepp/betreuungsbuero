@@ -2,6 +2,15 @@
 
 Stand: 12.09.2026. Umsetzung in der ausgelieferten Anwendung und den bestehenden Serverdaten. Das HTML-Mockup ist keine Datenquelle und wird nicht als separate Anwendung eingebunden.
 
+## Ansichten aktualisieren und einzelne Versandeinträge öffnen – 12.09.2026
+
+- Unter **Ansichten → Ansicht aktualisieren** werden die aktuellen Filter einschließlich Suche, Sortierung, Namensdarstellung und „Ohne E-Mail“ in der ausgewählten Ansicht gespeichert. ID und Name bleiben erhalten. Das funktioniert im Online- und im lokalen Modus; andere Ansichten bleiben unverändert.
+- Auswahl und Aktionen sind während des Ladens oder Speicherns gesperrt. Ohne gewählte Ansicht ist Aktualisieren deaktiviert. Versionskonflikte überschreiben keine fremden Änderungen. **Ansichten neu laden** erhält die eigenen aktuellen Filter; die Übernahme auf den neuen Stand erfolgt anschließend ausdrücklich über Aktualisieren.
+- **Versandeintrag öffnen** im Kommunikationsverlauf nutzt die konkrete Quell-ID und den zugehörigen Fall. Die Historie zeigt den Eintrag aufgeklappt und hervorgehoben; auf dem Handy öffnet sich direkt dessen Detailansicht. Gleichnamige Schreiben bleiben unterscheidbar, bestehende Historienfilter verdecken das Sprungziel nicht. Ein inzwischen gelöschter Eintrag führt zu einer verständlichen Meldung.
+- Der Bildausschnitt berücksichtigt die nachträglich aufgebaute Fallauswahl und Mobilansicht, damit ein aus dem Adressbuch geöffneter Eintrag nicht unten abgeschnitten bleibt. Ab der ersten Maus-, Touch- oder Tastaturaktion wird nicht mehr automatisch nachgeführt.
+
+Prüfung: `QA_VIEWS_HISTORY=1` mit `server/scripts/qa-addressbook-modern.cjs` prüft die echte ausgelieferte Oberfläche und HTTP-Routen gegen eine temporäre Datenbank. Enthalten sind Online-/Lokalmodus, Aktualisierung, erneutes Öffnen, Versionskonflikt, Umbenennen/Löschen, gleichnamige Schreiben, fremder Fall, gelöschte Quellen, bestehende Filter und eine 320-Pixel-Mobilansicht. Chromium und WebKit: jeweils 22 erfolgreiche Prüfungen auf Desktop und Mobil zusammen, keine JavaScript-Laufzeitfehler; Bildkontrolle in Hell- und Dunkeldarstellung. Zusätzlich 79 bestehende Tests für Adressbuch, Rechte, Datenkonsistenz, Skriptkompilierung und Desktop-/Mobilgestaltung erfolgreich.
+
 ## Mailverknüpfung und vollständiger vCard-Austausch – 12.09.2026
 
 Die beiden zuvor offenen Umbaupunkte sind umgesetzt:
@@ -58,7 +67,6 @@ Die laufende Demo unter `http://localhost:8935` liefert bei dieser Nachprüfung 
 | --- | --- |
 | Laufende lokale Beta aktualisieren | Das aktuelle Server-/Frontend-Paket muss dort noch eingespielt und anschließend live geprüft werden. Ein Git-Push allein aktualisiert den laufenden Container nicht. |
 | Favoriten und zuletzt verwendet | Aus der ursprünglichen Vorschlagsliste weiterhin nicht umgesetzt; persönliche bzw. fallbezogene Favoriten und eine Nutzungshistorie fehlen. |
-| Komfort bei Ansichten und Schreiben | Gespeicherte Ansichten können angelegt, aufgerufen, umbenannt und gelöscht werden; ihre Filter lassen sich noch nicht direkt unter demselben Namen aktualisieren. Ein Schreiben im Kommunikationsverlauf öffnet die Versandhistorie, noch nicht gezielt den einzelnen Eintrag. |
 | Prüfung mit verbundenen Postfächern | Echte Eingänge, geplanter Versand, Microsoft-/IMAP-Ordnerwechsel und große laufend veränderte Postfächer noch Ende zu Ende prüfen. Mehrdeutige gemeinsame E-Mail-Adressen benötigen weiterhin eine ausdrückliche Zuordnung. |
 
 Kundennummer je Fall, benannte Anschriften, bevorzugter Kontaktweg, Telefonzeiten/Abwesenheiten/Vertretung, Standards nach Rolle und Schreibentyp, benannte Ansichten und der erweiterte Änderungsverlauf sind vorhanden. Die oben genannten Punkte sind keine erneute Kennzeichnung dieser bereits umgesetzten Funktionen als fehlend.

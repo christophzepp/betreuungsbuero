@@ -21,6 +21,7 @@ seed('ended','a',{institution:'Frühere Praxis',role:'Hausarzt',status:'Beendet'
 seed('other','b',{institution:'Vermietung Nebenstadt',role:'Vermieter',status:'Aktiv',fileNumber:'B-900',_category:'wohnen'});
 db.prepare('INSERT INTO office_contacts(id,data_json) VALUES(?,?)').run('office',JSON.stringify({institution:'Büro-Kontakt',role:'Notarin',email:'buero@example.org'}));
 if(process.env.QA_MAILVCARD)require('./qa-addressbook-mail-vcard.cjs').setup(db);
+if(process.env.QA_VIEWS_HISTORY)require('./qa-addressbook-views-history.cjs').setup(db);
 let server,browser;
 (async()=>{
  server=await new Promise(resolve=>{const s=app.listen(0,'127.0.0.1',()=>resolve(s))});const origin='http://127.0.0.1:'+server.address().port;
@@ -40,6 +41,7 @@ let server,browser;
   document.getElementById('loginGateOverlay')?.remove();window.showImportedAddressbook();
  });
  await page.locator('#addressbookModern').waitFor();await page.waitForTimeout(300);
+ if(process.env.QA_VIEWS_HISTORY){await require('./qa-addressbook-views-history.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_MAILVCARD){await require('./qa-addressbook-mail-vcard.cjs')({page,mobile,db,errors,temp});await page.close();continue;}
  if(process.env.QA_AUDIT){await require('./qa-addressbook-audit.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_EXPANSION){await require('./qa-addressbook-expansion.cjs')({page,mobile,db,errors});await page.close();continue;}

@@ -147,7 +147,7 @@ function drawTab(c){
  }else{
   body.append(B('+ Kommunikation dokumentieren',()=>documentContact(c,person()),'primary'),B('Rückmeldung vereinbaren',()=>followup(c)));if(online()){const sync=E('p','am-sub');sync.id='amMailSync';sync.textContent=(M.mailSync?.key===identity(c)?M.mailSync.text:'')||'Nachrichten werden abgeglichen …';body.append(sync,B('Nachrichten aktualisieren',()=>syncMail(c,true)));syncMail(c).catch(e=>message(e.message,true));}
   if(!M.bundle.communications.length)body.append(E('p','am-empty','Noch keine verknüpfte Kommunikation. Einträge werden gemeinsam mit der Falldokumentation geführt.'));
-  for(const item of M.bundle.communications){const s=section(item.title);s.append(E('p','am-sub',[dateLabel(item.date),item.caseLabel,item.contactType,item.person].filter(Boolean).join(' · ')),E('p','am-note',item.text),B(({mail:'E-Mail öffnen',document:'Versandhistorie öffnen',followup:'Wiedervorlage öffnen'})[item.kind]||'In Falldokumentation öffnen',()=>openCommunication(item)));if(item.mail)s.append(B('E-Mail öffnen',()=>window.__mxOpenMsg(item.mail.accountId,item.mail.folder,item.mail.uid)));body.append(s)}
+  for(const item of M.bundle.communications){const s=section(item.title);s.append(E('p','am-sub',[dateLabel(item.date),item.caseLabel,item.contactType,item.person].filter(Boolean).join(' · ')),E('p','am-note',item.text),B(({mail:'E-Mail öffnen',document:'Versandeintrag öffnen',followup:'Wiedervorlage öffnen'})[item.kind]||'In Falldokumentation öffnen',()=>openCommunication(item)));if(item.mail)s.append(B('E-Mail öffnen',()=>window.__mxOpenMsg(item.mail.accountId,item.mail.folder,item.mail.uid)));body.append(s)}
   if(M.bundle.communicationCursor)body.append(B('Weitere Kommunikation laden',()=>loadMore(c,'communications')));
  }
 }
@@ -262,12 +262,34 @@ window.__abValidateImport=function(c){
 };
 const VIEW_IDS={query:'phase5AddressSearchV154',status:'phase5AddressStatusV154',city:'phase5AddressCityV154',role:'phase5AddressRoleV154',institution:'phase5AddressInstitutionV154',kind:'phase5AddressKindV154',sortBy:'phase5AddressSortV154',direction:'phase5AddressDirectionV154',nameOrder:'phase5AddressNameOrderV154'};
 function viewMenu(){
- const menu=E('details','am-menu am-views');menu.append(E('summary','am-btn','Ansichten'));const body=E('div','am-menu-body'),label=E('label','','Gespeicherte Ansicht'),select=E('select');select.id='amSavedViews';label.append(select);body.append(label);menu.append(body);
- const fill=views=>{M.views=views;const value=select.value;select.replaceChildren(new Option('Ansicht auswählen …',''));for(const v of views)select.append(new Option(v.label,v.id));select.value=value};
- const load=async()=>{fill(online()?(await request('views')).views:state.ui.addressbookViews||[])};
- select.onchange=async()=>{if(!await flush())return;const v=M.views.find(v=>v.id===select.value);if(!v)return;for(const [k,id] of Object.entries(VIEW_IDS)){const el=document.getElementById(id);if(!el)continue;const val=v.filters[k]||'';if(el.tagName==='SELECT'&&val&&![...el.options].some(o=>o.value===val))el.append(new Option(val,val));el.value=val}$('#amMissingEmail').checked=v.filters.missingEmail==='yes';window.phase5RenderAddressbookV154();menu.open=false};
- async function saveView(rename=false){const old=M.views.find(v=>v.id===select.value);if(rename&&!old)throw Error('Bitte zuerst eine Ansicht wählen.');const name=prompt(rename?'Ansicht umbenennen:':'Aktuelle Filter speichern als:',rename?old.label:'');if(name===null)return;if(!name.trim())throw Error('Bitte einen Namen angeben.');const row={id:rename?old.id:crypto.randomUUID(),label:name.trim(),filters:rename?old.filters:{...M.view},version:rename?old.version:0};if(online())fill((await request('views',row,'PUT')).views);else{state.ui.addressbookViews=[...(state.ui.addressbookViews||[]).filter(v=>v.id!==row.id),{...row,version:row.version+1}];saveState();fill(state.ui.addressbookViews)}select.value=row.id;message('Ansicht gespeichert')}
- body.append(B('Aktuelle Filter speichern',()=>saveView()),B('Ansicht umbenennen',()=>saveView(true)),B('Ansicht löschen',async()=>{const v=M.views.find(v=>v.id===select.value);if(!v)throw Error('Bitte zuerst eine Ansicht wählen.');if(!confirm('Ansicht „'+v.label+'“ löschen?'))return;if(online())fill((await request('views',{id:v.id,version:v.version},'DELETE')).views);else{state.ui.addressbookViews=M.views.filter(x=>x.id!==v.id);saveState();fill(state.ui.addressbookViews)}}));M.views=[];load().catch(e=>message(e.message,true));return menu;
+ const root=M.root,menu=E('details','am-menu am-views');menu.append(E('summary','am-btn','Ansichten'));
+ const body=E('div','am-menu-body'),label=E('label','','Gespeicherte Ansicht'),select=E('select');select.id='amSavedViews';label.append(select);body.append(label);menu.append(body);
+ let views=[],busy=true,chosenId='';const actions=[];
+ const current=()=>views.find(v=>v.id===select.value);
+ const sync=()=>{select.disabled=busy;for(const [button,needsView] of actions)button.disabled=busy||(needsView&&!current())};
+ const fill=(rows,id=select.value)=>{views=rows;select.replaceChildren(new Option('Ansicht auswählen …',''));for(const v of views)select.append(new Option(v.label,v.id));select.value=views.some(v=>v.id===id)?id:'';chosenId=select.value;sync()};
+ const load=async()=>fill(online()?(await request('views')).views:state.ui.addressbookViews||[]);
+ function action(text,fn,needsView=false){const button=E('button','am-btn',text);button.type='button';actions.push([button,needsView]);button.onclick=async()=>{
+  if(button.disabled)return;busy=true;sync();try{if(await flush()){await fn();reload.hidden=true}}catch(e){reload.hidden=false;if(M.root===root)message(e.message,true)}finally{busy=false;sync()}
+ };return button}
+ select.onchange=async()=>{const previous=chosenId;busy=true;sync();try{if(!await flush()){select.value=previous;return}chosenId=select.value;const v=current();if(!v)return;for(const [k,id] of Object.entries(VIEW_IDS)){const el=root.querySelector('#'+id);if(!el)continue;const val=v.filters[k]||'';if(el.tagName==='SELECT'&&val&&![...el.options].some(o=>o.value===val))el.append(new Option(val,val));el.value=val}root.querySelector('#amMissingEmail').checked=v.filters.missingEmail==='yes';window.phase5RenderAddressbookV154();menu.open=false}catch(e){message(e.message,true)}finally{busy=false;sync()}};
+ async function saveView(mode='create'){
+  const old=current();if(mode!=='create'&&!old)throw Error('Bitte zuerst eine Ansicht wählen.');
+  const name=mode==='update'?old.label:prompt(mode==='rename'?'Ansicht umbenennen:':'Aktuelle Filter speichern als:',mode==='rename'?old.label:'');
+  if(name===null)return;if(!name.trim())throw Error('Bitte einen Namen angeben.');
+  const row={id:mode==='create'?crypto.randomUUID():old.id,label:name.trim(),filters:mode==='rename'?old.filters:{...M.view},version:mode==='create'?0:old.version};
+  if(online())fill((await request('views',row,'PUT')).views,row.id);
+  else{state.ui.addressbookViews=[...(state.ui.addressbookViews||[]).filter(v=>v.id!==row.id),{...row,version:row.version+1}];saveState();fill(state.ui.addressbookViews,row.id)}
+  if(M.root===root)message(mode==='update'?'Ansicht aktualisiert':'Ansicht gespeichert');
+ }
+ const reload=action('Ansichten neu laden',async()=>{await load();message('Ansichten neu geladen · Ihre aktuellen Filter bleiben erhalten')});reload.hidden=true;
+ body.append(action('Aktuelle Filter speichern',()=>saveView()),action('Ansicht aktualisieren',()=>saveView('update'),true),E('p','am-sub','Aktualisieren ersetzt die Filter der ausgewählten Ansicht. Ihr Name bleibt erhalten.'),action('Ansicht umbenennen',()=>saveView('rename'),true),action('Ansicht löschen',async()=>{
+  const v=current();if(!confirm('Ansicht „'+v.label+'“ löschen?'))return;
+  if(online())fill((await request('views',{id:v.id,version:v.version},'DELETE')).views);
+  else{state.ui.addressbookViews=(state.ui.addressbookViews||[]).filter(x=>x.id!==v.id);saveState();fill(state.ui.addressbookViews)}
+  message('Ansicht gelöscht');
+ },true),reload);
+ sync();load().catch(e=>{reload.hidden=false;if(M.root===root)message(e.message,true)}).finally(()=>{busy=false;sync()});return menu;
 }
 // Bearbeitungsformulare halten ihre Ausgangsversion fest; Konflikte überschreiben keine fremden Daten.
 async function rebaseSmall(s,remote,label){
@@ -302,7 +324,7 @@ async function followup(c){
  const r=ref(c),caseId=r.scope==='case'?r.caseId:activeCase();if(!caseId)throw Error('Bitte einen Fall für die Rückmeldung öffnen.');const link=currentLink(c,person());let todoId='';const followupId=crypto.randomUUID();let baseVersion='';
  smallForm('Rückmeldung vereinbaren',[['name','Anlass',''],['dueAt','Wiedervorlage am',''],['description','Vereinbarung / Notiz','']],async v=>{if(online()){const result=await request('followup',{...r,targetCaseId:caseId,followupId,baseVersion,personId:link.personId,patch:v});baseVersion=result.version;M.bundle=await request('contact?'+new URLSearchParams(r));return}const payload={title:'Wiedervorlage: '+v.name,description:v.description,dueAt:v.dueAt+'T00:00:00',itemType:'followup',caseId,caseLabel:window.__onlineCaseCache?.get(caseId)?.label||'',sourceType:'contact',sourceId:r.id,sourceModule:'addressbook',sourceRef:JSON.stringify({contactLink:link}),connectionId:'local'};if(todoId)await window.__todoUpdateItem(todoId,payload);else{const result=await window.__todoCreateItem(payload);todoId=result?.id||result?.todo?.id;if(!todoId)throw Error('Die Wiedervorlage wurde gespeichert. Bitte die Ansicht neu öffnen.')}if(online())M.bundle=await request('contact?'+new URLSearchParams(r))});
 }
-async function openCommunication(item){if(item.kind==='mail'){await window.__mxOpenMsg(item.accountId,item.folder,item.uid);return}if(item.kind==='document'){if(item.caseId!==activeCase())await window.__abSwitchCase(item.caseId);if(item.caseId!==activeCase())throw Error('Der zugehörige Fall konnte nicht geöffnet werden.');window.showExportHistory();return}if(item.kind==='followup'){await window.openFollowupsWorkspace(item.workspaceId||(item.sourceId?'todo:'+item.sourceId:''));return}return openDoku(item)}
+async function openCommunication(item){if(item.kind==='mail'){await window.__mxOpenMsg(item.accountId,item.folder,item.uid);return}if(item.kind==='document'){if(item.caseId!==activeCase())await window.__abSwitchCase(item.caseId);if(item.caseId!==activeCase())throw Error('Der zugehörige Fall konnte nicht geöffnet werden.');window.phase4OpenHistoryEntry(item.sourceId);return}if(item.kind==='followup'){await window.openFollowupsWorkspace(item.workspaceId||(item.sourceId?'todo:'+item.sourceId:''));return}return openDoku(item)}
 async function syncMail(c,force=false){
  if(!online()||M.tab!=='communication')return;const key=identity(c),root=M.root;if(M.mailSync?.key===key&&(M.mailSync.running||(!force&&Date.now()-M.mailSync.at<60000)))return;
  const run=M.mailSync={key,running:true,at:Date.now(),text:'Nachrichten werden abgeglichen …'},current=()=>M.mailSync===run&&M.root===root&&root.isConnected&&M.selected===key&&M.tab==='communication';let cursor;
