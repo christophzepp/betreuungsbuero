@@ -2131,4 +2131,25 @@ db.exec(`
  );
 `);
 
+// Papierkorb erhält stabile Kontakt-IDs und die ursprünglichen Zuordnungen.
+db.exec(`
+ CREATE TABLE IF NOT EXISTS addressbook_trash (
+  id TEXT PRIMARY KEY, scope TEXT NOT NULL, case_id TEXT NOT NULL DEFAULT '', contact_id TEXT NOT NULL,
+  deleted_at TEXT NOT NULL, actor TEXT NOT NULL, data_json TEXT NOT NULL, restored_at TEXT
+ );
+ CREATE INDEX IF NOT EXISTS addressbook_trash_contact ON addressbook_trash(scope,case_id,contact_id);
+ CREATE TABLE IF NOT EXISTS addressbook_sync_bindings (
+  id TEXT PRIMARY KEY, scope TEXT NOT NULL, case_id TEXT NOT NULL DEFAULT '', contact_id TEXT NOT NULL,
+  connection_id TEXT NOT NULL REFERENCES calendar_connections(id) ON DELETE CASCADE, addressbook_ref TEXT NOT NULL DEFAULT '',
+  external_uid TEXT NOT NULL DEFAULT '', href TEXT NOT NULL DEFAULT '', etag TEXT NOT NULL DEFAULT '',
+  base_local_json TEXT NOT NULL DEFAULT '{}', base_remote_json TEXT NOT NULL DEFAULT '{}',
+  enabled INTEGER NOT NULL DEFAULT 1, owner_user_id INTEGER NOT NULL REFERENCES users(id),
+  last_synced_at TEXT NOT NULL DEFAULT '', status TEXT NOT NULL DEFAULT 'pending', error TEXT NOT NULL DEFAULT '',
+  conflict_json TEXT NOT NULL DEFAULT '', version INTEGER NOT NULL DEFAULT 1,
+  lock_token TEXT NOT NULL DEFAULT '', lock_until INTEGER NOT NULL DEFAULT 0,
+  UNIQUE(scope,case_id,contact_id,connection_id,addressbook_ref)
+ );
+`);
+
+for(const [name,type] of [['lock_token',"TEXT NOT NULL DEFAULT ''"],['lock_until','INTEGER NOT NULL DEFAULT 0']]){if(!db.prepare('PRAGMA table_info(addressbook_sync_bindings)').all().some(c=>c.name===name))db.exec('ALTER TABLE addressbook_sync_bindings ADD COLUMN '+name+' '+type)}
 module.exports = db;

@@ -170,3 +170,15 @@ html.mobile-online-active #modal.am-modal #addressbookModern{padding:12px 10px 0
  #addressbookModern .am-tools>.am-filters,#addressbookModern .am-tools>.am-menu{flex:1}
  #addressbookModern .am-tools summary{width:100%}
 }
+
+#addressbookModern .am-duplicates{padding:14px;border:1px solid var(--am-line);border-radius:10px;background:var(--am-soft);margin:14px 0}
+#addressbookModern .am-signature-row{display:grid;grid-template-columns:24px minmax(0,1fr);gap:8px;align-items:center}
+#addressbookModern #amSignatureText{min-height:180px;margin-bottom:12px}
+#addressbookModern .am-detail>.am-btn{margin:8px 8px 8px 0}
+
+#addressbookModern .am-sync-choice{display:grid;gap:8px;padding:12px 0;border-bottom:1px solid var(--am-line)}
+#addressbookModern .am-sync-choice label{display:flex;align-items:flex-start;gap:8px;white-space:pre-wrap;overflow-wrap:anywhere}
+#addressbookModern .am-sync-choice input{width:auto;flex:0 0 auto;margin-top:4px}
+#addressbookModern .am-sync-error{color:var(--danger,#b43c37);overflow-wrap:anywhere}
+#addressbookModern .am-section>label{display:grid;gap:5px;margin:10px 0}
+#addressbookModern .am-section>label>select{max-width:100%;width:100%;min-width:0}

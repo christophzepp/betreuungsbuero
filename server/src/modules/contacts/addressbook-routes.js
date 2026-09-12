@@ -5,7 +5,19 @@ const A=require('./addressbook'),router=express.Router();
 router.use(requireAuth,requireViewCases);
 const contactEvents=require('../office/events').middleware('officeContacts');
 router.use((req,res,next)=>['/views','/communications/sync'].includes(req.path)?next():contactEvents(req,res,next));
-const handle=fn=>async(req,res)=>{try{res.json(await fn(req))}catch(e){res.status(e.status||500).json({error:e.status?e.message:'Adressbuch konnte nicht gespeichert werden.'})}};
+const handle=fn=>async(req,res)=>{try{res.json(await fn(req))}catch(e){res.status(e.status||500).json({error:e.status?e.message:'Adressbuch konnte nicht gespeichert werden.',...(e.code?{code:e.code,candidates:e.candidates}:{} )})}};
+const trash=require('./addressbook-trash');
+router.get('/trash',handle(r=>trash.list(r.session)));
+router.post('/trash',requireEditCases,handle(r=>trash.remove(r.body,r.session)));
+router.post('/trash/restore',requireEditCases,handle(r=>trash.restore(r.body,r.session)));
+router.post('/duplicates',handle(r=>require('./addressbook-duplicates').find(r.body,r.session)));
+const sync=require('./addressbook-sync');
+router.get('/sync',handle(r=>sync.state(r.query,r.session)));
+router.post('/sync/remote',requireEditCases,handle(r=>sync.remoteOptions(r.body,r.session)));
+router.post('/sync/link',requireEditCases,handle(r=>sync.link(r.body,r.session)));
+router.patch('/sync',requireEditCases,handle(r=>sync.toggle(r.body,r.session)));
+router.delete('/sync',requireEditCases,handle(r=>sync.unlink(r.body,r.session)));
+router.post('/sync/run',requireEditCases,handle(r=>sync.run(r.body,r.session)));
 router.get('/contact',handle(r=>A.details(r.query.scope,r.query.caseId||'',r.query.id,r.session)));
 router.get('/history',handle(r=>A.historyPage(r.query.scope,r.query.caseId||'',r.query.id,r.session,r.query.cursor)));
 router.get('/communications',handle(r=>A.communicationPage(r.query.scope,r.query.caseId||'',r.query.id,r.session,r.query.cursor)));
@@ -27,9 +39,17 @@ router.patch('/contact',requireEditCases,handle(r=>{
  if(!version)A.fail(400,'Die Kontaktversion fehlt. Bitte neu laden.');A.replace(scope,caseId,id,changes,r.session,version);return A.details(scope,caseId,id,r.session);
 }));
 router.post('/contact',requireEditCases,handle(r=>{
- const {scope,caseId='',patch}=r.body;A.authorize(r.session,scope,caseId,true);const next=A.validatePatch(patch);
+ const {scope,caseId='',patch,creationId}=r.body;A.authorize(r.session,scope,caseId,true);
+ if(creationId!==undefined&&(typeof creationId!=='string'||!/^[a-z0-9-]{36}$/i.test(creationId)))A.fail(400,'Ungültige Kennung für die Kontaktanlage.');
+ if(creationId&&A.get(scope,caseId,creationId))return A.details(scope,caseId,creationId,r.session);
+ if(creationId&&db.prepare("SELECT 1 FROM addressbook_trash t,json_each(t.data_json,'$.rows') r WHERE json_extract(r.value,'$.id')=? AND json_extract(r.value,'$.scope')=? AND t.restored_at IS NULL").get(creationId,scope))A.fail(409,'Der angelegte Kontakt wurde inzwischen in den Papierkorb verschoben.');
+ const next=A.validatePatch(patch);
  if(!String(next.institution||'').trim()&&!String(next.lastName||'').trim())A.fail(400,'Bitte Institution oder Nachname angeben.');
- const id=crypto.randomUUID();next.status=next.status||'Aktiv';next._category=next._category||'soziales';next.createdAt=new Date().toISOString();
+ const candidates=require('./addressbook-duplicates').find({scope,caseId,patch:next},r.session).candidates;
+ if(candidates.length&&r.body.allowDuplicates!==true){const error=new Error('Ähnliche Kontakte vorhanden. Bitte die Vorschläge prüfen.');error.status=409;error.code='duplicates';error.candidates=candidates;throw error;}
+ if(next.people)next.people=next.people.map(p=>require('../../../frontend/addressbook-contact-tools').withWays(p));
+ if(next.contactWays)Object.assign(next,require('../../../frontend/addressbook-contact-tools').withWays(next));
+ const id=creationId||crypto.randomUUID();next.status=next.status||'Aktiv';next._category=next._category||'soziales';next.createdAt=new Date().toISOString();
  if(scope==='case'){if(!db.prepare('SELECT id FROM cases WHERE id=?').get(caseId))A.fail(404,'Fall nicht gefunden.');db.prepare('INSERT INTO case_contacts(id,case_id,data_json,updated_by) VALUES(?,?,?,?)').run(id,caseId,JSON.stringify(next),r.session.userId)}
  else db.prepare('INSERT INTO office_contacts(id,data_json,updated_by) VALUES(?,?,?)').run(id,JSON.stringify(next),r.session.userId);
  A.record(scope,caseId,id,null,next,r.session);A.notify(scope,caseId,id,next);return A.details(scope,caseId,id,r.session);
@@ -40,7 +60,7 @@ router.post('/standard',requireEditCases,handle(r=>A.standard(r.body,r.session))
 router.post('/restore',requireEditCases,handle(r=>{
  const {scope,caseId='',id,historyId,version}=r.body;A.authorize(r.session,scope,caseId,true);
  const h=db.prepare('SELECT * FROM addressbook_history WHERE id=? AND scope=? AND contact_id=? AND case_id=?').get(historyId,scope,id,caseId);if(!h)A.fail(404,'Änderung nicht gefunden.');
- const patch={};for(const [k,v] of Object.entries(JSON.parse(h.changes_json)))if(A.FIELDS.includes(k))patch[k]=v.before??(['people','addresses'].includes(k)?[]:'');
+ const patch={};for(const [k,v] of Object.entries(JSON.parse(h.changes_json)))if(A.FIELDS.includes(k))patch[k]=v.before??(['people','addresses','contactWays'].includes(k)?[]:'');
  if(!Object.keys(patch).length)A.fail(400,'Fallzuordnungen und Standardempfänger bitte unter „Fälle & Standard“ ändern.');
  const row=A.get(scope,caseId,id);if(!row)A.fail(404,'Kontakt nicht gefunden.');if(patch.addresses&&!patch.addresses.some(a=>a.id===(patch.preferredAddressId??A.data(row).preferredAddressId)))patch.preferredAddressId='';const next={...A.data(row),...patch};if(!next.institution&&!next.lastName)A.fail(400,'Die Anlage eines Kontakts lässt sich hier nicht rückgängig machen.');
  if(!version)A.fail(400,'Kontaktversion fehlt.');A.replace(scope,caseId,id,patch,r.session,version);return A.details(scope,caseId,id,r.session);

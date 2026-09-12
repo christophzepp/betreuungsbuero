@@ -92,6 +92,10 @@ const TABLE_REGISTRY = Object.freeze([
   // Recovery sonst die ältere Vollhistorie ersetzt).
   { key: 'syncJournal', table: 'sync_journal', groups: [], restore: false },
   { key: 'addressbookViews', table: 'addressbook_views', groups: ['office', 'module'] },
+  { key: 'addressbookTrash', table: 'addressbook_trash', groups: ['module'],
+    caseExcludedReason: 'Papierkorb kann zentrale Kontakte mit mehreren Fallzuordnungen enthalten; nur gemeinsam im Modul oder in SQLite sichern.' },
+  { key: 'addressbookSyncBindings', table: 'addressbook_sync_bindings', groups: ['module'],
+    caseExcludedReason: 'Konten- und fallübergreifende Synchronisationszuordnungen; nur gemeinsam im Modul oder in SQLite sichern.' },
   { key: 'addressbookHistory', table: 'addressbook_history', groups: [], restore: false,
     caseExcludedReason: 'Ungekürzter Änderungsnachweis; wie das Audit-Protokoll Teil der SQLite-Vollsicherung, kein ersetzendes JSON-Teilabbild.' },
 
@@ -1925,7 +1929,7 @@ function restorePayload(db, payload, definitions, options) {
       );
     }
     for (const definition of definitions || []) {
-      const sourceRows = source[definition.key];
+      const sourceRows = definition.table==='addressbook_sync_bindings'?source[definition.key].map(row=>({...row,enabled:0,lock_token:'',lock_until:0})):source[definition.key];
       const tableReport = restoreRows(db, definition.table, sourceRows, definition.mode || 'replace', {
         currentSid: opts.currentSid,
         dryRun: opts.dryRun,

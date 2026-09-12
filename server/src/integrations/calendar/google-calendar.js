@@ -272,7 +272,7 @@ async function pushContact(conn, _addressbookRef, contact, onTokenRefreshed) {
 }
 
 module.exports = {
-  getAuthUrl, exchangeCode, refreshAccessToken,
+  contactRequest:authedFetch, getAuthUrl, exchangeCode, refreshAccessToken,
   listCalendars, listTaskLists,
   fetchEvents, pushEvent, deleteRemoteEvent,
   fetchTodos, pushTodo, deleteRemoteTodo,

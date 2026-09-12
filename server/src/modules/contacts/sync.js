@@ -127,15 +127,17 @@ const impMarkMoved = db.prepare("UPDATE office_contact_imports SET status='moved
 const impDeleteStaleStmt = db.prepare("DELETE FROM office_contact_imports WHERE connection_id = ? AND addressbook_ref = ? AND status = 'new' AND external_uid NOT IN (SELECT value FROM json_each(?))");
 
 // external_uids, die bereits als Büro- ODER Fallkontakt im System sind (für diese Verbindung).
-function inSystemUids(connectionId) {
+function inSystemUids(connectionId, bookRef) {
   const set = new Set();
   for (const r of db.prepare("SELECT external_uid FROM office_contacts WHERE connection_id = ? AND external_uid != ''").all(connectionId)) set.add(r.external_uid);
   for (const r of db.prepare("SELECT external_uid FROM case_contacts WHERE connection_id = ? AND external_uid != ''").all(connectionId)) set.add(r.external_uid);
+  for(const r of db.prepare("SELECT external_uid FROM addressbook_sync_bindings WHERE connection_id=? AND addressbook_ref=? AND external_uid!=''").all(connectionId,bookRef))set.add(r.external_uid);
+  for(const t of db.prepare('SELECT data_json FROM addressbook_trash WHERE restored_at IS NULL').all())for(const r of JSON.parse(t.data_json).rows)if(r.connection_id===connectionId&&r.external_uid)set.add(r.external_uid);
   return set;
 }
 
 const syncOneBook = db.transaction((conn, book, remoteContacts) => {
-  const inSys = inSystemUids(conn.id);
+  const inSys = inSystemUids(conn.id,book.remote_id);
   const seen = [];
   let added = 0;
   for (const rc of remoteContacts) {
@@ -182,7 +184,8 @@ async function syncConnectionContacts(conn, onlyRef) {
 }
 
 async function syncContacts(userId, wantAuto) {
-  const connections = listContactConnections(wantAuto);
+  const user=userId?db.prepare('SELECT is_admin FROM users WHERE id=?').get(userId):null;
+  const connections = listContactConnections(wantAuto).filter(c=>!userId||user?.is_admin||c.owner_user_id==null||Number(c.owner_user_id)===Number(userId));
   const errors = [];
   let added = 0;
   if (!connections.length) return { ran: false, errors, added };

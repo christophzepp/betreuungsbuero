@@ -19,10 +19,11 @@ function resolve(session, caseId, to, preferred) {
   const matches = value => addresses.has(String(value || '').trim().toLowerCase());
   function link(scope, row, personId = '') {
     const c = A.data(row), p = (c.people || []).find(p => p.id === personId);
-    if (personId && !p || !matches(p?.email || c.email)) return null;
+    if (personId && !p) return null;
+    const profile=p||c, own=[profile.email,...(profile.contactWays||[]).filter(w=>w.type==='email').map(w=>w.value)].filter(Boolean),matchedEmail=(own.length?own:[c.email,...(c.contactWays||[]).filter(w=>w.type==='email').map(w=>w.value)]).find(matches);if(!matchedEmail)return null;
     const person = p?.name || [c.title, c.firstName, c.lastName].filter(Boolean).join(' ');
     return { scope, caseId: scope === 'office' ? '' : caseId, contactId: row.id, personId,
-      snapshot: { label: [c.institution, person].filter(Boolean).join(' – '), institution: c.institution || '', person, role: c.role || '', fileNumber: c.fileNumber || '', processNumber: c.processNumber || '', customerNumber: c.customerNumber || '', email: p?.email || c.email || '', phone: p?.phone || c.phone || '' } };
+      snapshot: { label: [c.institution, person].filter(Boolean).join(' – '), institution: c.institution || '', person, role: c.role || '', fileNumber: c.fileNumber || '', processNumber: c.processNumber || '', customerNumber: c.customerNumber || '', email: matchedEmail, phone: p?.phone || c.phone || '' } };
   }
   if (preferred?.contactId) {
     const scope = preferred.scope || 'case';
@@ -35,7 +36,7 @@ function resolve(session, caseId, to, preferred) {
   const hits = [];
   for (const row of db.prepare('SELECT * FROM case_contacts WHERE case_id=?').all(caseId)) {
     const c = A.data(row), base = link('case', row); if (base) hits.push(base);
-    for (const p of c.people || []) if (matches(p.email)) hits.push(link('case', row, p.id));
+    for (const p of c.people || []) {const person=link('case',row,p.id);if(person)hits.push(person)}
   }
   return hits.length === 1 ? hits[0] : null;
 }

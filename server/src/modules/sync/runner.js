@@ -380,7 +380,8 @@ function startAutoSync() {
           // Kontakte nur für Verbindungen mit contacts_sync_mode='auto' (Nutzerwunsch: Intervall vs. manuell).
           let c = { errors: [] };
           try { c = await contactsSync.syncContacts(null, true); } catch (e) { c = { errors: [`Kontakte: ${e.message}`] }; }
-          return [...a.errors, ...b.errors, ...c.errors];
+          const contacts = await require('../contacts/addressbook-sync').runAll();
+          return [...a.errors, ...b.errors, ...c.errors, ...contacts.errors];
         }
       );
       // Während der kurzen lokalen Snapshotphase wird der Takt bewusst ausgelassen.

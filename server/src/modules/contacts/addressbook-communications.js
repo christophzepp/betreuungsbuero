@@ -4,7 +4,8 @@ const db=require('../../database'),crypto=require('node:crypto');
 const {darfSehen}=require('../cases/case-visibility');
 const parse=v=>{try{return JSON.parse(v||'{}')}catch(_){return {}}};
 const email=v=>String(v?.address||v||'').trim().toLowerCase();
-const emails=c=>new Set([c.email,...(c.people||[]).map(p=>p.email),...(c.oldEmails||[])].map(email).filter(Boolean));
+const profileEmails=c=>[c.email,...(c.contactWays||[]).filter(w=>w.type==='email').map(w=>w.value)];
+const emails=c=>new Set([...profileEmails(c),...(c.people||[]).flatMap(profileEmails),...(c.oldEmails||[])].map(email).filter(Boolean));
 const privateVisible=(r,s)=>r.visibility!=='private'||Number(r.owner_user_id)===Number(s.userId);
 function normalizedDate(value){const text=String(value||''),de=text.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);if(de)return de[3]+'-'+de[2].padStart(2,'0')+'-'+de[1].padStart(2,'0');if(/^\d{4}-\d{2}-\d{2}$/.test(text))return text;const time=Date.parse(text);return Number.isFinite(time)?new Date(time).toISOString():''}
 function page({scope,caseId,id,session,cursor,ids,contactRefs,contact}){
@@ -15,7 +16,7 @@ function page({scope,caseId,id,session,cursor,ids,contactRefs,contact}){
  const allContacts=db.prepare('SELECT id,case_id,data_json FROM case_contacts').all().map(r=>({...parse(r.data_json),id:r.id,caseId:r.case_id,scope:'case'}));
  const office=db.prepare('SELECT id,data_json FROM office_contacts').all().map(r=>({...parse(r.data_json),id:r.id,caseId:'',scope:'office'}));
  const candidates=[...allContacts,...office],target=emails(contact);
- const history=db.prepare('SELECT scope,contact_id,case_id,changes_json FROM addressbook_history WHERE contact_id IN (SELECT value FROM json_each(?))').all(JSON.stringify([...ids]));for(const h of history){if(!contactRefs.has(refKey(h.scope,h.case_id,h.contact_id)))continue;const ch=parse(h.changes_json),oldEmails=[ch.email?.before,ch.email?.after,...(ch.people?.before||[]).map(p=>p.email),...(ch.people?.after||[]).map(p=>p.email)].map(email).filter(Boolean);for(const e of oldEmails)target.add(e);if(oldEmails.length)candidates.push({id:h.contact_id,caseId:h.case_id,scope:h.scope,oldEmails})}
+ const history=db.prepare('SELECT scope,contact_id,case_id,changes_json FROM addressbook_history WHERE contact_id IN (SELECT value FROM json_each(?))').all(JSON.stringify([...ids]));for(const h of history){if(!contactRefs.has(refKey(h.scope,h.case_id,h.contact_id)))continue;const ch=parse(h.changes_json),oldEmails=[ch.email?.before,ch.email?.after,...(ch.people?.before||[]).flatMap(profileEmails),...(ch.people?.after||[]).flatMap(profileEmails),...(ch.contactWays?.before||[]).filter(w=>w.type==='email').map(w=>w.value),...(ch.contactWays?.after||[]).filter(w=>w.type==='email').map(w=>w.value)].map(email).filter(Boolean);for(const e of oldEmails)target.add(e);if(oldEmails.length)candidates.push({id:h.contact_id,caseId:h.case_id,scope:h.scope,oldEmails})}
  // Nur eindeutige E-Mail-Zuordnungen; ein gemeinsam genutztes Postfach ist kein Identitätsnachweis.
  const globalEmails=new Map(),caseEmails=new Map();for(const c of candidates)for(const addr of emails(c)){const g=globalEmails.get(addr)||new Set();g.add(refKey(c.scope,c.caseId,c.id));globalEmails.set(addr,g);if(c.caseId){const key=c.caseId+'|'+addr,local=caseEmails.get(key)||new Set();local.add(refKey(c.scope,c.caseId,c.id));caseEmails.set(key,local)}}
  function matches(addresses,cid){for(const addr of addresses){if(!target.has(addr))continue;const hits=cid?caseEmails.get(cid+'|'+addr):globalEmails.get(addr);if(hits?.size&&[...hits].every(key=>contactRefs.has(key)))return true}return false}

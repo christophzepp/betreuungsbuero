@@ -852,9 +852,8 @@ router.put('/:id/contacts/:contactId', requireEditCases, (req, res) => {
 router.delete('/:id/contacts/:contactId', requireEditCases, (req, res) => {
   const { id, contactId } = req.params;
   if (!getContactStmt.get(contactId, id)) return res.status(404).json({ error: 'Kontakt nicht gefunden.' });
-  deleteContactStmt.run(contactId, id);
-  broadcast(id, { type: 'contact', action: 'delete', contact: { id: contactId }, updatedBy: req.session.displayName }, req);
-  res.json({ ok: true });
+  try { res.json(require('../contacts/addressbook-trash').remove({scope:'case',caseId:id,id:contactId},req.session)); }
+  catch(e) { res.status(e.status||500).json({error:e.message}); }
 });
 
 /* Zustaendigkeit und Freigaben eines Falls (2026-07-26).

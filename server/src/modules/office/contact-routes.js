@@ -13,6 +13,7 @@ const { requireAuth, requireViewCases, requireEditCases } = require('../../middl
 const contactsSync = require('../contacts/sync');
 
 const router = express.Router();
+const connectionVisible=(id,session)=>{const c=db.prepare('SELECT owner_user_id FROM calendar_connections WHERE id=?').get(id);return !!c&&(c.owner_user_id==null||Number(c.owner_user_id)===Number(session.userId)||session.isAdmin)};
 router.use(requireAuth);
 // Echtzeit (2026-07-19): erfolgreiche Schreiboperationen an alle Fenster/Nutzer melden.
 router.use(require('./events').middleware('officeContacts'));
@@ -63,7 +64,7 @@ const ccInsertSrcStmt = db.prepare('INSERT INTO case_contacts (id, case_id, data
 // unsichtbar/unerreichbar (Nutzerwunsch: einsehen + wiederherstellen können).
 router.get('/imports', requireViewCases, (req, res) => {
   const stmt = req.query.status === 'dismissed' ? impListDismissedStmt : impListStmt;
-  const imports = stmt.all().map((r) => ({
+  const imports = stmt.all().filter(r=>connectionVisible(r.connection_id,req.session)).map((r) => ({
     id: r.id, connectionId: r.connection_id, addressbookRef: r.addressbook_ref, status: r.status,
     externalUid: r.external_uid, data: JSON.parse(r.data_json || '{}'), firstSeenAt: r.first_seen_at
   }));
@@ -111,8 +112,9 @@ router.post('/imports/sync', requireEditCases, async (req, res) => {
     const connId = req.body && req.body.connectionId;
     if (connId) {
       const conn = db.prepare('SELECT * FROM calendar_connections WHERE id = ?').get(connId);
-      if (!conn) return res.status(404).json({ error: 'Verbindung nicht gefunden.' });
+      if (!conn||!conn.enabled||!connectionVisible(conn.id,req.session)) return res.status(404).json({ error: 'Verbindung nicht gefunden.' });
       const ref = (req.body.addressbookRef !== undefined && req.body.addressbookRef !== null) ? String(req.body.addressbookRef) : undefined;
+      if(ref!==undefined)require('../contacts/addressbook-sync').connection(conn.id,ref,req.session);
       const r = await contactsSync.syncConnectionContacts(conn, ref);
       return res.json({ ok: true, ran: r.ran, added: r.added, errors: r.errors });
     }
@@ -126,7 +128,8 @@ router.post('/imports/sync', requireEditCases, async (req, res) => {
 // Einen Import in ein Adressbuch übernehmen. body.target = 'office' | 'case', body.caseId (bei 'case').
 router.post('/imports/:id/move', requireEditCases, (req, res) => {
   const imp = impGetStmt.get(req.params.id);
-  if (!imp) return res.status(404).json({ error: 'Import nicht gefunden.' });
+  if (!imp||!connectionVisible(imp.connection_id,req.session)) return res.status(404).json({ error: 'Import nicht gefunden.' });
+  if(imp.status==='moved'||db.prepare('SELECT 1 FROM addressbook_sync_bindings WHERE connection_id=? AND addressbook_ref=? AND external_uid=?').get(imp.connection_id,imp.addressbook_ref,imp.external_uid))return res.status(409).json({error:'Dieser Kontakt wurde bereits übernommen.'});
   const target = (req.body && req.body.target) === 'case' ? 'case' : 'office';
   // Zusammengesetzte Online-Felder ("Musterstraße 12", volle Rufnummern) in die getrennten
   // Adressverzeichnis-Felder zerlegen (Nutzerwunsch) - erst HIER beim Übernehmen, damit die
@@ -136,6 +139,7 @@ router.post('/imports/:id/move', requireEditCases, (req, res) => {
   if (target === 'case') {
     const caseId = req.body && req.body.caseId;
     if (!caseId) return res.status(400).json({ error: 'Fall-ID fehlt.' });
+    if(!require('../cases/case-visibility').darfBearbeiten(req.session,caseId))return res.status(403).json({error:'Für diesen Fall fehlt die Bearbeitungsberechtigung.'});
     ccInsertSrcStmt.run({ id, caseId, dataJson: JSON.stringify(data), uid: imp.external_uid, connId: imp.connection_id, userId: req.session.userId });
   } else {
     ocInsertSrcStmt.run({ id, dataJson: JSON.stringify(data), uid: imp.external_uid, connId: imp.connection_id, userId: req.session.userId });
@@ -147,7 +151,7 @@ router.post('/imports/:id/move', requireEditCases, (req, res) => {
 // Einen Import verwerfen (bleibt verworfen, wird nicht erneut angeboten, solange remote unverändert).
 router.post('/imports/:id/dismiss', requireEditCases, (req, res) => {
   const imp = impGetStmt.get(req.params.id);
-  if (!imp) return res.status(404).json({ error: 'Import nicht gefunden.' });
+  if (!imp||!connectionVisible(imp.connection_id,req.session)) return res.status(404).json({ error: 'Import nicht gefunden.' });
   impSetStatusStmt.run('dismissed', '', '', imp.id);
   res.json({ ok: true });
 });
@@ -156,7 +160,7 @@ router.post('/imports/:id/dismiss', requireEditCases, (req, res) => {
 // endgültiges Löschen - der Kontakt taucht sonst nie wieder auf, solange er remote existiert).
 router.post('/imports/:id/restore', requireEditCases, (req, res) => {
   const imp = impGetStmt.get(req.params.id);
-  if (!imp) return res.status(404).json({ error: 'Import nicht gefunden.' });
+  if (!imp||!connectionVisible(imp.connection_id,req.session)) return res.status(404).json({ error: 'Import nicht gefunden.' });
   if (imp.status !== 'dismissed') return res.status(400).json({ error: 'Nur verworfene Kontakte können wiederhergestellt werden.' });
   impSetStatusStmt.run('new', '', '', imp.id);
   res.json({ ok: true });
@@ -171,12 +175,14 @@ router.post('/imports/:id/restore', requireEditCases, (req, res) => {
 router.post('/export', requireEditCases, async (req, res) => {
   const { connectionId, addressbookRef, contactIds, source } = req.body || {};
   const conn = db.prepare('SELECT * FROM calendar_connections WHERE id = ?').get(connectionId);
-  if (!conn) return res.status(404).json({ error: 'Verbindung nicht gefunden.' });
+  if (!conn||!conn.enabled||!connectionVisible(conn.id,req.session)) return res.status(404).json({ error: 'Verbindung nicht gefunden.' });
+  try{require('../contacts/addressbook-sync').connection(conn.id,String(addressbookRef||''),req.session)}catch(e){return res.status(e.status||400).json({error:e.message})}
   const kind = (source && source.kind) === 'case' ? 'case' : 'office';
   let rows; let linkStmt;
   if (kind === 'case') {
     const caseId = source && source.caseId;
     if (!caseId) return res.status(400).json({ error: 'Fall-ID fehlt.' });
+    if(!require('../cases/case-visibility').darfBearbeiten(req.session,caseId))return res.status(403).json({error:'Für diesen Fall fehlt die Bearbeitungsberechtigung.'});
     rows = db.prepare('SELECT * FROM case_contacts WHERE case_id = ?').all(caseId);
     linkStmt = db.prepare("UPDATE case_contacts SET connection_id=?, external_uid=?, updated_at=datetime('now') WHERE id=?");
   } else {
@@ -193,6 +199,8 @@ router.post('/export', requireEditCases, async (req, res) => {
     if (data.__merged) continue; // zusammengeführte Hülsen nicht exportieren
     // Bereits mit DIESEM Konto verknüpft (von dort importiert oder früher exportiert) → nicht erneut
     // anlegen, sonst entstünden drüben Dubletten bei jedem Klick.
+    const central=require('../contacts/addressbook').centralId(kind,row.id),binding=db.prepare('SELECT 1 FROM addressbook_sync_bindings WHERE scope=? AND contact_id=? AND connection_id=? AND addressbook_ref=?').get(central?'office':kind,central||row.id,conn.id,String(addressbookRef||''));
+    if(binding){skipped++;continue}
     if (String(row.connection_id || '') === String(conn.id) && String(row.external_uid || '').trim()) { skipped++; continue; }
     try {
       const r = await contactsSync.pushContact(conn, addressbookRef || '', data);
@@ -206,10 +214,8 @@ router.post('/export', requireEditCases, async (req, res) => {
 });
 
 router.delete('/:id', requireEditCases, (req, res) => {
-  if(require('../contacts/addressbook').linked(req.params.id).length) return res.status(409).json({error:'Dieser zentrale Kontakt ist Fällen zugeordnet. Bitte beenden oder zunächst die Fallzuordnungen entfernen.'});
-  if (!getStmt.get(req.params.id)) return res.status(404).json({ error: 'Kontakt nicht gefunden.' });
-  deleteStmt.run(req.params.id);
-  res.json({ ok: true });
+  try { res.json(require('../contacts/addressbook-trash').remove({scope:'office',id:req.params.id},req.session)); }
+  catch(e) { res.status(e.status||500).json({error:e.message}); }
 });
 
 module.exports = router;

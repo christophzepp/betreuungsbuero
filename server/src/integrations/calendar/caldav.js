@@ -225,8 +225,8 @@ function buildVtodo({ uid, title, description, dueAt, done, priority }) {
 
 const xmlParser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '@_', removeNSPrefix: true });
 
-async function davRequest(url, { method, headers, body }) {
-  const res = await fetch(url, { method, headers, body });
+async function davRequest(url, { method, headers, body, signal = AbortSignal.timeout(30000) }) {
+  const res = await fetch(url, { method, headers, body, signal });
   const text = await res.text();
   return { status: res.status, ok: res.ok || res.status === 207, text };
 }
@@ -522,7 +522,7 @@ function parseVcard(text) {
 }
 
 // Lädt alle Kontakte eines CardDAV-Adressbuchs. Rückgabe: [{...contactFields, uid, href, etag}].
-async function fetchVcards(cfg, url) {
+async function fetchVcards(cfg, url, includeRaw=false) {
   const body = `<?xml version="1.0" encoding="utf-8" ?>
 <CR:addressbook-query xmlns:D="DAV:" xmlns:CR="urn:ietf:params:xml:ns:carddav">
   <D:prop><D:getetag/><CR:address-data/></D:prop>
@@ -544,7 +544,7 @@ async function fetchVcards(cfg, url) {
     if (!href || !vcardText) continue;
     const c = parseVcard(String(vcardText));
     if (!c) continue;
-    out.push({ ...c, href: resolveHref(url, href), etag: String(etag || '') });
+    out.push({ ...c, href: resolveHref(url, href), etag: String(etag || ''), ...(includeRaw?{rawVcard:String(vcardText)}:{}) });
   }
   return out;
 }
@@ -585,7 +585,7 @@ async function pushVcard(cfg, addressbookUrl, contact) {
 }
 
 module.exports = {
-  getCaldavConfig, isConfigured, testConnection,
+  contactRequest:davRequest, contactAuth:authHeader, getCaldavConfig, isConfigured, testConnection,
   fetchEvents, fetchTodos, pushEvent, pushTodo, deleteRemote,
   parseIcsComponents, componentToEvent, componentToTodo, icsDateToIso, isoToIcsDate,
   buildVevent, buildVtodo, discoverCollections,

@@ -20,6 +20,7 @@ seed('doctor','a',{institution:'Praxis Dr. Sommer',role:'Hausärztin',status:'Ak
 seed('ended','a',{institution:'Frühere Praxis',role:'Hausarzt',status:'Beendet',_category:'gesundheit'});
 seed('other','b',{institution:'Vermietung Nebenstadt',role:'Vermieter',status:'Aktiv',fileNumber:'B-900',_category:'wohnen'});
 db.prepare('INSERT INTO office_contacts(id,data_json) VALUES(?,?)').run('office',JSON.stringify({institution:'Büro-Kontakt',role:'Notarin',email:'buero@example.org'}));
+if(process.env.QA_CONTACT_TOOLS)require('./qa-addressbook-contact-tools.cjs').setup(db);
 if(process.env.QA_MAILVCARD)require('./qa-addressbook-mail-vcard.cjs').setup(db);
 if(process.env.QA_VIEWS_HISTORY)require('./qa-addressbook-views-history.cjs').setup(db);
 let server,browser;
@@ -41,6 +42,7 @@ let server,browser;
   document.getElementById('loginGateOverlay')?.remove();window.showImportedAddressbook();
  });
  await page.locator('#addressbookModern').waitFor();await page.waitForTimeout(300);
+ if(process.env.QA_CONTACT_TOOLS){await require('./qa-addressbook-contact-tools.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_VIEWS_HISTORY){await require('./qa-addressbook-views-history.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_MAILVCARD){await require('./qa-addressbook-mail-vcard.cjs')({page,mobile,db,errors,temp});await page.close();continue;}
  if(process.env.QA_AUDIT){await require('./qa-addressbook-audit.cjs')({page,mobile,db,errors});await page.close();continue;}
@@ -107,7 +109,7 @@ let server,browser;
  });
  await check('Neuanlage wird genau einmal gespeichert; Sammelstatus wartet auf Erfolg',async()=>{
   const before=db.prepare("SELECT count(*) n FROM case_contacts WHERE case_id='a'").get().n;
-  await page.getByRole('button',{name:'+ Neuer Kontakt',exact:true}).click();await page.locator('#amEdit_institution').fill('QA Neue Institution');await page.locator('#amEdit_email').fill('neu@example.org');await page.waitForFunction(()=>document.querySelector('.am-save')?.textContent.startsWith('Gespeichert'));await page.locator('#amEdit_note').fill('Zweite automatische Speicherung');await page.waitForFunction(()=>document.querySelector('.am-save')?.textContent.startsWith('Gespeichert'));assert.equal(db.prepare("SELECT count(*) n FROM case_contacts WHERE case_id='a'").get().n,before+1);await page.getByRole('button',{name:'Fertig',exact:true}).click();
+  await page.getByRole('button',{name:'+ Neuer Kontakt',exact:true}).click();await page.locator('#amEdit_institution').fill('QA Neue Institution');await page.locator('#amEdit_email').fill('neu@example.org');await page.getByRole('button',{name:'Kontakt anlegen',exact:true}).click();await page.locator('.am-tabs').waitFor();await page.locator('.am-detail-top').getByRole('button',{name:'Bearbeiten',exact:true}).click();await page.locator('#amEdit_note').waitFor();await page.locator('#amEdit_note').fill('Zweite automatische Speicherung');await page.waitForFunction(()=>document.querySelector('.am-save')?.textContent.startsWith('Gespeichert'));assert.equal(db.prepare("SELECT count(*) n FROM case_contacts WHERE case_id='a'").get().n,before+1);await page.getByRole('button',{name:'Fertig',exact:true}).click();
   await page.locator('#phase5AddressSearchV154').fill('QA Neue');await page.getByRole('button',{name:'Alle auswählen',exact:true}).click();failSave=true;await page.getByRole('button',{name:'Als beendet markieren',exact:true}).click();await page.waitForFunction(()=>document.querySelector('.am-save')?.textContent.includes('nicht gespeichert'));assert.equal(await page.locator('.am-row input').isChecked(),true);failSave=false;await page.getByRole('button',{name:'Als beendet markieren',exact:true}).click();await page.locator('.am-row').waitFor({state:'detached'});await page.locator('#phase5AddressSearchV154').fill('');
  });
  await check('vCard-Import wird dauerhaft gespeichert und Duplikate werden übersprungen',async()=>{
