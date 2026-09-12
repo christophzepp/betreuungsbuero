@@ -69,8 +69,8 @@
 #addressbookModern .am-badge.ended{background:var(--am-soft);color:var(--am-muted)}
 #addressbookModern .am-person{margin:16px 0}
 #addressbookModern .am-detail-actions{margin:14px 0}
-#addressbookModern .am-tabs{display:flex;gap:14px;border-bottom:1px solid var(--am-line);overflow-x:auto;margin-top:20px}
-#addressbookModern .am-tabs .am-btn{white-space:nowrap;flex:none}
+#addressbookModern .am-tabs{display:flex;flex-wrap:wrap;gap:2px 8px;border-bottom:1px solid var(--am-line);margin-top:16px}
+#addressbookModern .am-tabs .am-btn{flex:0 1 auto;min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere;font-size:11px;padding:7px 2px 8px}
 #addressbookModern .am-section{margin:18px 0;padding-bottom:15px;border-bottom:1px solid var(--am-line)}
 #addressbookModern :is(.am-section,.am-tab-body)>.am-btn{max-width:100%;margin:0 6px 6px 0}
 #addressbookModern .am-info{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;padding:9px 0;font-size:13px;overflow-wrap:anywhere}
@@ -116,7 +116,6 @@ html[data-theme=dark] #addressbookModern .am-btn.primary{background:#245f86;bord
  #addressbookModern .am-btn{min-height:40px}
  #addressbookModern .am-detail-actions>.am-btn{flex:1 1 45%}
  #addressbookModern .am-detail h2{font-size:21px}
- #addressbookModern .am-tabs{gap:13px}
  #addressbookModern .am-head h2{font-size:24px}
  #addressbookModern.am-show-detail .am-detail.am-editing{display:flex}
  #addressbookModern .am-selection{display:grid;grid-template-columns:1fr 1fr;gap:0;padding:4px 8px}
@@ -163,8 +162,6 @@ html.mobile-online-active #modal.am-modal #addressbookModern{padding:12px 10px 0
 #addressbookModern .am-pages[hidden]{display:none!important}
 #addressbookModern .am-pages .am-btn{padding:6px;min-height:32px}
 
-#addressbookModern .am-tabs{flex-wrap:nowrap;overflow-x:auto;gap:16px;scrollbar-width:thin}
-#addressbookModern .am-tabs .am-btn{flex:none;white-space:nowrap}
 #addressbookModern .am-section>.am-btn{margin:3px 4px 3px 0}
 #addressbookModern label.am-missing{display:flex;align-items:center;gap:8px}
 #addressbookModern .am-tools>.am-menu{flex:none}
