@@ -2,6 +2,42 @@
 
 Stand: 12.09.2026. Umsetzung in der ausgelieferten Anwendung und den bestehenden Serverdaten. Das HTML-Mockup ist keine Datenquelle und wird nicht als separate Anwendung eingebunden.
 
+## Aktuelle Nachprüfung vom 12.09.2026
+
+Dieser Abschnitt ergänzt die weiter unten dokumentierten früheren Prüfläufe.
+
+### Behobene Fehler
+
+- Ein fehlerhafter Excel-Import konnte Kontakte bereits vor dem Abbruch aus der Browserliste entfernen oder teilweise übernehmen. Die neue Liste und die Kategoriezuordnung werden jetzt erst nach vollständiger Prüfung übernommen. Fehlerhafte JSON-Strukturen, ungültige Anschriften, Ansprechpartner und Verweise werden mit Zeilenangabe zurückgewiesen. Der Rückimport einer tatsächlich erzeugten Excel-Datei erhält weiterhin sämtliche neuen Felder.
+- Eine verspätete Mailantwort konnte nach einem Kontaktwechsel im falschen Verlauf erscheinen. Antworten sind jetzt an Kontakt, geöffnetes Adressbuch, aktuellen Detailstand und Abgleich gebunden. Ein anderer Kontakt kann seinen eigenen Abgleich beginnen.
+- Ein Postfachabgleich konnte währenddessen neu eingetroffene Nachrichten aus dem lokalen Cache entfernen. Die Bereinigung berücksichtigt nur unveränderte Einträge des Ausgangsbestands. Ändert sich der Nachrichtenbestand während der Seitensuche erkennbar, wird die Bereinigung ausgesetzt und eine erneute Aktualisierung angeboten. Auf dem Mailserver werden durch diesen Abgleich keine Nachrichten gelöscht.
+- Gleichlautende Kontakt-IDs in Büro und Fall konnten Verläufe vermischen. Verknüpfungen, historische Adressen und Merge-Aliasse berücksichtigen nun zusätzlich den Gültigkeitsbereich und Fall. Eine zentrale Vertretung öffnet ausdrücklich das Büro-Adressbuch.
+- Spätere Autosave-Eingaben zu einer Rückmeldung fehlten in ihrer automatisch erzeugten Falldokumentation. Der Eintrag wird jetzt atomar aktualisiert und per Echtzeitnachricht erneuert; eine zwischenzeitlich manuell überarbeitete Dokumentation bleibt erhalten.
+- Die Konfliktprüfung für Anschriften, Erreichbarkeit und Fallangaben bot zuvor nur einen Hinweis zum Verwerfen. Sie kann jetzt den aktuellen Stand laden und nach Gegenüberstellung ausschließlich die eigenen Änderungen übernehmen. Weitere Anschriften und fremde Feldänderungen bleiben erhalten.
+- „Wiedervorlage öffnen“ springt zum konkreten Eintrag. Der Rückweg zum Kontakt unterscheidet Büro- und Fallkontakt. Bereits dokumentierte, zurückgestellte E-Mails behalten ihren Wiedervorlageeintrag und den richtigen Sprung dorthin.
+- Deutsche Datumsangaben wurden im Kommunikationsverlauf lexikografisch statt chronologisch sortiert. Sie werden für Reihenfolge und Fortsetzung vereinheitlicht und in der Oberfläche deutsch dargestellt. Schaltflächen innerhalb der neuen Bereiche haben Abstand und bleiben innerhalb der verfügbaren Breite.
+
+### Nachweise und Grenzen
+
+94 gezielte Server-, Integrations- und Oberflächentests einschließlich fünf WebSocket-Prüfungen erfolgreich. Der neue Browser-Prüflauf `QA_AUDIT=1` prüft Importabbrüche ohne Veränderung bestehender Daten, verspätete Mailantworten, parallele Anschriften- und Falländerungen, kollidierende Kontakt-IDs, konkrete Wiedervorlagen und Formularlayout mit echter Anwendung, HTTP-Routen und temporärer SQLite-Datenbank. Er läuft in Chromium und WebKit für Desktop und emulierte Mobilansicht.
+
+Zusätzlich wurden der bisherige Funktionslauf und 25 Layout-/Navigationsprüfungen in Chromium sowie die 18 Erweiterungsprüfungen einschließlich echtem Excel-Download und Rückimport in WebKit ausgeführt. Geprüfte Breiten reichen bis 320 Pixel; helle und dunkle Darstellung wurden sichtbar kontrolliert. Der Build der ausgelieferten HTML-Datei ist wiederholbar.
+
+Die laufende Demo unter `http://localhost:8935` liefert bei dieser Nachprüfung noch eine ältere Adressbuchversion: Die Bezeichnungen der neuen Bereiche fehlen in der ausgelieferten Anwendung. Dort wurde deshalb keine Abnahme der neuen Funktionen behauptet. Die neuen Speicher- und Browserprüfungen verwendeten ausschließlich isolierte Testdaten. Ein echter IMAP-/Microsoft-Postfachabgleich und ein physisches Smartphone waren nicht Teil dieses Laufs.
+
+### Noch offene Punkte
+
+| Punkt | Verbleibender Umfang |
+| --- | --- |
+| Laufende lokale Beta aktualisieren | Das aktuelle Server-/Frontend-Paket muss dort noch eingespielt und anschließend live geprüft werden. Ein Git-Push allein aktualisiert den laufenden Container nicht. |
+| Kommunikationsverlauf vervollständigen | Der geplante Versand schreibt noch keine explizite Kontaktverknüpfung und Versand-Message-ID in seine Doku. Der Microsoft-Versand liefert noch keine Message-ID zur sicheren Zusammenführung mit dem Postfacheintrag. Vorhandene Mailzuordnungen über eindeutige Adressen ersetzen diese durchgängige Verknüpfung nicht. |
+| Favoriten und zuletzt verwendet | Aus der ursprünglichen Vorschlagsliste weiterhin nicht umgesetzt; persönliche bzw. fallbezogene Favoriten und eine Nutzungshistorie fehlen. |
+| vCard für die neuen Daten erweitern | Der bisherige vCard-Austausch funktioniert, überträgt aber weiterhin nur die bisherigen flachen Kontaktdaten. Mehrere benannte Anschriften, Ansprechpartner, Kundennummer und Erreichbarkeit sind darin noch nicht vollständig abgebildet. Der erweiterte Excel-Austausch ist vorhanden. |
+| Komfort bei Ansichten und Schreiben | Gespeicherte Ansichten können angelegt, aufgerufen, umbenannt und gelöscht werden; ihre Filter lassen sich noch nicht direkt unter demselben Namen aktualisieren. Ein Schreiben im Kommunikationsverlauf öffnet die Versandhistorie, noch nicht gezielt den einzelnen Eintrag. |
+| Prüfung mit verbundenen Postfächern | Echte Eingänge, geplanter Versand, Microsoft-/IMAP-Ordnerwechsel und große laufend veränderte Postfächer noch Ende zu Ende prüfen. Mehrdeutige gemeinsame E-Mail-Adressen benötigen weiterhin eine ausdrückliche Zuordnung. |
+
+Kundennummer je Fall, benannte Anschriften, bevorzugter Kontaktweg, Telefonzeiten/Abwesenheiten/Vertretung, Standards nach Rolle und Schreibentyp, benannte Ansichten und der erweiterte Änderungsverlauf sind vorhanden. Die oben genannten Punkte sind keine erneute Kennzeichnung dieser bereits umgesetzten Funktionen als fehlend.
+
 ## Bestehende Funktionen
 
 | Bisherige Funktion | Zugang in der neuen Oberfläche | Prüfung |

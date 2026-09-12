@@ -38,6 +38,7 @@ let server,browser;
   document.getElementById('loginGateOverlay')?.remove();window.showImportedAddressbook();
  });
  await page.locator('#addressbookModern').waitFor();await page.waitForTimeout(300);
+ if(process.env.QA_AUDIT){await require('./qa-addressbook-audit.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_EXPANSION){await require('./qa-addressbook-expansion.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_EXTENDED){await require('./qa-addressbook-extended.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_REGRESSIONS){await require('./qa-addressbook-regressions.cjs')({page,mobile,db,errors});await page.close();continue;}

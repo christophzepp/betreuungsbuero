@@ -87,13 +87,12 @@ function historyPage(scope,caseId,id,session,cursor){
 function communicationPage(scope,caseId,id,session,cursor,refs,cid){
  authorize(session,scope,caseId);const row=get(scope,caseId,id);if(!row)fail(404,'Kontakt nicht gefunden.');
  if(!refs){cid=centralId(scope,id);refs=(cid?linked(cid):scope==='case'?[row]:[]).filter(c=>darfSehen(session,c.case_id))}
- const ids=new Set(refs.map(c=>c.id));ids.add(id);if(cid)ids.add(cid);
- // Die historische Kontakt-ID bleibt im Doku-Eintrag erhalten und gehört nach einer
- // Zusammenführung trotzdem zum Kommunikationsverlauf des verbleibenden Kontakts.
- const merges=db.prepare('SELECT case_id,data_json FROM addressbook_merges WHERE undone_at IS NULL').all().filter(m=>darfSehen(session,m.case_id)).map(m=>JSON.parse(m.data_json).record);
- // Mehrfach zusammengeführte Kontakte auflösen, unabhängig von der Archiv-Reihenfolge.
- let expanded;do{expanded=false;for(const m of merges)if(ids.has(m.survivorId))for(const x of m.removed)if(!ids.has(x.id)){ids.add(x.id);expanded=true}}while(expanded);
- return require('./addressbook-communications').page({scope,caseId,id,session,cursor,ids,refs,centralId:cid,contact:data(row)});
+ const contactRefs=new Set(refs.map(c=>JSON.stringify(['case',c.case_id,c.id])));contactRefs.add(JSON.stringify([scope,caseId||'',id]));if(cid)contactRefs.add(JSON.stringify(['office','',cid]));
+ // Merge-Aliasse gehören stets zum ursprünglichen Fall, nie zu gleichlautenden Büro-IDs.
+ const merges=db.prepare('SELECT case_id,data_json FROM addressbook_merges WHERE undone_at IS NULL').all().filter(m=>darfSehen(session,m.case_id));
+ let expanded;do{expanded=false;for(const m of merges){const r=JSON.parse(m.data_json).record;if(contactRefs.has(JSON.stringify(['case',m.case_id,r.survivorId])))for(const x of r.removed){const key=JSON.stringify(['case',m.case_id,x.id]);if(!contactRefs.has(key)){contactRefs.add(key);expanded=true}}}}while(expanded);
+ const ids=new Set([...contactRefs].map(key=>JSON.parse(key)[2]));
+ return require('./addressbook-communications').page({scope,caseId,id,session,cursor,ids,contactRefs,contact:data(row)});
 }
 
 function assign(input,session){
@@ -121,5 +120,5 @@ function standard(input,session){
   }
  })();for(const [contactId,next] of affected)notify('case',caseId,contactId,next);return details('case',caseId,id,session);
 }
-function notifyDoku(caseId,id,data,session){if(realtime)realtime.broadcastToCase(caseId,{type:'doku-entry',action:'create',entry:{id,data},updatedBy:session.displayName},null)}
+function notifyDoku(caseId,id,data,session,action='create'){if(realtime)realtime.broadcastToCase(caseId,{type:'doku-entry',action,entry:{id,data},updatedBy:session.displayName},null)}
 module.exports={notifyDoku,FIELDS,SHARED,personVersion,savePerson,historyPage,communicationPage,get,data,version,authorize,validatePatch,replace,record,notify,details,assign,standard,centralId,linked,setRealtime:r=>{realtime=r},fail};

@@ -27,6 +27,7 @@ test('Rückmeldungen sind atomar mit Falldokumentation verknüpft; wiederholte A
  const i={scope:'case',caseId:'a',id:'contact',targetCaseId:'a',followupId:'reply',personId:'p',patch:{name:'Befund',dueAt:'2026-10-01',description:'Rückruf zugesagt'}};
  const first=F.save(i,s);F.save(i,s);assert.equal(db.prepare("SELECT count(*) n FROM todos WHERE id='reply'").get().n,1);assert.equal(db.prepare("SELECT count(*) n FROM case_doku_entries WHERE id='ab-followup-reply'").get().n,1);
  const next=F.save({...i,baseVersion:first.version,patch:{...i.patch,description:'Neue Absprache'}},s);assert.notEqual(next.version,first.version);assert.throws(()=>F.save({...i,baseVersion:first.version},s),e=>e.status===409);
+ assert.match(JSON.parse(db.prepare("SELECT data_json FROM case_doku_entries WHERE id='ab-followup-reply'").get().data_json).freeDetail,/Neue Absprache/,'Die Falldokumentation muss spätere Eingaben desselben Autosave-Formulars übernehmen');
  const timeline=A.details('case','a','contact',s).communications;assert.ok(timeline.some(x=>x.kind==='followup'&&x.text==='Neue Absprache'));assert.ok(timeline.some(x=>x.kind==='doku'&&x.title==='Rückmeldung vereinbart'));
  assert.throws(()=>F.save({...i,targetCaseId:'b'},s),e=>e.status===400);
 });
@@ -50,7 +51,31 @@ test('Historische E-Mail-Adressen, mehrere Empfänger und Entwürfe werden einde
  const draft={...message,uid:998,messageId:'<draft>',subject:'Ungesendeter Entwurf',draft:true};C.indexMessages('public','INBOX',[draft]);db.prepare('INSERT OR REPLACE INTO mail_cache(account_id,folder,uid,env_json,msg_date) VALUES(?,?,?,?,?)').run('public','INBOX','998',JSON.stringify({...draft,draft:undefined}),draft.date);
  const items=A.details('case','a','contact',s).communications;assert.ok(items.some(i=>i.title===message.subject));assert.ok(!items.some(i=>i.title===draft.subject));
 });
+test('Postfachabgleich entfernt keine während der Seitensuche frisch eingegangenen Cache-Daten',async()=>{
+ const incoming={uid:9000,messageId:'<just-arrived>',subject:'Gerade eingegangen',from:{address:'contact@example.org'},to:[],date:'2026-09-12'};
+ const engine={listFolders:async()=>[{path:'INBOX'}],listMessages:async(a,f,{offset})=>{if(offset===200){C.indexMessages(a.id,f,[incoming]);db.prepare('INSERT OR REPLACE INTO mail_cache(account_id,folder,uid,env_json,msg_date) VALUES(?,?,?,?,?)').run(a.id,f,'9000',JSON.stringify(incoming),incoming.date)}return {total:400,messages:Array.from({length:200},(_,i)=>({...incoming,uid:offset+i+1,messageId:'<existing-'+(offset+i)+'>'}))}}};
+ const input={scope:'case',caseId:'a',id:'contact'};let r=await C.sync(input,s,{imap:engine});while(r.cursor)r=await C.sync({...input,cursor:r.cursor},s,{imap:engine});
+ assert.ok(db.prepare("SELECT 1 FROM addressbook_mail_index WHERE account_id='public' AND uid='9000'").get());assert.ok(db.prepare("SELECT 1 FROM mail_cache WHERE account_id='public' AND uid='9000'").get());
+});
 test('Gleichlautende Kontakt-IDs in Büro und Fall vermischen keine verknüpfte Dokumentation',()=>{
  db.prepare('INSERT INTO office_contacts(id,data_json) VALUES(?,?)').run('contact',JSON.stringify({institution:'Unabhängiger Bürokontakt'}));db.prepare('INSERT INTO case_doku_entries(id,case_id,data_json) VALUES(?,?,?)').run('collision','a',JSON.stringify({detail:'Andere Zuordnung',contactLink:{scope:'office',contactId:'contact'}}));assert.ok(!A.details('case','a','contact',s).communications.some(x=>x.id==='collision'));
+ db.prepare('INSERT INTO case_contacts(id,case_id,data_json) VALUES(?,?,?)').run(central,'b',JSON.stringify({institution:'Anderer Fallkontakt',email:'collision@example.org'}));
+ db.prepare('INSERT INTO case_doku_entries(id,case_id,data_json) VALUES(?,?,?)').run('collision-central','b',JSON.stringify({detail:'Fremder Fallkontakt',contactLink:{scope:'case',caseId:'b',contactId:central}}));
+ assert.ok(!A.details('case','a','contact',s).communications.some(x=>x.id==='collision-central'));
+});
+test('Manuell bearbeitete Rückmeldedokumentation bleibt bei späterem Autosave erhalten',()=>{
+ const row=db.prepare("SELECT data_json FROM case_doku_entries WHERE id='ab-followup-reply'").get(),d=JSON.parse(row.data_json);d.freeDetail='Manuelle Gesprächsdokumentation';db.prepare("UPDATE case_doku_entries SET data_json=? WHERE id='ab-followup-reply'").run(JSON.stringify(d));
+ const i={scope:'case',caseId:'a',id:'contact',targetCaseId:'a',followupId:'reply',personId:'p',patch:{name:'Befund',dueAt:'2026-10-01',description:'Neue Absprache'}};
+ const v=F.save(i,s).version;F.save({...i,baseVersion:v,patch:{...i.patch,dueAt:'2026-10-02'}},s);assert.equal(JSON.parse(db.prepare("SELECT data_json FROM case_doku_entries WHERE id='ab-followup-reply'").get().data_json).freeDetail,d.freeDetail);
+ assert.throws(()=>F.save({...i,scope:'office',caseId:'',personId:'',baseVersion:v},s),e=>e.status===409);
+});
+test('Deutsche Dokumentationsdaten werden im Kommunikationsverlauf chronologisch einsortiert',()=>{
+ for(const [id,date] of [['january','31.01.2026'],['february','2026-02-01'],['december','01.12.2026']])db.prepare('INSERT INTO case_doku_entries(id,case_id,data_json) VALUES(?,?,?)').run(id,'a',JSON.stringify({date,detail:id,contactLink:{scope:'case',caseId:'a',contactId:'contact'}}));
+ const items=[];let cursor;do{const page=A.communicationPage('case','a','contact',s,cursor);items.push(...page.items);cursor=page.nextCursor}while(cursor);assert.deepEqual(items.filter(x=>['january','february','december'].includes(x.id)).map(x=>x.id),['december','february','january']);
+});
+test('Zurückgestellte E-Mail bleibt auch nach ihrer Dokumentation als Wiedervorlage sichtbar',()=>{
+ db.prepare("INSERT INTO mail_snoozes(id,account_id,folder,message_id,wake_at,owner_user_id) VALUES('snooze-audit','public','INBOX','<just-arrived>','2026-12-31T09:00:00Z',1)").run();
+ db.prepare('INSERT INTO case_doku_entries(id,case_id,data_json) VALUES(?,?,?)').run('documented-mail','a',JSON.stringify({date:'2026-12-01',detail:'Dokumentierte Mail',mailMessageId:'<just-arrived>',contactLink:{scope:'case',caseId:'a',contactId:'contact'}}));
+ const items=A.details('case','a','contact',s).communications;assert.equal(items.find(x=>x.id==='snooze:snooze-audit')?.workspaceId,'mail:snooze-audit');assert.ok(!items.some(x=>x.kind==='mail'&&x.uid==='9000'));
 });
 test.after(()=>{db.close();fs.rmSync(dir,{recursive:true,force:true})});

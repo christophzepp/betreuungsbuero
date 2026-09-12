@@ -70,6 +70,7 @@
 #addressbookModern .am-tabs{display:flex;gap:14px;border-bottom:1px solid var(--am-line);overflow-x:auto;margin-top:20px}
 #addressbookModern .am-tabs .am-btn{white-space:nowrap;flex:none}
 #addressbookModern .am-section{margin:18px 0;padding-bottom:15px;border-bottom:1px solid var(--am-line)}
+#addressbookModern :is(.am-section,.am-tab-body)>.am-btn{max-width:100%;margin:0 6px 6px 0}
 #addressbookModern .am-info{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;padding:9px 0;font-size:13px;overflow-wrap:anywhere}
 #addressbookModern .am-info>div{min-width:0}
 #addressbookModern .am-info>.am-btn{font-size:11px;flex:none;padding:5px;min-height:30px}
