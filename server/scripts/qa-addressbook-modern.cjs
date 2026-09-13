@@ -21,6 +21,7 @@ seed('doctor','a',{institution:'Praxis Dr. Sommer',role:'Hausärztin',status:'Ak
 seed('ended','a',{institution:'Frühere Praxis',role:'Hausarzt',status:'Beendet',_category:'gesundheit'});
 seed('other','b',{institution:'Vermietung Nebenstadt',role:'Vermieter',status:'Aktiv',fileNumber:'B-900',_category:'wohnen'});
 db.prepare('INSERT INTO office_contacts(id,data_json) VALUES(?,?)').run('office',JSON.stringify({institution:'Büro-Kontakt',role:'Notarin',email:'buero@example.org'}));
+if(process.env.QA_FAX_COMMUNICATION)require('./qa-addressbook-fax-communication.cjs').setup(db);
 if(process.env.QA_ORGANIZER)require('./qa-addressbook-organizer.cjs').setup(db);
 if(process.env.QA_CONTACT_TOOLS)require('./qa-addressbook-contact-tools.cjs').setup(db);
 if(process.env.QA_MAILVCARD)require('./qa-addressbook-mail-vcard.cjs').setup(db);
@@ -44,6 +45,7 @@ let server,browser;
   document.getElementById('loginGateOverlay')?.remove();window.showImportedAddressbook();
  });
  await page.locator('#addressbookModern').waitFor();await page.waitForTimeout(300);
+ if(process.env.QA_FAX_COMMUNICATION){await require('./qa-addressbook-fax-communication.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_COMPACT_LAYOUT){await require('./qa-addressbook-compact-layout.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_DISPLAY_BUGS){await require('./qa-addressbook-display-bugs.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_ORGANIZER){await require('./qa-addressbook-organizer.cjs')({page,mobile,db,errors});await page.close();continue;}
@@ -71,7 +73,7 @@ let server,browser;
  await check('Vollständige Kontaktaktionen und Ansprechpartner sind erreichbar',async()=>{
   await page.locator('#amPerson').selectOption('sach');assert.match(await page.locator('.am-tab-body').innerText(),/lea@example.org/);
   for(const t of ['Für aktuelles Dokument verwenden','Dokumentation anlegen','E-Mail intern','E-Mail extern'])assert.equal(await page.getByRole('button',{name:t,exact:true}).isVisible(),true,t);
-  await page.locator('.am-more summary').click();for(const t of ['Daten kopieren','Faxnummer kopieren','Beenden','Löschen'])assert.equal(await page.getByRole('button',{name:t,exact:true}).isVisible(),true,t);await page.locator('.am-more summary').click();
+  await page.locator('.am-more summary').click();for(const t of ['Daten kopieren','Beenden','Löschen'])assert.equal(await page.getByRole('button',{name:t,exact:true}).isVisible(),true,t);await page.locator('.am-more summary').click();
  });
  if(!mobile){
   const before=await page.locator('.am-list-pane').boundingBox(),grip=await page.locator('.am-resizer').boundingBox();await page.mouse.move(grip.x+4,grip.y+100);await page.mouse.down();await page.mouse.move(grip.x+90,grip.y+100);await page.mouse.up();const after=await page.locator('.am-list-pane').boundingBox();assert.ok(after.width>before.width+50);
