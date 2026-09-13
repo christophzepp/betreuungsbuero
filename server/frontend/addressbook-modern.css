@@ -303,3 +303,54 @@ html.mobile-online-active #modal.am-modal #addressbookModern{padding:12px 10px 0
  #addressbookModern.am-show-detail .am-tools{display:grid;grid-template-columns:minmax(0,1fr)}
  #addressbookModern.am-show-detail .am-tools>:not(.ab-case-switcher):not(.am-current-case){display:none}
 }
+
+/* Gemeinsames Formular und fünf Detailansichten. */
+#addressbookModern .am-contact-sync{display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px}
+#addressbookModern .am-contact-sync:empty{display:none}
+#addressbookModern .am-contact-sync .am-sub{font-size:11px}
+#addressbookModern .am-contact-sync .am-btn{padding:2px 4px;min-height:26px;font-size:11px}
+#addressbookModern .am-tabs .am-btn{font-size:12px}
+@container contact-detail (min-width:441px) and (max-width:620px){
+ #addressbookModern .am-tabs .am-tab-label{display:block}
+ #addressbookModern .am-tabs .am-icon{display:none}
+ #addressbookModern .am-tab-caption{display:none}
+}
+#addressbookModern .am-editor-section{border:1px solid var(--am-line);border-radius:10px;margin:12px 0;min-width:0}
+#addressbookModern .am-editor-section>summary,#addressbookModern .am-overview-fold>summary{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 14px;font-size:13px;font-weight:600;cursor:pointer;color:var(--am-ink)}
+#addressbookModern .am-editor-section>summary:after,#addressbookModern .am-overview-fold>summary:after{content:'⌄';font-size:16px;transition:transform .15s}
+#addressbookModern .am-editor-section[open]>summary:after,#addressbookModern .am-overview-fold[open]>summary:after{transform:rotate(180deg)}
+#addressbookModern .am-editor-section-body{padding:4px 14px 14px;display:grid;gap:14px;min-width:0}
+#addressbookModern .am-editor-section:not([open])>.am-editor-section-body{display:none}
+#addressbookModern .am-editor-cards{display:grid;gap:12px;min-width:0}
+#addressbookModern .am-editor-cards:empty{display:none}
+#addressbookModern .am-editor-card{display:grid;gap:12px;min-width:0;width:100%;margin:0;padding:12px;border:1px solid var(--am-line);border-radius:8px;background:var(--am-bg)}
+#addressbookModern .am-editor-card legend{font-size:12px;font-weight:600;padding:0 5px;overflow-wrap:anywhere;max-width:100%}
+#addressbookModern .am-editor-section-body>.am-btn,#addressbookModern .am-editor-card>.am-btn{justify-self:start}
+#addressbookModern .am-edit .am-form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+#addressbookModern .am-edit .am-wide{grid-column:1/-1}
+#addressbookModern :is(.am-editor-card,.am-label-editor) textarea{height:auto;min-height:64px;max-height:none;resize:vertical}
+#addressbookModern .am-check-label{display:flex;align-items:center;gap:8px;cursor:pointer}
+#addressbookModern .am-label-editor{display:grid;gap:8px;min-width:0}
+#addressbookModern .am-label-editor h3{margin:0}
+#addressbookModern .am-label-entry{display:flex;align-items:end;gap:8px}
+#addressbookModern .am-label-entry label{flex:1;min-width:0}
+#addressbookModern .am-label-entry .am-btn{flex:none}
+#addressbookModern .am-editor-image{grid-template-columns:96px minmax(0,1fr);align-items:start}
+#addressbookModern .am-editor-image-preview{min-width:0;padding-top:8px}
+#addressbookModern .am-editor-image-preview .am-image-preview{width:80px;height:80px;object-fit:contain}
+#addressbookModern .am-editor-image-controls{display:grid;gap:10px;min-width:0}
+#addressbookModern .am-editor-image-controls .am-btn{justify-self:start}
+#addressbookModern .am-overview-fold{border:1px solid var(--am-line);border-radius:8px;margin:12px 0;padding:0 10px}
+#addressbookModern .am-overview-fold>summary{padding-inline:0}
+#addressbookModern .am-overview-edit-links{display:flex;flex-wrap:wrap;gap:6px;border-top:1px solid var(--am-line);padding-top:10px}
+#addressbookModern .am-info-value a.am-btn{margin-left:8px;font-size:11px;padding:3px 8px;min-height:28px}
+#addressbookModern .am-sync-dialog{position:fixed;inset:0;margin:auto;width:min(760px,calc(100vw - 32px));height:fit-content;max-height:calc(100dvh - 48px);padding:20px;border:1px solid var(--am-line);border-radius:14px;background:var(--am-bg);color:var(--am-ink);overflow:auto;box-shadow:0 15px 60px #0004}
+#addressbookModern .am-sync-dialog::backdrop{background:#13273888}
+#addressbookModern .am-sync-dialog-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+#addressbookModern .am-sync-dialog-body .am-section{display:grid;gap:10px}
+@container contact-detail (max-width:500px){
+ #addressbookModern .am-edit .am-form-grid{grid-template-columns:minmax(0,1fr)}
+ #addressbookModern .am-editor-section-body{padding:4px 10px 12px}
+ #addressbookModern .am-editor-card{padding:10px}
+ #addressbookModern .am-editor-image{grid-template-columns:minmax(0,1fr)}
+}

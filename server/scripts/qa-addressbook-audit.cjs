@@ -1,6 +1,7 @@
 'use strict';
 const assert=require('node:assert/strict');
 module.exports=async({page,mobile,db,errors})=>{
+ const editor=require('./qa-addressbook-editor-helpers.cjs')(page);
  const check=async(label,fn)=>{await fn();console.log('PASS '+(mobile?'Mobil':'Desktop')+' '+label)};
  const choose=async text=>{if(mobile&&await page.getByRole('button',{name:'← Kontakte',exact:true}).isVisible())await page.getByRole('button',{name:'← Kontakte',exact:true}).click();await page.locator('.am-row-open').filter({hasText:text}).click();await page.locator('.am-tab-body .am-section').first().waitFor()};
  await check('Ungültiger Excel-Import verändert weder Kontakte noch Kategoriezuordnung',async()=>{
@@ -21,11 +22,11 @@ module.exports=async({page,mobile,db,errors})=>{
  });
  await check('Anschriftenkonflikt erhält fremde Änderungen und weitere Anschriften',async()=>{
   const row=JSON.parse(db.prepare("SELECT data_json FROM case_contacts WHERE id='court'").get().data_json);row.addresses=[{id:'post',label:'Postanschrift',street:'Alter Weg',city:'Altstadt'}];db.prepare("UPDATE case_contacts SET data_json=? WHERE id='court'").run(JSON.stringify(row));
-  await choose('Amtsgericht');await page.getByRole('button',{name:'Anschriften',exact:true}).click();await page.getByRole('button',{name:'Anschrift bearbeiten',exact:true}).click();
+  await choose('Amtsgericht');await editor.edit('addresses');
   row.addresses[0].city='Parallelstadt';row.addresses.push({id:'visit',label:'Besuchsanschrift',street:'Besuchsweg'});db.prepare("UPDATE case_contacts SET data_json=? WHERE id='court'").run(JSON.stringify(row));
-  await page.locator('[name=street]').fill('Mein Weg');await page.getByRole('button',{name:'Aktuellen Stand prüfen',exact:true}).waitFor();page.once('dialog',d=>d.accept());await page.getByRole('button',{name:'Aktuellen Stand prüfen',exact:true}).click();await page.waitForFunction(()=>document.querySelector('.am-save')?.textContent==='Gespeichert');
+  await page.locator('[data-address-id=post]').getByLabel('Straße',{exact:true}).fill('Mein Weg');await page.getByRole('button',{name:'Änderungskonflikt auflösen',exact:true}).waitFor();page.once('dialog',d=>d.accept());await page.getByRole('button',{name:'Änderungskonflikt auflösen',exact:true}).click();await page.waitForFunction(()=>document.querySelector('.am-save')?.textContent.startsWith('Gespeichert'));
   const saved=JSON.parse(db.prepare("SELECT data_json FROM case_contacts WHERE id='court'").get().data_json);assert.equal(saved.addresses[0].street,'Mein Weg');assert.equal(saved.addresses[0].city,'Parallelstadt');assert.equal(saved.addresses.length,2);
-  await page.locator('.am-small-form button[type=submit]').click();await page.locator('.am-small-form').waitFor({state:'detached'});
+  await editor.done();
  });
  await check('Fallangaben lassen sich nach einer parallelen Änderung ohne Datenverlust speichern',async()=>{
   await page.getByRole('button',{name:'Fälle & Standard',exact:true}).click();await page.getByRole('button',{name:'Fallangaben bearbeiten',exact:true}).click();
@@ -36,7 +37,7 @@ module.exports=async({page,mobile,db,errors})=>{
  });
  await check('Zentrale Vertretung bleibt bei gleichlautender Fallkontakt-ID eindeutig',async()=>{
   const row=JSON.parse(db.prepare("SELECT data_json FROM case_contacts WHERE id='court'").get().data_json);row.substituteContactId='office';db.prepare("UPDATE case_contacts SET data_json=? WHERE id='court'").run(JSON.stringify(row));
-  await page.evaluate(()=>{state.caseData.contacts.push({id:'office',institution:'Anderer Fallkontakt',status:'Aktiv'});window.phase5RenderAddressbookV154()});await choose('Amtsgericht');await page.getByRole('button',{name:'Erreichbarkeit',exact:true}).click();await page.getByRole('button',{name:'Vertretung: Büro-Kontakt',exact:true}).click();await page.locator('.am-detail h2').filter({hasText:'Büro-Kontakt'}).waitFor();
+  await page.evaluate(()=>{state.caseData.contacts.push({id:'office',institution:'Anderer Fallkontakt',status:'Aktiv'});window.phase5RenderAddressbookV154()});await choose('Amtsgericht');await page.getByRole('button',{name:'Kontaktdaten',exact:true}).click();await page.getByRole('button',{name:'Vertretung: Büro-Kontakt',exact:true}).click();await page.locator('.am-detail h2').filter({hasText:'Büro-Kontakt'}).waitFor();
  });
  await check('Verknüpfte Rückmeldung öffnet ihren Eintrag und den richtigen Bürokontakt',async()=>{
   const id=mobile?'audit-mobile':'audit-desktop';require('../src/modules/contacts/addressbook-followup').save({scope:'office',id:'office',targetCaseId:'a',followupId:id,patch:{name:'Rückruf Büro',dueAt:'2026-10-15',description:'Notiz'}},{userId:1,isAdmin:true});
@@ -44,6 +45,6 @@ module.exports=async({page,mobile,db,errors})=>{
   await page.getByRole('button',{name:'Kommunikation',exact:true}).click();await page.locator('.am-section').filter({has:page.getByRole('heading',{name:'Wiedervorlage: Rückruf Büro',exact:true})}).first().getByRole('button',{name:'Wiedervorlage öffnen',exact:true}).click();
   await page.locator('#wiedervorlagenWorkspace').waitFor();await page.getByRole('button',{name:'Kontakt öffnen',exact:true}).click();await page.locator('.am-detail h2').filter({hasText:'Büro-Kontakt'}).waitFor();
  });
- for(const theme of ['light','dark']){await choose('Büro-Kontakt');await page.getByRole('button',{name:'Erreichbarkeit',exact:true}).click();await page.getByRole('button',{name:'Erreichbarkeit bearbeiten',exact:true}).click();await page.evaluate(t=>document.documentElement.dataset.theme=t,theme);if(mobile)await page.setViewportSize({width:320,height:640});assert.equal(await page.locator('#addressbookModern').evaluate(e=>e.scrollWidth>e.clientWidth+1),false);await page.screenshot({path:'/tmp/addressbook-audit-'+(mobile?'mobile':'desktop')+'-'+theme+'.png'});await page.locator('.am-small-form button[type=submit]').click();await page.locator('.am-small-form').waitFor({state:'detached'})}
+ for(const theme of ['light','dark']){await choose('Büro-Kontakt');await page.getByRole('button',{name:'Kontaktdaten',exact:true}).click();await editor.edit('availability');await page.evaluate(t=>document.documentElement.dataset.theme=t,theme);if(mobile)await page.setViewportSize({width:320,height:640});assert.equal(await page.locator('#addressbookModern').evaluate(e=>e.scrollWidth>e.clientWidth+1),false);await page.screenshot({path:'/tmp/addressbook-audit-'+(mobile?'mobile':'desktop')+'-'+theme+'.png'});await editor.done()}
  assert.deepEqual(errors,[]);
 };

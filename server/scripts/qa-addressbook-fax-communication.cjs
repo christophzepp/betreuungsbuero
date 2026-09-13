@@ -22,7 +22,7 @@ module.exports=async({page,mobile,db,errors})=>{
   await page.evaluate(()=>{window.__qaComposeTo=window.__mxComposeTo;window.__mxComposeTo=target=>{window.__qaMail=target}});
   const compose=async(email,personId)=>{await page.getByRole('link',{name:email,exact:true}).click();const target=await page.evaluate(()=>window.__qaMail);assert.equal(target.email,email);assert.equal(target.contactLink.contactId,'court');assert.equal(target.contactLink.personId,personId);assert.equal(target.contactLink.snapshot.email,email)};
   for(const label of ['E-Mail','Telefon','Fax','Aktenzeichen']){const row=page.locator('.am-info').filter({has:page.locator('.am-sub').filter({hasText:new RegExp('^'+label+'$')})});assert.equal(await row.locator('svg[aria-hidden=true]').count(),1)}
-  await compose('gericht@example.org','');await page.locator('#amPerson').selectOption('sach');await compose('lea@example.org','sach');await page.getByRole('button',{name:'Kontaktwege',exact:true}).click();await compose('abteilung@example.org','sach');await page.locator('#amPerson').selectOption('');await compose('poststelle@example.org','');
+  await compose('gericht@example.org','');await page.locator('#amPerson').selectOption('sach');await compose('lea@example.org','sach');await compose('abteilung@example.org','sach');await page.locator('#amPerson').selectOption('');await compose('poststelle@example.org','');
   await page.evaluate(()=>window.__mxComposeTo=window.__qaComposeTo);await page.getByRole('button',{name:'Kontaktdaten',exact:true}).click();
  });
  await check('Beenden fragt nach; Abbrechen erhält den Kontakt, Bestätigen lässt sich wieder aktivieren',async()=>{
@@ -32,7 +32,7 @@ module.exports=async({page,mobile,db,errors})=>{
  });
  await check('Ansprechpartner und benannte Faxwege verwenden jeweils ihre eigene Nummer',async()=>{
   await page.locator('#amPerson').selectOption('sach');await openFax('0123/66');assert.equal(await page.evaluate(()=>window.__qaCopied.at(-1)),'0123/66');
-  await page.getByRole('button',{name:'Kontaktwege',exact:true}).click();await openFax('0123/77');assert.equal(await page.evaluate(()=>window.__qaCopied.at(-1)),'0123/77');
+  await openFax('0123/77');assert.equal(await page.evaluate(()=>window.__qaCopied.at(-1)),'0123/77');
   await page.locator('#amPerson').selectOption('');await openFax('0123/88');assert.equal(await page.evaluate(()=>window.__qaCopied.at(-1)),'0123/88');
  });
  await check('Gesperrte Zwischenablage verhindert das Öffnen nicht; ungültige Versandadresse wird abgefangen',async()=>{
@@ -68,17 +68,17 @@ module.exports=async({page,mobile,db,errors})=>{
   if(mobile)await page.setViewportSize({width:320,height:640});else await page.locator('.am-resizer').focus().then(()=>page.keyboard.press('End'));
   await noOverflow();await page.getByRole('heading',{name:'Versendetes Schreiben',exact:true}).scrollIntoViewIfNeeded();await screenshot('narrow');
  });
- await check('Alle zehn Reiter bleiben in einer Zeile; Kontaktaktionen erscheinen ausschließlich bei Kontaktdaten',async()=>{
+ await check('Alle fünf Reiter bleiben in einer Zeile; Kontaktaktionen erscheinen ausschließlich bei Kontaktdaten',async()=>{
   await choose('court');
   for(const size of mobile?[{width:390,height:844},{width:320,height:640}]:[{width:1440,height:1000},{width:768,height:640}]){
    await page.setViewportSize(size);
    for(const split of mobile?[42]:[28,42,65]){
     await page.locator('.am-board').evaluate((e,v)=>e.style.setProperty('--am-split',v+'%'),split);
-    const geometry=await page.locator('.am-tabs').evaluate(e=>({count:e.children.length,rows:new Set([...e.children].map(b=>Math.round(b.getBoundingClientRect().top))).size,overflow:e.scrollWidth>e.clientWidth+1,clipped:[...e.children].some(b=>b.scrollWidth>b.clientWidth+1),small:[...e.children].some(b=>b.getBoundingClientRect().width<24)}));assert.deepEqual(geometry,{count:10,rows:1,overflow:false,clipped:false,small:false},JSON.stringify({size,split,geometry}));
+    const geometry=await page.locator('.am-tabs').evaluate(e=>({count:e.children.length,rows:new Set([...e.children].map(b=>Math.round(b.getBoundingClientRect().top))).size,overflow:e.scrollWidth>e.clientWidth+1,clipped:[...e.children].some(b=>b.scrollWidth>b.clientWidth+1),small:[...e.children].some(b=>b.getBoundingClientRect().width<24)}));assert.deepEqual(geometry,{count:5,rows:1,overflow:false,clipped:false,small:false},JSON.stringify({size,split,geometry}));
     if(split===42){await page.locator('.am-detail').evaluate(e=>e.scrollTop=0);await screenshot('tabs-'+size.width)}
    }
   }
-  for(const key of ['data','cases','people','addresses','ways','extras','sync','availability','history','communication']){const b=page.locator('[data-tab='+key+']');await b.click();assert.equal(await b.getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.am-more summary').isVisible(),key==='data');assert.equal(await page.locator('.am-tab-caption').innerText(),await b.getAttribute('aria-label'))}
+  for(const key of ['data','people','cases','communication','history']){const b=page.locator('[data-tab='+key+']');await b.click();assert.equal(await b.getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.am-more summary').isVisible(),key==='data');assert.equal(await page.locator('.am-tab-caption').innerText(),await b.getAttribute('aria-label'))}
   await page.getByRole('button',{name:'Kontaktdaten',exact:true}).click();assert.equal(await page.locator('.am-more').evaluate(e=>e.open),false);
  });
  assert.deepEqual(errors,[]);

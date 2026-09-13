@@ -61,7 +61,7 @@ module.exports=async({page,mobile,db,errors})=>{
  await check('Alle Detailansichten bleiben hell und dunkel ohne seitlichen Überlauf',async()=>{
   await open();if(mobile)await page.setViewportSize({width:320,height:640});
   for(const theme of ['light','dark']){await page.evaluate(t=>document.documentElement.dataset.theme=t,theme);
-   for(const tab of ['data','cases','people','addresses','ways','extras','sync','availability','history','communication']){
+   for(const tab of ['data','people','cases','communication','history']){
     await page.locator('[data-tab='+tab+']').click();await page.waitForFunction(()=>!document.querySelector('.am-tab-body')?.textContent.includes('Kontaktinformationen werden geladen'));
     assert.equal(await page.locator('.am-detail').evaluate(e=>e.scrollWidth>e.clientWidth+1),false,theme+' '+tab);
     if(mobile){const back=await page.getByRole('button',{name:'← Kontakte',exact:true}).boundingBox();assert.ok(back&&back.y>=0&&back.y+back.height<640,'Rückkehr zur Liste bleibt sichtbar')}
