@@ -7,6 +7,7 @@ for(const [kind,close] of [['css','</style>'],['js','</script>']]){
  let source=fs.readFileSync(path.resolve(__dirname,'../frontend/addressbook-modern.'+kind),'utf8');
  if(kind==='js')source=source.replace('/* ADDRESSBOOK-EXTRAS-UI */',fs.readFileSync(path.resolve(__dirname,'../frontend/addressbook-extras-ui.js'),'utf8'));
  if(kind==='js')source=source.replace('/* ADDRESSBOOK-EDITOR-UI */',fs.readFileSync(path.resolve(__dirname,'../frontend/addressbook-editor.js'),'utf8'));
+ if(kind==='js')source=source.replace('/* ADDRESSBOOK-DEMO-CASES */',fs.readFileSync(path.resolve(__dirname,'../frontend/addressbook-demo-cases.js'),'utf8'));
  if(kind==='css')source+='\n'+fs.readFileSync(path.resolve(__dirname,'../frontend/addressbook-extras.css'),'utf8');
  if(kind==='js')source=fs.readFileSync(path.resolve(__dirname,'../frontend/addressbook-extras-data.js'),'utf8')+'\n'+fs.readFileSync(path.resolve(__dirname,'../frontend/addressbook-contact-tools.js'),'utf8')+'\n'+fs.readFileSync(path.resolve(__dirname,'../frontend/addressbook-vcard.js'),'utf8')+'\n'+source;
  const block=start+'\n'+source+'\n'+end;
