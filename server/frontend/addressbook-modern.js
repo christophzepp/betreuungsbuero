@@ -172,11 +172,25 @@ function drawTab(c){
    s.append(B('Fallangaben bearbeiten',()=>editAssociation(c,a)),B('Weitere Standardempfänger',()=>editStandards(c,a)));for(const [purpose,pid] of Object.entries(a.standards||{}))if(!['document','mail'].includes(purpose))s.append(E('p','am-sub',purposeLabel(purpose)+' · '+((data.people||[]).find(p=>p.id===pid)?.name||'Institution')));
    if(M.bundle.centralId&&online())s.append(B('Zentrale Zuordnung lösen',()=>detach(c,a),'quiet'));body.append(s)}
   if(online())body.append(B('+ Weiterem Fall zuordnen',()=>assign(c),'primary'));else body.append(E('p','am-sub','Zentrale Fallzuordnungen werden im Online-Modus verwaltet.'));
- }else if(M.tab==='history'){
-  if(!M.bundle.history.length)body.append(E('p','am-empty','Noch keine protokollierten Änderungen. Neue Änderungen werden mit Datum, Bearbeiter und vorherigem Wert erfasst.'));
-  for(const h of M.bundle.history){const s=section(new Date(h.at).toLocaleString('de-DE')+' · '+h.actor);for(const [k,v] of Object.entries(h.changes)){s.append(E('p','am-history-line',(LABELS[k]||k)+': '+displayValue(v.before)+' → '+displayValue(v.after)))}if(Object.keys(h.changes).some(k=>Object.hasOwn(LABELS,k)&&k!=='_standardRecipients'))s.append(B('Diese Änderung rückgängig machen',()=>restore(c,h)));else s.append(E('p','am-sub','Fallzuordnungen und Standardempfänger lassen sich unter „Fälle & Standard“ anpassen.'));body.append(s)}
-  if(M.bundle.historyCursor)body.append(B('Weitere Änderungen laden',()=>loadMore(c,'history')));
- }else drawCommunication(body,c);
+ }else if(M.tab==='history')drawHistory(body,c);else drawCommunication(body,c);
+}
+function detailView(parent,title,description,cls){const view=E('section','am-detail-view '+cls),head=E('header','am-view-head');view.setAttribute('aria-label',title);head.append(E('h3','',title),E('p','am-sub',description));view.append(head);parent.append(view);return view}
+function emptyView(parent,title,description){const empty=E('div','am-view-empty');empty.append(E('h3','',title),E('p','am-sub',description));parent.append(empty)}
+function historyValue(key,value){if(key==='preferredChannel')return CHANNELS[value]||displayValue(value);if(['absentFrom','absentUntil'].includes(key))return dateLabel(value)||'—';return displayValue(value)}
+function drawHistory(body,c){
+ const view=detailView(body,'Änderungsverlauf','Nachvollziehen, wann und von wem Kontaktdaten geändert wurden.','am-history');
+ if(!M.bundle.history.length)emptyView(view,'Noch keine protokollierten Änderungen','Sobald Sie Kontaktdaten ändern, erscheinen hier der Zeitpunkt, der Bearbeiter sowie die bisherigen und neuen Werte.');
+ for(const h of M.bundle.history){
+  const card=section(dateLabel(h.at)+' · '+h.actor);card.classList.add('am-view-card');
+  for(const [key,value] of Object.entries(h.changes)){
+   const change=E('div','am-history-change'),values=E('div','am-history-values');change.append(E('strong','am-history-field',LABELS[key]||key));
+   for(const [label,field] of [['Bisher','before'],['Neu','after']]){const cell=E('div','am-history-value');cell.append(E('span','am-sub',label),E('div','am-note',historyValue(key,value[field])));values.append(cell)}
+   change.append(values);card.append(change);
+  }
+  if(Object.keys(h.changes).some(k=>Object.hasOwn(LABELS,k)&&k!=='_standardRecipients')){const actions=E('div','am-view-actions');actions.append(B('Diese Änderung rückgängig machen',()=>restore(c,h)));card.append(actions)}else card.append(E('p','am-sub','Fallzuordnungen und Standardempfänger lassen sich unter „Fälle & Standard“ anpassen.'));
+  view.append(card);
+ }
+ if(M.bundle.historyCursor)view.append(B('Weitere Änderungen laden',()=>loadMore(c,'history')));
 }
 function drawCommunication(body,c){
  const view=E('section','am-communication'),head=E('header','am-communication-head'),actions=E('div','am-communication-actions');view.setAttribute('aria-label','Kommunikationsverlauf');
@@ -443,8 +457,18 @@ function drawAddresses(body,c,d){
 }
 function editAddress(c,a){const id=a?.id||crypto.randomUUID();contactForm(c,a?'Anschrift bearbeiten':'Neue Anschrift',[['label','Bezeichnung',a?.label],...['street','house','houseLetter','postal','city','postbox','country'].map(k=>[k,k==='country'?'Land':LABELS[k],a?.[k]])],(v,base)=>{const all=[...(base.addresses||[])],i=all.findIndex(x=>x.id===id);if(i<0)all.push({...v,id});else all[i]={...v,id};return {addresses:all}},d=>(d.addresses||[]).find(x=>x.id===id)||{})}
 function drawAvailability(body,c,d){
- const s=section('Erreichbarkeit');info(s,'Bevorzugter Kontaktweg',CHANNELS[d.preferredChannel]||'Keine Vorgabe');info(s,'Telefonzeiten',d.phoneHours);info(s,'Abwesend ab',dateLabel(d.absentFrom));info(s,'Abwesend bis',dateLabel(d.absentUntil));info(s,'Hinweis',d.absenceNote);const substitute=(window.__baModernContacts?.()||[]).find(x=>x.id===d.substituteContactId);if(d.substituteContactId)s.append(B('Vertretung: '+(substitute?name(substitute):'Zentralen Kontakt öffnen'),()=>openContact(d.substituteContactId)));s.append(B('Erreichbarkeit bearbeiten',()=>editAvailability(c,d)));body.append(s);
- const p=person();if(p){const s=section(p.name);info(s,'Telefonzeiten',p.phoneHours);info(s,'Abwesenheit',[dateLabel(p.absentFrom),dateLabel(p.absentUntil),p.absenceNote].filter(Boolean).join(' · '));const replacement=(d.people||[]).find(x=>x.id===p.substitutePersonId);if(replacement)s.append(B('Vertretung: '+replacement.name,()=>{$('#amPerson').value=replacement.id;M.personIds.set(identity(c),replacement.id);drawTab(c)}));s.append(B('Ansprechpartner bearbeiten',()=>editPerson(c,p)));body.append(s)}
+ const view=detailView(body,'Erreichbarkeit','Bevorzugte Kontaktwege, Telefonzeiten, Abwesenheiten und Vertretung.','am-availability'),actions=E('div','am-view-actions');actions.append(B('Erreichbarkeit bearbeiten',()=>editAvailability(c,d),'primary'));view.append(actions);
+ const hasDetails=profile=>['preferredChannel','phoneHours','absentFrom','absentUntil','absenceNote','substituteContactId','substitutePersonId'].some(k=>profile[k]);
+ const fields=(card,profile)=>{const grid=E('div','am-availability-fields');info(grid,'Bevorzugter Kontaktweg',CHANNELS[profile.preferredChannel]);info(grid,'Telefonzeiten',profile.phoneHours);info(grid,'Abwesend ab',dateLabel(profile.absentFrom));info(grid,'Abwesend bis',dateLabel(profile.absentUntil));card.append(grid);info(card,'Hinweis',profile.absenceNote)};
+ if(hasDetails(d)){
+  const card=section('Allgemeiner Kontakt');card.classList.add('am-view-card');fields(card,d);
+  if(d.substituteContactId){const substitute=(window.__baModernContacts?.()||[]).find(x=>x.id===d.substituteContactId),links=E('div','am-view-actions');links.append(B('Vertretung: '+(substitute?name(substitute):'Zentralen Kontakt öffnen'),()=>openContact(d.substituteContactId)));card.append(links)}view.append(card);
+ }else emptyView(view,'Noch keine Erreichbarkeit hinterlegt','Hinterlegen Sie Telefonzeiten, Abwesenheiten, eine Vertretung oder den bevorzugten Kontaktweg für diesen Kontakt.');
+ const p=person();if(p){
+  const card=section(p.name);card.classList.add('am-view-card');card.append(E('p','am-sub','Ansprechpartner'));
+  if(hasDetails(p))fields(card,p);else card.append(E('p','am-sub','Für diesen Ansprechpartner sind noch keine eigenen Angaben zur Erreichbarkeit hinterlegt.'));
+  const links=E('div','am-view-actions'),replacement=(d.people||[]).find(x=>x.id===p.substitutePersonId);if(replacement)links.append(B('Vertretung: '+replacement.name,()=>{$('#amPerson').value=replacement.id;M.personIds.set(identity(c),replacement.id);drawTab(c)}));links.append(B('Ansprechpartner bearbeiten',()=>editPerson(c,p)));card.append(links);view.append(card);
+ }
 }
 async function editAvailability(c,d){
  if(online())await window.__baLoadServerBuero?.();const contacts=window.__baModernContacts?.()||api().contacts();const choices=contacts.filter(x=>x.__buero||(!x.__caseId&&x.id!==c.id)).filter(x=>x.id!==c.id&&x.id!==M.bundle.centralId).map(x=>[x.id,name(x)]);if(d.substituteContactId&&!choices.some(x=>x[0]===d.substituteContactId))choices.push([d.substituteContactId,'Bisherige Vertretung']);

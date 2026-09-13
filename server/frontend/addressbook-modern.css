@@ -78,22 +78,27 @@
 #addressbookModern .am-info>.am-btn{font-size:11px;flex:none;padding:5px;min-height:30px}
 #addressbookModern .am-contact-link{color:var(--am-accent);text-decoration:underline;text-underline-offset:2px;overflow-wrap:anywhere}
 #addressbookModern .am-contact-link:focus-visible{outline:2px solid var(--am-accent);outline-offset:3px;border-radius:2px}
-#addressbookModern .am-communication{display:grid;gap:16px;min-width:0;padding:20px 0 22px}
-#addressbookModern .am-communication :is(h3,p){margin:0;overflow-wrap:anywhere}
-#addressbookModern .am-communication-head{display:grid;gap:5px}
-#addressbookModern .am-communication-head h3{font-size:16px}
-#addressbookModern .am-communication-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;min-width:0}
-#addressbookModern .am-communication .am-btn{max-width:100%;overflow-wrap:anywhere}
+#addressbookModern :is(.am-communication,.am-detail-view){display:grid;gap:16px;min-width:0;padding:20px 0 22px}
+#addressbookModern :is(.am-communication,.am-detail-view) :is(h3,p){margin:0;overflow-wrap:anywhere}
+#addressbookModern :is(.am-communication-head,.am-view-head){display:grid;gap:5px}
+#addressbookModern :is(.am-communication-head,.am-view-head) h3{font-size:16px}
+#addressbookModern :is(.am-communication-actions,.am-view-actions){display:flex;flex-wrap:wrap;gap:8px;align-items:center;min-width:0}
+#addressbookModern :is(.am-communication,.am-detail-view) .am-btn{max-width:100%;overflow-wrap:anywhere}
 #addressbookModern .am-communication-sync{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;padding:8px 0;border-block:1px solid var(--am-line)}
 #addressbookModern .am-communication-sync p{flex:1 1 180px}
 #addressbookModern .am-communication-sync .am-btn{font-size:11px;padding:5px 7px;min-height:32px}
-#addressbookModern .am-communication-empty{display:grid;gap:7px;padding:20px;border:1px solid var(--am-line);border-radius:10px;background:var(--am-soft);text-align:left}
-#addressbookModern .am-communication-empty p{max-width:60ch}
+#addressbookModern :is(.am-communication-empty,.am-view-empty){display:grid;gap:7px;padding:20px;border:1px solid var(--am-line);border-radius:10px;background:var(--am-soft);text-align:left}
+#addressbookModern :is(.am-communication-empty,.am-view-empty) p{max-width:60ch}
 #addressbookModern .am-communication-list{display:grid;gap:12px;min-width:0}
-#addressbookModern .am-section.am-communication-entry{display:grid;gap:10px;margin:0;padding:16px;border:1px solid var(--am-line);border-radius:10px;min-width:0}
+#addressbookModern .am-section:is(.am-communication-entry,.am-view-card){display:grid;gap:10px;margin:0;padding:16px;border:1px solid var(--am-line);border-radius:10px;min-width:0}
 #addressbookModern .am-communication-meta{display:flex;align-items:center;flex-wrap:wrap;gap:6px 12px}
 #addressbookModern .am-communication-kind{font-size:11px;font-weight:600;color:var(--am-accent);background:var(--am-soft);border-radius:5px;padding:3px 7px}
 #addressbookModern .am-communication-entry .am-communication-actions{padding-top:2px}
+#addressbookModern .am-history-change{display:grid;gap:7px;min-width:0;padding:12px 0;border-top:1px solid var(--am-line)}
+#addressbookModern .am-history-field{font-size:12px;overflow-wrap:anywhere}
+#addressbookModern .am-history-values,#addressbookModern .am-availability-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:10px;min-width:0}
+#addressbookModern .am-history-value{display:grid;align-content:start;gap:4px;min-width:0;padding:10px 12px;background:var(--am-soft);border-radius:7px}
+#addressbookModern .am-availability-fields .am-info{padding:4px 0}
 #addressbookModern .am-note{white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px}
 #addressbookModern .am-history-line{font-size:12px;overflow-wrap:anywhere}
 #addressbookModern .am-empty{padding:30px 18px;text-align:center;color:var(--am-muted)}
