@@ -8,7 +8,7 @@ const $=s=>M.root?.querySelector(s),E=(t,cls,text)=>{const e=document.createElem
 const B=(label,action,cls='',skipFlush=false)=>{const b=E('button','am-btn '+cls,label);b.type='button';b.onclick=async()=>{if(b.disabled)return;b.disabled=true;try{if(skipFlush||await flush()){if(b.closest('.am-menu-body'))closeMenus();await action()}}catch(e){message(e.message,true)}finally{b.disabled=false;if(b.closest('.am-selection'))selectionCount()}};return b};
 const api=()=>window.__abModernLegacy;
 const online=()=>window.__appMode==='online';
-const activeCase=()=>String(window.__activeServerCaseId||window.caseIdentityOf?.(state)||'');
+const activeCase=()=>String((online()?window.__activeServerCaseId:'')||window.caseIdentityOf?.(state)||'');
 const ref=c=>({scope:c.__buero?'office':'case',caseId:c.__buero?'':String(c.__caseId||activeCase()),id:String(c.id||''),localKey:c.id?'':api().key(c)});
 const identity=c=>JSON.stringify([ref(c).scope,ref(c).caseId,c.id||api().key(c)]);
 const name=c=>[c.institution,[c.title,c.firstName,c.lastName].filter(Boolean).join(' ')].filter(Boolean).join(' – ')||c.role||'Unbenannter Kontakt';
@@ -125,6 +125,16 @@ async function loadDetails(c){
  const result=await request('contact?'+new URLSearchParams(r));if(token!==M.load||M.selected!==identity(c)||M.editor||M.small||M.utility)return null;M.bundle=result;await cacheBundle(result,r,false);return token===M.load?result:null;
 }
 function localCommunications(c){const r=ref(c),caseId=r.scope==='case'?r.caseId:activeCase(),cd=caseId===activeCase()?state.caseData:window.__onlineCaseCache?.get(caseId)?.data||(window.caseRegistry||[]).find(e=>e.id===caseId)?.state?.caseData;return (cd?.documentationEntries||[]).filter(e=>{const l=e.contactLink;return l&&(l.scope||'case')===r.scope&&(r.scope==='office'||!l.caseId||l.caseId===caseId)&&(c.id?l.contactId===c.id:!!l.contactKey&&l.contactKey===(c.key||window.phase5ContactKey?.(c)||api().key(c)))}).map(e=>({id:e.id,caseId,title:e.detail||e.type,date:e.date,text:e.freeDetail||e.note,contactType:e.contactType}))}
+function localAssociations(c){
+ const r=ref(c),current=activeCase(),cases=new Map((window.caseRegistry||[]).filter(e=>e?.state?.caseData).map(e=>[String(e.id),{label:e.label||window.caseLabelOf?.(e.state),data:e.state.caseData}]));
+ // Der offene Fall enthält die neuesten Eingaben; sein Registry-Schnappschuss kann älter sein.
+ cases.set(current,{label:window.caseLabelOf?.(state)||window.fullName?.()||'Aktueller Fall',data:state.caseData});
+ const associations=[],add=(caseId,contact)=>{const source=cases.get(caseId);associations.push({caseId,contactId:contact.id||'',label:source?.label||contact.__cases||'Geladener Fall',role:contact.role,fileNumber:contact.fileNumber,processNumber:contact.processNumber,customerNumber:contact.customerNumber,status:contact.status,standards:contact._standardRecipients||{},people:contact.people||[]})};
+ if(r.scope==='case')add(r.caseId,c);
+ // Nur ausdrückliche zentrale Verknüpfungen übernehmen, keine Gleichheit von Namen oder Kontakt-IDs unterstellen.
+ const central=r.scope==='office'?r.id:c.centralContactId;if(central)for(const [caseId,entry] of cases)for(const contact of entry.data.contacts||[]){if(!contact||contact.__merged||contact.centralContactId!==central)continue;if(r.scope==='case'&&caseId===r.caseId&&(c.id?contact.id===c.id:api().key(contact)===api().key(c)))continue;add(caseId,contact)}
+ return associations;
+}
 function contactIcon(kind){
  const paths={email:'M3 5h18v14H3z M3 5l9 7 9-7',phone:'M8 3H4a1 1 0 0 0-1 1c0 9.4 7.6 17 17 17a1 1 0 0 0 1-1v-4l-5-2-2 2a14 14 0 0 1-6-6l2-2z',fax:'M7 8V3h10v5 M7 16v5h10v-5 M6 18H3V8h18v10h-3 M7 12h1 M12 12h1 M17 12h1 M7 16h10',file:'M14 2H5v20h14V7z M14 2v5h5 M8 12h8 M8 16h6',data:'M3 4h18v16H3z M7 8h3v4H7z M6 16h5 M14 8h4 M14 12h4 M14 16h3',cases:'M3 6h7l2 2h9v12H3z M3 6V4h7l2 2h7v2',people:'M9 3a3 3 0 1 0 0 6 3 3 0 0 0 0-6 M3 21v-5a6 6 0 0 1 12 0v5 M16 3a3 3 0 0 1 0 6 M18 12a5 5 0 0 1 3 4v5',addresses:'M12 22S4 14 4 9a8 8 0 0 1 16 0c0 5-8 13-8 13 M12 6a3 3 0 1 0 0 6 3 3 0 0 0 0-6',ways:'M5 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4 M19 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4 M5 7v9a3 3 0 0 0 6 0V8a4 4 0 0 1 8 0v9',extras:'M3 3h8l10 10-8 8L3 11z M7 7h.01',sync:'M20 7a9 9 0 0 0-15-2L2 8 M2 2v6h6 M4 17a9 9 0 0 0 15 2l3-3 M22 22v-6h-6',availability:'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18 M12 7v5l3 2',history:'M3 11a9 9 0 1 1 2 7 M3 4v7h7 M12 7v5l4 2',communication:'M3 3h15v12H8l-5 4z M18 7h3v14l-5-3h-5v-3'};
  paths.star='m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9z';
@@ -181,12 +191,14 @@ function drawTab(c){
   for(const p of data.people||[]){const s=section(p.name);s.append(E('p','am-sub',[p.department,p.role,p.email,p.phone].filter(Boolean).join(' · ')),B('Auswählen',()=>{$('#amPerson').value=p.id;M.personIds.set(identity(c),p.id);M.tab='data';drawTab(c)}),B('Bearbeiten',()=>editPerson(c,p)),B('Entfernen',()=>deletePerson(c,p),'danger'));body.append(s)}
   body.append(B('+ Ansprechpartner',()=>editPerson(c,null),'primary'));
  }else if(M.tab==='cases'){
-  body.append(E('p','am-sub','Gemeinsame Stammdaten werden in allen zugeordneten Fällen aktualisiert. Aktenzeichen, Vorgangsnummer, Kundennummer und Rolle bleiben je Fall getrennt.'));
-  for(const a of M.bundle.associations){const s=section(a.label);s.append(E('p','am-sub',[a.role,a.fileNumber||'Ohne Aktenzeichen',a.customerNumber?'Kunde '+a.customerNumber:'',a.processNumber,a.status].filter(Boolean).join(' · ')));
+  const associations=online()?M.bundle.associations:localAssociations(c);
+  body.append(E('p','am-sub',online()?'Gemeinsame Stammdaten werden in allen zugeordneten Fällen aktualisiert. Aktenzeichen, Vorgangsnummer, Kundennummer und Rolle bleiben je Fall getrennt.':'Dieser Kontakt ist in den folgenden geladenen Fällen hinterlegt. Aktenzeichen, Vorgangsnummer, Kundennummer und Rolle gehören zum jeweiligen Fall.'));
+  for(const a of associations){const s=section(a.label);s.append(E('p','am-sub',[a.role,a.fileNumber||'Ohne Aktenzeichen',a.customerNumber?'Kunde '+a.customerNumber:'',a.processNumber,a.status].filter(Boolean).join(' · ')));
+   if(!online()){for(const [purpose,pid] of Object.entries(a.standards||{}))s.append(E('p','am-sub','Standard für '+purposeLabel(purpose)+' · '+(pid?(a.people.find(p=>p.id===pid)?.name||'Ansprechpartner'):'Institution')));body.append(s);continue}
    for(const [purpose,label] of [['document','Dokumente'],['mail','E-Mail']]){const marked=Object.hasOwn(a.standards||{},purpose)&&a.standards[purpose]===(person()?.id||'');s.append(B((marked?'✓ Standard für ':'Als Standard für ')+label,()=>setStandard(c,a,purpose,marked)))}
    s.append(B('Fallangaben bearbeiten',()=>editAssociation(c,a)),B('Weitere Standardempfänger',()=>editStandards(c,a)));for(const [purpose,pid] of Object.entries(a.standards||{}))if(!['document','mail'].includes(purpose))s.append(E('p','am-sub',purposeLabel(purpose)+' · '+((data.people||[]).find(p=>p.id===pid)?.name||'Institution')));
    if(M.bundle.centralId&&online())s.append(B('Zentrale Zuordnung lösen',()=>detach(c,a),'quiet'));body.append(s)}
-  if(online())body.append(B('+ Weiterem Fall zuordnen',()=>assign(c),'primary'));else body.append(E('p','am-sub','Zentrale Fallzuordnungen werden im Online-Modus verwaltet.'));
+  if(online())body.append(B('+ Weiterem Fall zuordnen',()=>assign(c),'primary'));else{if(!associations.length)emptyView(body,'Keine Fallzuordnung in den geladenen Fällen','Dieser Bürokontakt ist in den aktuell geladenen Fällen nicht verknüpft.');body.append(E('p','am-sub','Weitere Fälle zentral zuordnen und Standardempfänger festlegen ist im Online-Modus möglich.'))}
  }else if(M.tab==='history')drawHistory(body,c);else drawCommunication(body,c);
 }
 function detailView(parent,title,description,cls){const view=E('section','am-detail-view '+cls),head=E('header','am-view-head');view.setAttribute('aria-label',title);head.append(E('h3','',title),E('p','am-sub',description));view.append(head);parent.append(view);return view}
