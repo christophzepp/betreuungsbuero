@@ -5,7 +5,7 @@
 #addressbookModern .am-star{font-size:22px;min-width:36px;padding:4px 7px;flex:none;line-height:1.3}
 #addressbookModern .am-star[aria-pressed=true]{color:var(--am-accent);background:var(--am-soft)}
 #addressbookModern .am-row .am-star{border-color:transparent;background:transparent}
-#addressbookModern .am-contact-picture{width:64px;height:64px;object-fit:contain;border-radius:10px;float:right;margin:0 0 8px 12px;background:#fff}
+#addressbookModern .am-contact-picture{width:56px;height:56px;object-fit:contain;border:1px solid var(--am-line);border-radius:10px;flex:none;margin:0;background:#fff}
 #addressbookModern .am-row-picture{object-fit:contain;background:#fff}
 #addressbookModern .am-overview-controls{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
 #addressbookModern .am-overview-controls input,#addressbookModern .am-overview-controls select{flex:1 1 160px;min-width:0;max-width:100%}
@@ -18,7 +18,6 @@
 #addressbookModern input[type=file]{width:100%;min-width:0;max-width:100%;margin:12px 0;font-size:13px}
 #addressbookModern .am-detail>.am-btn{margin:4px}
 #addressbookModern .am-detail textarea{box-sizing:border-box;width:100%;max-width:100%;min-width:0;resize:vertical}
-#addressbookModern .am-detail-top{flex-wrap:wrap}
 #addressbookModern .am-overview-list .am-section{overflow-wrap:anywhere}
 #addressbookModern .am-section>.am-section{padding:12px;border:1px solid var(--am-line);border-radius:8px}
 @media(max-width:680px){

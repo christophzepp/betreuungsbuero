@@ -65,11 +65,34 @@
 #addressbookModern .am-resizer:after{content:'';position:absolute;top:45%;left:2px;width:2px;height:36px;background:var(--am-line);border-radius:3px}
 #addressbookModern .am-resizer:hover,#addressbookModern .am-resizer.dragging{background:var(--am-soft)}
 #addressbookModern .am-detail{min-width:0;overflow:auto;padding:22px 24px;scrollbar-gutter:stable;min-height:0;container-type:inline-size;container-name:contact-detail}
-#addressbookModern .am-detail-top{display:flex;gap:8px;justify-content:space-between;align-items:center;margin-bottom:18px}
+#addressbookModern .am-contact-header{display:grid;gap:14px;min-width:0}
+#addressbookModern .am-detail-top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 16px;align-items:start;min-width:0}
+#addressbookModern .am-contact-identity{display:flex;align-items:flex-start;gap:12px;min-width:0}
+#addressbookModern .am-contact-summary{display:grid;gap:8px;min-width:0}
+#addressbookModern .am-contact-summary h2{hyphens:auto}
+#addressbookModern .am-contact-meta{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;min-width:0}
+#addressbookModern .am-contact-meta .am-badge{flex:none}
+#addressbookModern .am-contact-favorites{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;min-width:0}
+#addressbookModern .am-contact-favorites .am-btn{font-size:11px;line-height:1.4;min-height:32px;padding:5px 9px;gap:6px}
+#addressbookModern .am-contact-favorites .am-icon{width:15px;height:15px;color:inherit}
+#addressbookModern .am-contact-favorites .am-btn[aria-pressed=true]{color:var(--am-accent);background:var(--am-soft);border-color:var(--am-accent)}
+#addressbookModern .am-contact-favorites .am-btn[aria-pressed=true] .am-icon{fill:currentColor}
 #addressbookModern .am-badge{background:#e7f3ec;color:#307252;padding:3px 8px;border-radius:6px;font-size:11px}
 #addressbookModern .am-badge.ended{background:var(--am-soft);color:var(--am-muted)}
 #addressbookModern .am-person{margin:16px 0}
 #addressbookModern .am-detail-actions{margin:14px 0}
+#addressbookModern .am-contact-header .am-person{margin:0}
+#addressbookModern .am-contact-header .am-contact-actions{display:grid;grid-template-columns:var(--am-action-columns);align-items:stretch;gap:8px;margin:0;padding-top:14px;border-top:1px solid var(--am-line)}
+#addressbookModern .am-contact-actions>.am-btn{min-width:0;padding:9px 8px}
+@container contact-detail (max-width:620px){
+ #addressbookModern .am-contact-header .am-contact-actions{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@container contact-detail (max-width:380px){
+ #addressbookModern .am-detail-top{grid-template-columns:minmax(0,1fr);gap:10px}
+ #addressbookModern .am-contact-edit{justify-self:start}
+ #addressbookModern .am-contact-summary h2{font-size:21px}
+ #addressbookModern .am-contact-identity .am-contact-picture{width:40px;height:40px}
+}
 #addressbookModern .am-tabs{display:flex;flex-wrap:nowrap;gap:2px;border-bottom:1px solid var(--am-line);margin-top:16px}
 #addressbookModern .am-tabs .am-btn{flex:1 1 auto;min-width:0;max-width:100%;white-space:nowrap;font-size:11px;padding:8px 3px;min-height:40px}
 #addressbookModern .am-tabs .am-icon{display:none;color:inherit}
@@ -82,13 +105,13 @@
 }
 #addressbookModern .am-section{margin:18px 0;padding-bottom:15px;border-bottom:1px solid var(--am-line)}
 #addressbookModern :is(.am-section,.am-tab-body)>.am-btn{max-width:100%;margin:0 6px 6px 0}
-#addressbookModern .am-info{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;padding:9px 0;font-size:13px;overflow-wrap:anywhere}
-#addressbookModern .am-info>div{min-width:0}
-#addressbookModern .am-info>.am-btn{font-size:11px;flex:none;padding:5px;min-height:30px}
+#addressbookModern .am-info{display:grid;grid-template-columns:20px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 0;font-size:13px;overflow-wrap:anywhere}
+#addressbookModern .am-info-content{display:grid;gap:2px;min-width:0}
+#addressbookModern .am-info-symbol{display:grid;place-items:center;width:20px;min-height:20px}
+#addressbookModern .am-info-symbol .am-icon{width:18px;height:18px}
+#addressbookModern .am-info>.am-btn{font-size:11px;padding:5px 7px;min-height:32px;justify-self:end}
 #addressbookModern .am-icon{display:block;width:16px;height:16px;flex:none;color:var(--am-accent)}
-#addressbookModern .am-info-value{display:flex;align-items:flex-start;gap:5px;min-width:0}
-#addressbookModern .am-info-value>.am-icon{margin-top:2px}
-#addressbookModern .am-info-value>:not(.am-icon){min-width:0;overflow-wrap:anywhere}
+#addressbookModern .am-info-value{min-width:0;overflow-wrap:anywhere;line-height:1.5}
 #addressbookModern .am-contact-link{color:var(--am-accent);text-decoration:underline;text-underline-offset:2px;overflow-wrap:anywhere}
 #addressbookModern .am-contact-link:focus-visible{outline:2px solid var(--am-accent);outline-offset:3px;border-radius:2px}
 #addressbookModern :is(.am-communication,.am-detail-view){display:grid;gap:16px;min-width:0;padding:20px 0 22px}
