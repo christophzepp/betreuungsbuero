@@ -89,32 +89,40 @@ die Anwendung nutzbar.
     <td width="50%"><a href="docs/screenshots/00-freidokument.png"><img src="docs/screenshots/00-freidokument.png" alt="Freidokument mit Fallbezug, Vorprüfung und Exportfunktionen"></a><br><sub>Freidokument mit Fallbezug und Export</sub></td>
   </tr>
   <tr>
-    <td><a href="docs/screenshots/03-kalender.png"><img src="docs/screenshots/03-kalender.png" alt="Kalender mit fallbezogenen Einträgen"></a><br><sub>Kalender, Termine und Wiedervorlagen</sub></td>
+    <td><a href="docs/screenshots/03-kalender.png"><img src="docs/screenshots/03-kalender.png" alt="Monatskalender mit Terminen, Aufgaben und Fristen aus allen Fällen"></a><br><sub>Kalender mit Terminen, Aufgaben und Fristen</sub></td>
+    <td><a href="docs/screenshots/17-aufgaben.png"><img src="docs/screenshots/17-aufgaben.png" alt="Aufgabenübersicht mit Fälligkeiten, Aufgabenlisten und Fallfilter"></a><br><sub>Aufgaben und Fälligkeiten im Überblick</sub></td>
+  </tr>
+  <tr>
+    <td><a href="docs/screenshots/18-fristen.png"><img src="docs/screenshots/18-fristen.png" alt="Fristenübersicht mit Fallfilter, Herkunft und Fälligkeiten"></a><br><sub>Fristen nach Fall, Herkunft und Fälligkeit</sub></td>
+    <td><a href="docs/screenshots/19-wiedervorlagen.png"><img src="docs/screenshots/19-wiedervorlagen.png" alt="Wiedervorlagen mit Fallbezug und Verknüpfung zum Original"></a><br><sub>Wiedervorlagen für Dokumente und Vorgänge</sub></td>
+  </tr>
+  <tr>
     <td><a href="docs/screenshots/04-e-mail-posteingang.png"><img src="docs/screenshots/04-e-mail-posteingang.png" alt="Integrierter E-Mail-Posteingang"></a><br><sub>E-Mail-Posteingang und Fallablage</sub></td>
-  </tr>
-  <tr>
     <td><a href="docs/screenshots/05-e-mail-verfassen.png"><img src="docs/screenshots/05-e-mail-verfassen.png" alt="E-Mail-Editor"></a><br><sub>E-Mail verfassen und beantworten</sub></td>
+  </tr>
+  <tr>
     <td><a href="docs/screenshots/06-datei-explorer.png"><img src="docs/screenshots/06-datei-explorer.png" alt="Datei-Explorer"></a><br><sub>Datei-Explorer mit Fallordnern</sub></td>
-  </tr>
-  <tr>
     <td><a href="docs/screenshots/07-datei-leseansicht.png"><img src="docs/screenshots/07-datei-leseansicht.png" alt="PDF-Leseansicht"></a><br><sub>PDF-Leseansicht und Anmerkungen</sub></td>
-    <td><a href="docs/screenshots/08-adressbuch.png"><img src="docs/screenshots/08-adressbuch.png" alt="Adressbuch"></a><br><sub>Adressbuch und Kontaktexport</sub></td>
   </tr>
   <tr>
+    <td><a href="docs/screenshots/08-adressbuch.png"><img src="docs/screenshots/08-adressbuch.png" alt="Adressbuch mit Kontaktliste, Kontaktdetails und Fallzuordnungen"></a><br><sub>Adressbuch mit Kontaktdetails und Fallzuordnungen</sub></td>
     <td><a href="docs/screenshots/09-falluebersicht.png"><img src="docs/screenshots/09-falluebersicht.png" alt="Fallübersicht"></a><br><sub>Fallübersicht und Schnellaktionen</sub></td>
+  </tr>
+  <tr>
     <td><a href="docs/screenshots/10-banking.png"><img src="docs/screenshots/10-banking.png" alt="Banking-Modul"></a><br><sub>Bankkonten und Zahlungsverkehr</sub></td>
-  </tr>
-  <tr>
     <td><a href="docs/screenshots/11-ziele-entscheidungsplanung.png"><img src="docs/screenshots/11-ziele-entscheidungsplanung.png" alt="Wünsche, Ziele und Entscheidungsplanung"></a><br><sub>Wünsche, Ziele und Entscheidungsplanung</sub></td>
+  </tr>
+  <tr>
     <td><a href="docs/screenshots/12-einstellungen-herkunft.png"><img src="docs/screenshots/12-einstellungen-herkunft.png" alt="Herkunft wirksamer Einstellungen"></a><br><sub>Nachvollziehbare Einstellungsvorgaben</sub></td>
-  </tr>
-  <tr>
     <td><a href="docs/screenshots/13-buerostammdaten.png"><img src="docs/screenshots/13-buerostammdaten.png" alt="Bürostammdaten"></a><br><sub>Bürostammdaten und Berechtigungen</sub></td>
-    <td><a href="docs/screenshots/14-ki-direktverbindung.png"><img src="docs/screenshots/14-ki-direktverbindung.png" alt="Konfiguration der KI-Direktverbindung"></a><br><sub>KI-Anbieter und Modelle konfigurieren</sub></td>
   </tr>
   <tr>
+    <td><a href="docs/screenshots/14-ki-direktverbindung.png"><img src="docs/screenshots/14-ki-direktverbindung.png" alt="Konfiguration der KI-Direktverbindung"></a><br><sub>KI-Anbieter und Modelle konfigurieren</sub></td>
     <td><a href="docs/screenshots/15-promptbibliothek.png"><img src="docs/screenshots/15-promptbibliothek.png" alt="Persönliche Promptbibliothek"></a><br><sub>Persönliche Promptbibliothek</sub></td>
+  </tr>
+  <tr>
     <td><a href="docs/screenshots/16-chat.png"><img src="docs/screenshots/16-chat.png" alt="Interner Chat"></a><br><sub>Interner Chat mit Fall- und Dokumentbezug</sub></td>
+    <td></td>
   </tr>
 </table>
 </details>
