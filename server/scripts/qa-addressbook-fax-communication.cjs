@@ -18,6 +18,18 @@ module.exports=async({page,mobile,db,errors})=>{
   await page.getByRole('button',{name:'Fax kopieren',exact:true}).click();assert.equal(await page.evaluate(()=>window.__qaCopied.at(-1)),'0123/55');
   await page.locator('.am-more summary').click();assert.equal(await page.getByRole('button',{name:'Faxnummer kopieren',exact:true}).count(),0);assert.equal(await page.getByRole('button',{name:'Daten kopieren',exact:true}).isVisible(),true);await page.locator('.am-more summary').click();
  });
+ await check('E-Mail-Links übernehmen Kontakt und Ansprechpartner; alle vier Datenarten haben Symbole',async()=>{
+  await page.evaluate(()=>{window.__qaComposeTo=window.__mxComposeTo;window.__mxComposeTo=target=>{window.__qaMail=target}});
+  const compose=async(email,personId)=>{await page.getByRole('link',{name:email,exact:true}).click();const target=await page.evaluate(()=>window.__qaMail);assert.equal(target.email,email);assert.equal(target.contactLink.contactId,'court');assert.equal(target.contactLink.personId,personId);assert.equal(target.contactLink.snapshot.email,email)};
+  for(const label of ['E-Mail','Telefon','Fax','Aktenzeichen']){const row=page.locator('.am-info').filter({has:page.locator('.am-sub').filter({hasText:new RegExp('^'+label+'$')})});assert.equal(await row.locator('svg[aria-hidden=true]').count(),1)}
+  await compose('gericht@example.org','');await page.locator('#amPerson').selectOption('sach');await compose('lea@example.org','sach');await page.getByRole('button',{name:'Kontaktwege',exact:true}).click();await compose('abteilung@example.org','sach');await page.locator('#amPerson').selectOption('');await compose('poststelle@example.org','');
+  await page.evaluate(()=>window.__mxComposeTo=window.__qaComposeTo);await page.getByRole('button',{name:'Kontaktdaten',exact:true}).click();
+ });
+ await check('Beenden fragt nach; Abbrechen erhält den Kontakt, Bestätigen lässt sich wieder aktivieren',async()=>{
+  await page.locator('.am-more summary').click();const end=page.getByRole('button',{name:'Beenden',exact:true});assert.equal(await end.evaluate(e=>e.classList.contains('warning')),true);
+  page.once('dialog',async d=>{assert.match(d.message(),/als beendet markieren/);await d.dismiss()});await end.click();await page.waitForFunction(()=>!document.querySelector('.am-more .warning').disabled);assert.equal(JSON.parse(db.prepare("SELECT data_json FROM case_contacts WHERE id='court'").get().data_json).status,'Aktiv');
+  page.once('dialog',d=>d.accept());await end.click();await page.waitForFunction(()=>state.caseData.contacts.find(c=>c.id==='court').status==='Beendet');await choose('court');await page.locator('.am-more summary').click();await page.getByRole('button',{name:'Aktivieren',exact:true}).click();await page.waitForFunction(()=>state.caseData.contacts.find(c=>c.id==='court').status==='Aktiv');await choose('court');
+ });
  await check('Ansprechpartner und benannte Faxwege verwenden jeweils ihre eigene Nummer',async()=>{
   await page.locator('#amPerson').selectOption('sach');await openFax('0123/66');assert.equal(await page.evaluate(()=>window.__qaCopied.at(-1)),'0123/66');
   await page.getByRole('button',{name:'Kontaktwege',exact:true}).click();await openFax('0123/77');assert.equal(await page.evaluate(()=>window.__qaCopied.at(-1)),'0123/77');
@@ -56,10 +68,23 @@ module.exports=async({page,mobile,db,errors})=>{
   if(mobile)await page.setViewportSize({width:320,height:640});else await page.locator('.am-resizer').focus().then(()=>page.keyboard.press('End'));
   await noOverflow();await page.getByRole('heading',{name:'Versendetes Schreiben',exact:true}).scrollIntoViewIfNeeded();await screenshot('narrow');
  });
+ await check('Alle zehn Reiter bleiben in einer Zeile; Kontaktaktionen erscheinen ausschließlich bei Kontaktdaten',async()=>{
+  await choose('court');
+  for(const size of mobile?[{width:390,height:844},{width:320,height:640}]:[{width:1440,height:1000},{width:768,height:640}]){
+   await page.setViewportSize(size);
+   for(const split of mobile?[42]:[28,42,65]){
+    await page.locator('.am-board').evaluate((e,v)=>e.style.setProperty('--am-split',v+'%'),split);
+    const geometry=await page.locator('.am-tabs').evaluate(e=>({count:e.children.length,rows:new Set([...e.children].map(b=>Math.round(b.getBoundingClientRect().top))).size,overflow:e.scrollWidth>e.clientWidth+1,clipped:[...e.children].some(b=>b.scrollWidth>b.clientWidth+1),small:[...e.children].some(b=>b.getBoundingClientRect().width<24)}));assert.deepEqual(geometry,{count:10,rows:1,overflow:false,clipped:false,small:false},JSON.stringify({size,split,geometry}));
+    if(split===42){await page.locator('.am-detail').evaluate(e=>e.scrollTop=0);await screenshot('tabs-'+size.width)}
+   }
+  }
+  for(const key of ['data','cases','people','addresses','ways','extras','sync','availability','history','communication']){const b=page.locator('[data-tab='+key+']');await b.click();assert.equal(await b.getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.am-more summary').isVisible(),key==='data');assert.equal(await page.locator('.am-tab-caption').innerText(),await b.getAttribute('aria-label'))}
+  await page.getByRole('button',{name:'Kontaktdaten',exact:true}).click();assert.equal(await page.locator('.am-more').evaluate(e=>e.open),false);
+ });
  assert.deepEqual(errors,[]);
 };
 module.exports.setup=db=>{
- const contact=JSON.parse(db.prepare("SELECT data_json FROM case_contacts WHERE id='court'").get().data_json);contact.people[0].fax='0123/66';contact.people[0].contactWays=[{id:'p-fax',type:'fax',label:'Abteilung',value:'0123/77'}];contact.contactWays=[{id:'c-fax',type:'fax',label:'Poststelle',value:'0123/88'}];db.prepare("UPDATE case_contacts SET data_json=? WHERE id='court'").run(JSON.stringify(contact));
+ const contact=JSON.parse(db.prepare("SELECT data_json FROM case_contacts WHERE id='court'").get().data_json);contact.people[0].fax='0123/66';contact.people[0].contactWays=[{id:'p-fax',type:'fax',label:'Abteilung',value:'0123/77'},{id:'p-mail',type:'email',label:'Abteilung',value:'abteilung@example.org'}];contact.contactWays=[{id:'c-fax',type:'fax',label:'Poststelle',value:'0123/88'},{id:'c-mail',type:'email',label:'Poststelle',value:'poststelle@example.org'}];db.prepare("UPDATE case_contacts SET data_json=? WHERE id='court'").run(JSON.stringify(contact));
  const link={scope:'case',caseId:'a',contactId:'court'};
  db.prepare('INSERT INTO case_doku_entries(id,case_id,data_json) VALUES(?,?,?)').run('qa-note','a',JSON.stringify({date:'2026-09-13',detail:'Dokumentierte Antwort',freeDetail:'Die Rückmeldung ist eingegangen und wurde dem Fall zugeordnet.',mailAccountId:'qa-communication',mailMessageId:'<qa-documented>',contactLink:link}));
  db.prepare("UPDATE cases SET stammdaten_json=? WHERE id='a'").run(JSON.stringify({exportHistory:[{id:'qa-letter',status:'sent',channel:'fax',documentTitle:'Versendetes Schreiben',note:'Langes Aktenzeichen: '+ 'AZ1234567890'.repeat(20),sentAt:'2026-09-12T09:00:00Z',contactLink:link}]}));
