@@ -25,7 +25,7 @@ const X=(()=>{
  function migrateLocal(r,row){if(online()||r.id||!r.localKey||!row.id)return;const p=localPrefs();for(const entry of p.personal)if(entry.scope===r.scope&&entry.caseId===r.caseId&&(entry.id||entry.localKey)===r.localKey){entry.id=row.id;delete entry.localKey}if(r.scope==='case')for(const entry of p.cases)if(entry.caseId===r.caseId&&entry.id===r.localKey)entry.id=row.id;prefs=structuredClone(p)}
  function star(c){if(c.__viewMergeId||ref(c).scope!=='case')return null;const yes=caseFav(c),b=B(yes?'★':'☆',async()=>{await preference(c,'caseFavorite',!yes);redraw()},'am-star am-case-favorite');b.setAttribute('aria-label',(yes?'Fallfavorit entfernen: ':'Als Fallfavorit markieren: ')+name(c));b.title=yes?'Favorit für diesen Fall entfernen':'Als Favorit für diesen Fall markieren';b.setAttribute('aria-pressed',String(yes));b.disabled=!ready;return b}
  function heading(c,top,identityBlock){
-  if(c.__viewMergeId)return;const favorite=star(c);if(favorite){const favorites=E('div','am-contact-favorites');favorite.replaceChildren(contactIcon('star'),E('span','','Fallfavorit'));favorites.append(favorite);top.append(favorites)}
+  if(c.__viewMergeId)return;const favorite=star(c);if(favorite){favorite.replaceChildren(contactIcon('star'),E('span','','Fallfavorit'));top.querySelector('.am-contact-controls').append(favorite)}
   if(c.imageData){const img=photo(c,'am-contact-picture');if(img)identityBlock.prepend(img)}
  }
  function photo(c,cls){try{if(!D.imageData(c.imageData||''))return null}catch(_){return null}const img=E('img',cls);img.src=c.imageData;img.alt=c.imageKind==='logo'?'Logo von '+name(c):'Kontaktbild von '+name(c);img.loading='lazy';img.onerror=()=>img.remove();return img}

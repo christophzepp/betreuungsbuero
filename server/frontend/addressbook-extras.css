@@ -26,7 +26,6 @@
  #addressbookModern .am-organizer select{font-size:16px}
  #addressbookModern .am-row .am-star{font-size:21px;min-height:40px;min-width:40px}
  #addressbookModern .am-contact-picture{width:48px;height:48px}
- #addressbookModern .am-detail-top .am-btn{font-size:12px}
 }
 #addressbookModern .am-organizer>.am-clear-recent{grid-column:1 / -1;justify-self:start}
 

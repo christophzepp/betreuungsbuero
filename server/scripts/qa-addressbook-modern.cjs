@@ -46,6 +46,7 @@ let server,browser;
  });
  await page.locator('#addressbookModern').waitFor();await page.waitForTimeout(300);
  if(process.env.QA_FAX_COMMUNICATION){await require('./qa-addressbook-fax-communication.cjs')({page,mobile,db,errors});await page.close();continue;}
+ if(process.env.QA_COMPACT_EDITOR){await require('./qa-addressbook-compact-editor.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_COMPACT_LAYOUT){await require('./qa-addressbook-compact-layout.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_DISPLAY_BUGS){await require('./qa-addressbook-display-bugs.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_ORGANIZER){await require('./qa-addressbook-organizer.cjs')({page,mobile,db,errors});await page.close();continue;}
