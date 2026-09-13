@@ -342,7 +342,6 @@ html.mobile-online-active #modal.am-modal #addressbookModern{padding:12px 10px 0
 #addressbookModern .am-editor-image-controls .am-btn{justify-self:start}
 #addressbookModern .am-overview-fold{border:1px solid var(--am-line);border-radius:8px;margin:12px 0;padding:0 10px}
 #addressbookModern .am-overview-fold>summary{padding-inline:0}
-#addressbookModern .am-overview-edit-links{display:flex;flex-wrap:wrap;gap:6px;border-top:1px solid var(--am-line);padding-top:10px}
 #addressbookModern .am-info-value a.am-btn{margin-left:8px;font-size:11px;padding:3px 8px;min-height:28px}
 #addressbookModern .am-sync-dialog{position:fixed;inset:0;margin:auto;width:min(760px,calc(100vw - 32px));height:fit-content;max-height:calc(100dvh - 48px);padding:20px;border:1px solid var(--am-line);border-radius:14px;background:var(--am-bg);color:var(--am-ink);overflow:auto;box-shadow:0 15px 60px #0004}
 #addressbookModern .am-sync-dialog::backdrop{background:#13273888}

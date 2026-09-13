@@ -88,7 +88,6 @@ const CE=(()=>{
   const reachKeys=['preferredChannel','phoneHours','absentFrom','absentUntil','absenceNote','substituteContactId','substitutePersonId'];if(reachKeys.some(k=>d[k]||p?.[k]))drawAvailability(body,c,d);
   if(d.tags?.length||d.groups?.length){const box=section('Organisation');for(const [k,label] of [['tags','Schlagwörter'],['groups','Gruppen']])if(d[k]?.length){box.append(E('span','am-sub',label));const chips=E('div','am-chips');for(const v of d[k])chips.append(E('span','am-chip',v));box.append(chips)}box.append(editLink('organisation','Organisation bearbeiten'));body.append(box)}
   const fields=(d.customFields||[]).filter(f=>String(f.value??'').trim());if(fields.length){const box=section('Zusatzangaben');for(const f of fields)info(box,f.label,f.type==='date'?dateLabel(f.value):f.value);box.append(editLink('custom','Zusatzangaben bearbeiten'));body.append(box)}
-  const links=E('div','am-overview-edit-links');links.append(editLink('addresses','Anschriften verwalten'),p?B('Kontaktwege verwalten',()=>editPerson(c,p),'quiet'):editLink('ways','Kontaktwege verwalten'),p?B('Erreichbarkeit verwalten',()=>editPerson(c,p),'quiet'):editLink('availability','Erreichbarkeit verwalten'));body.append(links);
  }
  // Änderungen innerhalb wiederholbarer Felder nach ID zusammenführen. Unberührte
  // Unterfelder und parallel hinzugefügte Einträge bleiben bei Konflikten erhalten.
