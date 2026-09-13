@@ -23,20 +23,26 @@ const DC=(()=>{
  async function save(r,next){if(next._standardRecipients)next._standardRecipients=Object.fromEntries(Object.entries(next._standardRecipients).filter(([,pid])=>!pid||next.people?.some(p=>p.id===pid)));const saved=await put(r,next);await propagate(saved,{...r,id:saved.id});return details({...r,id:saved.id,localKey:''})}
  function validateVersion(r,version){const c=find(r);if(version&&JSON.stringify(clean(c))!==version){const e=Error('Der Demo-Kontakt wurde zwischenzeitlich geändert. Bitte den aktuellen Stand prüfen.');e.status=409;throw e}return c}
  async function request(path,body={},method){guard();const [route,query]=path.split('?'),r=query?Object.fromEntries(new URLSearchParams(query)):body;
+  if(route==='assignment-context'){find(r);const entry=cases().get(String(r.targetCaseId));if(!entry)throw Error('Bitte einen geladenen Demo-Fall auswählen.');return {label:entry.label,caseData:structuredClone(entry.data),contacts:(entry.data.contacts||[]).filter(c=>!c.__merged).map(c=>({...clean(c),localKey:c.id?'':api().key(c),version:JSON.stringify(clean(c))}))}}
   if(route==='contact'){if(!body||method==='GET'||query)return details(r);const c=validateVersion(r,body.version);return save(r,{...c,...body.patch})}
   if(route==='assign'){
    const source=find(r),targetCaseId=String(body.targetCaseId||'');if(!cases().has(targetCaseId))throw Error('Bitte einen geladenen Demo-Fall auswählen.');const existing=localAssociations({...source,__buero:r.scope==='office',__caseId:r.caseId}).find(a=>a.caseId===targetCaseId);
-   if(existing&&existing.contactId!==body.assignmentId)throw Error('Der Kontakt ist diesem Fall bereits zugeordnet.');
+   if(existing&&existing.contactId!==body.assignmentId&&existing.contactId!==body.targetContactId)throw Error('Der Kontakt ist diesem Fall bereits zugeordnet.');
    const patch=Object.fromEntries(caseFields.map(k=>[k,String(body[k]||'')]));if(Object.values(patch).some(v=>v.length>1000))throw Error('Fallangaben dürfen jeweils höchstens 1.000 Zeichen enthalten.');
    if(!body.assignmentId)throw Error('Die neue Zuordnung hat keine Kennung. Bitte das Formular erneut öffnen.');
-   const target={scope:'case',caseId:targetCaseId,id:body.assignmentId};const prior=existing?validateVersion(target,body.targetVersion):null;
+   const reuse=!existing&&(body.targetContactId||body.targetContactKey),target={scope:'case',caseId:targetCaseId,id:existing?.contactId||(reuse?body.targetContactId:body.assignmentId),localKey:reuse?body.targetContactKey:''};
+   if(body.sourceVersion&&!existing)validateVersion(r,body.sourceVersion);
+   const prior=existing?validateVersion(target,body.targetVersion||body.targetContactVersion):reuse?validateVersion(target,body.targetContactVersion):null;
+   if(reuse&&prior.centralContactId)throw Error('Der Zielkontakt gehört bereits zu einer anderen zentralen Verknüpfung. Bitte diese zuerst prüfen.');
    if(!prior&&(cases().get(targetCaseId).data.contacts||[]).some(c=>c.id===target.id))throw Error('Diese Zuordnung besteht bereits. Bitte das Formular erneut öffnen.');
    let central=r.scope==='office'?source.id:source.centralContactId,contact=source;
    const promote=!central;central=central||crypto.randomUUID();
-   const next={...(prior||{...common(contact),id:body.assignmentId,centralContactId:central,status:'Aktiv',_category:contact._category||'soziales'}),...patch};window.__abValidateImport(next);
+   const next={...(prior||{...common(contact),id:body.assignmentId,centralContactId:central,status:'Aktiv',_category:contact._category||'soziales'}),...patch};
+   if(reuse){for(const k of shared()){if(Object.hasOwn(contact,k))next[k]=structuredClone(contact[k]);else delete next[k]}next.centralContactId=central;next.id=prior.id||body.assignmentId;if(prior._standardRecipients)next._standardRecipients=window.__abAssignmentData.standards(prior,contact)}
+   window.__abValidateImport(next);
    // Alle Zuordnungsangaben prüfen, bevor ein bisher lokaler Kontakt zentral verknüpft wird.
    if(promote){await put({scope:'office',id:central},{...common(source),id:central,status:'Aktiv'});contact=await put(r,{...source,centralContactId:central})}
-   await put(target,next);const result=details({...r,id:contact.id,localKey:contact.id?'':r.localKey});result.assignment={contactId:next.id,version:details(target).version};return result;
+   const saved=await put(target,next);const result=details({...r,id:contact.id,localKey:contact.id?'':r.localKey});result.assignment={contactId:saved.id,version:details({...target,id:saved.id}).version};return result;
   }
   if(route==='detach'){const source=find(r),target={scope:'case',caseId:body.targetCaseId,id:body.contactId,localKey:body.localKey},contact=find(target),central=r.scope==='office'?source.id:source.centralContactId;if(!central||contact.centralContactId!==central)throw Error('Diese zentrale Zuordnung besteht nicht mehr.');const next=clean(contact);delete next.centralContactId;await put(target,next);return details(r)}
   if(route==='standard'){

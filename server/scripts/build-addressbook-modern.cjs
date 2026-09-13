@@ -8,8 +8,9 @@ for(const [kind,close] of [['css','</style>'],['js','</script>']]){
  if(kind==='js')source=source.replace('/* ADDRESSBOOK-EXTRAS-UI */',fs.readFileSync(path.resolve(__dirname,'../frontend/addressbook-extras-ui.js'),'utf8'));
  if(kind==='js')source=source.replace('/* ADDRESSBOOK-EDITOR-UI */',fs.readFileSync(path.resolve(__dirname,'../frontend/addressbook-editor.js'),'utf8'));
  if(kind==='js')source=source.replace('/* ADDRESSBOOK-DEMO-CASES */',fs.readFileSync(path.resolve(__dirname,'../frontend/addressbook-demo-cases.js'),'utf8'));
+ if(kind==='js')source=source.replace('/* ADDRESSBOOK-ASSIGNMENT-UI */',fs.readFileSync(path.resolve(__dirname,'../frontend/addressbook-assignment-ui.js'),'utf8'));
  if(kind==='css')source+='\n'+fs.readFileSync(path.resolve(__dirname,'../frontend/addressbook-extras.css'),'utf8');
- if(kind==='js')source=fs.readFileSync(path.resolve(__dirname,'../frontend/addressbook-extras-data.js'),'utf8')+'\n'+fs.readFileSync(path.resolve(__dirname,'../frontend/addressbook-contact-tools.js'),'utf8')+'\n'+fs.readFileSync(path.resolve(__dirname,'../frontend/addressbook-vcard.js'),'utf8')+'\n'+source;
+ if(kind==='js')source=fs.readFileSync(path.resolve(__dirname,'../frontend/addressbook-assignment-data.js'),'utf8')+'\n'+fs.readFileSync(path.resolve(__dirname,'../frontend/addressbook-extras-data.js'),'utf8')+'\n'+fs.readFileSync(path.resolve(__dirname,'../frontend/addressbook-contact-tools.js'),'utf8')+'\n'+fs.readFileSync(path.resolve(__dirname,'../frontend/addressbook-vcard.js'),'utf8')+'\n'+source;
  const block=start+'\n'+source+'\n'+end;
  const a=html.indexOf(start),b=html.indexOf(end);if(a>=0){if(b<a)throw Error('Unvollständiger Adressbuchblock');html=html.slice(0,a)+block+html.slice(b+end.length)}
  else{const i=html.lastIndexOf(close);if(i<0)throw Error('Zielblock fehlt');html=html.slice(0,i)+block+'\n'+html.slice(i)}

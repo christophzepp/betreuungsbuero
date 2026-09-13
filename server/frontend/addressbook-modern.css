@@ -353,3 +353,7 @@ html.mobile-online-active #modal.am-modal #addressbookModern{padding:12px 10px 0
  #addressbookModern .am-editor-card{padding:10px}
  #addressbookModern .am-editor-image{grid-template-columns:minmax(0,1fr)}
 }
+#addressbookModern .am-assignment-info{padding:12px 14px;border:1px solid var(--am-line);border-radius:8px;background:var(--am-soft);overflow-wrap:anywhere}
+#addressbookModern .am-assignment-info p{margin:5px 0 0}
+#addressbookModern .am-assignment-result{min-width:0;overflow-wrap:anywhere}
+#addressbookModern .am-assignment-copy{justify-self:start;max-width:100%;text-align:left;margin-top:-8px;overflow-wrap:anywhere}

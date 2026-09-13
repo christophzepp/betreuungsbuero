@@ -95,15 +95,35 @@ function communicationPage(scope,caseId,id,session,cursor,refs,cid){
  return require('./addressbook-communications').page({scope,caseId,id,session,cursor,ids,contactRefs,contact:data(row)});
 }
 
+function assignmentContext(input,session){
+ const {scope,caseId='',id,targetCaseId}=input;authorize(session,scope,caseId);authorize(session,'case',targetCaseId);
+ const source=get(scope,caseId,id);if(!source)fail(404,'Kontakt nicht gefunden.');const target=db.prepare('SELECT label,file_number,stammdaten_json FROM cases WHERE id=?').get(targetCaseId);if(!target)fail(404,'Zielfall nicht gefunden.');
+ const sd=JSON.parse(target.stammdaten_json||'{}');return {label:target.label,fileNumber:target.file_number,caseData:{care:{courtName:sd.care?.courtName,fileNumber:sd.care?.fileNumber},benefits:(sd.benefits||[]).map(b=>({provider:b.provider,fileNumber:b.fileNumber}))},contacts:require('../../../frontend/addressbook-assignment-data').matches(data(source),db.prepare('SELECT * FROM case_contacts WHERE case_id=?').all(targetCaseId).map(row=>({...data(row),id:row.id,version:version(row)})))};
+}
+const assignmentStandards=require('../../../frontend/addressbook-assignment-data').standards;
+
 function assign(input,session){
  const {scope,caseId='',id,targetCaseId}=input;authorize(session,scope,caseId,true);authorize(session,'case',targetCaseId,true);
  let cid,result;const effects=[];
  db.transaction(()=>{
   const source=get(scope,caseId,id);if(!source)fail(404,'Kontakt nicht gefunden.');if(!db.prepare('SELECT id FROM cases WHERE id=?').get(targetCaseId))fail(404,'Zielfall nicht gefunden.');
-  cid=centralId(scope,id);const s=data(source);
+  cid=centralId(scope,id);const s=data(source),already=cid&&linked(cid).find(c=>c.case_id===targetCaseId);
+  const retry=already&&(input.assignmentId===already.id||input.targetContactId===already.id);
+  if(input.sourceVersion&&!retry&&version(source)!==input.sourceVersion)fail(409,'Der Ausgangskontakt wurde geändert. Bitte die Verknüpfung erneut öffnen und die aktuellen Angaben prüfen.');
+  let existing=null;if(input.targetContactId&&!already){existing=get('case',targetCaseId,input.targetContactId);if(!existing)fail(404,'Der gewählte Kontakt im Zielfall ist nicht mehr vorhanden.');if(!input.targetContactVersion||version(existing)!==input.targetContactVersion)fail(409,'Der Kontakt im Zielfall wurde geändert. Bitte die Verknüpfung erneut öffnen und die aktuellen Angaben prüfen.');if(centralId('case',existing.id))fail(409,'Der Zielkontakt gehört bereits zu einer anderen zentralen Verknüpfung. Bitte diese zuerst prüfen.');}
+
   if(!cid){cid=crypto.randomUUID();const common=Object.fromEntries(SHARED.filter(k=>Object.hasOwn(s,k)).map(k=>[k,s[k]]));common.status='Aktiv';db.prepare('INSERT INTO office_contacts(id,data_json,updated_by) VALUES(?,?,?)').run(cid,JSON.stringify(common),session.userId);record('office','',cid,null,common,session);db.prepare('INSERT INTO addressbook_links VALUES(?,?)').run(id,cid);db.prepare("UPDATE addressbook_sync_bindings SET scope='office',case_id='',contact_id=?,version=version+1 WHERE scope='case' AND case_id=? AND contact_id=?").run(cid,caseId,id);putRow('case',source,{...s,centralContactId:cid},session);require('./addressbook-organizer').promote(caseId,id,cid)}
   const found=linked(cid).find(c=>c.case_id===targetCaseId);if(found){result=found.id;
-   if(input.assignmentId){if(input.assignmentId!==found.id)fail(409,'Dieser Kontakt ist dem Fall bereits zugeordnet. Bitte die vorhandene Zuordnung bearbeiten.');const patch=validatePatch({role:String(input.role||''),fileNumber:String(input.fileNumber||''),processNumber:String(input.processNumber||''),customerNumber:String(input.customerNumber||'')});if(Object.keys(patch).some(k=>patch[k]!==String(data(found)[k]||''))){if(!input.targetVersion)fail(409,'Die Zuordnung wurde bereits gespeichert. Bitte den aktuellen Stand prüfen.');replace('case',targetCaseId,found.id,patch,session,input.targetVersion,effects)}}return}
+   if(input.assignmentId){if(input.assignmentId!==found.id&&input.targetContactId!==found.id)fail(409,'Dieser Kontakt ist dem Fall bereits zugeordnet. Bitte die vorhandene Zuordnung bearbeiten.');const patch=validatePatch({role:String(input.role||''),fileNumber:String(input.fileNumber||''),processNumber:String(input.processNumber||''),customerNumber:String(input.customerNumber||'')});if(Object.keys(patch).some(k=>patch[k]!==String(data(found)[k]||''))){if(!(input.targetVersion||input.targetContactVersion))fail(409,'Die Zuordnung wurde bereits gespeichert. Bitte den aktuellen Stand prüfen.');replace('case',targetCaseId,found.id,patch,session,input.targetVersion||input.targetContactVersion,effects)}}return}
+  if(existing){
+   const central=data(get('office','',cid)),old=data(existing),next={...old,...validatePatch(Object.fromEntries(['role','fileNumber','processNumber','customerNumber'].map(k=>[k,String(input[k]??old[k]??'')]))),centralContactId:cid,_pendingWrite:true};
+   for(const k of SHARED){if(Object.hasOwn(central,k))next[k]=structuredClone(central[k]);else delete next[k]}
+   if(old._standardRecipients)next._standardRecipients=assignmentStandards(old,central);
+   const bindings=db.prepare("SELECT * FROM addressbook_sync_bindings WHERE scope='case' AND case_id=? AND contact_id=?").all(targetCaseId,existing.id);
+   for(const binding of bindings)if(db.prepare("SELECT 1 FROM addressbook_sync_bindings WHERE scope='office' AND contact_id=? AND connection_id=? AND addressbook_ref=?").get(cid,binding.connection_id,binding.addressbook_ref))fail(409,'Beide Kontakte haben bereits einen Abgleich mit demselben Online-Adressbuch. Bitte die Synchronisationsverbindungen vor dem Verknüpfen abgleichen.');
+   result=existing.id;db.prepare('INSERT INTO addressbook_links VALUES(?,?)').run(result,cid);putRow('case',existing,next,session);
+   db.prepare("UPDATE addressbook_sync_bindings SET scope='office',case_id='',contact_id=?,version=version+1 WHERE scope='case' AND case_id=? AND contact_id=?").run(cid,targetCaseId,result);require('./addressbook-organizer').promote(targetCaseId,result,cid);return;
+  }
   if(input.assignmentId&&(typeof input.assignmentId!=='string'||!/^[a-zA-Z0-9_-]{1,128}$/.test(input.assignmentId)))fail(400,'Ungültige Zuordnungs-ID.');
   result=input.assignmentId||crypto.randomUUID();if(db.prepare('SELECT 1 FROM case_contacts WHERE id=?').get(result))fail(409,'Die Zuordnungs-ID ist bereits belegt. Bitte die Zuordnung neu öffnen.');const central=data(get('office','',cid)),assignment=validatePatch({role:String(input.role??s.role??''),fileNumber:String(input.fileNumber||''),processNumber:String(input.processNumber||''),customerNumber:String(input.customerNumber||'')});const next={...central,...assignment,status:'Aktiv',_category:s._category||'soziales',centralContactId:cid,_pendingWrite:true};
   delete next._standardRecipients;delete next.note;delete next.id;delete next.key;delete next._row;
@@ -121,4 +141,4 @@ function standard(input,session){
  })();for(const [contactId,next] of affected)notify('case',caseId,contactId,next);return details('case',caseId,id,session);
 }
 function notifyDoku(caseId,id,data,session,action='create'){if(realtime)realtime.broadcastToCase(caseId,{type:'doku-entry',action,entry:{id,data},updatedBy:session.displayName},null)}
-module.exports={notifyDoku,FIELDS,SHARED,personVersion,savePerson,historyPage,communicationPage,get,data,version,authorize,validatePatch,replace,record,notify,details,assign,standard,centralId,linked,setRealtime:r=>{realtime=r},fail};
+module.exports={assignmentContext,assignmentStandards,notifyDoku,FIELDS,SHARED,personVersion,savePerson,historyPage,communicationPage,get,data,version,authorize,validatePatch,replace,record,notify,details,assign,standard,centralId,linked,setRealtime:r=>{realtime=r},fail};

@@ -61,6 +61,7 @@ router.post('/contact',requireEditCases,handle(r=>{
  else db.prepare('INSERT INTO office_contacts(id,data_json,updated_by) VALUES(?,?,?)').run(id,JSON.stringify(next),r.session.userId);
  A.record(scope,caseId,id,null,next,r.session);A.notify(scope,caseId,id,next);return A.details(scope,caseId,id,r.session);
 }));
+router.get('/assignment-context',handle(r=>A.assignmentContext(r.query,r.session)));
 router.post('/assign',requireEditCases,handle(r=>A.assign(r.body,r.session)));
 router.post('/followup',requireEditCases,handle(r=>require('./addressbook-followup').save(r.body,r.session)));
 router.post('/standard',requireEditCases,handle(r=>A.standard(r.body,r.session)));

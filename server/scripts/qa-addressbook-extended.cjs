@@ -33,9 +33,10 @@ module.exports=async function({page,mobile,db,errors}){
   const result=read().people.find(p=>p.id==='sach');assert.equal(result.department,'Parallel '+(mobile?'Mobil':'Desktop'));assert.equal(result.phone,'Eigene '+(mobile?'Mobil':'Desktop'));
   await page.screenshot({path:prefix+'-person.png'});assert.equal(await page.locator('.am-detail').evaluate(e=>e.scrollWidth>e.clientWidth+1),false);await page.getByRole('button',{name:'Fertig',exact:true}).click();
  });
- if(!mobile)await check('Fallzuordnung speichert ohne Übernehmen und aktualisiert dieselbe Zuordnung',async()=>{
-  await page.getByRole('button',{name:'Fälle & Standard',exact:true}).click();await page.getByRole('button',{name:'+ Weiterem Fall zuordnen',exact:true}).click();await page.locator('[name=targetCaseId]').selectOption('b');await saved();
+ if(!mobile)await check('Neue Fallzuordnung wird bestätigt; spätere Fallangaben speichern automatisch',async()=>{
+  await page.getByRole('button',{name:'Fälle & Standard',exact:true}).click();await page.getByRole('button',{name:'+ Weiterem Fall zuordnen',exact:true}).click();await page.locator('[name=targetCaseId]').selectOption('b');await page.locator('.am-small-form button[type=submit]').click();await page.locator('.am-small-form').waitFor({state:'detached'});
   const rows=db.prepare("SELECT c.* FROM case_contacts c JOIN addressbook_links l ON l.case_contact_id=c.id WHERE case_id='b'").all();assert.equal(rows.length,1);const id=rows[0].id;
+  await page.getByRole('button',{name:'Fallangaben bearbeiten',exact:true}).nth(1).click();
   await page.locator('[name=fileNumber]').fill('B-Autosave');await page.locator('[name=processNumber]').fill('Vorgang-Autosave');await saved();
   const next=db.prepare('SELECT data_json FROM case_contacts WHERE id=?').get(id);assert.equal(JSON.parse(next.data_json).fileNumber,'B-Autosave');assert.equal(JSON.parse(next.data_json).processNumber,'Vorgang-Autosave');
   await page.getByRole('button',{name:'Kontaktdaten',exact:true}).click();assert.equal(await page.locator('.am-small-form').count(),0);

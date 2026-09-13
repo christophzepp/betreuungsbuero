@@ -1,0 +1,46 @@
+'use strict';
+const assert=require('node:assert/strict');
+module.exports=async({page,mobile,db,errors})=>{
+ for(const demo of [false,true]){
+  const prefix=(mobile?'mobile':'desktop')+(demo?'demo':'online'),a=prefix+'a',b=prefix+'b',c=prefix+'c',sid=prefix+'source',tid=prefix+'target';
+  const source={id:sid,institution:'Amtsgericht Teststadt',role:'Betreuungsgericht',status:'Aktiv',email:'gemeinsam@example.org',street:'Gerichtsweg',house:'7',postal:'12345',city:'Teststadt',fileNumber:'A-AZ',processNumber:'A-VORGANG',customerNumber:'A-KUNDE',note:'Notiz Ausgangsfall',people:[{id:'lea',name:'Lea Ansprechpartner',email:'lea@example.org'}]};
+  const target={...source,id:tid,email:'altziel@example.org',fileNumber:'B-BEKANNT',processNumber:'B-VORGANG',customerNumber:'B-KUNDE',status:'Beendet',note:'Notiz Zielfall',_standardRecipients:{mail:'lea'}};
+  const check=async(label,run)=>{await run();console.log('PASS '+prefix+' '+label)};
+  if(demo){await page.evaluate(()=>{sessionStorage.setItem('betreuungsbuero.demoBoot.v1','1')});await page.addScriptTag({content:await page.locator('#aussendienst-2a-v1').textContent()});assert.equal(await page.evaluate(()=>__demoSpeicherAktiv&&localStorage===__adSpeicher),true)}
+  else{for(const [id,az] of [[a,'A-FALL'],[b,'B-FALL'],[c,'C-FALL']])db.prepare('INSERT INTO cases(id,label,owner_user_id,stammdaten_json) VALUES(?,?,1,?)').run(id,'Testfall '+id,JSON.stringify({care:{courtName:source.institution,fileNumber:az}}));for(const [id,caseId,data] of [[sid,a,source],[tid,b,target]])db.prepare('INSERT INTO case_contacts(id,case_id,data_json) VALUES(?,?,?)').run(id,caseId,JSON.stringify(data))}
+  await page.evaluate(({a,b,c,source,target,demo})=>{
+   window.__demoModus=demo;window.__appMode=demo?'local':'online';window.__activeServerCaseId=a;window.caseIdentityOf=s=>s.ui.assignmentCase;state.ui.assignmentCase=a;state.ui.caseLoaded=true;state.caseData.contacts=[source];state.caseData.care={courtName:source.institution,fileNumber:'A-FALL'};
+   const ca=structuredClone(state),cb=structuredClone(state),cc=structuredClone(state);cb.ui.assignmentCase=b;cb.caseData.contacts=[target];cb.caseData.care.fileNumber='B-FALL';cc.ui.assignmentCase=c;cc.caseData.contacts=[];cc.caseData.care.fileNumber='C-FALL';window.caseRegistry=[{id:a,label:'Ausgangsfall',state:ca},{id:b,label:'Bekannter Zielfall',state:cb},{id:c,label:'Neuer Zielfall',state:cc}];window.__onlineCaseCache=new Map(caseRegistry.map(e=>[e.id,{label:e.label,data:structuredClone(e.state.caseData)}]));window.__abScope='case';window.__abBueroWide=false;window.showImportedAddressbook();
+  },{a,b,c,source,target,demo});
+  const posts=[];const capture=r=>{if(r.method()==='POST'&&/\/api\/addressbook\/assign$/.test(r.url()))posts.push(r)};page.on('request',capture);
+  await page.locator('.am-row-open').filter({hasText:source.institution}).click();await page.locator('[data-tab=cases]').click();await page.getByRole('button',{name:'+ Weiterem Fall zuordnen',exact:true}).click();
+  const field=k=>page.locator('.am-small-form [name='+k+']');
+  const choose=async id=>{await field('targetCaseId').selectOption(id);await page.waitForFunction(()=>{const e=document.querySelector('.am-small-form [name=customerNumber]');return e&&!e.disabled})};
+  await check('Bekannte Referenzen kommen aus dem Zielkontakt und werden vor dem Verknüpfen angezeigt',async()=>{
+   await choose(b);assert.equal(await field('fileNumber').inputValue(),'B-BEKANNT');assert.equal(await field('processNumber').inputValue(),'B-VORGANG');assert.equal(await field('customerNumber').inputValue(),'B-KUNDE');assert.match(await page.locator('.am-assignment-result').innerText(),/altziel@example.org.*gemeinsam@example.org/);assert.match(await page.locator('#amAssignmentOrigin_customerNumber').innerText(),/Kontakt im Zielfall/);
+   await page.waitForTimeout(800);assert.equal(posts.length,0,'Die neue Verbindung muss bewusst bestätigt werden');await page.locator('[data-tab=data]').click();assert.equal(await page.locator('.am-small-form').count(),1,'Reiterwechsel legt keine ungeprüfte Verbindung an');
+  });
+  await check('Gerichtsaktenzeichen wird nur passend zum Ziel vorbelegt; Entwürfe sind je Zielfall getrennt',async()=>{
+   await choose(c);assert.equal(await field('fileNumber').inputValue(),'C-FALL');assert.equal(await field('processNumber').inputValue(),'');assert.equal(await field('customerNumber').inputValue(),'');await field('customerNumber').fill('C-EIGEN');await field('role').fill('Versicherung');await field('role').dispatchEvent('change');assert.equal(await field('fileNumber').inputValue(),'');await field('role').fill('Betreuungsgericht');await field('role').dispatchEvent('change');assert.equal(await field('fileNumber').inputValue(),'C-FALL');
+   await page.getByRole('button',{name:'Aus Ausgangsfall übernehmen: A-VORGANG',exact:true}).click();assert.equal(await field('processNumber').inputValue(),'A-VORGANG');assert.match(await page.locator('#amAssignmentOrigin_processNumber').innerText(),/Aus Ausgangsfall übernommen/);
+   await choose(b);assert.equal(await field('customerNumber').inputValue(),'B-KUNDE');assert.equal(await field('processNumber').inputValue(),'B-VORGANG');await choose(c);assert.equal(await field('customerNumber').inputValue(),'C-EIGEN');assert.equal(await field('processNumber').inputValue(),'A-VORGANG');await choose(b);
+  });
+  if(!demo)await check('Verspätete Antworten eines anderen Zielfalls überschreiben keine aktuellen Eingaben',async()=>{
+   await page.route('**/api/addressbook/assignment-context?*',async route=>{if(new URL(route.request().url()).searchParams.get('targetCaseId')===c)await new Promise(r=>setTimeout(r,300));await route.continue()});await field('targetCaseId').selectOption(c);await choose(b);await field('customerNumber').fill('B-EIGEN');await page.waitForTimeout(450);assert.equal(await field('customerNumber').inputValue(),'B-EIGEN');assert.equal(await field('fileNumber').inputValue(),'B-BEKANNT');await page.unroute('**/api/addressbook/assignment-context?*');
+  });
+  if(!demo)await check('Parallel geänderte Zielangaben werden vor der Bestätigung erneut geprüft; eigene Eingaben bleiben erhalten',async()=>{
+   const row=db.prepare('SELECT data_json FROM case_contacts WHERE id=?').get(tid),changed={...JSON.parse(row.data_json),processNumber:'B-PARALLEL'};db.prepare('UPDATE case_contacts SET data_json=? WHERE id=?').run(JSON.stringify(changed),tid);
+   await page.locator('.am-small-form button[type=submit]').click();await page.getByRole('button',{name:'Aktuellen Stand prüfen',exact:true}).waitFor();assert.equal(await field('customerNumber').inputValue(),'B-EIGEN');assert.equal(db.prepare('SELECT count(*) n FROM addressbook_links WHERE case_contact_id=?').get(sid).n,0);
+   page.once('dialog',d=>d.accept());await page.getByRole('button',{name:'Aktuellen Stand prüfen',exact:true}).click();await page.waitForFunction(()=>document.querySelector('.am-small-form [name=processNumber]')?.value==='B-PARALLEL');assert.equal(await field('customerNumber').inputValue(),'B-EIGEN');assert.equal(db.prepare('SELECT count(*) n FROM addressbook_links WHERE case_contact_id=?').get(sid).n,0);
+  });
+  await check('Vorhandener Kontakt wird ohne Dublette verknüpft; Ausgangsfall und Ziel bleiben getrennt',async()=>{
+   await field('customerNumber').fill('B-EIGEN');await page.locator('.am-small-form h3').scrollIntoViewIfNeeded();await page.screenshot({path:'/tmp/addressbook-assignment-'+prefix+'-top.png'});await page.locator('.am-small-form button[type=submit]').scrollIntoViewIfNeeded();await page.screenshot({path:'/tmp/addressbook-assignment-'+prefix+'-bottom.png'});assert.equal(await page.locator('.am-detail').evaluate(e=>e.scrollWidth>e.clientWidth+1),false);
+   await page.locator('.am-small-form button[type=submit]').click();await page.locator('.am-small-form').waitFor({state:'detached'});await page.getByRole('button',{name:'Fallangaben bearbeiten',exact:true}).nth(1).waitFor();
+   const result=demo?await page.evaluate(({b})=>({source:state.caseData.contacts[0],target:caseRegistry.find(e=>e.id===b).state.caseData.contacts}),{b}):{source:JSON.parse(db.prepare('SELECT data_json FROM case_contacts WHERE id=?').get(sid).data_json),target:db.prepare('SELECT id,data_json FROM case_contacts WHERE case_id=?').all(b).map(r=>({...JSON.parse(r.data_json),id:r.id}))};
+   assert.equal(result.target.length,1);assert.equal(result.target[0].id,tid);assert.equal(result.source.fileNumber,'A-AZ');assert.equal(result.source.customerNumber,'A-KUNDE');assert.equal(result.source.note,'Notiz Ausgangsfall');assert.equal(result.target[0].fileNumber,'B-BEKANNT');assert.equal(result.target[0].customerNumber,'B-EIGEN');assert.equal(result.target[0].status,'Beendet');assert.equal(result.target[0].note,'Notiz Zielfall');assert.deepEqual(result.target[0]._standardRecipients,{mail:'lea'});assert.equal(result.target[0].email,result.source.email);assert.ok(result.target[0].centralContactId);
+   await page.locator('.am-contact-edit').click();assert.equal(await page.locator('#amEdit_customerNumber').inputValue(),'A-KUNDE');await page.getByRole('button',{name:'Fertig',exact:true}).click();
+  });
+  if(demo)assert.equal(posts.length,0);else assert.equal(posts.length,2);page.off('request',capture);
+ }
+ assert.deepEqual(errors,[]);
+};

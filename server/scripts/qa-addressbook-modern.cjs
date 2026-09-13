@@ -30,7 +30,7 @@ let server,browser;
 (async()=>{
  server=await new Promise(resolve=>{const s=app.listen(0,'127.0.0.1',()=>resolve(s))});const origin='http://127.0.0.1:'+server.address().port;
  browser=await playwright[process.env.QA_BROWSER||'chromium'].launch({headless:true});
- for(const mobile of (process.env.QA_MOBILE_ONLY?[true]:[false,true])){
+ for(const mobile of (process.env.QA_MOBILE_ONLY?[true]:process.env.QA_DESKTOP_ONLY?[false]:[false,true])){
  if(process.env.QA_REGRESSIONS){const ended=JSON.parse(db.prepare('SELECT data_json FROM case_contacts WHERE id=?').get('ended').data_json);ended.status='Beendet';db.prepare('UPDATE case_contacts SET data_json=? WHERE id=?').run(JSON.stringify(ended),'ended')}
  const page=await browser.newPage({viewport:mobile?{width:390,height:process.env.QA_REGRESSIONS?700:844}:{width:1440,height:1000},isMobile:mobile,hasTouch:mobile,...(mobile?{userAgent:'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Version/18.0 Mobile/15E148 Safari/604.1'}:{})});
  page.setDefaultTimeout(15000);const errors=[];page.on('pageerror',e=>{errors.push(e.message);console.log('PAGEERROR',e.message)});
@@ -47,6 +47,7 @@ let server,browser;
  await page.locator('#addressbookModern').waitFor();await page.waitForTimeout(300);
  if(process.env.QA_FAX_COMMUNICATION){await require('./qa-addressbook-fax-communication.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_UNIFIED_EDITOR){await require('./qa-addressbook-unified-editor.cjs')({page,mobile,db,errors});await page.close();continue;}
+ if(process.env.QA_ASSIGNMENT){await require('./qa-addressbook-assignment.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_DEMO_CASES){await require('./qa-addressbook-demo-cases.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_LOCAL_CASES){await require('./qa-addressbook-local-cases.cjs')({page,mobile,db,errors});await page.close();continue;}
  if(process.env.QA_COMPACT_EDITOR){await require('./qa-addressbook-compact-editor.cjs')({page,mobile,db,errors});await page.close();continue;}
