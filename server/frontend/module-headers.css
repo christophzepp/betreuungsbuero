@@ -1,0 +1,88 @@
+/* One compact title treatment across the existing module workspaces. */
+:is(#modal,.module-heading-root) .module-title{
+ display:flex;align-items:flex-start;gap:10px;min-width:0;
+ font:650 24px/1.25 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+ letter-spacing:-.5px;margin:0!important;padding:0;color:var(--blue,#245d7b)!important;
+}
+:is(#modal,.module-heading-root) .module-title-text{min-width:0;overflow-wrap:anywhere}
+:is(#modal,.module-heading-root) .module-title-icon{
+ display:inline-flex!important;align-items:center;justify-content:center;
+ flex:0 0 24px;width:24px!important;height:30px!important;
+ margin:0;padding:0;border:0;border-radius:0;background:transparent;color:inherit;
+}
+:is(#modal,.module-heading-root) .module-title-icon svg{display:block;width:24px!important;height:24px!important;stroke-width:1.8}
+#modal .module-header{min-width:0;gap:16px;align-items:center}
+#modal :is(.cal-work-head,.at-header,.fd-header){padding:18px 22px}
+#modal .module-header > div:first-child{min-width:0}
+#modal :is(.cal-work-head,.at-header,.fd-header) > div:first-child > p,
+#modal .wv-subtitle,#modal .gdp-brand p,#modal .housing-header-v255 .housing-brand-v255 p.housing-sub-v260,#modal .am-head > .am-save,
+#modal .mobile-ui-heading:has(.module-title) > small{
+ margin:4px 0 0 34px;font-size:12px;line-height:1.45;max-width:none;
+}
+#modal .wv-title > span,#modal .gdp-brand-logo,#modal .housing-brand-icon-v255{display:none!important}
+#modal .wv-title,#modal .gdp-brand,#modal .housing-brand-v255{display:block;min-width:0}
+#modal .wv-header{padding:18px 22px}
+#modal .gdp-header{padding:18px 22px!important}
+#modal .module-header-actions{
+ display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:8px;min-width:0;
+}
+#modal .module-header-actions > button,
+#modal .module-header-actions > details > summary,
+#modal .module-close{
+ align-items:center;justify-content:center;gap:7px;
+ box-sizing:border-box;min-height:36px;height:36px;margin:0;padding:7px 11px;
+ border-radius:8px;font:600 12px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+#modal .module-close{
+ display:inline-flex;flex:0 0 36px;width:36px;padding:7px;border:1px solid var(--line,#d8e5ec);
+ background:var(--paper,#fff);color:var(--ink,#254251);cursor:pointer;
+}
+#modal .module-close svg,#modal .module-header-actions [data-module-close] svg{width:18px;height:18px}
+#modal .module-close:hover{background:var(--blue-soft,#edf4f9)}
+#modal .module-close:focus-visible{outline:2px solid var(--blue,#245d7b);outline-offset:2px}
+#modal .module-header-actions :is([data-tw=exit],[data-action=exit],[data-module-close]){flex:0 0 36px;width:36px;min-height:36px;height:36px;padding:7px}
+#modal .module-standalone-title{padding:0 46px 14px 0}
+#modal > .modal-box:has(> .module-standalone-close){position:relative}
+#modal .module-standalone-close{position:absolute;top:18px;right:22px}
+#modal #addressbookModern .am-head > .am-save{margin-top:0}
+#modal #addressbookModern .am-head{row-gap:4px}
+@media(max-width:1100px){
+ #modal .gdp-header.module-header{flex-wrap:wrap!important}
+ #modal .gdp-header.module-header > .gdp-brand{flex:1 1 100%}
+ #modal .gdp-header .module-header-actions{width:100%}
+}
+@media(max-width:700px){
+ :is(#modal,.module-heading-root) .module-title{font-size:20px!important;line-height:1.3!important;letter-spacing:-.3px}
+ :is(#modal,.module-heading-root) .module-title-icon{height:26px!important;width:22px!important;flex-basis:22px}
+ :is(#modal,.module-heading-root) .module-title-icon svg{width:22px!important;height:22px!important}
+ #modal :is(.cal-work-head,.at-header,.fd-header),#modal .wv-header,#modal .gdp-header{padding:14px 12px!important}
+ #modal .module-header{flex-wrap:wrap;gap:12px}
+ #modal :is(.at-header,.fd-header,.wv-titlebar,.housing-header-v255) > div:first-child{align-self:stretch;width:100%}
+ #modal :is(.cal-work-head,.at-header,.fd-header) > div:first-child > p,
+ #modal .wv-subtitle,#modal .gdp-brand p,#modal .housing-header-v255 .housing-brand-v255 p.housing-sub-v260,#modal .am-head > .am-save,
+ #modal .mobile-ui-heading:has(.module-title) > small{margin-left:32px;font-size:11px}
+ #modal .module-header-actions > button,#modal .module-header-actions > details > summary{min-width:44px;min-height:44px;height:44px}
+ #modal .module-header-actions :is([data-tw=exit],[data-action=exit],[data-module-close]),#modal .module-close{flex-basis:44px;width:44px;min-height:44px;height:44px}
+ #modal #addressbookModern.am-show-detail .am-heading h2{display:none!important}
+ #modal #addressbookModern .am-head{grid-template-columns:minmax(0,1fr);gap:4px}
+ #modal #addressbookModern .am-heading{grid-column:1;grid-row:1}
+ #modal #addressbookModern .am-head > .am-save{grid-column:1;grid-row:2}
+ #modal #addressbookModern .am-head > .am-actions{grid-column:1;grid-row:3;justify-content:flex-end;margin-top:6px}
+ #modal #addressbookModern .am-head .am-menu > summary{min-width:44px}
+ #modal #addressbookModern.am-show-detail .am-head > .am-save{margin-left:0}
+ #modal .module-standalone-close{top:12px;right:12px}
+}
+@media(pointer:coarse){
+ #modal .module-header-actions > button,#modal .module-header-actions > details > summary,#modal .module-close{min-width:44px;min-height:44px;height:44px}
+ #modal .module-header-actions :is([data-tw=exit],[data-action=exit],[data-module-close]){flex-basis:44px;width:44px}
+}
+
+/* Independent module overlays use the same title and icon sizes. */
+:is(#ciOverlay,#coOverlay) .module-title{color:#f4f8fb!important}
+:is(#ciOverlay,#coOverlay) .dcw-identity .ci-sub{margin-left:34px}
+#functionalProfileHubOverlayV255 .v255-dialog-head > div:first-child > div{margin-left:34px}
+body:has(#modal:not(.hidden)) #sbReopen{visibility:hidden}
+@media(max-width:700px){
+ #functionalProfileHubOverlayV255 .v255-dialog-head > div:first-child > div{margin-left:32px}
+ :is(#ciOverlay,#coOverlay) .dcw-identity .ci-sub{margin-left:32px}
+}
