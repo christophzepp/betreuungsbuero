@@ -8,6 +8,7 @@
   followups:{labels:['Wiedervorlagen'],path:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5M12 7v5l4 2"/>'},
   contacts:{labels:['Adressbuch','Adressbuch aus Excel'],path:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>'},
   documents:{labels:['Datei-Explorer'],path:'<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>'},
+  documentation:{labels:['Falldokumentation'],path:'<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>'},
   planning:{labels:['Wünsche, Ziele & Entscheidungsplanung','Wünsche und Bedarfe','Wünsche & Ziele','Bedarfe & Wille'],path:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>'},
   housing:{labels:['Wohnen'],path:'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1zM9 21v-8h6v8"/>'},
   finance:{labels:['Bürofinanzen','Finanzen']},
@@ -61,12 +62,33 @@
   ['#ciOverlay','intake','.ci-head h1'],
   ['#coOverlay','outtake','.ci-head h1']
  ];
+ function documentationHeader(modal){
+  const header=modal.querySelector('.fd-shell > .fd-head');if(!header)return;
+  header.classList.add('module-header');decorate(header.querySelector('h3'),'documentation');
+  let actions=header.querySelector(':scope > .module-documentation-actions');
+  if(!actions){
+   actions=document.createElement('div');actions.className='module-header-actions module-documentation-actions';
+   actions.append(...header.querySelectorAll(':scope > .sync,:scope > .menu,:scope > .fd-btn,:scope > .fd-ib'));
+   header.append(actions);
+  }
+  // Keep the documentation close handler: it protects unfinished entry forms.
+  const close=actions.querySelector('.fd-ib');
+  if(close){close.classList.add('module-close');close.dataset.moduleClose='';close.setAttribute('aria-label','Falldokumentation schließen')}
+  // The mobile heading also contains the interactive case picker. Decorate only its title.
+  const mobileTitle=modal.querySelector('.fd-shell.fd-mobil-liste > .fd-m-top h4');
+  if(mobileTitle&&!mobileTitle.querySelector('.module-title')){
+   const title=document.createElement('span');
+   for(const node of [...mobileTitle.childNodes])if(node.nodeType===3)title.append(node);
+   mobileTitle.prepend(title);decorate(title,'documentation');
+  }
+ }
  function apply(){
   for(const [selector,key,titleSelector] of otherRoots){
    const root=document.querySelector(selector);if(!root)continue;
    root.classList.add('module-heading-root');decorate(root.querySelector(titleSelector),key);
   }
   const modal=document.getElementById('modal');if(!modal)return;
+  documentationHeader(modal);
   for(const [key,selector,titleSelector,actionSelector] of specs){
    const header=modal.querySelector(selector);if(!header)continue;
    header.classList.add('module-header');decorate(header.querySelector(titleSelector),key);

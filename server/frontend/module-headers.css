@@ -27,6 +27,7 @@
  display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:8px;min-width:0;
 }
 #modal .module-header-actions > button,
+#modal .module-header-actions > .menu > button,
 #modal .module-header-actions > details > summary,
 #modal .module-close{
  align-items:center;justify-content:center;gap:7px;
@@ -46,12 +47,34 @@
 #modal .module-standalone-close{position:absolute;top:18px;right:22px}
 #modal #addressbookModern .am-head > .am-save{margin-top:0}
 #modal #addressbookModern .am-head{row-gap:4px}
+/* Documentation keeps case and search controls directly in its header for the mobile views. */
+#modal .fd-shell > .fd-head.module-header{
+ display:grid;grid-template-columns:minmax(260px,1fr) minmax(0,2fr);gap:12px 16px;padding:2px 2px 16px;
+}
+#modal .fd-shell .fd-head > .module-title{grid-column:1;grid-row:1;white-space:normal}
+#modal .fd-shell .fd-head > .module-documentation-actions{grid-column:2;grid-row:1}
+#modal .fd-shell .fd-head > .fd-case{grid-column:1;grid-row:2;min-width:0;max-width:none;width:100%;height:36px}
+#modal .fd-shell .fd-head > .fd-search{grid-column:2;grid-row:2;min-width:0;height:36px;box-sizing:border-box}
+#modal .fd-shell .fd-head > .fd-spacer{display:none}
+#modal .fd-shell .fd-head .sync{height:36px;box-sizing:border-box}
+#modal .fd-shell .module-documentation-actions .fd-btn.primary span{display:inline}
+@media(max-width:900px){
+ #modal .fd-shell .fd-head > .module-title{grid-column:1 / -1}
+ #modal .fd-shell .fd-head > .module-documentation-actions{grid-column:1 / -1;grid-row:2}
+ #modal .fd-shell .fd-head > :is(.fd-case,.fd-search){grid-row:3}
+}
+html.mobile-online-active #modal .fd-shell.fd-mobil-liste > .fd-m-top{flex-wrap:wrap;justify-content:flex-end;gap:4px 8px}
+html.mobile-online-active #modal .fd-shell.fd-mobil-liste > .fd-m-top h4{flex:1 0 100%;min-width:0}
+html.mobile-online-active #modal .fd-shell .fd-m-top .module-title{color:inherit!important}
+html.mobile-online-active #modal .fd-shell .fd-m-top .fd-m-fall{margin:4px 0 0 34px;max-width:calc(100% - 34px)}
 @media(max-width:1100px){
  #modal .gdp-header.module-header{flex-wrap:wrap!important}
  #modal .gdp-header.module-header > .gdp-brand{flex:1 1 100%}
  #modal .gdp-header .module-header-actions{width:100%}
 }
 @media(max-width:700px){
+ #modal .fd-shell > .fd-head.module-header{grid-template-columns:minmax(0,1fr)}
+ #modal .fd-shell .fd-head > :is(.module-title,.module-documentation-actions,.fd-case,.fd-search){grid-column:1;grid-row:auto}
  :is(#modal,.module-heading-root) .module-title{font-size:20px!important;line-height:1.3!important;letter-spacing:-.3px}
  :is(#modal,.module-heading-root) .module-title-icon{height:26px!important;width:22px!important;flex-basis:22px}
  :is(#modal,.module-heading-root) .module-title-icon svg{width:22px!important;height:22px!important}
@@ -61,7 +84,7 @@
  #modal :is(.cal-work-head,.at-header,.fd-header) > div:first-child > p,
  #modal .wv-subtitle,#modal .gdp-brand p,#modal .housing-header-v255 .housing-brand-v255 p.housing-sub-v260,#modal .am-head > .am-save,
  #modal .mobile-ui-heading:has(.module-title) > small{margin-left:32px;font-size:11px}
- #modal .module-header-actions > button,#modal .module-header-actions > details > summary{min-width:44px;min-height:44px;height:44px}
+ #modal .module-header-actions > button,#modal .module-header-actions > .menu > button,#modal .module-header-actions > details > summary{min-width:44px;min-height:44px;height:44px}
  #modal .module-header-actions :is([data-tw=exit],[data-action=exit],[data-module-close]),#modal .module-close{flex-basis:44px;width:44px;min-height:44px;height:44px}
  #modal #addressbookModern.am-show-detail .am-heading h2{display:none!important}
  #modal #addressbookModern .am-head{grid-template-columns:minmax(0,1fr);gap:4px}
@@ -71,9 +94,10 @@
  #modal #addressbookModern .am-head .am-menu > summary{min-width:44px}
  #modal #addressbookModern.am-show-detail .am-head > .am-save{margin-left:0}
  #modal .module-standalone-close{top:12px;right:12px}
+ html.mobile-online-active #modal .fd-shell .fd-m-top .fd-m-fall{margin-left:32px;max-width:calc(100% - 32px)}
 }
 @media(pointer:coarse){
- #modal .module-header-actions > button,#modal .module-header-actions > details > summary,#modal .module-close{min-width:44px;min-height:44px;height:44px}
+ #modal .module-header-actions > button,#modal .module-header-actions > .menu > button,#modal .module-header-actions > details > summary,#modal .module-close{min-width:44px;min-height:44px;height:44px}
  #modal .module-header-actions :is([data-tw=exit],[data-action=exit],[data-module-close]){flex-basis:44px;width:44px}
 }
 
