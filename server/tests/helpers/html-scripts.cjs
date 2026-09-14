@@ -11,7 +11,8 @@ const additions = [
   'mobile-document-library-v1',
   'desktop-case-wizard-v1',
   'mobile-case-wizard-v1',
-  'followup-workspace-v1'
+  'followup-workspace-v1',
+  'module-headers-js'
 ];
 
 function assertScriptInventory(source, label = 'HTML') {
