@@ -194,6 +194,12 @@ das Container-Image.
 für `linux/amd64` und `linux/arm64` gebaut und vor der Veröffentlichung durch einen
 Container-Starttest geprüft.
 
+Der Stable-Workflow prüft außerdem, dass Programmversion und Tag übereinstimmen und die
+Release Notes unter `docs/releases/<Tag>.md` vorhanden sind. Nach erfolgreichem Container-Build
+erstellt er ein vollständiges GitHub-Release mit der versionierten HTML-Anwendung,
+`compose.yaml`, `betreuungsbuero.env.example` und `SHA256SUMS.txt`. Das Release wird erst
+freigegeben, wenn alle vier Downloads einschließlich ihrer Prüfsummen geprüft sind.
+
 ## Installation mit Docker Compose
 
 ### 1. Konfigurationsdateien vorbereiten

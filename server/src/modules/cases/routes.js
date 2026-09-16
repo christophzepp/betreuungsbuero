@@ -10,7 +10,7 @@ const path = require('path');
 const { DATA_ROOT } = require('../../config/paths');
 const db = require('../../database/index');
 const {
-  requireAuth, requireCaseManagement,
+  requireAuth, requireCaseManagement, requireAdmin,
   requireViewCases, requireEditCases, requireViewDocuments, requireEditDocuments,
   hasPermission
 } = require('../../middleware/authentication');
@@ -43,6 +43,11 @@ const caseDocumentStorage = createDocumentStorage({
     } catch (_error) { return {}; }
   }
 });
+
+const { createCaseDeletion, deletionOptions } = require('./delete-case');
+const caseDeletion = createCaseDeletion({ db, dataRoot: DATA_ROOT, storage: caseDocumentStorage });
+try { caseDeletion.recover(); }
+catch (error) { console.error('[case.delete] Ausstehende Dateibereinigung:', error.message); }
 
 // Nur lesender Rückfall für den früheren Dokumenten-Zwischenspeicher des Mail-Editors.
 // Neue Berichte/Anlagen werden als doc_files im zentralen Dokumentenspeicher abgelegt.
@@ -167,10 +172,8 @@ const insertCaseStmt = db.prepare(`
   INSERT INTO cases (id, label, file_number, created_by, stammdaten_json, stammdaten_updated_by)
   VALUES (@id, @label, @fileNumber, @userId, @stammdatenJson, @userId)
 `);
-const deleteCaseStmt = db.prepare('DELETE FROM cases WHERE id = ?');
 const deleteCaseReportsStmt = db.prepare('DELETE FROM case_reports WHERE case_id = ?');
 const deleteCaseDokuStmt = db.prepare('DELETE FROM case_doku_entries WHERE case_id = ?');
-const deleteCaseOverviewStmt = db.prepare('DELETE FROM betreuung_overview_entries WHERE case_id = ?');
 const updateStammdatenStmt = db.prepare(`
   UPDATE cases SET stammdaten_json = ?, stammdaten_updated_at = datetime('now'), stammdaten_updated_by = ? WHERE id = ?
 `);
@@ -213,7 +216,6 @@ const insertDocumentStmt = db.prepare(`
   VALUES (@id, @caseId, @filename, @mimeType, @size, @reportId, @userId)
 `);
 const deleteDocumentStmt = db.prepare('DELETE FROM case_documents WHERE id = ? AND case_id = ?');
-const deleteCaseDocumentsStmt = db.prepare('DELETE FROM case_documents WHERE case_id = ?');
 const getFieldAttachmentImportStmt = db.prepare(`
   SELECT i.file_id,f.sha256,f.name,f.mime_type,f.size
     FROM doc_module_import i
@@ -225,11 +227,6 @@ const rememberFieldAttachmentImportStmt = db.prepare(`
   VALUES ('aussendienst-anlage',?,?)
   ON CONFLICT(quelle,quell_id) DO UPDATE SET file_id=excluded.file_id
 `);
-const clearCaseBankConnectionsStmt = db.prepare("UPDATE bank_connections SET case_id = NULL WHERE case_id = ?");
-const clearManualBankAccountCasesStmt = db.prepare(`UPDATE bank_accounts_discovered
-  SET case_assignment_mode='auto', manual_case_id=NULL,
-      manual_case_updated_at=datetime('now'), manual_case_updated_by=NULL
-  WHERE manual_case_id=?`);
 
 function caseStammdatenBody(caseId) {
   const row = getCaseStmt.get(caseId);
@@ -438,55 +435,43 @@ router.patch('/:id', requireCaseManagement, (req, res) => {
   res.json({ case: publicCase(getCaseWithName(id)), storage: storageInfo });
 });
 
-router.delete('/:id', requireCaseManagement, (req, res) => {
+router.delete('/:id', requireAdmin, async (req, res) => {
   const { id } = req.params;
   const row = getCaseStmt.get(id);
   if (!row) return res.status(404).json({ error: 'Fall nicht gefunden.' });
-  const material = db.prepare(`
-    SELECT
-      (SELECT COUNT(*) FROM doc_files WHERE case_id=@id) AS explorer,
-      (SELECT COUNT(*) FROM case_documents WHERE case_id=@id) AS dokumente,
-      (SELECT COUNT(*) FROM case_doku_entries WHERE case_id=@id) AS doku,
-      (SELECT COUNT(*) FROM case_reports WHERE case_id=@id) AS berichte,
-      (SELECT COUNT(*) FROM case_contacts WHERE case_id=@id) AS kontakte
-  `).get({ id });
-  const materialCount = Object.values(material || {}).reduce((sum, value) => sum + Number(value || 0), 0);
-  const legacyDirs = [path.join(DOCUMENTS_DIR, id), path.join(DOKU_PHOTOS_DIR, id)];
-  const legacyBytes = legacyDirs.some((dir) => {
-    try { return fs.readdirSync(dir).length > 0; } catch (_error) { return false; }
-  });
-  if (materialCount || legacyBytes) {
-    return res.status(409).json({
-      error: 'Dieser Fall enthält Unterlagen und darf deshalb nicht gelöscht werden. Bitte archivieren; die Herausgabe bleibt dadurch vollständig möglich.',
-      material
-    });
-  }
-  let emptyCaseRoot = null;
+  let options, result;
   try {
-    const rootInfo = caseDocumentStorage.caseRootInfo(id, false);
-    emptyCaseRoot = path.join(caseDocumentStorage.root(), ...rootInfo.storageRelpath.split('/'));
-  } catch (_error) { emptyCaseRoot = null; }
-  const tx = db.transaction(() => {
-    deleteCaseContactsStmt.run(id);
-    deleteCaseDokuStmt.run(id);
-    deleteCaseReportsStmt.run(id);
-    deleteCaseDocumentsStmt.run(id);
-    deleteCaseOverviewStmt.run(id);
-    clearCaseBankConnectionsStmt.run(id);
-    clearManualBankAccountCasesStmt.run(id);
-    db.prepare("DELETE FROM doc_folders WHERE area='case' AND case_id=?").run(id);
-    db.prepare('DELETE FROM doc_case_roots WHERE case_id=?').run(id);
-    deleteCaseStmt.run(id);
-  });
-  tx();
-  // Nur fuer den nachweislich inhaltsleeren Fall duerfen leere technische Altordner weg.
-  try { fs.rmSync(path.join(DOCUMENTS_DIR, id), { recursive: true, force: true }); } catch (_e) { /* ignore */ }
-  try { fs.rmSync(path.join(DOKU_PHOTOS_DIR, id), { recursive: true, force: true }); } catch (_e) { /* ignore */ }
-  if (emptyCaseRoot) {
-    try { fs.rmSync(emptyCaseRoot, { recursive: true, force: true }); } catch (_e) { /* nachweislich leer */ }
+    options = deletionOptions(req.body);
+    result = caseDeletion.remove(row, options);
+  } catch (error) {
+    console.error('[case.delete]', error.message);
+    return res.status(error.status || 409).json({ error: error.message || 'Der Fall konnte nicht vollständig gelöscht werden.' });
   }
-  logAction(req, 'case.delete', 'case', id, { label: row.label });
-  res.json({ ok: true });
+  logAction(req, 'case.delete', 'case', id, { label: row.label, deleteRelated: options });
+  const events = require('../office/events');
+  for (const area of ['calendar', 'todos', 'documents', 'inbox', 'officeContacts', 'officeJson']) {
+    events.emit(area, { method: 'DELETE', caseId: id });
+  }
+  const warnings = [];
+  if (result.cleanupPending) warnings.push('Der Fall ist gelöscht. Die endgültige Dateibereinigung steht noch aus und wird beim nächsten Serverstart wiederholt.');
+  // Use the same provider deletion as the individual calendar/task routes.
+  const sync = require('../calendar/sync');
+  for (const [rows, removeRemote] of [[result.removedEvents, sync.deleteRemoteEvent], [result.removedTodos, sync.deleteRemoteTodo]]) {
+    for (const item of rows) {
+      if (!item.connection_id) continue;
+      const connection = db.prepare('SELECT * FROM calendar_connections WHERE id=?').get(item.connection_id);
+      if (!connection || !connection.enabled) {
+        warnings.push('Ein externer Kalender- oder Aufgabeneintrag konnte nicht mitgelöscht werden, weil die Verbindung nicht aktiv ist.');
+        continue;
+      }
+      try { await removeRemote(connection, item); }
+      catch (error) {
+        console.warn('[case.delete] Externe Löschung fehlgeschlagen:', error.message);
+        warnings.push('Ein externer Kalender- oder Aufgabeneintrag konnte nicht mitgelöscht werden. Bitte die Verbindung prüfen und den Eintrag beim Anbieter löschen.');
+      }
+    }
+  }
+  res.json({ ok: true, warnings: [...new Set(warnings)] });
 });
 
 function getCaseWithName(id) {

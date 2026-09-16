@@ -381,6 +381,9 @@ function createDocumentReconciler(options) {
           }
           for (const entry of entries.sort((left, right) => names.deutschVergleichen(left, right))) {
             if (entry === '.ablage-speicherkennung.json') continue;
+            // Pending permanent case deletions are recovered by deletion-files;
+            // never re-import their staged files as new documents.
+            if (entry.startsWith('.ablage-case-delete-')) continue;
             await visit(path.join(current, entry));
           }
           return;

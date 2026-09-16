@@ -17,8 +17,8 @@ function section(start, end) {
   return html.slice(a, b);
 }
 
-test('0.7.6 bietet einen echten leeren lokalen Fall mit stabiler ID an', () => {
-  assert.match(html, /const APP_VERSION='0\.7\.6'/);
+test('die Anwendung bietet einen echten leeren lokalen Fall mit stabiler ID an', () => {
+  assert.match(html, /const APP_VERSION='\d+\.\d+\.\d+'/);
   assert.match(html, /id="startCreateEmptyCaseBtn"/);
   assert.match(html, /localCaseId:uuid\(\)/);
   assert.match(html, /globalThis\.crypto\?\.randomUUID/);

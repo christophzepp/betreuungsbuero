@@ -1,4 +1,4 @@
-name: Stable-Container veröffentlichen
+name: Stable-Container und Release veröffentlichen
 
 on:
   push:
@@ -31,6 +31,9 @@ jobs:
 
       - name: Quellcode laden
         uses: actions/checkout@v6
+
+      - name: Version, Release Notes und Downloads vor dem Build prüfen
+        run: node server/scripts/release-assets.cjs prepare "$GITHUB_REF_NAME" "$RUNNER_TEMP/release-assets"
 
       - name: ARM64-Unterstützung einrichten
         uses: docker/setup-qemu-action@v4
@@ -126,3 +129,41 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=stable
           cache-to: type=gha,mode=max,scope=stable
+
+  publish-release:
+    needs: build-and-publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Quellcode des geprüften Tags laden
+        uses: actions/checkout@v6
+
+      - name: Downloads und Prüfsummen zusammenstellen
+        run: node server/scripts/release-assets.cjs prepare "$GITHUB_REF_NAME" "$RUNNER_TEMP/release-assets"
+
+      - name: Release mit allen Downloads vorbereiten
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          tag="$GITHUB_REF_NAME"
+          if gh release view "$tag" --json isDraft > "$RUNNER_TEMP/release-state.json" 2>/dev/null; then
+            if [[ "$(jq -r .isDraft "$RUNNER_TEMP/release-state.json")" == "true" ]]; then
+              gh release edit "$tag" --title "Betreuungsbüro ${tag#v}" --notes-file "docs/releases/$tag.md"
+              gh release upload "$tag" "$RUNNER_TEMP/release-assets/"* --clobber
+            fi
+          else
+            gh release create "$tag" "$RUNNER_TEMP/release-assets/"* \
+              --draft --verify-tag --title "Betreuungsbüro ${tag#v}" --notes-file "docs/releases/$tag.md"
+          fi
+
+      - name: Alle Downloads prüfen und vollständiges Release freigeben
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          gh api "repos/$GH_REPO/releases/tags/$GITHUB_REF_NAME" > "$RUNNER_TEMP/release-manifest.json"
+          node server/scripts/release-assets.cjs verify "$GITHUB_REF_NAME" "$RUNNER_TEMP/release-assets" "$RUNNER_TEMP/release-manifest.json"
+          gh release edit "$GITHUB_REF_NAME" --draft=false --latest

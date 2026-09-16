@@ -2821,7 +2821,7 @@ test('Mehrfachauswahl auch im Fallarchiv – mit eigenen Sammelaktionen', () => 
   /* Unwiderruflich und mehrfach: die Rückfrage nennt die Fälle beim Namen. Eine blosse Zahl
      kann man nicht gegenprüfen. Am Prüfstand: „3 archivierte Fälle unwiderruflich … \n\n
      Auerbach, Margarete\nKilic, Emre\nMustermann, Max". */
-  assert.ok(html.includes('Fälle unwiderruflich aus der Datenbank löschen?') && html.includes('${liste}'),
+  assert.ok(html.includes('caseDeletionDialog(namen)') && html.includes("textContent=namen.join('\\n')"),
     'Die Löschabfrage nennt die Fälle nicht beim Namen');
 });
 
