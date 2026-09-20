@@ -164,6 +164,9 @@ jobs:
         shell: bash
         run: |
           set -Eeuo pipefail
-          gh api "repos/$GH_REPO/releases/tags/$GITHUB_REF_NAME" > "$RUNNER_TEMP/release-manifest.json"
+          # Die REST-Abfrage nach Tag findet nur veröffentlichte Releases.
+          # gh release view löst auch Entwürfe auf; deren API-URL enthält die Release-ID.
+          release_api_url="$(gh release view "$GITHUB_REF_NAME" --json apiUrl --jq .apiUrl)"
+          gh api "$release_api_url" > "$RUNNER_TEMP/release-manifest.json"
           node server/scripts/release-assets.cjs verify "$GITHUB_REF_NAME" "$RUNNER_TEMP/release-assets" "$RUNNER_TEMP/release-manifest.json"
           gh release edit "$GITHUB_REF_NAME" --draft=false --latest
