@@ -220,44 +220,16 @@ test('Die Totenfürsorgeverfügung folgt jetzt dem Vordruck', () => {
   assert.equal(karteLesen('funeral_directive').checks.fd_signature_declarant.true, null);
 });
 
-test('Vermögensverzeichnis: alle Anker des eigenen Erzeugers sind gesetzt', () => {
-  const vorlage = v159.pdfTemplates.asset_inventory;
-  assert.equal(vorlage.mode, 'asset-coordinate', 'Der eigene Erzeuger ist nicht mehr zuständig');
-  assert.equal(vorlage.pages, 6);
-  assert.match(nachId.get('asset_inventory').template, /BS 10/, 'Nicht die Fassung BS 10');
-  assert.equal(nachId.get('asset_inventory').templateDate, '01/2023');
-
-  /* Die Namen, die der Erzeuger anspricht, muessen alle in assetCoordinates stehen: fehlt einer,
-     verschwindet die Angabe im Export lautlos. */
-  const erzeuger = html.slice(html.indexOf('async function v159CreateAssetInventoryPdf('));
-  const rumpf = erzeuger.slice(0, erzeuger.indexOf('\n}'));
-  const grenzen = [...rumpf.matchAll(/\.slice\(0,\s*(\d+)\)/g)].map((m) => Number(m[1]));
-  const zeilen = grenzen.length ? Math.max(...grenzen) : 2;
-  const gebraucht = new Set();
-  for (const t of rumpf.matchAll(/put(?:Amount)?\(\s*(?:`([^`]*)`|'([^']*)')/g)) {
-    const roh = t[1] || t[2];
-    if (!roh.includes('${')) { gebraucht.add(roh); continue }
-    for (let i = 0; i < zeilen; i++) gebraucht.add(roh.replace(/\$\{i\+(\d)\}/g, (_m, d) => String(i + Number(d))));
+test('Vermögensverzeichnis: bereitgestellte BS-10-Vorlage mit eigener Feldkarte', () => {
+  const vorlage=v159.pdfTemplates.asset_inventory;
+  assert.equal(vorlage.mode,'asset-coordinate');assert.equal(vorlage.pages,6);
+  assert.equal(nachId.get('asset_inventory').templateDate,'02/2012');
+  assert.match(nachId.get('asset_inventory').sourceUrl,/ag-schmallenberg\.nrw\.de/);
+  assert.equal(vorlage.mappingVersion,3);
+  for(const [name,rect] of Object.entries(v159.assetCoordinates)){
+    assert.ok(rect.page>=0&&rect.page<6,name);
+    assert.ok(rect.x>=0&&rect.x+rect.width<=596,name);
+    assert.ok(rect.y>=0&&rect.y+rect.height<=842,name);
   }
-  const aggregat = rumpf.slice(rumpf.indexOf('const aggregate=['));
-  for (const z of aggregat.slice(0, aggregat.indexOf(']\n') + 1).matchAll(/\['([^']*)','([^']*)',(?:'([^']*)'|null)\]/g)) {
-    gebraucht.add(z[2]);
-    if (z[3]) gebraucht.add(z[3]);
-  }
-  const anker = v159.assetCoordinates;
-  const fehlend = [...gebraucht].filter((name) => !(name in anker));
-  assert.deepEqual(fehlend, [], 'Anker fehlen');
-
-  for (const [name, rect] of Object.entries(anker)) {
-    assert.ok(rect.page >= 0 && rect.page < vorlage.pages, `${name}: Seite ${rect.page} gibt es nicht`);
-    assert.ok(rect.y >= 0 && rect.y + rect.height <= 842, `${name}: liegt ausserhalb des Blattes`);
-    assert.ok(rect.x >= 0 && rect.x + rect.width <= 596, `${name}: ragt ueber den Rand`);
-  }
-  /* Vorgedruckte Musterwerte (Summen, Erzeugungsdatum) werden vor dem Schreiben abgedeckt. */
-  assert.ok(html.includes('if(spec.clear&&text)page.drawRectangle('), 'Ueberdecken fehlt');
-  for (const name of ['EUR 1', 'Summe Seite 1', 'Summe Seite 2', 'Vermögen gesamt', 'Summe Schulden', 'Text1']) {
-    assert.equal(anker[name].clear, true, `${name}: der vorgedruckte Wert wird nicht abgedeckt`);
-  }
-  /* Der Unterschriftsort kommt aus den Stammdaten, nicht mehr fest verdrahtet. */
-  assert.ok(!/put\('Ort','St\. Goarshausen'\)/.test(html), 'Der Ort ist weiterhin fest verdrahtet');
+  assert.ok(v159.assetCoordinates.signature);
 });

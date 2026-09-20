@@ -404,7 +404,7 @@ test('Feinschliff 30.08.: ausgegraute Schreibwege, offener Fall markiert, ehrlic
     'Die Fallliste kennt die Anzeige-Wahrheit nicht mehr');
   assert.ok(HTML.includes('disabled title="Dieser Vorführfall ist gerade geöffnet.">Geöffnet</button>'),
     'Der offene Vorführfall bekommt wieder den scharfen „Schließen"-Knopf oder gar keine Markierung');
-  assert.match(HTML, /function closeServerCase\(\)\{\s*\n[^\n]*\n[^\n]*\n\s*if\(demoSperre\(\)\)return;/,
+  assert.match(HTML, /async function closeServerCase\(discard=false\)\{\s*\n[^\n]*\n[^\n]*\n\s*if\(demoSperre\(\)\)return;/,
     'closeServerCase ist in der Vorführung wieder scharf - es setzt den Arbeitsstand zurück');
   assert.ok(HTML.includes("window.bueroLocal.kontaktmonitor=kmRoh.map(function(e){"),
     'Der Kontaktmonitor-Bestand der Vorführung wird nicht mehr umgesetzt (Form + Fallkennung)');

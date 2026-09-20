@@ -2927,7 +2927,7 @@ test('Sammel-Löschen gibt es in BEIDEN Falltabellen', () => {
      ist es umgekehrt richtig, dort muss der Fall vorher zu sein. */
   const loeschBlock = html.slice(html.indexOf('async function bulkDeleteServerCases(caseIds,satz)'),
     html.indexOf("bulkMeldung('gelöscht'"));
-  const zu = loeschBlock.indexOf('if(window.__activeServerCaseId===caseId)closeServerCase();');
+  const zu = loeschBlock.indexOf('if(window.__activeServerCaseId===caseId)await closeServerCase(true);');
   assert.ok(zu > 0, 'Ein gelöschter aktiver Fall bleibt in der Arbeitsfläche stehen');
   assert.ok(zu > loeschBlock.indexOf("method:'DELETE'"),
     'Der aktive Fall wird VOR dem Löschen geschlossen - eine Ablehnung schlösse ihn dann grundlos');

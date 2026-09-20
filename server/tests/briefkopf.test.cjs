@@ -639,8 +639,8 @@ test('Fund 12: Verdrahtung - Cache-Frische, Aussendienst-Kopf, Editor-Texte', ()
   const q = html.slice(oeffnen, oeffnen + 1500);
   assert.ok(q.includes('window.__sigStore?.ensureCaregiver?.(caseId,true)'), 'ensureCaregiver beim Oeffnen');
   assert.ok(q.includes('window.__briefkopfInvalidieren?.()'), 'Invalidierung beim Oeffnen');
-  const schliessen = html.indexOf('  function closeServerCase(){');
-  assert.ok(html.slice(schliessen, schliessen + 2200).includes('window.__briefkopfInvalidieren?.()'), 'Invalidierung beim Schliessen');
+  const schliessen = html.indexOf('  async function closeServerCase(discard=false){');
+  assert.ok(html.slice(schliessen, schliessen + 2700).includes('window.__briefkopfInvalidieren?.()'), 'Invalidierung beim Schliessen');
   const wechsel = html.indexOf('  window.switchToCase=function(id){');
   assert.ok(html.slice(wechsel, wechsel + 1200).includes('window.__briefkopfInvalidieren?.()'), 'Invalidierung beim lokalen Fallwechsel');
   /* Aussendienst-Boot stellt den Kopf (ersteller) zur Laufzeit bereit */

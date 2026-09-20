@@ -184,6 +184,11 @@ das Container-Image.
 
 ## Veröffentlichungskanäle
 
+Aktuelle Freigabe: [Betreuungsbüro 0.7.12](https://github.com/christophzepp/betreuungsbuero/releases/tag/v0.7.12).
+Die [Release Notes](docs/releases/v0.7.12.md) beschreiben alle Änderungen, insbesondere die
+korrigierte Falldatenspeicherung, den überarbeiteten Vermögensverzeichnis-Export und die
+Verbesserungen an Einstellungen, Demo-Trennung und Kalenderkonten.
+
 | Kanal | Container-Image | Zweck |
 | --- | --- | --- |
 | Beta | `ghcr.io/christophzepp/betreuungsbuero-beta:beta` | Interne Vorabversionen aus `develop` |
