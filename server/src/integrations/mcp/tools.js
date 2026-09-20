@@ -65,12 +65,12 @@ function visibleCases(session) {
      gemeinsamer Code der ganzen Weboberflaeche. */
   if (!(session && (session.isAdmin || session.canViewCases))) return [];
   const vis = sichtbareFaelle(session);
-  return db.prepare('SELECT id, label, file_number, archived FROM cases ORDER BY label').all()
+  return db.prepare('SELECT id, label, file_number, archived FROM live_cases ORDER BY label').all()
     .filter(r => !vis || vis.has(String(r.id)));
 }
 function caseBlob(session, caseId) {
   if (!darfSehen(session, caseId)) return { err: 'Dieser Fall ist Ihrem Konto nicht zugeordnet.' };
-  const r = db.prepare('SELECT id, label, stammdaten_json, archived FROM cases WHERE id=?').get(String(caseId));
+  const r = db.prepare('SELECT id, label, stammdaten_json, archived FROM live_cases WHERE id=?').get(String(caseId));
   if (!r) return { err: 'Fall nicht gefunden.' };
   let cd = {}, defekt = false;
   try { cd = JSON.parse(r.stammdaten_json || '{}'); } catch (_e) { defekt = true; /* defekter Blob */ }
@@ -83,7 +83,7 @@ function writeBlob(caseId, cd, userId) {
      ("{"fristen":[…]}" und sonst nichts mehr). Die Pruefung sitzt bewusst HIER und nicht in den
      rund fuenfzehn apply()-Funktionen: so ist auch jeder kuenftige Schreiber gedeckt. Eine
      zusaetzliche Leseabfrage je Schreibvorgang ist der Preis dafuer. */
-  const roh = (db.prepare('SELECT stammdaten_json FROM cases WHERE id=?').get(String(caseId)) || {}).stammdaten_json;
+  const roh = (db.prepare('SELECT stammdaten_json FROM live_cases WHERE id=?').get(String(caseId)) || {}).stammdaten_json;
   if (roh && String(roh).trim()) {
     try { JSON.parse(roh); }
     catch (_e) {
@@ -104,7 +104,7 @@ function resolveCase(session, nameOrId) {
   if (!raw) return null;
   const needle = raw.toLowerCase();
   const visible = visibleCases(session);
-  const all = db.prepare('SELECT id, label FROM cases ORDER BY id').all();
+  const all = db.prepare('SELECT id, label FROM live_cases ORDER BY id').all();
   const visibleById = new Map(visible.map(c => [String(c.id), c]));
 
   /* IDs sind eindeutig und autoritativ. Ist die ID vorhanden, aber fuer dieses Konto nicht
@@ -166,7 +166,7 @@ function ibanZuFaellen(iban) {
   const gesucht = String(iban || '').replace(/\s+/g, '').toUpperCase();
   if (!gesucht) return [];
   const out = [];
-  for (const r of db.prepare('SELECT id, label, stammdaten_json FROM cases').all()) {
+  for (const r of db.prepare('SELECT id, label, stammdaten_json FROM live_cases').all()) {
     let banks = [];
     try { banks = JSON.parse(r.stammdaten_json || '{}').banks || []; } catch (_e) { banks = []; }
     for (const b of banks) {
@@ -370,7 +370,7 @@ const KINDS = {
   aufgabe_erledigen: {
     fields: [],
     apply(session, caseId, v, caseLabel) {
-      const r = db.prepare('SELECT id,title,case_id,case_label,visibility,owner_user_id FROM todos WHERE id=?').get(String(v.id || ''));
+      const r = db.prepare('SELECT id,title,case_id,case_label,visibility,owner_user_id FROM live_todos WHERE id=?').get(String(v.id || ''));
       if (!r) throw new Error('Aufgabe nicht gefunden: ' + v.id);
       pruefePrivatenEintrag(r, session, 'Diese Aufgabe');
       pruefeZielImFall(r, caseId, caseLabel, 'Diese Aufgabe');
@@ -381,7 +381,7 @@ const KINDS = {
   aufgabe_aendern: {
     fields: ['title', 'description', 'due_at', 'priority'],
     apply(session, caseId, v, caseLabel) {
-      const r = db.prepare('SELECT * FROM todos WHERE id=?').get(String(v.id || ''));
+      const r = db.prepare('SELECT * FROM live_todos WHERE id=?').get(String(v.id || ''));
       if (!r) throw new Error('Aufgabe nicht gefunden: ' + v.id);
       pruefePrivatenEintrag(r, session, 'Diese Aufgabe');
       pruefeZielImFall(r, caseId, caseLabel, 'Diese Aufgabe');
@@ -418,7 +418,7 @@ const KINDS = {
   termin_verschieben: {
     fields: ['start_at', 'end_at', 'location'],
     apply(session, caseId, v, caseLabel) {
-      const r = db.prepare('SELECT * FROM calendar_events WHERE id=?').get(String(v.id || ''));
+      const r = db.prepare('SELECT * FROM live_calendar_events WHERE id=?').get(String(v.id || ''));
       if (!r) throw new Error('Termin nicht gefunden: ' + v.id);
       pruefePrivatenEintrag(r, session, 'Dieser Termin');
       pruefeZielImFall(r, caseId, caseLabel, 'Dieser Termin');
@@ -432,7 +432,7 @@ const KINDS = {
   termin_absagen: {
     fields: [],
     apply(session, caseId, v, caseLabel) {
-      const r = db.prepare('SELECT id,title,case_id,case_label,visibility,owner_user_id FROM calendar_events WHERE id=?').get(String(v.id || ''));
+      const r = db.prepare('SELECT id,title,case_id,case_label,visibility,owner_user_id FROM live_calendar_events WHERE id=?').get(String(v.id || ''));
       if (!r) throw new Error('Termin nicht gefunden: ' + v.id);
       pruefePrivatenEintrag(r, session, 'Dieser Termin');
       pruefeZielImFall(r, caseId, caseLabel, 'Dieser Termin');
@@ -469,7 +469,7 @@ const KINDS = {
   kontakt_aendern: {
     fields: ['name', 'firstName', 'organisation', 'role', 'phone', 'email', 'street', 'zip', 'city', 'note'],
     apply(session, caseId, v) {
-      const r = db.prepare('SELECT * FROM case_contacts WHERE id=? AND case_id=?').get(String(v.id || ''), String(caseId));
+      const r = db.prepare('SELECT * FROM live_case_contacts WHERE id=? AND case_id=?').get(String(v.id || ''), String(caseId));
       if (!r) throw new Error('Kontakt nicht gefunden: ' + v.id);
       const data = JSON.parse(r.data_json || '{}');
       for (const k of KINDS.kontakt_aendern.fields) if (v[k] != null) data[k] = String(v[k]);
@@ -481,7 +481,7 @@ const KINDS = {
   kontakt_loeschen: {
     fields: [],
     apply(session, caseId, v) {
-      const r = db.prepare('SELECT id FROM case_contacts WHERE id=? AND case_id=?').get(String(v.id || ''), String(caseId));
+      const r = db.prepare('SELECT id FROM live_case_contacts WHERE id=? AND case_id=?').get(String(v.id || ''), String(caseId));
       if (!r) throw new Error('Kontakt nicht gefunden: ' + v.id);
       db.prepare('DELETE FROM case_contacts WHERE id=?').run(r.id);
       return { id: r.id, ort: 'Adressbuch (gelöscht)' };
@@ -571,7 +571,7 @@ const KINDS = {
   doku_eintrag_aendern: {
     fields: ['date', 'type', 'detail', 'freeDetail', 'actor', 'actorGroup', 'contactType'],
     apply(session, caseId, v) {
-      const r = db.prepare('SELECT * FROM case_doku_entries WHERE id=? AND case_id=?').get(String(v.id || ''), String(caseId));
+      const r = db.prepare('SELECT * FROM live_case_doku_entries WHERE id=? AND case_id=?').get(String(v.id || ''), String(caseId));
       if (!r) throw new Error('Doku-Eintrag nicht gefunden: ' + v.id);
       const data = JSON.parse(r.data_json || '{}');
       for (const k of KINDS.doku_eintrag_aendern.fields) if (v[k] != null) data[k] = String(v[k]);
@@ -883,7 +883,7 @@ tool('bb_fall_stammdaten', 'bb.read', 'Stammdaten eines Falls (Person, Betreuung
 });
 tool('bb_termine_liste', 'bb.read', 'Kalendereinträge (optional je Fall, Zeitraum von/bis ISO).', { ...P_FALL, von: { type: 'string' }, bis: { type: 'string' }, ...P_UMFANG }, [], (s, a) => {
   const c = a.fall ? needCase(s, a) : null;
-  let rows = db.prepare('SELECT id,title,location,start_at,end_at,all_day,case_id,case_label,visibility,owner_user_id FROM calendar_events ORDER BY start_at').all();
+  let rows = db.prepare('SELECT id,title,location,start_at,end_at,all_day,case_id,case_label,visibility,owner_user_id FROM live_calendar_events ORDER BY start_at').all();
   rows = sichtbareZuordnungen(s, rows);
   if (c) rows = rows.filter(r => gehoertZuFall(r, c.id));
   if (a.von) rows = rows.filter(r => r.start_at >= a.von);
@@ -893,7 +893,7 @@ tool('bb_termine_liste', 'bb.read', 'Kalendereinträge (optional je Fall, Zeitra
 });
 tool('bb_aufgaben_liste', 'bb.read', 'Aufgaben (offen/erledigt, optional je Fall).', { ...P_FALL, status: { type: 'string', enum: ['offen', 'erledigt', 'alle'] }, ...P_UMFANG }, [], (s, a) => {
   const c = a.fall ? needCase(s, a) : null;
-  let rows = db.prepare('SELECT id,title,due_at,done,priority,case_label,case_id,visibility,owner_user_id FROM todos ORDER BY COALESCE(due_at, start_at, created_at)').all();
+  let rows = db.prepare('SELECT id,title,due_at,done,priority,case_label,case_id,visibility,owner_user_id FROM live_todos ORDER BY COALESCE(due_at, start_at, created_at)').all();
   rows = sichtbareZuordnungen(s, rows);
   if (c) rows = rows.filter(r => gehoertZuFall(r, c.id));
   if (a.status !== 'alle') rows = rows.filter(r => a.status === 'erledigt' ? r.done === 1 : r.done !== 1);
@@ -907,7 +907,7 @@ tool('bb_fristen_liste', 'bb.read', 'Fristen eines Falls.', { ...P_FALL, ...P_UM
   listFromBlob(s, a, 'fristen', f => ({ id: f.id, titel: f.title, faellig: f.dueDate, kategorie: f.category, gegenueber: f.institution, status: f.status || 'offen' })));
 tool('bb_doku_suchen', 'bb.read', 'Falldokumentation durchsuchen (Volltext).', { ...P_FALL, suchtext: { type: 'string' }, ...P_UMFANG }, ['fall'], (s, a) => {
   const c = needCase(s, a);
-  const rows = db.prepare('SELECT id, data_json, created_at FROM case_doku_entries WHERE case_id=? ORDER BY created_at DESC').all(String(c.id));
+  const rows = db.prepare('SELECT id, data_json, created_at FROM live_case_doku_entries WHERE case_id=? ORDER BY created_at DESC').all(String(c.id));
   const q = String(a.suchtext || '').toLowerCase();
   const list = rows.map(r => { try { return Object.assign({ _id: r.id }, JSON.parse(r.data_json || '{}')); } catch (_e) { return null; } }).filter(Boolean)
     .filter(e => !q || JSON.stringify(e).toLowerCase().includes(q));
@@ -917,7 +917,7 @@ tool('bb_doku_suchen', 'bb.read', 'Falldokumentation durchsuchen (Volltext).', {
 tool('bb_gesundheit_liste', 'bb.read', 'Gesundheitsdaten eines Falls (Übersicht + gesundheitsbezogene Doku).', { ...P_FALL, ...P_UMFANG }, ['fall'], (s, a) => {
   const c = needCase(s, a);
   const { cd, err } = caseBlob(s, c.id); if (err) throw new Error(err);
-  const doku = db.prepare('SELECT data_json FROM case_doku_entries WHERE case_id=?').all(String(c.id))
+  const doku = db.prepare('SELECT data_json FROM live_case_doku_entries WHERE case_id=?').all(String(c.id))
     .map(r => { try { return JSON.parse(r.data_json || '{}'); } catch (_e) { return null; } })
     .filter(e => e && /gesundheit|arzt|krankenhaus|operation/i.test((e.type || '') + ' ' + (e.detail || '')));
   return { fall: c.label, gesundheitsinfo: cd.healthInfo || {}, uebersicht: cd.health || {}, doku: kurz(doku, e => ({ datum: e.date, vermerk: e.detail, text: String(e.freeDetail || '').slice(0, 300) }), a.umfang) };
@@ -950,7 +950,7 @@ tool('bb_bedarfe_liste', 'bb.read', 'Wünsche, Ziele, Bedarfe, Entscheidungen un
 tool('bb_bank_konten', 'bb.read', 'Bankkonten (Hibiscus) mit Saldo und Fallzuordnung.', {}, [], (s) => {
   if (!(s.isAdmin || s.canViewBankData)) throw new Error('Keine Berechtigung, Bankdaten anzusehen.');
   const map = new Map();
-  for (const r of db.prepare('SELECT id,label,stammdaten_json FROM cases').all()) {
+  for (const r of db.prepare('SELECT id,label,stammdaten_json FROM live_cases').all()) {
     try { for (const b of (JSON.parse(r.stammdaten_json || '{}').banks || [])) { const i = String(b.iban || '').replace(/\s+/g, '').toUpperCase(); if (i) map.set(i, r.label); } } catch (_e) {}
   }
   const vis = sichtbareFaelle(s);
@@ -978,7 +978,7 @@ tool('bb_bank_umsaetze', 'bb.read', 'Kontoumsätze einer IBAN (aus dem letzten A
 tool('bb_kontakte_suchen', 'bb.read', 'Adressbuch eines Falls durchsuchen.', { ...P_FALL, suchtext: { type: 'string' } }, ['fall'], (s, a) => {
   const c = needCase(s, a);
   const q = String(a.suchtext || '').toLowerCase();
-  const rows = db.prepare('SELECT data_json FROM case_contacts WHERE case_id=?').all(String(c.id))
+  const rows = db.prepare('SELECT data_json FROM live_case_contacts WHERE case_id=?').all(String(c.id))
     .map(r => { try { return JSON.parse(r.data_json || '{}'); } catch (_e) { return null; } }).filter(Boolean)
     .filter(k => !q || JSON.stringify(k).toLowerCase().includes(q));
   return { fall: c.label, anzahl: rows.length, kontakte: rows.slice(0, 60) };
@@ -995,7 +995,7 @@ tool('bb_dokumente_suchen', 'bb.read', 'Dokumentenspeicher durchsuchen: Dateinam
   const q = '%' + roh.toLowerCase() + '%';
   const vis = sichtbareFaelle(s);
   let namen = [];
-  try { namen = db.prepare("SELECT id, name, case_id FROM doc_files WHERE deleted_at IS NULL AND lower(name) LIKE ? LIMIT 40").all(q); } catch (_e) {}
+  try { namen = db.prepare("SELECT id, name, case_id FROM live_doc_files WHERE deleted_at IS NULL AND lower(name) LIKE ? LIMIT 40").all(q); } catch (_e) {}
   namen = namen.filter(r => !vis || !r.case_id || vis.has(String(r.case_id)));
   // Volltext ueber den FTS5-Index aus D5 (Tabelle doc_text) - Spalten werden zur Laufzeit erkannt,
   // damit eine Schemaabweichung das Werkzeug nicht sprengt.
@@ -1007,7 +1007,7 @@ tool('bb_dokumente_suchen', 'bb.read', 'Dokumentenspeicher durchsuchen: Dateinam
     if (match) {
       const hits = db.prepare('SELECT ' + fId + " AS fid, snippet(doc_text, -1, '[', ']', ' … ', 12) AS ausschnitt FROM doc_text WHERE doc_text MATCH ? LIMIT 30").all(match);
       for (const h of hits) {
-        const f = db.prepare('SELECT id, name, case_id FROM doc_files WHERE id=? AND deleted_at IS NULL').get(String(h.fid));
+        const f = db.prepare('SELECT id, name, case_id FROM live_doc_files WHERE id=? AND deleted_at IS NULL').get(String(h.fid));
         if (!f) continue;
         if (vis && f.case_id && !vis.has(String(f.case_id))) continue;
         voll.push({ id: f.id, name: f.name, fallId: f.case_id || null, ausschnitt: h.ausschnitt });
@@ -1017,7 +1017,7 @@ tool('bb_dokumente_suchen', 'bb.read', 'Dokumentenspeicher durchsuchen: Dateinam
   return { hinweis: DATEN_MARKER, namenstreffer: namen.map(r => ({ id: r.id, name: r.name, fallId: r.case_id || null })), volltexttreffer: voll };
 });
 tool('bb_dokument_text', 'bb.read', 'Erkannten Text (OCR/Textebene) einer Datei aus dem Dokumentenspeicher lesen.', { dateiId: { type: 'string' }, ...P_UMFANG }, ['dateiId'], (s, a) => {
-  const f = db.prepare('SELECT id, name, case_id FROM doc_files WHERE id=? AND deleted_at IS NULL').get(String(a.dateiId));
+  const f = db.prepare('SELECT id, name, case_id FROM live_doc_files WHERE id=? AND deleted_at IS NULL').get(String(a.dateiId));
   if (!f) throw new Error('Datei nicht gefunden.');
   const vis = sichtbareFaelle(s);
   if (vis && f.case_id && !vis.has(String(f.case_id))) throw new Error('Dieser Fall ist Ihrem Konto nicht zugeordnet.');
@@ -1071,7 +1071,7 @@ tool('bb_posteingang_lesen', 'bb.read', 'Ein Posteingangs-Dokument mit OCR-Text 
 });
 tool('bb_betreuungsuebersicht', 'bb.read', 'Betreuungsübersicht-Einträge (fürs Gericht) eines Falls.', { ...P_FALL }, ['fall'], (s, a) => {
   const c = needCase(s, a);
-  return { fall: c.label, eintraege: db.prepare('SELECT period_start, aenderungsart, uebergabe_an, updated_at FROM betreuung_overview_entries WHERE case_id=? ORDER BY period_start DESC LIMIT 60').all(String(c.id)) };
+  return { fall: c.label, eintraege: db.prepare('SELECT period_start, aenderungsart, uebergabe_an, updated_at FROM live_betreuung_overview_entries WHERE case_id=? ORDER BY period_start DESC LIMIT 60').all(String(c.id)) };
 });
 tool('bb_kontaktmonitor', 'bb.read', 'Kontaktmonitor (§ 1863 BGB): büroweiter Stand der Kontaktpflicht.', {}, [], (s) => {
   const row = db.prepare("SELECT data_json FROM office_json WHERE key='kontaktmonitor'").get();
@@ -1104,7 +1104,7 @@ tool('bb_buero_finanzen', 'bb.read', 'Büro-Finanzbuchungen (Kanzleikonto).', { 
   return { anzahl: rows.length, buchungen: kurz(rows, r => r, a.umfang) };
 });
 tool('bb_fahrten', 'bb.read', 'Fahrtenbuch (Fahrtkostennachweis).', { ...P_UMFANG }, [], (s, a) => {
-  const rows = db.prepare('SELECT datum, fahranlass, case_label, start_adresse, ziel_adresse, kilometer, erstattungsbetrag_snapshot, status FROM mileage_trips ORDER BY datum DESC LIMIT 300').all();
+  const rows = db.prepare('SELECT datum, fahranlass, case_label, start_adresse, ziel_adresse, kilometer, erstattungsbetrag_snapshot, status FROM live_mileage_trips ORDER BY datum DESC LIMIT 300').all();
   const vis = sichtbareFaelle(s);
   const visLabels = vis ? new Set(visibleCases(s).map(c => c.label)) : null;
   return { fahrten: kurz(rows.filter(r => !visLabels || !r.case_label || visLabels.has(r.case_label)), r => r, a.umfang) };
@@ -1112,7 +1112,7 @@ tool('bb_fahrten', 'bb.read', 'Fahrtenbuch (Fahrtkostennachweis).', { ...P_UMFAN
 tool('bb_rechnungen', 'bb.read', 'Ausgangsrechnungen des Büros.', { ...P_UMFANG }, [], (s, a) => {
   if (!(s.isAdmin || s.canViewFinance)) throw new Error('Keine Berechtigung, Finanzen anzusehen.');
   let rows = [];
-  try { rows = db.prepare('SELECT * FROM outgoing_invoices ORDER BY rowid DESC LIMIT 200').all(); } catch (_e) {}
+  try { rows = db.prepare('SELECT * FROM live_outgoing_invoices ORDER BY rowid DESC LIMIT 200').all(); } catch (_e) {}
   return { anzahl: rows.length, rechnungen: kurz(rows, r => { const o = {}; for (const k of Object.keys(r)) if (!/json$/.test(k)) o[k] = r[k]; return o; }, a.umfang) };
 });
 tool('bb_qualifikationen', 'bb.read', 'Qualifikationsmanager (Fortbildungen, Einstufung).', {}, [], (s) => {
@@ -1135,10 +1135,10 @@ tool('bb_fall_dossier', 'bb.read', 'Kompaktes Dossier eines Falls (z. B. vor ein
   const { cd, err } = caseBlob(s, c.id); if (err) throw new Error(err);
   const heute = today();
   const in14 = new Date(Date.now() + 14 * 86400000).toISOString().slice(0, 10);
-  const doku = db.prepare('SELECT data_json FROM case_doku_entries WHERE case_id=? ORDER BY created_at DESC LIMIT 5').all(String(c.id))
+  const doku = db.prepare('SELECT data_json FROM live_case_doku_entries WHERE case_id=? ORDER BY created_at DESC LIMIT 5').all(String(c.id))
     .map(r => { try { const e = JSON.parse(r.data_json); return { datum: e.date, vermerk: e.detail, text: String(e.freeDetail || '').slice(0, 150) }; } catch (_e) { return null; } }).filter(Boolean);
   const termine = sichtbareZuordnungen(s,
-    db.prepare('SELECT title,start_at,location,case_id,case_label,visibility,owner_user_id FROM calendar_events WHERE start_at>=? AND start_at<=? ORDER BY start_at').all(heute, in14 + 'T23:59'))
+    db.prepare('SELECT title,start_at,location,case_id,case_label,visibility,owner_user_id FROM live_calendar_events WHERE start_at>=? AND start_at<=? ORDER BY start_at').all(heute, in14 + 'T23:59'))
     .filter(t => gehoertZuFall(t, c.id)).slice(0, 10)
     .map(t => Object.assign({}, t, fallReferenz(t)));
   const p2 = cd.person || {};
@@ -1164,7 +1164,7 @@ tool('bb_luecken_pruefen', 'bb.read', 'Datenlücken eines Falls (z. B. vor dem J
   pruef(!(cd.insurances || []).length, 'Versicherungen (mind. Krankenkasse)');
   pruef(!((cd.accommodation || {}).type), 'Wohnform');
   pruef(!(cd.fristen || []).length, 'Fristen (keine einzige hinterlegt)');
-  const doku = db.prepare('SELECT MAX(created_at) m FROM case_doku_entries WHERE case_id=?').get(String(c.id)).m;
+  const doku = db.prepare('SELECT MAX(created_at) m FROM live_case_doku_entries WHERE case_id=?').get(String(c.id)).m;
   pruef(!doku, 'Falldokumentation (kein einziger Eintrag)');
   return { fall: c.label, luecken: fehlt, hinweis: fehlt.length ? '' : 'Keine offensichtlichen Lücken in den Kernbereichen.' };
 });
@@ -1186,7 +1186,7 @@ tool('bb_formular_werte', 'bb.read', 'Liefert zu Formular-Feldnamen die passende
     [/bic/i, () => bank.bic, 'stammdaten'],
     [/kontoinhaber/i, () => bank.accountHolder, 'stammdaten'],
     [/betreuer(in)?$|betreuername/i, () => [rb.firstName, rb.lastName].filter(Boolean).join(' ') || rb.name, 'stammdaten'],
-    [/aktenzeichen|az\b/i, () => rb.aktenzeichen || rb.fileNumber || (db.prepare('SELECT file_number FROM cases WHERE id=?').get(String(c.id)) || {}).file_number, 'stammdaten'],
+    [/aktenzeichen|az\b/i, () => rb.aktenzeichen || rb.fileNumber || (db.prepare('SELECT file_number FROM live_cases WHERE id=?').get(String(c.id)) || {}).file_number, 'stammdaten'],
     [/gericht/i, () => rb.gericht || rb.court, 'stammdaten'],
     [/krankenkasse/i, () => ((cd.insurances || []).find(i2 => /kranken/i.test(i2.type || '')) || {}).provider, 'abgeleitet'],
     [/datum$/i, () => today(), 'abgeleitet']
@@ -1211,10 +1211,10 @@ tool('bb_uebersicht_heute', 'bb.read', 'Tagesübersicht über alle sichtbaren F�
   const heute = today();
   const vis = sichtbareFaelle(s);
   const termine = sichtbareZuordnungen(s,
-    db.prepare('SELECT title,start_at,case_id,case_label,visibility,owner_user_id FROM calendar_events WHERE start_at LIKE ? ORDER BY start_at').all(heute + '%'))
+    db.prepare('SELECT title,start_at,case_id,case_label,visibility,owner_user_id FROM live_calendar_events WHERE start_at LIKE ? ORDER BY start_at').all(heute + '%'))
     .map(t => Object.assign({}, t, fallReferenz(t)));
   const aufgaben = sichtbareZuordnungen(s,
-    db.prepare('SELECT title,due_at,case_id,case_label,visibility,owner_user_id FROM todos WHERE done!=1 AND due_at<=? AND due_at!=\'\' ORDER BY due_at LIMIT 60').all(heute + 'T23:59'))
+    db.prepare('SELECT title,due_at,case_id,case_label,visibility,owner_user_id FROM live_todos WHERE done!=1 AND due_at<=? AND due_at!=\'\' ORDER BY due_at LIMIT 60').all(heute + 'T23:59'))
     .map(t => Object.assign({}, t, fallReferenz(t)));
   const fristen = [];
   for (const c of visibleCases(s)) {
@@ -1237,7 +1237,7 @@ tool('bb_pflichten_pruefen', 'bb.read', 'Pflichten-Radar: Fälle ohne Kontakt/Do
   const grenze = new Date(Date.now() - schwelle * 86400000).toISOString().slice(0, 10);
   const out = [];
   for (const c of visibleCases(s).filter(c => c.archived !== 1)) {
-    const letzte = db.prepare('SELECT MAX(created_at) m FROM case_doku_entries WHERE case_id=?').get(String(c.id)).m || '';
+    const letzte = db.prepare('SELECT MAX(created_at) m FROM live_case_doku_entries WHERE case_id=?').get(String(c.id)).m || '';
     const { cd } = caseBlob(s, c.id) || {};
     const ueberfaellig = ((cd || {}).fristen || []).filter(f => f && f.status !== 'erledigt' && f.dueDate && f.dueDate < today()).length;
     if ((letzte || '') < grenze || ueberfaellig > 0) {
@@ -1310,7 +1310,13 @@ tool('bb_vorschlag_uebernehmen', 'bb.propose', 'Bestätigten Vorschlag übernehm
     const alle = JSON.parse(p.payload_json || '[]');
     const auswahl = (Array.isArray(a.zeilen) && a.zeilen.length) ? a.zeilen.map(n => alle[n - 1]).filter(Boolean) : alle;
     if (!auswahl.length) throw new Error('Auswahl ist leer.');
-    const caseRow = p.case_id ? db.prepare('SELECT label FROM cases WHERE id=?').get(p.case_id) : null;
+    // Vor dem ersten Schreibzugriff prüfen, auch für gemischte Vorschlagspakete.
+    const sourcePreferences = require('../../modules/calendar/source-preferences').create(db);
+    for (const row of auswahl) {
+      const kind = p.kind === 'paket' ? row.modul : p.kind;
+      if (['termin', 'aufgabe', 'wiedervorlage'].includes(kind)) sourcePreferences.assertLocalAllowed(s.userId, kind === 'termin' ? 'event' : 'task');
+    }
+    const caseRow = p.case_id ? db.prepare('SELECT label FROM live_cases WHERE id=?').get(p.case_id) : null;
     const ergebnisse = [];
     for (let i = 0; i < auswahl.length; i++) {
       // Korrekturen: NUR whitelisted Felder aus dem Client uebernehmen - alles andere stammt

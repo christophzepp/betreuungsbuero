@@ -10,6 +10,7 @@ const { DATA_ROOT: DEFAULT_DATA_ROOT } = require('../../config/paths');
 const db = require('../../database/index');
 const { requireAuth, requireViewCases, requireEditCases } = require('../../middleware/authentication');
 const sync = require('./sync');
+const sourcePreferences = require('./source-preferences').create(db);
 const syncRunner = require('../sync/runner');
 const officeEvents = require('../office/events');
 const { createModuleFiles } = require('../documents/module-files');
@@ -32,10 +33,10 @@ const DATA_ROOT = path.resolve(DEFAULT_DATA_ROOT);
 const ATTACHMENTS_DIR = path.join(DATA_ROOT, 'todo-attachments');
 function attachmentFilePath(todoId, attId) { return path.join(ATTACHMENTS_DIR, todoId, attId); }
 
-const listStmt = db.prepare('SELECT * FROM todos ORDER BY (due_at = \'\'), due_at');
+const listStmt = db.prepare('SELECT * FROM live_todos ORDER BY (due_at = \'\'), due_at');
 // Multi-User-Sichtbarkeit (Nutzerwunsch): öffentliche (büroweite) Aufgaben + eigene private.
-const listVisibleStmt = db.prepare("SELECT * FROM todos WHERE visibility = 'public' OR owner_user_id = ? ORDER BY (due_at = ''), due_at");
-const getStmt = db.prepare('SELECT * FROM todos WHERE id = ?');
+const listVisibleStmt = db.prepare("SELECT * FROM live_todos WHERE visibility = 'public' OR owner_user_id = ? ORDER BY (due_at = ''), due_at");
+const getStmt = db.prepare('SELECT * FROM live_todos WHERE id = ?');
 const insertStmt = db.prepare(`
   INSERT INTO todos
     (id, title, description, due_at, start_at, done, priority, recurrence_rule, case_label,
@@ -226,22 +227,26 @@ router.post('/', requireEditCases, async (req, res) => {
   // bestehende Einzel-Verbindungs-Bueros nicht unangekuendigt anders verhalten. Draussen schuetzt
   // der Nur-Export-Waechter in sync/runner.js diese Eintraege vor Fremdaenderungen.
   const exportableType = row.itemType === 'deadline' || row.itemType === 'followup';
-  let target = null;
+  let destination;
+  try { destination = sourcePreferences.resolve(req.session.userId, 'task', connectionId, calendarRef); }
+  catch (error) { return res.status(error.status || 500).json({ error: error.message }); }
+  if (destination.required && row.recurrenceRule) return res.status(422).json({ error: 'Wiederkehrende Aufgaben benötigen derzeit das lokale Speicherziel. Bitte dieses einschalten oder die Wiederholung entfernen.' });
+  let target = destination.target?.connection || null;
   if ((row.itemType === 'task' || exportableType) && !row.recurrenceRule) {
-    if (connectionId === undefined) {
+    if (!target && connectionId === undefined) {
       if (!exportableType) {
         const enabled = sync.listEnabledConnections()
           .filter((connection) => connectionVisible(connection, req.session));
         if (enabled.length === 1) target = enabled[0];
       }
-    } else if (connectionId && connectionId !== 'local') {
+    } else if (!target && connectionId && connectionId !== 'local') {
       const conn = getConnectionStmt.get(connectionId);
       if (conn && conn.enabled && connectionVisible(conn, req.session)) target = conn;
     }
   }
   if (target) {
     try {
-      const pushed = await sync.pushTodo(target, { title: row.title, description: row.description, dueAt: row.dueAt, done: false, priority: row.priority, caseId: row.caseId, calendarRef: (calendarRef || '') });
+      const pushed = await sync.pushTodo(target, { title: row.title, description: row.description, dueAt: row.dueAt, done: false, priority: row.priority, caseId: row.caseId, calendarRef: (destination.target?.calendarRef || calendarRef || '') });
       row.source = target.provider;
       row.connectionId = target.id;
       row.calendarRef = pushed.calendarRef || '';
@@ -251,6 +256,7 @@ router.post('/', requireEditCases, async (req, res) => {
       row.visibility = target.visibility === 'private' ? 'private' : 'public';
     } catch (error) {
       console.warn('[todos] Aufgabe konnte nicht gespiegelt werden:', error.message);
+      if (destination.required) return res.status(502).json({ error: 'Der Eintrag konnte nicht in der Online-Aufgabenliste gespeichert werden. Das lokale Speicherziel ist ausgeschaltet; bitte erneut versuchen.' });
     }
   }
   insertStmt.run(row);

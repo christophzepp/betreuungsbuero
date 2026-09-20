@@ -2166,4 +2166,7 @@ db.exec(`
   PRIMARY KEY(case_id,contact_id)
  );
 `);
+require('../modules/demo/retire-build-user').retire(db);
+require('../modules/settings/system-time').apply(db);
+require('../modules/demo/live-data').install(db);
 module.exports = db;

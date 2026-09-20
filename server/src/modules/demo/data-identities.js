@@ -25,6 +25,10 @@ function isDemoCaseId(value) {
   return DEMO_CASE_IDS.has(String(value || '').trim());
 }
 
+function isLiveCaseId(value) {
+  return process.env.DEMO_PACKAGE_BUILD === '1' || !isDemoCaseId(value);
+}
+
 function isDemoCaseLabel(value) {
   return DEMO_CASE_LABELS.has(String(value || '').trim().toLocaleLowerCase('de'));
 }
@@ -34,5 +38,6 @@ module.exports = {
   DEMO_CASE_IDS,
   isDemoUsername,
   isDemoCaseId,
+  isLiveCaseId,
   isDemoCaseLabel
 };

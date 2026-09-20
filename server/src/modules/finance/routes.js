@@ -455,8 +455,8 @@ router.delete('/transactions/:id', requireEditFinance, (req, res) => {
 const RECEIPTS_DIR = path.join(DATA_ROOT, 'finance-receipts');
 function receiptFilePath(id) { return path.join(RECEIPTS_DIR, id); }
 
-const listReceiptsStmt = db.prepare('SELECT * FROM finance_receipts ORDER BY uploaded_at DESC');
-const getReceiptStmt = db.prepare('SELECT * FROM finance_receipts WHERE id = ?');
+const listReceiptsStmt = db.prepare('SELECT * FROM live_finance_receipts ORDER BY uploaded_at DESC');
+const getReceiptStmt = db.prepare('SELECT * FROM live_finance_receipts WHERE id = ?');
 const insertReceiptStmt = db.prepare(`
   INSERT INTO finance_receipts (id, filename, mime_type, size, ocr_status, uploaded_by)
   VALUES (@id, @filename, @mimeType, @size, 'pending', @userId)

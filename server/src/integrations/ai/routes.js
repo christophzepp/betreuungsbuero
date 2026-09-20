@@ -19,6 +19,9 @@ router.use(requireAuth);
 
 const ALLOWED_HOSTS = new Set([
   'api.openai.com',
+  'api.poe.com',
+  'api.langdock.com',
+  'api.deutschlandgpt.de',
   'api.anthropic.com',
   'generativelanguage.googleapis.com',
   'openai.inference.de-txl.ionos.com',

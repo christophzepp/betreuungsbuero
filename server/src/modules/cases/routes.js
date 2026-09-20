@@ -159,15 +159,15 @@ const listCasesStmt = db.prepare(`
          json_extract(c.stammdaten_json, '$.person.firstName') AS sd_first_name,
          json_extract(c.stammdaten_json, '$.person.birthDate') AS sd_birth_date,
          COALESCE(json_array_length(c.stammdaten_json, '$.exportHistory'), 0) AS export_history_count,
-         (SELECT COUNT(*) FROM case_contacts cc WHERE cc.case_id = c.id) AS contacts_count,
-         (SELECT COUNT(*) FROM case_reports cr WHERE cr.case_id = c.id) AS reports_count,
-         (SELECT COUNT(*) FROM case_doku_entries cd WHERE cd.case_id = c.id) AS doku_count
-  FROM cases c
+         (SELECT COUNT(*) FROM live_case_contacts cc WHERE cc.case_id = c.id) AS contacts_count,
+         (SELECT COUNT(*) FROM live_case_reports cr WHERE cr.case_id = c.id) AS reports_count,
+         (SELECT COUNT(*) FROM live_case_doku_entries cd WHERE cd.case_id = c.id) AS doku_count
+  FROM live_cases c
   LEFT JOIN users u ON u.id = c.stammdaten_updated_by
   LEFT JOIN users uo ON uo.id = c.owner_user_id
   ORDER BY c.label COLLATE NOCASE
 `);
-const getCaseStmt = db.prepare('SELECT * FROM cases WHERE id = ?');
+const getCaseStmt = db.prepare('SELECT * FROM live_cases WHERE id = ?');
 const insertCaseStmt = db.prepare(`
   INSERT INTO cases (id, label, file_number, created_by, stammdaten_json, stammdaten_updated_by)
   VALUES (@id, @label, @fileNumber, @userId, @stammdatenJson, @userId)
@@ -178,8 +178,8 @@ const updateStammdatenStmt = db.prepare(`
   UPDATE cases SET stammdaten_json = ?, stammdaten_updated_at = datetime('now'), stammdaten_updated_by = ? WHERE id = ?
 `);
 
-const listReportsStmt = db.prepare('SELECT report_id, data_json FROM case_reports WHERE case_id = ?');
-const getReportStmt = db.prepare('SELECT * FROM case_reports WHERE case_id = ? AND report_id = ?');
+const listReportsStmt = db.prepare('SELECT report_id, data_json FROM live_case_reports WHERE case_id = ?');
+const getReportStmt = db.prepare('SELECT * FROM live_case_reports WHERE case_id = ? AND report_id = ?');
 const deleteReportStmt = db.prepare('DELETE FROM case_reports WHERE case_id = ? AND report_id = ?');
 const insertReportStmt = db.prepare(`
   INSERT INTO case_reports (case_id, report_id, data_json, updated_by) VALUES (@caseId, @reportId, @dataJson, @userId)
@@ -188,7 +188,7 @@ const updateReportStmt = db.prepare(`
   UPDATE case_reports SET data_json = ?, updated_at = datetime('now'), updated_by = ? WHERE case_id = ? AND report_id = ?
 `);
 
-const listDokuStmt = db.prepare('SELECT id, data_json FROM case_doku_entries WHERE case_id = ? ORDER BY created_at');
+const listDokuStmt = db.prepare('SELECT id, data_json FROM live_case_doku_entries WHERE case_id = ? ORDER BY created_at');
 const insertDokuStmt = db.prepare(`
   INSERT INTO case_doku_entries (id, case_id, data_json, updated_by) VALUES (@id, @caseId, @dataJson, @userId)
 `);
@@ -196,21 +196,21 @@ const updateDokuStmt = db.prepare(`
   UPDATE case_doku_entries SET data_json = ?, updated_at = datetime('now'), updated_by = ? WHERE id = ? AND case_id = ?
 `);
 const deleteDokuStmt = db.prepare('DELETE FROM case_doku_entries WHERE id = ? AND case_id = ?');
-const getDokuStmt = db.prepare('SELECT * FROM case_doku_entries WHERE id = ? AND case_id = ?');
+const getDokuStmt = db.prepare('SELECT * FROM live_case_doku_entries WHERE id = ? AND case_id = ?');
 
 const deleteCaseContactsStmt = db.prepare('DELETE FROM case_contacts WHERE case_id = ?');
-const listContactsStmt = db.prepare('SELECT id, data_json, created_at, updated_at FROM case_contacts WHERE case_id = ? ORDER BY created_at');
+const listContactsStmt = db.prepare('SELECT id, data_json, created_at, updated_at FROM live_case_contacts WHERE case_id = ? ORDER BY created_at');
 const insertContactStmt = db.prepare(`
   INSERT INTO case_contacts (id, case_id, data_json, updated_by) VALUES (@id, @caseId, @dataJson, @userId)
 `);
 const updateContactStmt = db.prepare(`
   UPDATE case_contacts SET data_json = ?, updated_at = datetime('now'), updated_by = ? WHERE id = ? AND case_id = ?
 `);
-const getContactStmt = db.prepare('SELECT * FROM case_contacts WHERE id = ? AND case_id = ?');
+const getContactStmt = db.prepare('SELECT * FROM live_case_contacts WHERE id = ? AND case_id = ?');
 const deleteContactStmt = db.prepare('DELETE FROM case_contacts WHERE id = ? AND case_id = ?');
 
-const listDocumentsStmt = db.prepare('SELECT * FROM case_documents WHERE case_id = ? ORDER BY created_at DESC');
-const getDocumentStmt = db.prepare('SELECT * FROM case_documents WHERE id = ? AND case_id = ?');
+const listDocumentsStmt = db.prepare('SELECT * FROM live_case_documents WHERE case_id = ? ORDER BY created_at DESC');
+const getDocumentStmt = db.prepare('SELECT * FROM live_case_documents WHERE id = ? AND case_id = ?');
 const insertDocumentStmt = db.prepare(`
   INSERT INTO case_documents (id, case_id, filename, mime_type, size, report_id, created_by)
   VALUES (@id, @caseId, @filename, @mimeType, @size, @reportId, @userId)
@@ -219,7 +219,7 @@ const deleteDocumentStmt = db.prepare('DELETE FROM case_documents WHERE id = ? A
 const getFieldAttachmentImportStmt = db.prepare(`
   SELECT i.file_id,f.sha256,f.name,f.mime_type,f.size
     FROM doc_module_import i
-    LEFT JOIN doc_files f ON f.id=i.file_id
+    LEFT JOIN live_doc_files f ON f.id=i.file_id
    WHERE i.quelle='aussendienst-anlage' AND i.quell_id=?
 `);
 const rememberFieldAttachmentImportStmt = db.prepare(`
@@ -476,7 +476,7 @@ router.delete('/:id', requireAdmin, async (req, res) => {
 
 function getCaseWithName(id) {
   return db.prepare(`
-    SELECT c.*, u.display_name AS updated_by_name FROM cases c
+    SELECT c.*, u.display_name AS updated_by_name FROM live_cases c
     LEFT JOIN users u ON u.id = c.stammdaten_updated_by
     WHERE c.id = ?
   `).get(id);
@@ -513,6 +513,17 @@ router.get('/:id/stammdaten', requireViewCases, (req, res) => {
   const body = caseStammdatenBody(req.params.id);
   if (!body) return res.status(404).json({ error: 'Fall nicht gefunden.' });
   res.json(body);
+});
+
+router.get('/:id/remuneration-prefill', requireViewCases, (req, res) => {
+  const row = getCaseStmt.get(req.params.id);
+  if (!row) return res.status(404).json({ error: 'Fall nicht gefunden.' });
+  res.set('Cache-Control', 'no-store');
+  try {
+    res.json(require('./remuneration-prefill').stageForCase(db, JSON.parse(row.stammdaten_json || '{}')));
+  } catch (error) {
+    res.status(503).json({ error: 'Die Vergütungsstufe konnte nicht geladen werden.' });
+  }
 });
 
 router.patch('/:id/stammdaten', requireEditCases, (req, res) => {
@@ -815,7 +826,7 @@ router.post('/:id/contacts', requireEditCases, (req, res) => {
   // damit vorhandene Dokumentationsverknüpfungen auch nach dem Trennen wieder passen.
   const contactId = req.body?.id || crypto.randomUUID();
   if (typeof contactId !== 'string' || !/^[a-zA-Z0-9_-]{1,128}$/.test(contactId)) return res.status(400).json({ error: 'Ungültige Kontakt-ID.' });
-  if (db.prepare('SELECT id FROM case_contacts WHERE id=?').get(contactId)) return res.status(409).json({ error: 'Die Kontakt-ID ist bereits vergeben.' });
+  if (db.prepare('SELECT id FROM live_case_contacts WHERE id=?').get(contactId)) return res.status(409).json({ error: 'Die Kontakt-ID ist bereits vergeben.' });
   const data = req.body?.data || {};
   insertContactStmt.run({ id: contactId, caseId: id, dataJson: JSON.stringify(data), userId: req.session.userId });
   require('../contacts/addressbook').record('case', id, contactId, null, data, req.session);
@@ -845,16 +856,16 @@ router.delete('/:id/contacts/:contactId', requireEditCases, (req, res) => {
    Lesen darf, wer den Fall ohnehin sieht; Aendern nur die Fallverwaltung bzw. Admin - sonst
    koennte sich ein Nutzer selbst Faelle zuschanzen. */
 router.get('/:id/access', requireViewCases, (req, res) => {
-  const fall = db.prepare('SELECT owner_user_id FROM cases WHERE id = ?').get(String(req.params.id));
+  const fall = db.prepare('SELECT owner_user_id FROM live_cases WHERE id = ?').get(String(req.params.id));
   if (!fall) return res.status(404).json({ error: 'Fall nicht gefunden.' });
   const freigaben = db.prepare(`SELECT ca.user_id AS userId, ca.level, u.display_name AS name, u.username
-    FROM case_access ca LEFT JOIN users u ON u.id = ca.user_id WHERE ca.case_id = ? ORDER BY u.display_name`).all(String(req.params.id));
+    FROM live_case_access ca LEFT JOIN users u ON u.id = ca.user_id WHERE ca.case_id = ? ORDER BY u.display_name`).all(String(req.params.id));
   res.json({ ownerUserId: fall.owner_user_id == null ? null : Number(fall.owner_user_id), freigaben });
 });
 
 router.put('/:id/access', requireCaseManagement, (req, res) => {
   const id = String(req.params.id);
-  if (!db.prepare('SELECT id FROM cases WHERE id = ?').get(id)) return res.status(404).json({ error: 'Fall nicht gefunden.' });
+  if (!db.prepare('SELECT id FROM live_cases WHERE id = ?').get(id)) return res.status(404).json({ error: 'Fall nicht gefunden.' });
   const roh = req.body || {};
   let owner = roh.ownerUserId;
   owner = (owner === null || owner === '' || owner === undefined) ? null : Number(owner);

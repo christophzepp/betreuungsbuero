@@ -1,5 +1,7 @@
 'use strict';
 
+const { isLiveCaseId } = require('../demo/data-identities');
+
 // Abgleich zwischen dem lesbaren Dokumentenbaum und seinem SQLite-Index.
 //
 // Die Factory bekommt alle umgebungsspezifischen Abhängigkeiten injiziert. Ein Scan
@@ -273,7 +275,7 @@ function createDocumentReconciler(options) {
 
   function readFolders() {
     try {
-      return db.prepare('SELECT id, area, case_id, storage_relpath FROM doc_folders').all();
+      return db.prepare('SELECT id, area, case_id, storage_relpath FROM doc_folders').all().filter(row => isLiveCaseId(row.case_id));
     } catch (_error) {
       return [];
     }
@@ -319,6 +321,25 @@ function createDocumentReconciler(options) {
     const hashCache = new Map();
     const sidecarCache = new Map();
     const legacyRoots = resolveLegacyRoots(runOptions && runOptions.legacyRoots);
+    const excludedPaths = new Set();
+    // Existing sample files remain untouched, including when the case-root sidecar is missing.
+    for (const row of db.prepare('SELECT * FROM doc_files').all()) {
+      if (isLiveCaseId(row.case_id)) continue;
+      if (row.storage_relpath) excludedPaths.add(path.resolve(storageRoot, row.storage_relpath));
+      try {
+        const resolved = resolveRow(row, legacyRoots);
+        if (resolved) {
+          excludedPaths.add(resolved.absolute);
+          excludedPaths.add(expectedSidecarPath(resolved.absolute, row.id, resolved.sidecarPath));
+        }
+      } catch (_error) { /* Unresolvable historical sample path. */ }
+    }
+    try {
+      for (const row of db.prepare('SELECT case_id,storage_relpath FROM doc_case_roots').all()) {
+        if (!isLiveCaseId(row.case_id) && row.storage_relpath) excludedPaths.add(path.resolve(storageRoot, row.storage_relpath));
+      }
+    } catch (_error) { /* Old databases may not yet have case-root mappings. */ }
+
 
     function finding(kind, fileId, storageRelpath, detail) {
       const item = {
@@ -338,6 +359,7 @@ function createDocumentReconciler(options) {
       let available = true;
 
       async function visit(current) {
+        if (excludedPaths.has(path.resolve(current))) return;
         let stat;
         try {
           stat = await fs.promises.lstat(current);
@@ -372,6 +394,11 @@ function createDocumentReconciler(options) {
           return;
         }
         if (stat.isDirectory()) {
+          try {
+            const identity = JSON.parse(await fs.promises.readFile(path.join(current, '.ablage-fall.json'), 'utf8'));
+            if (identity && !isLiveCaseId(identity.caseId)) return;
+          } catch (_error) { /* Regular directory or damaged metadata: normal verification below. */ }
+
           let entries;
           try {
             entries = await fs.promises.readdir(current);
@@ -492,7 +519,7 @@ function createDocumentReconciler(options) {
     const orphanAckSidecars = new Set();
     const technicalManagementFiles = new Set();
     const primaryByRelpath = new Map(primaryEntries.map((entry) => [entry.relpath, entry]));
-    const rows = db.prepare('SELECT * FROM doc_files').all();
+    const rows = db.prepare('SELECT * FROM doc_files').all().filter(row => isLiveCaseId(row.case_id));
     const activeRows = rows.filter(activeRow);
     const indexedByStoragePath = new Map(
       activeRows

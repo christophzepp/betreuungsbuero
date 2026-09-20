@@ -105,18 +105,18 @@ router.get('/', (req, res) => {
      neutralen Punkt). Es gibt KEIN canManageCaseData in der Session - die Datenadministration
      haengt am Menuerecht menuSettingsDataAdmin, und Menuerechte kennt der Server nicht. */
   if (admin || s.canViewAllCases) {
-    out.faelle = zahl('SELECT COUNT(*) AS n FROM cases');
+    out.faelle = zahl('SELECT COUNT(*) AS n FROM live_cases');
   }
 
   // ---- Verarbeitungs-Log: eigenes Leserecht, unabhaengig von isAdmin ----
-  if (admin || s.canViewAuditLog) out.audit = zahl('SELECT COUNT(*) AS n FROM audit_log');
+  if (admin || s.canViewAuditLog) out.audit = zahl('SELECT COUNT(*) AS n FROM live_audit_log');
 
   // ---- Ab hier nur Admins: die zugehoerigen Bereiche sind im Menue admin-only ----
   if (admin) {
-    out.nutzer = zahl('SELECT COUNT(*) AS n FROM users WHERE active = 1');
+    out.nutzer = zahl('SELECT COUNT(*) AS n FROM live_users WHERE active = 1');
     /* Personenregister (Etappe 1): der Menuepunkt heisst jetzt "Personen" und zaehlt ALLE
        aktiven Personen - mit Konto, ohne Konto, extern. */
-    out.personen = zahl('SELECT COUNT(*) AS n FROM persons WHERE aktiv = 1');
+    out.personen = zahl('SELECT COUNT(*) AS n FROM live_persons WHERE aktiv = 1');
     out.mcp = zahl('SELECT COUNT(*) AS n FROM mcp_tokens WHERE revoked IS NULL OR revoked = 0');
     out.formulare = zahl('SELECT COUNT(*) AS n FROM custom_form_templates');
 
@@ -147,15 +147,15 @@ router.get('/', (req, res) => {
      ueberhaupt gibt), liefert sie die Zahlen gleich mit. Jedes Feld haengt am selben Recht wie
      sein Bereich; fehlt das Recht, fehlt das Feld, und die Diagnose schreibt einen Strich. */
   if (admin || s.canViewCases) {
-    out.termine = zahl('SELECT COUNT(*) AS n FROM calendar_events');
-    out.aufgaben = zahl('SELECT COUNT(*) AS n FROM todos');
+    out.termine = zahl('SELECT COUNT(*) AS n FROM live_calendar_events');
+    out.aufgaben = zahl('SELECT COUNT(*) AS n FROM live_todos');
   }
   if (admin || s.canViewDocuments) {
-    out.dokumente = zahl('SELECT COUNT(*) AS n FROM case_documents');
+    out.dokumente = zahl('SELECT COUNT(*) AS n FROM live_case_documents');
   }
   if (admin || s.canViewFinance) {
-    out.rechnungen = zahl('SELECT COUNT(*) AS n FROM outgoing_invoices');
-    out.belege = zahl('SELECT COUNT(*) AS n FROM finance_receipts');
+    out.rechnungen = zahl('SELECT COUNT(*) AS n FROM live_outgoing_invoices');
+    out.belege = zahl('SELECT COUNT(*) AS n FROM live_finance_receipts');
   }
   if (admin || s.canManageMailSettings) {
     out.mailkonten = zahl('SELECT COUNT(*) AS n FROM mail_accounts');

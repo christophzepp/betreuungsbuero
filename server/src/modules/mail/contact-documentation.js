@@ -10,7 +10,7 @@ function currentSession(userId) {
 }
 function authorize(session, caseId) {
   if (!session?.isAdmin && !session?.canEditCases || !darfBearbeiten(session, caseId)) A.fail(403, 'Für die Falldokumentation fehlt die Schreibberechtigung.');
-  if (!db.prepare('SELECT id FROM cases WHERE id=?').get(caseId)) A.fail(404, 'Der Dokumentationsfall wurde nicht gefunden.');
+  if (!db.prepare('SELECT id FROM live_cases WHERE id=?').get(caseId)) A.fail(404, 'Der Dokumentationsfall wurde nicht gefunden.');
 }
 function resolve(session, caseId, to, preferred) {
   if (!caseId) return null;
@@ -34,7 +34,7 @@ function resolve(session, caseId, to, preferred) {
     return result;
   }
   const hits = [];
-  for (const row of db.prepare('SELECT * FROM case_contacts WHERE case_id=?').all(caseId)) {
+  for (const row of db.prepare('SELECT * FROM live_case_contacts WHERE case_id=?').all(caseId)) {
     const c = A.data(row), base = link('case', row); if (base) hits.push(base);
     for (const p of c.people || []) {const person=link('case',row,p.id);if(person)hits.push(person)}
   }
@@ -51,7 +51,7 @@ function documentMessage(account, message, input, session) {
   const id = 'mail-doku-' + require('node:crypto').createHash('sha256').update(JSON.stringify([caseId, account.id, fingerprint])).digest('hex');
   let saved, action = 'create';
   db.transaction(() => {
-    const existing = db.prepare('SELECT * FROM case_doku_entries WHERE case_id=?').all(caseId).find(row => {
+    const existing = db.prepare('SELECT * FROM live_case_doku_entries WHERE case_id=?').all(caseId).find(row => {
       const d = JSON.parse(row.data_json);
       return row.id === id || d.mailAccountId === account.id && ((mailMessageId && d.mailMessageId === mailMessageId) || (mailDispatchId && d.mailDispatchId === mailDispatchId));
     });

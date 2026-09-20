@@ -6,7 +6,7 @@ const hash=v=>crypto.createHash('sha256').update(JSON.stringify(v)).digest('hex'
 const empty=v=>v==null||v===''||(Array.isArray(v)&&!v.length);
 const clean=d=>Object.fromEntries(Object.entries(d).filter(([k])=>!['id','key','_row','_pendingWrite','__merged','__mergedInto'].includes(k)));
 const read=(caseId,id)=>A.get('case',caseId,id);
-function result(caseId,session){A.authorize(session,'case',caseId);const rows=db.prepare('SELECT * FROM case_contacts WHERE case_id=? ORDER BY created_at,id').all(caseId);return {contacts:rows.map(r=>({...A.data(r),id:r.id})),versions:Object.fromEntries(rows.map(r=>[r.id,A.version(r)])),merges:db.prepare('SELECT data_json FROM addressbook_merges WHERE case_id=? AND undone_at IS NULL ORDER BY created_at,id').all(caseId).map(r=>JSON.parse(r.data_json).record)}}
+function result(caseId,session){A.authorize(session,'case',caseId);const rows=db.prepare('SELECT * FROM live_case_contacts WHERE case_id=? ORDER BY created_at,id').all(caseId);return {contacts:rows.map(r=>({...A.data(r),id:r.id})),versions:Object.fromEntries(rows.map(r=>[r.id,A.version(r)])),merges:db.prepare('SELECT data_json FROM addressbook_merges WHERE case_id=? AND undone_at IS NULL ORDER BY created_at,id').all(caseId).map(r=>JSON.parse(r.data_json).record)}}
 function notify(effects){for(const a of effects)A.notify(...a)}
 function snapshots(scope,caseId,id){const row=A.get(scope,caseId,id),cid=A.centralId(scope,id),rows=[{scope,row}];if(cid){const office=A.get('office','',cid);if(scope!=='office'&&office)rows.push({scope:'office',row:office});for(const r of A.linked(cid))if(r.id!==id)rows.push({scope:'case',row:r})}return rows}
 function merge(input,session){
@@ -57,13 +57,13 @@ function unmerge(input,session){
    A.replace('case',caseId,row.id,patch,session,versions[row.id],effects);
    // Anders als ein normales Bearbeiten entfernt Trennen auch nachträglich ergänzte Felder.
    db.prepare('UPDATE case_contacts SET data_json=? WHERE id=?').run(JSON.stringify(original),row.id);effects.push(['case',caseId,row.id,original]);
-   for(const d of legacy.removed){if(typeof d.id!=='string'||!d.id||db.prepare('SELECT 1 FROM case_contacts WHERE id=?').get(d.id))A.fail(409,'Eine ursprüngliche Kontakt-ID ist bereits belegt.');insertRow({id:d.id,case_id:caseId,data_json:JSON.stringify(clean(d)),updated_by:session.userId});effects.push(['case',caseId,d.id,clean(d)])}
+   for(const d of legacy.removed){if(typeof d.id!=='string'||!d.id||db.prepare('SELECT 1 FROM live_case_contacts WHERE id=?').get(d.id))A.fail(409,'Eine ursprüngliche Kontakt-ID ist bereits belegt.');insertRow({id:d.id,case_id:caseId,data_json:JSON.stringify(clean(d)),updated_by:session.userId});effects.push(['case',caseId,d.id,clean(d)])}
    db.prepare('INSERT INTO addressbook_merges(id,case_id,operation_id,data_json,undone_at) VALUES(?,?,?,?,datetime(\'now\'))').run(id,caseId,id,JSON.stringify({record:legacy}));return;
   }
   const p=JSON.parse(saved.data_json);
   if(p.caseId!==caseId)A.fail(409,'Diese Zusammenführung stammt aus einem anderen Fall. Sie kann nach dem Import nicht hier getrennt werden.');
   for(const a of p.after){A.authorize(session,a.scope,a.caseId,true);const row=A.get(a.scope,a.caseId,a.id);if(!row||A.version(row)!==a.version)A.fail(409,'Seit der Zusammenführung wurden Kontakte geändert. Trennen würde neuere Daten überschreiben und wurde deshalb nicht ausgeführt.');}
-  for(const r of p.removedRows)if(db.prepare('SELECT 1 FROM case_contacts WHERE id=?').get(r.id))A.fail(409,'Eine ursprüngliche Kontakt-ID ist inzwischen belegt.');
+  for(const r of p.removedRows)if(db.prepare('SELECT 1 FROM live_case_contacts WHERE id=?').get(r.id))A.fail(409,'Eine ursprüngliche Kontakt-ID ist inzwischen belegt.');
   for(const x of p.before){const current=A.get(x.scope,x.row.case_id||'',x.row.id),d=A.data(x.row);db.prepare(`UPDATE ${x.scope==='office'?'office_contacts':'case_contacts'} SET data_json=?,updated_at=datetime('now'),updated_by=? WHERE id=?`).run(x.row.data_json,session.userId,x.row.id);A.record(x.scope,x.row.case_id||'',x.row.id,A.data(current),d,session);effects.push([x.scope,x.row.case_id||'',x.row.id,d])}
   for(const row of p.removedRows){insertRow(row);effects.push(['case',caseId,row.id,A.data(row)])}
   db.prepare("UPDATE addressbook_merges SET undone_at=datetime('now') WHERE id=?").run(id);

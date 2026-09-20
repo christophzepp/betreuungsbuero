@@ -257,6 +257,7 @@ function bauePaket() {
        Wegwerf-Ordner gezwungen. OUTPUTS_DIR/SP_PLUGIN_DIR bleiben unverändert, weil
        sie nur lesend auf Programmdateien zeigen. */
     const env = Object.assign({}, process.env, {
+      DEMO_PACKAGE_BUILD: '1',
       RUNTIME_ROOT: tmp,
       DB_PATH: path.join(tmp, 'database', 'betreuungsbuero.sqlite3'),
       DATA_DIR: path.join(tmp, 'data'),
@@ -269,7 +270,7 @@ function bauePaket() {
     });
     const opts = { cwd: SERVER_ROOT, env, stdio: 'pipe' };
     execFileSync(process.execPath, [path.join('tools', 'admin', 'create-admin.js'),
-      '--username', 'paketbau', '--password', 'Wegwerf-Paketbau-0000!', '--admin', '--local', '--online'], opts);
+      '--username', 'demo-package-builder', '--password', require('node:crypto').randomBytes(24).toString('hex'), '--admin', '--local', '--online'], opts);
     execFileSync(process.execPath, [path.join('tools', 'demo-faelle', 'seed.js')], opts);
     execFileSync(process.execPath, [path.join('tools', 'fall-export.js'), '--ziel', exportZiel], opts);
 

@@ -222,7 +222,7 @@ router.delete('/:id', requirePersonsEdit, (req, res) => {
      Vertretungsplan. Loeschen ohne Referenzpruefung hinterliesse eine tote UUID - der Name
      fehlte danach in JEDER kuenftigen Sicherung. Gleiches Muster wie die finance_entries-
      Pruefung beim Extern-Stellen: erst Verweise entfernen, dann loeschen. */
-  const inFaellen = db.prepare("SELECT COUNT(*) AS n FROM cases WHERE stammdaten_json LIKE '%' || ? || '%'").get(person.id).n;
+  const inFaellen = db.prepare("SELECT COUNT(*) AS n FROM live_cases WHERE stammdaten_json LIKE '%' || ? || '%'").get(person.id).n;
   const imPlan = db.prepare("SELECT COUNT(*) AS n FROM office_json WHERE key = 'vertretungsplan' AND data_json LIKE '%' || ? || '%'").get(person.id).n;
   if (inFaellen || imPlan) {
     return res.status(409).json({

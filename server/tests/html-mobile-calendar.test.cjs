@@ -3,7 +3,7 @@ const test=require('node:test'),assert=require('node:assert/strict'),fs=require(
 const html=fs.readFileSync(path.resolve(__dirname,'../../outputs/Betreuungsbuero_Dokumentenassistent_v0_7.html'),'utf8');
 function source(name,next){const start=html.indexOf('function '+name+'('),end=html.indexOf('function '+next+'(',start);assert.ok(start>=0&&end>start);return html.slice(start,end)}
 function context(){
- const ctx={Date,calFullFilter:'__all__',calMobile:{types:['events','tasks','fristen','followups'],calendar:'all'},itemMatchesCase:(e,id)=>id==='__all__'||e.caseId===id,calPseudoVisible:e=>!e.hidden,calEventVisible:e=>!e.hidden,calEventMatchesSearch:()=>true,calEventMatchesKeyword:()=>true,dateToLocalIso:date=>{const pad=n=>String(n).padStart(2,'0');return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`}};
+ const ctx={Date,calFullFilter:'__all__',calMobile:{types:['events','tasks','fristen','followups'],calendar:'all'},itemMatchesCase:(e,id)=>id==='__all__'||e.caseId===id,calPseudoVisible:e=>!e.hidden,calTodoVisible:()=>true,calItemSourceRef:(_kind,e)=>e.calendarRef||'',calEventVisible:e=>!e.hidden,calEventMatchesSearch:()=>true,calEventMatchesKeyword:()=>true,dateToLocalIso:date=>{const pad=n=>String(n).padStart(2,'0');return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`}};
  vm.createContext(ctx);vm.runInContext(source('calMobileFiltered','calMobileOpen').replace(/async\s*$/,'')+source('calMobileRangeEvents','calMobileMove'),ctx);return ctx;
 }
 test('Kalenderfilter kombiniert Fall-ID, Kalender und Eintragsart mit persönlichen Sichtbarkeiten',()=>{

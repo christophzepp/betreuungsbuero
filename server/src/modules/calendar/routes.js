@@ -14,6 +14,7 @@ const { DATA_ROOT: DEFAULT_DATA_ROOT } = require('../../config/paths');
 const db = require('../../database/index');
 const { requireAuth, requireViewCases, requireEditCases } = require('../../middleware/authentication');
 const sync = require('./sync');
+const sourcePreferences = require('./source-preferences').create(db);
 const syncRunner = require('../sync/runner');
 const { createModuleFiles } = require('../documents/module-files');
 const {
@@ -35,11 +36,11 @@ const DATA_ROOT = path.resolve(DEFAULT_DATA_ROOT);
 const ATTACHMENTS_DIR = path.join(DATA_ROOT, 'calendar-event-attachments');
 function attachmentFilePath(eventId, attId) { return path.join(ATTACHMENTS_DIR, eventId, attId); }
 
-const listStmt = db.prepare('SELECT * FROM calendar_events ORDER BY start_at');
+const listStmt = db.prepare('SELECT * FROM live_calendar_events ORDER BY start_at');
 // Multi-User-Sichtbarkeit (Nutzerwunsch): jeder sieht öffentliche (büroweite) Termine + die eigenen
 // privaten (owner_user_id = ich). Private Termine anderer Nutzer bleiben verborgen.
-const listVisibleStmt = db.prepare("SELECT * FROM calendar_events WHERE visibility = 'public' OR owner_user_id = ? ORDER BY start_at");
-const getStmt = db.prepare('SELECT * FROM calendar_events WHERE id = ?');
+const listVisibleStmt = db.prepare("SELECT * FROM live_calendar_events WHERE visibility = 'public' OR owner_user_id = ? ORDER BY start_at");
+const getStmt = db.prepare('SELECT * FROM live_calendar_events WHERE id = ?');
 const insertStmt = db.prepare(`
   INSERT INTO calendar_events (id, title, description, location, online_url, color, start_at, end_at, all_day, recurrence_rule, case_id, case_label, reminder_at, source, connection_id, calendar_ref, external_uid, external_href, external_etag, owner_user_id, visibility, updated_by)
   VALUES (@id, @title, @description, @location, @onlineUrl, @color, @startAt, @endAt, @allDay, @recurrenceRule, @caseId, @caseLabel, @reminderAt, @source, @connectionId, @calendarRef, @externalUid, @externalHref, @externalEtag, @ownerUserId, @visibility, @userId)
@@ -145,16 +146,26 @@ router.get('/events/attachments-map', requireViewCases, (req, res) => {
 const listEnabledConnStmt = db.prepare("SELECT id, provider, display_name, owner_user_id, visibility FROM calendar_connections WHERE enabled = 1 ORDER BY display_name");
 // Ausgewaehlte Kalender/Aufgabenlisten je Verbindung (mit Farbe) - fuer die Sichtbarkeits-Haekchen +
 // Farbpunkte in Kalender-/Aufgaben-Ansicht (Nutzerwunsch mehrere Kalender je Konto).
-const listSelCalsStmt = db.prepare("SELECT id, kind, remote_id, name, color, position FROM connection_calendars WHERE connection_id = ? AND selected = 1 ORDER BY kind, position, name");
 router.get('/connections', requireViewCases, (req, res) => {
   const uid = req.session.userId;
   // Nur Verbindungen, deren Termine/Aufgaben fuer diesen Nutzer sichtbar sind (public ODER eigene) -
   // deckungsgleich mit listVisibleStmt.
   const conns = listEnabledConnStmt.all().filter((c) => (c.visibility !== 'private') || c.owner_user_id === uid);
+  const lists = ['event', 'task'].flatMap(kind => sourcePreferences.targets(uid, kind));
+  const otherLists = db.prepare("SELECT id, connection_id AS connectionId, remote_id AS calendarRef, kind, name, color FROM connection_calendars WHERE kind NOT IN ('event', 'task') AND selected = 1").all();
   res.json({ connections: conns.map((c) => ({
     id: c.id, provider: c.provider, displayName: c.display_name || c.provider,
-    calendars: listSelCalsStmt.all(c.id).map((cc) => ({ id: cc.id, kind: cc.kind, remoteId: cc.remote_id, name: cc.name || '', color: cc.color || '' }))
-  })) });
+    calendars: lists.concat(otherLists).filter(t => t.connectionId === c.id).map(t => ({ id: t.id, kind: t.kind, remoteId: t.calendarRef, name: t.name, color: t.color }))
+  })), sourcePreferences: sourcePreferences.get(uid) });
+});
+
+router.put('/source-preferences', requireViewCases, (req, res) => {
+  try {
+    const prefs = sourcePreferences.save(req.session.userId, req.body?.prefs);
+    try { require('../documents/materializations').current()?.markOfficeDirty(); } catch (_) { /* Periodischer Scanner übernimmt. */ }
+    res.json({ prefs });
+  }
+  catch (error) { res.status(error.status || 500).json({ error: error.message }); }
 });
 
 router.post('/events', requireEditCases, async (req, res) => {
@@ -181,18 +192,21 @@ router.post('/events', requireEditCases, async (req, res) => {
   //  - connectionId '' / 'local' -> bewusst lokal (kein Push).
   //  - connectionId = eine aktive Verbindung -> gezielt in genau diese spiegeln.
   // (Serientermine werden mitgespiegelt; recurrence.js uebersetzt das App-Modell in RRULE/Graph-Objekt.)
-  let target = null;
-  if (connectionId === undefined) {
+  let destination;
+  try { destination = sourcePreferences.resolve(req.session.userId, 'event', connectionId, calendarRef); }
+  catch (error) { return res.status(error.status || 500).json({ error: error.message }); }
+  let target = destination.target?.connection || null;
+  if (!target && connectionId === undefined) {
     const enabled = sync.listEnabledConnections()
       .filter((connection) => connectionVisible(connection, req.session));
     if (enabled.length === 1) target = enabled[0];
-  } else if (connectionId && connectionId !== 'local') {
+  } else if (!target && connectionId && connectionId !== 'local') {
     const conn = getConnectionStmt.get(connectionId);
     if (conn && conn.enabled && connectionVisible(conn, req.session)) target = conn;
   }
   if (target) {
     try {
-      const pushed = await sync.pushEvent(target, { title: row.title, description: row.description, location: row.location, startAt: row.startAt, endAt: row.endAt, allDay: !!row.allDay, recurrenceRule: row.recurrenceRule, reminderAt: row.reminderAt, calendarRef: (calendarRef || '') });
+      const pushed = await sync.pushEvent(target, { title: row.title, description: row.description, location: row.location, startAt: row.startAt, endAt: row.endAt, allDay: !!row.allDay, recurrenceRule: row.recurrenceRule, reminderAt: row.reminderAt, calendarRef: (destination.target?.calendarRef || calendarRef || '') });
       row.source = target.provider;
       row.connectionId = target.id;
       row.calendarRef = pushed.calendarRef || '';
@@ -202,6 +216,7 @@ router.post('/events', requireEditCases, async (req, res) => {
       row.visibility = target.visibility === 'private' ? 'private' : 'public';
     } catch (error) {
       console.warn('[calendar] Termin konnte nicht gespiegelt werden:', error.message);
+      if (destination.required) return res.status(502).json({ error: 'Der Termin konnte nicht im Online-Kalender gespeichert werden. Das lokale Speicherziel ist ausgeschaltet; bitte erneut versuchen.' });
     }
   }
   insertStmt.run(row);

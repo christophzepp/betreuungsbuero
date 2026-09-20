@@ -22,12 +22,12 @@
 const db = require('../../database/index');
 const { isDemoCaseId, isDemoCaseLabel } = require('../demo/data-identities');
 
-const eigeneStmt = db.prepare('SELECT id FROM cases WHERE owner_user_id IS NULL OR owner_user_id = ?');
-const freigabenStmt = db.prepare('SELECT case_id, level FROM case_access WHERE user_id = ?');
-const einzelStmt = db.prepare('SELECT owner_user_id FROM cases WHERE id = ?');
-const einzelFreigabeStmt = db.prepare('SELECT level FROM case_access WHERE case_id = ? AND user_id = ?');
-const fallMitLabelStmt = db.prepare('SELECT id, label FROM cases WHERE id = ?');
-const faelleNachLabelStmt = db.prepare('SELECT id, label FROM cases WHERE label = ? ORDER BY id');
+const eigeneStmt = db.prepare('SELECT id FROM live_cases WHERE owner_user_id IS NULL OR owner_user_id = ?');
+const freigabenStmt = db.prepare('SELECT case_id, level FROM live_case_access WHERE user_id = ?');
+const einzelStmt = db.prepare('SELECT owner_user_id FROM live_cases WHERE id = ?');
+const einzelFreigabeStmt = db.prepare('SELECT level FROM live_case_access WHERE case_id = ? AND user_id = ?');
+const fallMitLabelStmt = db.prepare('SELECT id, label FROM live_cases WHERE id = ?');
+const faelleNachLabelStmt = db.prepare('SELECT id, label FROM live_cases WHERE label = ? ORDER BY id');
 
 /* Alle Fall-IDs, die diese Sitzung sehen darf. null = keine Einschraenkung (Admin/viewAllCases).
    Ein leeres Set bedeutet: darf nichts sehen (z.B. abgemeldet). */
@@ -173,8 +173,9 @@ function eindeutigeFallId(caseId, caseLabel) {
 
 function darfZuordnungSehen(session, assignment) {
   if (!session || !session.userId) return false;
-  if (session.isAdmin || session.canViewAllCases) return true;
   const value = assignment || {};
+  if (value.source === 'demo' || isDemoCaseId(value.caseId)) return false;
+  if (session.isAdmin || session.canViewAllCases) return true;
   // Ein bekanntes, aber nicht eindeutig auflösbares Label ist kein
   // büroweiter Datensatz. Eingeschränkte Nutzer dürfen dessen Inhalt erst
   // nach einer ausdrücklichen ID-Zuordnung sehen.
@@ -184,15 +185,16 @@ function darfZuordnungSehen(session, assignment) {
 
 function darfZuordnungBearbeiten(session, assignment) {
   if (!session || !session.userId) return false;
-  if (session.isAdmin) return true;
   const value = assignment || {};
+  if (value.source === 'demo' || isDemoCaseId(value.caseId)) return false;
+  if (session.isAdmin) return true;
   if (value.ambiguous || value.invalidId) return false;
   return !value.caseId || darfBearbeiten(session, value.caseId);
 }
 
 /* Labels sichtbarer, eindeutig bezeichnete Faelle. Mehrdeutige Labels werden
    absichtlich nicht als Berechtigungsersatz verwendet. */
-const labelStmt = db.prepare('SELECT id, label FROM cases');
+const labelStmt = db.prepare('SELECT id, label FROM live_cases');
 function sichtbareLabels(session) {
   const erlaubt = sichtbareFaelle(session);
   if (erlaubt === null) return null;

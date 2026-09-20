@@ -632,3 +632,19 @@ test('automatischer Vollabgleich verändert verwaltete Abbilder nicht', async (t
     && finding.detail.automaticApply === false
   )));
 });
+
+test('Datei-Explorer-Abgleich überspringt Demo-Wurzeln und erhält ihre Dateien', async t => {
+ const f=fixture();t.after(()=>f.close());
+ const id=require('../src/modules/demo/data-identities').DEMO_CASES[0].id;
+ const rel='Fallakten/A/Auerbach, Margarete';
+ f.db.exec('CREATE TABLE doc_case_roots(case_id TEXT,storage_relpath TEXT)');
+ f.db.prepare('INSERT INTO doc_case_roots VALUES (?,?)').run(id,rel);
+ const file=f.write(rel+'/00 - Eingang/Demo.txt','unverändert');
+ f.addRow({id:'demo-file',caseId:id,name:'Demo.txt',storageRelpath:rel+'/00 - Eingang/Demo.txt',size:file.bytes.length,sha256:sha(file.bytes)});
+ const result=await f.reconciler.scan();
+ assert.equal(result.summary.filesChecked,0);
+ assert.equal(result.summary.diskFiles,0);
+ assert.ok(!JSON.stringify(result).includes('Auerbach'));
+ assert.equal(fs.readFileSync(file.target,'utf8'),'unverändert');
+ assert.equal(f.db.prepare('SELECT count(*) n FROM doc_files').get().n,1);
+});

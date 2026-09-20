@@ -48,7 +48,7 @@ const listCasesStmt = db.prepare(`
          json_extract(c.stammdaten_json, '$.care.remStage')        AS sd_rem_stage,
          json_extract(c.stammdaten_json, '$.care.assetStatus')     AS sd_asset_status,
          json_extract(c.stammdaten_json, '$.care.housingCategory') AS sd_housing_category
-  FROM cases c
+  FROM live_cases c
   ORDER BY c.label COLLATE NOCASE
 `);
 
@@ -95,7 +95,7 @@ const HOUSING_CATEGORIES = ['S', 'A'];
    DIESELBEN Fixtures, damit sie nicht auseinanderlaufen.
    Vorrang hat immer der Fall: sobald dort etwas gepflegt ist, gilt der Fall als Wahrheit. */
 const listAntraegeStmt = db.prepare(
-  "SELECT case_id, data_json FROM case_reports WHERE report_id = 'remuneration'"
+  "SELECT case_id, data_json FROM live_case_reports WHERE report_id = 'remuneration'"
 );
 
 function antragProfile() {

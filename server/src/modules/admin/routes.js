@@ -262,6 +262,15 @@ function persistPermissions(userId, matrix) {
   db.prepare(`UPDATE users SET ${sets.join(', ')} WHERE id = ?`).run(...values);
 }
 
+const systemTime = require('../settings/system-time');
+router.get('/system-time', (req, res) => res.json(systemTime.get(db)));
+router.put('/system-time', (req, res) => {
+  if (!systemTime.validTimeZone(req.body?.timeZone)) return res.status(400).json({error:'Bitte eine gültige Zeitzone auswählen.'});
+  const settings = systemTime.set(db, req.body.timeZone, req.session.userId);
+  logAction(req, 'system-time.update', 'settings', 'system_time', {timeZone:settings.timeZone});
+  res.json(settings);
+});
+
 router.get('/users', (req, res) => {
   res.json({ users: listUsersStmt.all(req.session && req.session.isDemo ? 1 : 0).map(publicUser) });
 });
@@ -275,9 +284,9 @@ router.get('/users/:id/cases', (req, res) => {
   const rows = db.prepare(`
     SELECT c.id, c.label, c.file_number, c.archived, c.owner_user_id, uo.display_name AS owner_name,
            ca.level AS level
-    FROM cases c
+    FROM live_cases c
     LEFT JOIN users uo ON uo.id = c.owner_user_id
-    LEFT JOIN case_access ca ON ca.case_id = c.id AND ca.user_id = @uid
+    LEFT JOIN live_case_access ca ON ca.case_id = c.id AND ca.user_id = @uid
     ORDER BY c.archived, c.label COLLATE NOCASE
   `).all({ uid });
   res.json({
@@ -298,14 +307,14 @@ router.put('/users/:id/cases', (req, res) => {
   const uid = Number(req.params.id);
   if (!db.prepare('SELECT id FROM users WHERE id = ?').get(uid)) return res.status(404).json({ error: 'Nutzer nicht gefunden.' });
   const liste = Array.isArray(req.body && req.body.faelle) ? req.body.faelle : [];
-  const bekannt = new Set(db.prepare('SELECT id FROM cases').all().map((c) => String(c.id)));
+  const bekannt = new Set(db.prepare('SELECT id FROM live_cases').all().map((c) => String(c.id)));
   let uebernommen = 0, entzogen = 0;
   const schreiben = db.transaction(() => {
     for (const f of liste.slice(0, 2000)) {
       const id = String((f && f.id) || '');
       if (!bekannt.has(id)) continue;
       const stufe = ['owner', 'write', 'read', 'none'].includes(String(f.stufe)) ? String(f.stufe) : 'none';
-      const aktuell = db.prepare('SELECT owner_user_id FROM cases WHERE id = ?').get(id);
+      const aktuell = db.prepare('SELECT owner_user_id FROM live_cases WHERE id = ?').get(id);
       const istEigner = Number(aktuell.owner_user_id) === uid;
       if (stufe === 'owner') {
         /* Zustaendigkeit uebernehmen: eine eventuelle frühere Person verliert sie hier - das ist
@@ -580,9 +589,20 @@ const upsertSendCredentialsStmt = db.prepare(`
 `);
 
 router.get('/send-credentials', (req, res) => {
-  const rows = db.prepare('SELECT service, username, login_url, inbox_url, compose_url, updated_at FROM office_send_credentials').all();
-  const byService = Object.fromEntries(rows.map((r) => [r.service, { ...r, hasPassword: true }]));
+  const rows = db.prepare('SELECT * FROM office_send_credentials').all();
+  const byService = Object.fromEntries(rows.map((r) => [r.service, {
+    service: r.service, username: r.username, loginUrl: r.login_url, inboxUrl: r.inbox_url,
+    composeUrl: r.compose_url, updatedAt: r.updated_at,
+    hasPassword: !!cryptoHelper.decrypt(r.password_encrypted)
+  }]));
   res.json({ services: SEND_SERVICES.map((s) => ({ service: s, username: '', loginUrl: '', inboxUrl: '', composeUrl: '', hasPassword: false, ...(byService[s] || {}) })) });
+});
+
+router.delete('/send-credentials/:service', (req, res) => {
+  if (!SEND_SERVICES.includes(req.params.service)) return res.status(400).json({ error: 'Unbekannter Dienst.' });
+  db.prepare('DELETE FROM office_send_credentials WHERE service=?').run(req.params.service);
+  logAction(req, 'send-credentials.delete', 'send-credentials', req.params.service);
+  res.json({ ok: true });
 });
 
 router.get('/send-credentials/:service/reveal', (req, res) => {
@@ -1046,7 +1066,7 @@ router.get('/calendar-connections/:id/task-statuses', async (req, res) => {
 });
 
 // Projekt je Fall (Nutzerentscheidung 02.08.2026): Zuordnung ansehen ...
-const listCasesStmt = db.prepare('SELECT id, label FROM cases ORDER BY label COLLATE NOCASE');
+const listCasesStmt = db.prepare('SELECT id, label FROM live_cases ORDER BY label COLLATE NOCASE');
 const listCaseProjectsStmt = db.prepare('SELECT * FROM connection_case_projects WHERE connection_id = ?');
 const upsertCaseProjectStmt = db.prepare(`
   INSERT INTO connection_case_projects (id, connection_id, case_id, remote_project_id, remote_project_name)
@@ -1225,19 +1245,20 @@ router.get('/audit-log', (req, res) => {
   /* created_at steht in UTC (datetime('now')), der Nutzer waehlt aber lokale Kalendertage.
      Die Grenzen deshalb als Ortszeit interpretieren und nach UTC schieben - sonst fehlen
      abends erfasste Vorgaenge im gewaehlten Tag. */
-  if (text(req.query.von)) { wo.push("created_at >= datetime(?, 'utc')"); werte.push(text(req.query.von) + ' 00:00:00'); }
-  if (text(req.query.bis)) { wo.push("created_at <= datetime(?, 'utc')"); werte.push(text(req.query.bis) + ' 23:59:59'); }
+  if ([req.query.von,req.query.bis].some(v=>v&&!/^\d{4}-\d{2}-\d{2}$/.test(text(v)))) return res.status(400).json({error:'Ungültiger Datumsfilter.'});
+  if (text(req.query.von)) { wo.push("created_at >= ?"); werte.push(systemTime.utcDayBoundary(text(req.query.von))); }
+  if (text(req.query.bis)) { wo.push("created_at < ?"); werte.push(systemTime.utcDayBoundary(text(req.query.bis), true)); }
   if (text(req.query.nutzer)) { wo.push('actor_username = ?'); werte.push(text(req.query.nutzer)); }
   if (text(req.query.kategorie)) { wo.push('kategorie = ?'); werte.push(text(req.query.kategorie)); }
   if (text(req.query.fall)) { wo.push('case_id = ?'); werte.push(text(req.query.fall)); }
   if (text(req.query.suche)) { wo.push('(action LIKE ? OR target_id LIKE ? OR empfaenger LIKE ?)');
     const s = '%' + text(req.query.suche) + '%'; werte.push(s, s, s); }
   const bedingung = wo.length ? (' WHERE ' + wo.join(' AND ')) : '';
-  const gesamt = db.prepare('SELECT COUNT(*) AS c FROM audit_log' + bedingung).get(...werte).c;
-  const rows = db.prepare('SELECT * FROM audit_log' + bedingung + ' ORDER BY created_at DESC, id DESC LIMIT ?').all(...werte, limit);
+  const gesamt = db.prepare('SELECT COUNT(*) AS c FROM live_audit_log' + bedingung).get(...werte).c;
+  const rows = db.prepare('SELECT * FROM live_audit_log' + bedingung + ' ORDER BY created_at DESC, id DESC LIMIT ?').all(...werte, limit);
   res.json({
     gesamt,
-    nutzerListe: db.prepare('SELECT DISTINCT actor_username FROM audit_log WHERE actor_username != \'\' ORDER BY actor_username').all().map((r) => r.actor_username),
+    nutzerListe: db.prepare('SELECT DISTINCT actor_username FROM live_audit_log WHERE actor_username != \'\' ORDER BY actor_username').all().map((r) => r.actor_username),
     entries: rows.map((r) => ({
       id: r.id,
       actorUsername: r.actor_username,
@@ -1260,7 +1281,7 @@ router.get('/audit-log', (req, res) => {
 // explizite zusaetzliche Pruefung. Das Leeren selbst wird als erster neuer Eintrag protokolliert.
 router.delete('/audit-log', (req, res) => {
   if (!req.session.isAdmin) return res.status(403).json({ error: 'Nur für Administratoren.' });
-  const count = db.prepare('SELECT COUNT(*) AS c FROM audit_log').get().c;
+  const count = db.prepare('SELECT COUNT(*) AS c FROM live_audit_log').get().c;
   db.prepare('DELETE FROM audit_log').run();
   logAction(req, 'audit-log.clear', 'audit-log', '1', { deletedEntries: count });
   res.json({ ok: true, deleted: count });
@@ -1458,7 +1479,7 @@ function encryptedSnapshotState(_keyStatus, options) {
                  m.sha256 AS materialization_sha256,
                  m.source_revision AS materialization_source_revision
             FROM doc_materializations m
-            LEFT JOIN doc_files f ON f.id=m.file_id
+            LEFT JOIN live_doc_files f ON f.id=m.file_id
            WHERE m.scope_type='office' AND m.scope_id='' AND m.artifact_kind=?
         `).get(artifactKind);
       } catch (_error) { return null; }

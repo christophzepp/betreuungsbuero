@@ -12,7 +12,9 @@ const additions = [
   'desktop-case-wizard-v1',
   'mobile-case-wizard-v1',
   'followup-workspace-v1',
-  'module-headers-js'
+  'module-headers-js',
+  'remuneration-prefill-rules',
+  'remuneration-prefill-ui'
 ];
 
 function assertScriptInventory(source, label = 'HTML') {

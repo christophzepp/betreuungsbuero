@@ -50,9 +50,9 @@ const rateForDateStmt = db.prepare(`
   ORDER BY gueltig_ab DESC LIMIT 1
 `);
 
-const listAllTripsStmt = db.prepare('SELECT * FROM mileage_trips ORDER BY datum DESC, created_at DESC');
-const listOwnTripsStmt = db.prepare('SELECT * FROM mileage_trips WHERE fahrer_user_id = ? ORDER BY datum DESC, created_at DESC');
-const getTripStmt = db.prepare('SELECT * FROM mileage_trips WHERE id = ?');
+const listAllTripsStmt = db.prepare('SELECT * FROM live_mileage_trips ORDER BY datum DESC, created_at DESC');
+const listOwnTripsStmt = db.prepare('SELECT * FROM live_mileage_trips WHERE fahrer_user_id = ? ORDER BY datum DESC, created_at DESC');
+const getTripStmt = db.prepare('SELECT * FROM live_mileage_trips WHERE id = ?');
 const insertTripStmt = db.prepare(`
   INSERT INTO mileage_trips (id, vehicle_id, fahrer_user_id, datum, fahranlass, case_label, start_adresse, ziel_adresse, kilometer, erstattungsbetrag_snapshot, rate_id_snapshot, status, fahrer_name)
   VALUES (@id, @vehicleId, @fahrerUserId, @datum, @fahranlass, @caseLabel, @startAdresse, @zielAdresse, @kilometer, @erstattungsbetragSnapshot, @rateIdSnapshot, @status, @fahrerName)

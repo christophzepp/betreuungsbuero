@@ -67,7 +67,7 @@ const listCasesLightStmt = db.prepare(`
   SELECT c.id, c.label, c.file_number,
          json_extract(c.stammdaten_json, '$.person.lastName') AS sd_last_name,
          json_extract(c.stammdaten_json, '$.person.firstName') AS sd_first_name
-  FROM cases c
+  FROM live_cases c
   WHERE COALESCE(c.archived, 0) = 0
   ORDER BY c.label COLLATE NOCASE
 `);
@@ -84,8 +84,8 @@ router.get('/cases', requireExtPermission('viewCases', 'Keine Berechtigung fuer 
   });
 });
 
-const getCaseStmt = db.prepare('SELECT id, label, file_number, stammdaten_json FROM cases WHERE id = ?');
-const listContactsStmt = db.prepare('SELECT id, data_json FROM case_contacts WHERE case_id = ? ORDER BY created_at');
+const getCaseStmt = db.prepare('SELECT id, label, file_number, stammdaten_json FROM live_cases WHERE id = ?');
+const listContactsStmt = db.prepare('SELECT id, data_json FROM live_case_contacts WHERE case_id = ? ORDER BY created_at');
 const getOfficeProfileStmt = db.prepare('SELECT * FROM office_profile WHERE id = 1');
 const listOfficeBanksStmt = db.prepare('SELECT * FROM office_bank_accounts ORDER BY sort_order, created_at');
 // Personenregister (Etappe 4, 30.08.2026): die Mitarbeitendenliste kommt aus `persons` -
@@ -94,8 +94,8 @@ const listOfficeBanksStmt = db.prepare('SELECT * FROM office_bank_accounts ORDER
 const listOfficeEmployeesStmt = db.prepare(`SELECT * FROM persons
   WHERE art = 'intern' AND aktiv = 1
   ORDER BY last_name COLLATE NOCASE, first_name COLLATE NOCASE`);
-const listExtReportsStmt = db.prepare('SELECT report_id, data_json FROM case_reports WHERE case_id = ? ORDER BY report_id');
-const listExtDokuStmt = db.prepare('SELECT id, data_json FROM case_doku_entries WHERE case_id = ? ORDER BY created_at, id');
+const listExtReportsStmt = db.prepare('SELECT report_id, data_json FROM live_case_reports WHERE case_id = ? ORDER BY report_id');
+const listExtDokuStmt = db.prepare('SELECT id, data_json FROM live_case_doku_entries WHERE case_id = ? ORDER BY created_at, id');
 
 // Mappings spiegeln publicProfile/publicBank/publicEmployee aus routes/office-profile.js -
 // bewusst lokal dupliziert (kleine, stabile Objekte), damit diese Fassade keinen Router importieren
@@ -267,16 +267,16 @@ router.post('/site-profiles/:id/apply-stat', requireExtPermission('viewCases', '
 // dedupliziert. Die Dokumentberechtigung wird zusaetzlich zur Fallansicht geprueft.
 const listCentralCaseDocsStmt = db.prepare(`
   SELECT id, name, mime_type, size, created_at, updated_at, storage_relpath, visibility, artifact_kind
-    FROM doc_files
+    FROM live_doc_files
    WHERE area = 'case' AND case_id = ? AND deleted_at = ''
    ORDER BY storage_relpath COLLATE NOCASE, name COLLATE NOCASE
 `);
 const getCentralCaseDocStmt = db.prepare(`
-  SELECT * FROM doc_files
+  SELECT * FROM live_doc_files
    WHERE id = ? AND area = 'case' AND case_id = ? AND deleted_at = ''
 `);
-const listLegacyCaseDocsStmt = db.prepare('SELECT id, filename, mime_type, size, created_at FROM case_documents WHERE case_id = ? ORDER BY created_at DESC');
-const getLegacyCaseDocStmt = db.prepare('SELECT * FROM case_documents WHERE id = ? AND case_id = ?');
+const listLegacyCaseDocsStmt = db.prepare('SELECT id, filename, mime_type, size, created_at FROM live_case_documents WHERE case_id = ? ORDER BY created_at DESC');
+const getLegacyCaseDocStmt = db.prepare('SELECT * FROM live_case_documents WHERE id = ? AND case_id = ?');
 const requireExtDocumentView = requireExtPermission('viewDocuments', 'Keine Berechtigung fuer Dokumentansicht.');
 
 router.get('/cases/:id/documents', requireExtPermission('viewCases', 'Keine Berechtigung fuer Fallansicht.'), requireExtDocumentView, (req, res) => {
@@ -571,11 +571,11 @@ tokensRouter.delete('/:id', requireAuth, requireUseExtension, (req, res) => {
 // normalen API-Token und erbt dessen Rechtematrix. Bewusst schmal: Liste, Anlegen, Erledigt/
 // Textaenderung. Fristen/Wiedervorlagen sind Nur-Export und deshalb hier unantastbar.
 const extListTodosStmt = db.prepare(`
-  SELECT * FROM todos
+  SELECT * FROM live_todos
    WHERE visibility != 'private' AND (done = 0 OR updated_at >= datetime('now', '-14 day'))
    ORDER BY (due_at = ''), due_at
 `);
-const extGetTodoStmt = db.prepare("SELECT * FROM todos WHERE id = ? AND visibility != 'private'");
+const extGetTodoStmt = db.prepare("SELECT * FROM live_todos WHERE id = ? AND visibility != 'private'");
 const extInsertTodoStmt = db.prepare(`
   INSERT INTO todos (id, title, description, due_at, start_at, done, priority, recurrence_rule, case_label,
     item_type, case_id, source_type, source_id, source_module, source_ref,
@@ -609,6 +609,8 @@ router.get('/todos', requireExtPermission('viewCases', 'Keine Berechtigung fuer 
 router.post('/todos', requireExtPermission('editCases', 'Keine Berechtigung (Fallbearbeitung nötig).'), (req, res) => {
   const { title, description, dueAt, priority } = req.body || {};
   if (!String(title || '').trim()) return res.status(400).json({ error: 'Titel erforderlich.' });
+  try { require('../../modules/calendar/source-preferences').create(db).assertLocalAllowed(req.extUser?.id, 'task'); }
+  catch (error) { return res.status(error.status || 500).json({ error: error.message }); }
   const id = crypto.randomUUID();
   extInsertTodoStmt.run({
     id, title: String(title).slice(0, 500), description: String(description || '').slice(0, 4000),

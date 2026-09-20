@@ -37,11 +37,11 @@ const MAX_PUT = Number(intern.MAX_FILE) || (1024 * 1024 * 1024);
 const userByNameStmt = db.prepare('SELECT * FROM users WHERE username = ?');
 const tokensByUserStmt = db.prepare('SELECT * FROM doc_webdav_tokens WHERE user_id = ?');
 const tokenTouchStmt = db.prepare("UPDATE doc_webdav_tokens SET last_used_at = datetime('now') WHERE id = ?");
-const casesStmt = db.prepare('SELECT id, label FROM cases WHERE archived = 0 ORDER BY label COLLATE NOCASE');
-const archivCasesStmt = db.prepare('SELECT id, label FROM cases WHERE archived = 1 ORDER BY label COLLATE NOCASE');
-const foldersStmt = db.prepare('SELECT * FROM doc_folders WHERE area = ? AND case_id = ? ORDER BY name COLLATE NOCASE');
-const filesInFolderStmt = db.prepare("SELECT * FROM doc_files WHERE area = ? AND case_id = ? AND folder_id = ? AND deleted_at = '' ORDER BY name COLLATE NOCASE");
-const fileByNameStmt = db.prepare("SELECT * FROM doc_files WHERE area = ? AND case_id = ? AND folder_id = ? AND deleted_at = '' AND name = ? COLLATE NOCASE");
+const casesStmt = db.prepare('SELECT id, label FROM live_cases WHERE archived = 0 ORDER BY label COLLATE NOCASE');
+const archivCasesStmt = db.prepare('SELECT id, label FROM live_cases WHERE archived = 1 ORDER BY label COLLATE NOCASE');
+const foldersStmt = db.prepare('SELECT * FROM live_doc_folders WHERE area = ? AND case_id = ? ORDER BY name COLLATE NOCASE');
+const filesInFolderStmt = db.prepare("SELECT * FROM live_doc_files WHERE area = ? AND case_id = ? AND folder_id = ? AND deleted_at = '' ORDER BY name COLLATE NOCASE");
+const fileByNameStmt = db.prepare("SELECT * FROM live_doc_files WHERE area = ? AND case_id = ? AND folder_id = ? AND deleted_at = '' AND name = ? COLLATE NOCASE");
 const fileInsStmt = db.prepare(`INSERT INTO doc_files (id, area, case_id, folder_id, name, mime_type, size, pages, sha256, ocr_status, created_by)
   VALUES (@id, @area, @caseId, @folderId, @name, @mimeType, @size, @pages, @sha256, @ocrStatus, @createdBy)`);
 const fileUeberschreibStmt = db.prepare(`UPDATE doc_files SET size=@size, sha256=@sha256, mime_type=@mimeType, pages=0, ocr_status=@ocrStatus, updated_at=datetime('now') WHERE id=@id`);

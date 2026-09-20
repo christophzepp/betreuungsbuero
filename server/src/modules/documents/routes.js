@@ -140,6 +140,7 @@ function erlaubteFaelle(session) {
   return sichtbareFaelle(session);
 }
 function fallErlaubt(session, caseId) {
+  if (require('../demo/data-identities').isDemoCaseId(caseId)) return false;
   const e = erlaubteFaelle(session);
   return !e || e.has(String(caseId || ''));
 }
@@ -155,7 +156,7 @@ router.use((req, res, next) => {
   if (requestedArea === 'management' && !req.session.isAdmin) {
     return res.status(403).json({ error: 'Die geschützte Verwaltung ist nur für Administratoren sichtbar.' });
   }
-  if (caseId && e && !e.has(caseId)) return res.status(403).json({ error: 'Keine Berechtigung für diese Fallakte (Recht „alle Fallakten" fehlt - nur eigene Fälle).' });
+  if (caseId && !fallErlaubt(req.session, caseId)) return res.status(403).json({ error: 'Keine Berechtigung für diese Fallakte (Recht „alle Fallakten" fehlt - nur eigene Fälle).' });
   const m = /^\/files\/([^/]+)/.exec(req.path);
   if (m && m[1] !== 'zip') {
     const row = fileGetStmt.get(String(m[1]));
@@ -499,8 +500,8 @@ function blobDirFor(area, caseId, folderId) {
 function findBlobPath(file) { return documentStorage.findBlobPath(file); }
 
 /* ------------------------------- Statements ------------------------------- */
-const folderAllStmt = db.prepare('SELECT * FROM doc_folders WHERE area = ? AND case_id = ? ORDER BY sort_order, name COLLATE NOCASE');
-const folderGetStmt = db.prepare('SELECT * FROM doc_folders WHERE id = ?');
+const folderAllStmt = db.prepare('SELECT * FROM live_doc_folders WHERE area = ? AND case_id = ? ORDER BY sort_order, name COLLATE NOCASE');
+const folderGetStmt = db.prepare('SELECT * FROM live_doc_folders WHERE id = ?');
 const folderInsStmt = db.prepare(`INSERT INTO doc_folders (id, area, case_id, parent_id, name, created_by)
   VALUES (@id, @area, @caseId, @parentId, @name, @createdBy)`);
 const folderRenStmt = db.prepare("UPDATE doc_folders SET name = @name WHERE id = @id");
@@ -508,10 +509,10 @@ const folderMoveStmt = db.prepare("UPDATE doc_folders SET parent_id = @parentId 
 const folderDelStmt = db.prepare('DELETE FROM doc_folders WHERE id = ?');
 const folderPathStmt = db.prepare("UPDATE doc_folders SET name_key=@nameKey, storage_relpath=@storageRelpath, updated_at=datetime('now') WHERE id=@id");
 
-const fileListStmt = db.prepare("SELECT * FROM doc_files WHERE area = ? AND case_id = ? AND folder_id = ? AND deleted_at = '' ORDER BY name COLLATE NOCASE");
-const fileScopeStmt = db.prepare("SELECT * FROM doc_files WHERE area = ? AND case_id = ? AND deleted_at = ''");
-const trashListStmt = db.prepare("SELECT * FROM doc_files WHERE area = ? AND case_id = ? AND deleted_at != '' ORDER BY deleted_at DESC");
-const fileGetStmt = db.prepare('SELECT * FROM doc_files WHERE id = ?');
+const fileListStmt = db.prepare("SELECT * FROM live_doc_files WHERE area = ? AND case_id = ? AND folder_id = ? AND deleted_at = '' ORDER BY name COLLATE NOCASE");
+const fileScopeStmt = db.prepare("SELECT * FROM live_doc_files WHERE area = ? AND case_id = ? AND deleted_at = ''");
+const trashListStmt = db.prepare("SELECT * FROM live_doc_files WHERE area = ? AND case_id = ? AND deleted_at != '' ORDER BY deleted_at DESC");
+const fileGetStmt = db.prepare('SELECT * FROM live_doc_files WHERE id = ?');
 const fileInsStmt = db.prepare(`INSERT INTO doc_files (id, area, case_id, folder_id, name, mime_type, size, pages, sha256, ocr_status, created_by)
   VALUES (@id, @area, @caseId, @folderId, @name, @mimeType, @size, @pages, @sha256, @ocrStatus, @createdBy)`);
 const fileUpdStmt = db.prepare(`UPDATE doc_files SET name=@name, folder_id=@folderId, pages=@pages, ocr_status=@ocrStatus, updated_at=datetime('now') WHERE id=@id`);
@@ -519,8 +520,8 @@ const fileTrashStmt = db.prepare(`UPDATE doc_files SET deleted_at=datetime('now'
 const fileRestoreStmt = db.prepare(`UPDATE doc_files SET deleted_at='', folder_id=@folderId, deleted_from='', deleted_by=NULL, updated_at=datetime('now') WHERE id=@id`);
 const filePurgeStmt = db.prepare('DELETE FROM doc_files WHERE id = ?');
 const fileLinksPurgeStmt = db.prepare('DELETE FROM doc_links WHERE file_id = ?');
-const trashOldStmt = db.prepare("SELECT * FROM doc_files WHERE deleted_at != '' AND deleted_at < datetime('now', ?)");
-const nameTakenStmt = db.prepare("SELECT 1 FROM doc_files WHERE area=? AND case_id=? AND folder_id=? AND deleted_at='' AND name_key=? AND id!=?");
+const trashOldStmt = db.prepare("SELECT * FROM live_doc_files WHERE deleted_at != '' AND deleted_at < datetime('now', ?)");
+const nameTakenStmt = db.prepare("SELECT 1 FROM live_doc_files WHERE area=? AND case_id=? AND folder_id=? AND deleted_at='' AND name_key=? AND id!=?");
 const fileStorageStmt = db.prepare(`
   UPDATE doc_files SET
     name=@name, name_key=@nameKey, folder_id=@folderId, storage_relpath=@storageRelpath,
@@ -542,19 +543,19 @@ const annDelStmt = db.prepare('DELETE FROM doc_annotations WHERE id = ?');
 const annDelForFileStmt = db.prepare('DELETE FROM doc_annotations WHERE file_id = ?');
 const annCountStmt = db.prepare('SELECT file_id, COUNT(*) AS n FROM doc_annotations GROUP BY file_id');
 
-const caseExistsStmt = db.prepare('SELECT 1 FROM cases WHERE id = ?');
-const caseLabelStmt = db.prepare('SELECT label FROM cases WHERE id = ?');
-const handoverCaseStmt = db.prepare('SELECT * FROM cases WHERE id = ?');
-const handoverReportsStmt = db.prepare('SELECT * FROM case_reports WHERE case_id = ? ORDER BY report_id');
-const handoverDokuStmt = db.prepare('SELECT * FROM case_doku_entries WHERE case_id = ? ORDER BY created_at, id');
-const handoverContactsStmt = db.prepare('SELECT * FROM case_contacts WHERE case_id = ? ORDER BY created_at, id');
+const caseExistsStmt = db.prepare('SELECT 1 FROM live_cases WHERE id = ?');
+const caseLabelStmt = db.prepare('SELECT label FROM live_cases WHERE id = ?');
+const handoverCaseStmt = db.prepare('SELECT * FROM live_cases WHERE id = ?');
+const handoverReportsStmt = db.prepare('SELECT * FROM live_case_reports WHERE case_id = ? ORDER BY report_id');
+const handoverDokuStmt = db.prepare('SELECT * FROM live_case_doku_entries WHERE case_id = ? ORDER BY created_at, id');
+const handoverContactsStmt = db.prepare('SELECT * FROM live_case_contacts WHERE case_id = ? ORDER BY created_at, id');
 const documentFollowupStmt = db.prepare(`
-  SELECT * FROM todos
+  SELECT * FROM live_todos
    WHERE item_type = 'followup' AND source_type = 'document' AND source_id = ?
    ORDER BY done, created_at LIMIT 1
 `);
 const documentFollowupAllStmt = db.prepare(`
-  SELECT id FROM todos
+  SELECT id FROM live_todos
    WHERE item_type = 'followup' AND source_type = 'document' AND source_id = ?
 `);
 const documentFollowupInsertStmt = db.prepare(`
@@ -695,7 +696,7 @@ function moveFolderPhysical(row, parentId, wantedName) {
       fs.mkdirSync(newPath, { recursive: true });
     }
     const folders = folderAllStmt.all(row.area, row.case_id);
-    const files = db.prepare('SELECT * FROM doc_files WHERE area=? AND case_id=?').all(row.area, row.case_id);
+    const files = db.prepare('SELECT * FROM live_doc_files WHERE area=? AND case_id=?').all(row.area, row.case_id);
     const setFolderPath = db.prepare("UPDATE doc_folders SET name_key=?, storage_relpath=?, updated_at=datetime('now') WHERE id=?");
     const setFilePath = db.prepare("UPDATE doc_files SET storage_relpath=?, updated_at=datetime('now') WHERE id=?");
     db.transaction(() => {
@@ -957,7 +958,7 @@ router.patch('/folders/:id', requireEditDocuments, (req, res) => {
     }
     const oldPrefix = oldRelative;
     const folders = folderAllStmt.all(ordner.area, ordner.case_id);
-    const files = db.prepare('SELECT * FROM doc_files WHERE area=? AND case_id=?').all(ordner.area, ordner.case_id);
+    const files = db.prepare('SELECT * FROM live_doc_files WHERE area=? AND case_id=?').all(ordner.area, ordner.case_id);
     const setFolderPath = db.prepare("UPDATE doc_folders SET name_key=?, storage_relpath=?, updated_at=datetime('now') WHERE id=?");
     const setFilePath = db.prepare("UPDATE doc_files SET storage_relpath=?, updated_at=datetime('now') WHERE id=?");
     const updatePaths = db.transaction(() => {
@@ -1421,7 +1422,7 @@ router.get('/config', requireViewDocuments, (req, res) => {
     // Alias für noch zwischengespeicherte ältere Clients; er bezeichnet in der Antwort
     // bereits die neue Baumwurzel, niemals den alten Blobort.
     baseDir: cfg.storageRoot,
-    legacyLocations: [cfg.legacyBaseDir, ...Object.values(cfg.caseDirs || {})].filter(Boolean),
+    legacyLocations: [cfg.legacyBaseDir, ...Object.entries(cfg.caseDirs || {}).filter(([id]) => require('../demo/data-identities').isLiveCaseId(id)).map(([, directory]) => directory)].filter(Boolean),
     caseDirs: {},
     autoOcr: cfg.autoOcr,
     tags: cfg.tags,
@@ -1518,17 +1519,17 @@ router.put('/config', requireEditDocuments, (req, res) => {
    DOCUMENTS_DATA_ROOT dient NUR dem Testharnisch (Fixture-Verzeichnis). */
 const DATA_ROOT = DOCUMENT_DATA_ROOT;
 
-const dokuEntriesStmt = db.prepare('SELECT id, data_json, created_at FROM case_doku_entries WHERE case_id = ?');
+const dokuEntriesStmt = db.prepare('SELECT id, data_json, created_at FROM live_case_doku_entries WHERE case_id = ?');
 const inboxAllStmt = db.prepare('SELECT id, file_name, mime_type, size, inbox_date, received_date, created_at FROM inbox_documents');
 const inboxOneStmt = db.prepare('SELECT * FROM inbox_documents WHERE id = ?');
-const receiptsAllStmt = db.prepare('SELECT id, filename, mime_type, size, invoice_date, uploaded_at FROM finance_receipts ORDER BY uploaded_at DESC');
-const receiptOneStmt = db.prepare('SELECT * FROM finance_receipts WHERE id = ?');
+const receiptsAllStmt = db.prepare('SELECT id, filename, mime_type, size, invoice_date, uploaded_at FROM live_finance_receipts ORDER BY uploaded_at DESC');
+const receiptOneStmt = db.prepare('SELECT * FROM live_finance_receipts WHERE id = ?');
 const statementsAllStmt = db.prepare('SELECT id, filename, mime_type, size, uploaded_at FROM finance_statements ORDER BY uploaded_at DESC');
 const statementOneStmt = db.prepare('SELECT * FROM finance_statements WHERE id = ?');
 const intakeDraftsStmt = db.prepare('SELECT draft_id, COUNT(*) AS n FROM intake_files GROUP BY draft_id ORDER BY draft_id');
 const intakeListStmt = db.prepare('SELECT id, file_name, mime_type, size, created_at FROM intake_files WHERE draft_id = ? ORDER BY created_at, file_name');
 const intakeOneStmt = db.prepare('SELECT * FROM intake_files WHERE draft_id = ? AND id = ?');
-const caseRowStmt = db.prepare('SELECT id, label, stammdaten_json FROM cases WHERE id = ?');
+const caseRowStmt = db.prepare('SELECT id, label, stammdaten_json FROM live_cases WHERE id = ?');
 const intakeMetaStmt = db.prepare("SELECT data_json FROM office_json WHERE key = 'case_intakes'");
 
 const SPIEGEL_CASE = [
@@ -1763,7 +1764,7 @@ router.get('/mirror/file', requireViewDocuments, (req, res) => {
     const foto = dokuFotos(scope.caseId).find(f => f.key === key);
     if (!foto) return res.status(404).json({ error: 'Anlage nicht gefunden.' });
     const central = db.prepare(`
-      SELECT f.* FROM doc_links l JOIN doc_files f ON f.id=l.file_id
+      SELECT f.* FROM doc_links l JOIN live_doc_files f ON f.id=l.file_id
        WHERE l.module='doku-photo' AND l.slot=?
          AND f.area='case' AND f.case_id=?
        ORDER BY CASE WHEN l.owner_id=? THEN 0 ELSE 1 END LIMIT 1
@@ -1781,19 +1782,19 @@ router.get('/mirror/file', requireViewDocuments, (req, res) => {
   if (src === 'posteingang') {
     const r = inboxOneStmt.get(key);
     if (!r) return res.status(404).json({ error: 'Dokument nicht gefunden.' });
-    const linked = db.prepare("SELECT f.* FROM doc_links l JOIN doc_files f ON f.id=l.file_id WHERE l.module='inbox' AND l.owner_id=? AND l.slot=''").get(r.id);
+    const linked = db.prepare("SELECT f.* FROM doc_links l JOIN live_doc_files f ON f.id=l.file_id WHERE l.module='inbox' AND l.owner_id=? AND l.slot=''").get(r.id);
     return sende(r.file_name, r.mime_type, (linked && findBlobPath(linked)) || path.join(DATA_ROOT, 'inbox-documents', r.id));
   }
   if (src === 'belege') {
     const r = receiptOneStmt.get(key);
     if (!r) return res.status(404).json({ error: 'Beleg nicht gefunden.' });
-    const linked = db.prepare("SELECT f.* FROM doc_links l JOIN doc_files f ON f.id=l.file_id WHERE l.module='finance-receipt' AND l.owner_id=? AND l.slot=''").get(r.id);
+    const linked = db.prepare("SELECT f.* FROM doc_links l JOIN live_doc_files f ON f.id=l.file_id WHERE l.module='finance-receipt' AND l.owner_id=? AND l.slot=''").get(r.id);
     return sende(r.filename, r.mime_type, (linked && findBlobPath(linked)) || path.join(DATA_ROOT, 'finance-receipts', r.id));
   }
   if (src === 'auszuege') {
     const r = statementOneStmt.get(key);
     if (!r) return res.status(404).json({ error: 'Kontoauszug nicht gefunden.' });
-    const linked = db.prepare("SELECT f.* FROM doc_links l JOIN doc_files f ON f.id=l.file_id WHERE l.module='finance-statement' AND l.owner_id=? AND l.slot=''").get(r.id);
+    const linked = db.prepare("SELECT f.* FROM doc_links l JOIN live_doc_files f ON f.id=l.file_id WHERE l.module='finance-statement' AND l.owner_id=? AND l.slot=''").get(r.id);
     return sende(r.filename, r.mime_type, (linked && findBlobPath(linked)) || path.join(DATA_ROOT, 'finance-statements', r.id));
   }
   if (src === 'intakes') {
@@ -1814,7 +1815,7 @@ router.post('/files/von-posteingang', requireEditDocuments, (req, res) => {
   const area = req.body?.area === 'case' ? 'case' : 'office';
   const caseId = area === 'case' ? String(req.body?.caseId || '') : '';
   if (area === 'case' && !caseExistsStmt.get(caseId)) return res.status(404).json({ error: 'Fallakte nicht gefunden.' });
-  const linked = db.prepare("SELECT f.* FROM doc_links l JOIN doc_files f ON f.id=l.file_id WHERE l.module='inbox' AND l.owner_id=? AND l.slot=''").get(r.id);
+  const linked = db.prepare("SELECT f.* FROM doc_links l JOIN live_doc_files f ON f.id=l.file_id WHERE l.module='inbox' AND l.owner_id=? AND l.slot=''").get(r.id);
   /* D48: Zielordner wahlweise als Pfad (wird angelegt) statt als fertige folderId. */
   const teile = Array.isArray(req.body?.pfad) ? req.body.pfad.map(x => String(x || '')).filter(Boolean) : [];
   const folderId = teile.length ? ordnerSicherstellen(area, caseId, teile) : String(req.body?.folderId || '');
@@ -2537,7 +2538,7 @@ function dateiMitPfadErsetzen(row, sourcePath, options) {
 }
 
 function versionenPurge() {
-  const alte = db.prepare("SELECT v.*, f.area, f.case_id FROM doc_versions v LEFT JOIN doc_files f ON f.id = v.file_id WHERE v.created_at < datetime('now', ?)").all('-' + trashTage() + ' days');
+  const alte = db.prepare("SELECT v.*, f.area, f.case_id FROM doc_versions v LEFT JOIN live_doc_files f ON f.id = v.file_id WHERE v.created_at < datetime('now', ?)").all('-' + trashTage() + ' days');
   for (const v of alte) {
     const p = versionBlobPfad(v, { area: v.area || 'office', case_id: v.case_id });
     if (p) {
@@ -2914,7 +2915,7 @@ router.get('/falluebergabe-zip', requireViewDocuments, async (req, res, next) =>
   const folderRows = folderAllStmt.all('case', caseId);
   const folderParts = handoverFolderParts(folderRows);
   const fileRows = db.prepare(
-    "SELECT * FROM doc_files WHERE area='case' AND case_id=? AND deleted_at='' ORDER BY name COLLATE NOCASE"
+    "SELECT * FROM live_doc_files WHERE area='case' AND case_id=? AND deleted_at='' ORDER BY name COLLATE NOCASE"
   ).all(caseId);
   const documents = [];
   const missing = [];
@@ -3172,7 +3173,7 @@ router.get('/ordner-zip', requireViewDocuments, (req, res) => {
   }
   const basis = wurzelId ? pfadVon(wurzelId) : [];
   const drin = (fid) => { const seg = pfadVon(String(fid || '')); return !wurzelId || (seg.length >= basis.length && basis.every((s, i) => seg[i] === s)); };
-  const dateien = db.prepare("SELECT * FROM doc_files WHERE area = ? AND case_id = ? AND deleted_at = ''").all(scope.area, scope.caseId);
+  const dateien = db.prepare("SELECT * FROM live_doc_files WHERE area = ? AND case_id = ? AND deleted_at = ''").all(scope.area, scope.caseId);
   const eintraege = [];
   const fehlend = [];
   for (const r of dateien) {
@@ -3212,7 +3213,7 @@ router.get('/ordner-dateien', requireViewDocuments, (req, res) => {
   }
   const basis = wurzelId ? pfadVon(wurzelId) : [];
   const drin = (fid) => { const seg = pfadVon(String(fid || '')); return !wurzelId || (seg.length >= basis.length && basis.every((s, i) => seg[i] === s)); };
-  const rows = db.prepare("SELECT id, name, mime_type, size, sha256, folder_id, updated_at FROM doc_files WHERE area = ? AND case_id = ? AND deleted_at = ''").all(scope.area, scope.caseId)
+  const rows = db.prepare("SELECT id, name, mime_type, size, sha256, folder_id, updated_at FROM live_doc_files WHERE area = ? AND case_id = ? AND deleted_at = ''").all(scope.area, scope.caseId)
     .filter((r) => drin(r.folder_id))
     .map((r) => ({ id: r.id, name: r.name, mimeType: r.mime_type, size: r.size, sha256: r.sha256 || '', updatedAt: r.updated_at,
       pfad: pfadVon(String(r.folder_id || '')).slice(basis.length).join('/'), available: !!findBlobPath(r) }));
@@ -3227,12 +3228,12 @@ router.patch('/files/:id/tags', requireEditDocuments, (req, res) => {
   res.json({ ok: true, tags: tags.join(',') });
 });
 router.get('/ocr-ausstehend', requireViewDocuments, (req, res) => {
-  const rows = db.prepare("SELECT id, name, area, case_id, mime_type FROM doc_files WHERE deleted_at = '' AND ocr_status IN ('pending','failed') ORDER BY created_at LIMIT 60").all()
+  const rows = db.prepare("SELECT id, name, area, case_id, mime_type FROM live_doc_files WHERE deleted_at = '' AND ocr_status IN ('pending','failed') ORDER BY created_at LIMIT 60").all()
     .filter((r) => dateiSichtbar(req.session, r)).slice(0, 24);
   res.json({ files: rows.map((r) => ({ id: r.id, name: r.name, area: r.area, caseId: r.case_id || '', mimeType: r.mime_type })) });
 });
 router.post('/duplikate-scan', requireEditDocuments, (req, res) => {
-  const offenRows = db.prepare("SELECT * FROM doc_files WHERE sha256 = '' AND deleted_at = '' LIMIT 800").all()
+  const offenRows = db.prepare("SELECT * FROM live_doc_files WHERE sha256 = '' AND deleted_at = '' LIMIT 800").all()
     .filter((row) => dateiSichtbar(req.session, row)).slice(0, 400);
   let gehasht = 0;
   for (const r of offenRows) {
@@ -3246,16 +3247,16 @@ router.post('/duplikate-scan', requireEditDocuments, (req, res) => {
       gehasht++;
     } catch (_e) { /* Datei gerade nicht lesbar - naechster Scan */ }
   }
-  const offen = db.prepare("SELECT * FROM doc_files WHERE sha256 = '' AND deleted_at = ''").all()
+  const offen = db.prepare("SELECT * FROM live_doc_files WHERE sha256 = '' AND deleted_at = ''").all()
     .filter((row) => dateiSichtbar(req.session, row)).length;
   res.json({ gehasht, offen });
 });
 router.get('/duplikate', requireViewDocuments, (req, res) => {
-  const gruppenRows = db.prepare("SELECT sha256, COUNT(*) AS n FROM doc_files WHERE sha256 != '' AND deleted_at = '' GROUP BY sha256 HAVING n > 1 ORDER BY n DESC LIMIT 100").all();
-  const labels = new Map(db.prepare('SELECT id, label FROM cases').all().map((c) => [String(c.id), c.label]));
+  const gruppenRows = db.prepare("SELECT sha256, COUNT(*) AS n FROM live_doc_files WHERE sha256 != '' AND deleted_at = '' GROUP BY sha256 HAVING n > 1 ORDER BY n DESC LIMIT 100").all();
+  const labels = new Map(db.prepare('SELECT id, label FROM live_cases').all().map((c) => [String(c.id), c.label]));
   const gruppen = gruppenRows.map((g) => ({
     sha256: g.sha256,
-    files: db.prepare("SELECT id, name, area, case_id, folder_id, size FROM doc_files WHERE sha256 = ? AND deleted_at = ''").all(g.sha256)
+    files: db.prepare("SELECT id, name, area, case_id, folder_id, size FROM live_doc_files WHERE sha256 = ? AND deleted_at = ''").all(g.sha256)
       .filter((r) => dateiSichtbar(req.session, r))
       .map((r) => ({ id: r.id, name: r.name, area: r.area, caseId: r.case_id || '', folderId: r.folder_id || '', size: r.size,
         ort: r.area === 'office' ? 'Büroorganisation' : ('Fallakte ' + (labels.get(String(r.case_id)) || '')) }))
@@ -3264,7 +3265,7 @@ router.get('/duplikate', requireViewDocuments, (req, res) => {
 });
 router.post('/duplikate/deduplizieren', requireEditDocuments, (req, res) => {
   const groups = db.prepare(`
-    SELECT sha256 FROM doc_files
+    SELECT sha256 FROM live_doc_files
      WHERE sha256 != '' AND deleted_at = ''
      GROUP BY sha256 HAVING COUNT(*) > 1
   `).all();
@@ -3272,7 +3273,7 @@ router.post('/duplikate/deduplizieren', requireEditDocuments, (req, res) => {
   let bytesFreigegeben = 0;
   for (const group of groups) {
     const rows = db.prepare(`
-      SELECT * FROM doc_files
+      SELECT * FROM live_doc_files
        WHERE sha256=? AND deleted_at=''
        ORDER BY CASE WHEN storage_status='ok' THEN 0 ELSE 1 END, created_at, id
     `).all(group.sha256).filter((row) => dateiSichtbar(req.session, row));
@@ -3435,9 +3436,9 @@ router.get('/integrity/runs/:id', requireViewDocuments, (req, res) => {
   res.json({ run: { ...run, summary }, findings });
 });
 router.get('/speicher', requireViewDocuments, (req, res) => {
-  const labels = new Map(db.prepare('SELECT id, label, archived FROM cases').all().map((c) => [String(c.id), c]));
-  const rows = db.prepare("SELECT area, case_id, COUNT(*) AS n, COALESCE(SUM(size),0) AS bytes FROM doc_files WHERE deleted_at = '' GROUP BY area, case_id").all();
-  const korb = db.prepare("SELECT COUNT(*) AS n, COALESCE(SUM(size),0) AS bytes FROM doc_files WHERE deleted_at != ''").get();
+  const labels = new Map(db.prepare('SELECT id, label, archived FROM live_cases').all().map((c) => [String(c.id), c]));
+  const rows = db.prepare("SELECT area, case_id, COUNT(*) AS n, COALESCE(SUM(size),0) AS bytes FROM live_doc_files WHERE deleted_at = '' GROUP BY area, case_id").all();
+  const korb = db.prepare("SELECT COUNT(*) AS n, COALESCE(SUM(size),0) AS bytes FROM live_doc_files WHERE deleted_at != ''").get();
   let platte = null;
   try {
     const wo = readCfg().storageRoot || DEFAULT_DIR;
@@ -3456,9 +3457,9 @@ router.get('/speicher', requireViewDocuments, (req, res) => {
 router.get('/aktivitaet', requireViewDocuments, (req, res) => {
   try { db.prepare("DELETE FROM doc_activity WHERE ts < datetime('now','-180 days')").run(); } catch (_e) { /* Aufbewahrung */ }
   const limit = Math.min(500, Math.max(1, Number(req.query.limit) || 100));
-  const rows = db.prepare('SELECT ts, username, aktion, ziel, detail, area, case_id FROM doc_activity ORDER BY id DESC LIMIT ?').all(limit)
+  const rows = db.prepare('SELECT ts, username, aktion, ziel, detail, area, case_id FROM live_doc_activity ORDER BY id DESC LIMIT ?').all(limit)
     .filter((r) => dateiSichtbar(req.session, r));
-  const labels = new Map(db.prepare('SELECT id, label FROM cases').all().map((c) => [String(c.id), c.label]));
+  const labels = new Map(db.prepare('SELECT id, label FROM live_cases').all().map((c) => [String(c.id), c.label]));
   res.json({ eintraege: rows.map((r) => ({ ts: r.ts, username: r.username, aktion: r.aktion, ziel: r.ziel, detail: r.detail,
     ort: r.area === 'management' ? 'Geschützte Verwaltung' : (r.area === 'office' ? 'Büroorganisation' : (r.case_id ? (labels.get(String(r.case_id)) || r.case_id) : '')) })) });
 });
@@ -3466,7 +3467,7 @@ router.get('/aktivitaet', requireViewDocuments, (req, res) => {
 /* Ordner-Inhaltsangabe (D14): Anzahl+Bytes der DIREKTEN Dateien je Ordner des Bereichs. */
 router.get('/ordner-statistik', requireViewDocuments, (req, res) => {
   const scope = scopeFromReq(req, res); if (!scope) return;
-  const rows = db.prepare("SELECT folder_id, COUNT(*) AS n, COALESCE(SUM(size),0) AS bytes FROM doc_files WHERE area = ? AND case_id = ? AND deleted_at = '' GROUP BY folder_id").all(scope.area, scope.caseId);
+  const rows = db.prepare("SELECT folder_id, COUNT(*) AS n, COALESCE(SUM(size),0) AS bytes FROM live_doc_files WHERE area = ? AND case_id = ? AND deleted_at = '' GROUP BY folder_id").all(scope.area, scope.caseId);
   const stat = {};
   for (const r of rows) stat[String(r.folder_id || '')] = { n: r.n, bytes: r.bytes };
   res.json({ stat });
@@ -3480,6 +3481,10 @@ router.patch('/files/:id/wiedervorlage', requireEditDocuments, (req, res) => {
   if (datum && !/^\d{4}-\d{2}-\d{2}$/.test(datum)) return res.status(400).json({ error: 'Datum bitte als JJJJ-MM-TT.' });
   const notiz = String(req.body?.notiz || '').slice(0, 500);
   const linked = documentFollowupStmt.get(row.id);
+  if (datum && !linked) {
+    try { require('../calendar/source-preferences').create(db).assertLocalAllowed(req.session.userId, 'task'); }
+    catch (error) { return res.status(error.status || 500).json({ error: error.message }); }
+  }
   const caseId = row.area === 'case' ? String(row.case_id || '') : '';
   const caseRow = caseId ? caseLabelStmt.get(caseId) : null;
   const values = {
@@ -3517,8 +3522,8 @@ router.patch('/files/:id/wiedervorlage', requireEditDocuments, (req, res) => {
 router.get('/wiedervorlagen', requireViewDocuments, (req, res) => {
   const heute = new Date();
   const heuteS = heute.getFullYear() + '-' + String(heute.getMonth() + 1).padStart(2, '0') + '-' + String(heute.getDate()).padStart(2, '0');
-  const labels = new Map(db.prepare('SELECT id, label FROM cases').all().map((c) => [String(c.id), c.label]));
-  const rows = db.prepare("SELECT id, name, area, case_id, folder_id, resubmit_at, resubmit_note FROM doc_files WHERE resubmit_at != '' AND deleted_at = '' ORDER BY resubmit_at LIMIT 200").all()
+  const labels = new Map(db.prepare('SELECT id, label FROM live_cases').all().map((c) => [String(c.id), c.label]));
+  const rows = db.prepare("SELECT id, name, area, case_id, folder_id, resubmit_at, resubmit_note FROM live_doc_files WHERE resubmit_at != '' AND deleted_at = '' ORDER BY resubmit_at LIMIT 200").all()
     .filter((r) => dateiSichtbar(req.session, r));
   res.json({ eintraege: rows.map((r) => ({ id: r.id, name: r.name, area: r.area, caseId: r.case_id || '', folderId: r.folder_id || '',
     datum: r.resubmit_at, notiz: r.resubmit_note, faellig: r.resubmit_at <= heuteS,
@@ -3534,7 +3539,7 @@ router.post('/files/:id/zum-posteingang', requireEditDocuments, (req, res) => {
   const ocrText = textForFileStmt.all(row.id).map((s) => String(s.text || '')).join('\n\n').slice(0, 400000);
   let caseLabel = '';
   if (row.area === 'case' && row.case_id) {
-    const c = db.prepare('SELECT label FROM cases WHERE id = ?').get(row.case_id);
+    const c = db.prepare('SELECT label FROM live_cases WHERE id = ?').get(row.case_id);
     caseLabel = (c && c.label) || '';
   }
   const inboxId = crypto.randomUUID();
@@ -5088,7 +5093,7 @@ const prInsStmt = db.prepare('INSERT INTO doc_pair_jobs (id, label, mount_id, so
 const prUpdStmt = db.prepare('UPDATE doc_pair_jobs SET label = ?, mount_id = ?, source_path = ?, target_json = ?, enabled = ? WHERE id = ?');
 const prDelStmt = db.prepare('DELETE FROM doc_pair_jobs WHERE id = ?');
 const prStateDelStmt = db.prepare('DELETE FROM doc_pair_state WHERE pair_id = ?');
-const prCasesStmt = db.prepare('SELECT id, label FROM cases');
+const prCasesStmt = db.prepare('SELECT id, label FROM live_cases');
 function pairJobJson(r) {
   let ziel = {};
   try { ziel = JSON.parse(r.target_json || '{}'); } catch (_e) { /* leer */ }
@@ -5445,7 +5450,7 @@ router.post('/export-ablage/status', requireViewDocuments, (req, res) => {
    insgesamt. Genau diese Zahlen stehen im Dialog VOR der Auslagerung und danach erneut. */
 router.get('/export-ablage/bestand', requireViewDocuments, (req, res) => {
   const erlaubt = erlaubteFaelle(req.session);
-  const rows = db.prepare('SELECT id, label, stammdaten_json FROM cases').all();
+  const rows = db.prepare('SELECT id, label, stammdaten_json FROM live_cases').all();
   const faelle = [];
   let gesamtBlob = 0, gesamtSchnapp = 0, gesamtEintraege = 0, gesamtMitSchnapp = 0;
   for (const r of rows) {

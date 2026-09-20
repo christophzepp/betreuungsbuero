@@ -1,5 +1,7 @@
 'use strict';
 
+const { isLiveCaseId } = require('../demo/data-identities');
+
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
@@ -153,7 +155,7 @@ function createDocumentMaterializations(options) {
    */
   function collectCaseStrongRevisions() {
     const specs = backupData.registryFor('case');
-    const cases = db.prepare('SELECT * FROM cases ORDER BY id').all();
+    const cases = db.prepare('SELECT * FROM cases ORDER BY id').all().filter(row => isLiveCaseId(row.id));
     const rowsByCase = new Map(cases.map((row) => [
       String(row.id),
       new Map(specs.map((spec) => [spec.table, []]))
@@ -350,7 +352,7 @@ function createDocumentMaterializations(options) {
 
   function markCaseDirty(caseId, delayMs) {
     const id = String(caseId || '');
-    if (!id) return false;
+    if (!id || !isLiveCaseId(id)) return false;
     const due = Date.now() + Math.max(0, Number(delayMs === undefined ? CASE_DELAY_MS : delayMs) || 0);
     const previous = caseQueue.get(id);
     // Entprellen: jede neue Änderung verschiebt die Erzeugung nach hinten. Ein
@@ -561,7 +563,7 @@ function createDocumentMaterializations(options) {
   function runCase(caseId, options) {
     const runOptions = options || {};
     const row = db.prepare('SELECT id,label,stammdaten_json FROM cases WHERE id=?').get(String(caseId || ''));
-    if (!row) throw new Error('Fall nicht gefunden.');
+    if (!row || !isLiveCaseId(row.id)) throw new Error('Fall nicht gefunden.');
     const revisionBefore = runOptions.sourceRevision
       || runOptions.quickRevision // Übergang für interne Aufrufer älterer Builds
       || collectCaseStrongRevisions().get(String(row.id))
@@ -807,7 +809,7 @@ function createDocumentMaterializations(options) {
     const runOptions = options || {};
     const result = { cases: {}, office: [] };
     const revisions = collectCaseStrongRevisions();
-    for (const row of db.prepare('SELECT id FROM cases ORDER BY id').all()) {
+    for (const row of db.prepare('SELECT id FROM cases ORDER BY id').all().filter(row => isLiveCaseId(row.id))) {
       result.cases[row.id] = runCase(row.id, {
         ...runOptions,
         sourceRevision: revisions.get(String(row.id))
@@ -921,6 +923,7 @@ function createDocumentMaterializations(options) {
       recoveryKeySource: keyStatus.source,
       recoveryKeyError: keyStatus.error,
       items: db.prepare('SELECT * FROM doc_materializations ORDER BY scope_type,scope_id,artifact_kind').all()
+        .filter(row => row.scope_type !== 'case' || isLiveCaseId(row.scope_id))
     };
   }
 

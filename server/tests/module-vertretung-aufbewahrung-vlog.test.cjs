@@ -263,7 +263,7 @@ test('Review-Fix: CSV-Export folgt dem Filter und traegt die Verarbeitungs-Merkm
 
 test('Review-Fix: Zeitfilter rechnet Ortszeit nach UTC, Vertretungsplan nutzt Ortszeit', () => {
   const adminSrc = lies('src', 'modules', 'admin', 'routes.js');
-  assert.ok(adminSrc.includes("datetime(?, 'utc')"), 'Filtergrenzen vergleichen Ortszeit gegen UTC');
+  assert.ok(adminSrc.includes("systemTime.utcDayBoundary(text(req.query.von))") && adminSrc.includes("systemTime.utcDayBoundary(text(req.query.bis), true)"), 'Filtergrenzen vergleichen Ortszeit gegen UTC');
   assert.ok(html.includes('function vertretungHeute()'), 'Vertretungsplan rechnet weiter in UTC');
   /* Nur den Vertretungs-Bereich pruefen - andere Module haben eigene, hier nicht betroffene Stellen. */
   const vi = html.indexOf('let vertretungStand=');

@@ -47,12 +47,12 @@ function sichtbareBereiche(welt) {
   return { sichtbar: [...ctx.__sichtbar], nurOnline: [...ctx.__nurOnline] };
 }
 
-test('Online-Admin sieht alle 30 Bereiche - der Umbau hat online nichts weggenommen', () => {
+test('Online-Admin sieht alle 31 Bereiche - der Umbau hat online nichts weggenommen', () => {
   /* 30.08.2026: 28 + der neue Bereich „Demo-Modus" (Nutzerauftrag Vorführbetrieb).
      06.09.2026: 29 + der Bereich „Briefkopf" (Briefkopf-Editor, Gruppe Büro hinter den
      Bürostammdaten; bewusste Erweiterung, kein Verlust). */
   const { sichtbar, nurOnline } = sichtbareBereiche({ modus: 'online', nutzer: { isAdmin: true } });
-  assert.strictEqual(sichtbar.length, 30, `Online-Admin sieht ${sichtbar.length} statt 30 Bereiche: ${sichtbar}`);
+  assert.strictEqual(sichtbar.length, 31, `Online-Admin sieht ${sichtbar.length} statt 31 Bereiche: ${sichtbar}`);
   assert.deepStrictEqual(nurOnline, [], 'Online darf es keinen Sammelhinweis geben');
 });
 
@@ -68,7 +68,7 @@ test('Lokal-Admin: die tragfähigen Bereiche erscheinen, die Server-Bereiche wan
   /* Der Sammelhinweis nennt genau die Bereiche, die NUR am Modus scheitern. */
   assert.deepStrictEqual(nurOnline.sort(), [
     'audit', 'banking', 'benachrichtigung', 'demo', 'erweiterung', 'explorer', 'formulare',
-    'kalender', 'mail', 'mcp', 'nutzer', 'prompts', 'rollen', 'vertretung',
+    'kalender', 'mail', 'mcp', 'nutzer', 'prompts', 'rollen', 'systemzeit', 'vertretung',
   ].sort(), 'Der Sammelhinweis-Inhalt für den Lokal-Admin stimmt nicht');
 });
 
@@ -159,6 +159,7 @@ test('Willkommens-Schalter und Herkunfts-Zugangszeile tragen lokal', () => {
     'Die Herkunfts-Zugangszeile rechnet lokal nicht mehr aus Browser-Werten');
   assert.match(HTML, /a\.effectiveConfigured===null\?'von hier nicht prüfbar'/,
     'Der dritte Zustand (Mail lokal unbekannt) fehlt in der Herkunftstabelle');
-  assert.match(HTML, /if\(einIstAdmin\(\)&&einIstOnline\(\)\)html\+='<h4 class="set-abschnitt2">Büro-Versandkonten/,
-    'Die Büro-Versandkonten (Server-Formular) würden lokal als 403-Fassade eingebettet');
+  assert.match(HTML, /if\(window\.__appMode!=='online'\)return;/,
+    'Versandwege laden lokal keine Server-Vorgaben');
+  assert.ok(!HTML.includes('id="einVsAdm"'), 'Kein zweites Admin-Formular in Versandwege');
 });

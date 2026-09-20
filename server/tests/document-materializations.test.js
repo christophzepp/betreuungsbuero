@@ -519,3 +519,18 @@ test('zieht Security-Änderungen entprellt nach und belegt die aktuelle DB-Quell
   assert.notEqual(after, before);
   assert.equal(after, backupData.portableRecoverySourceRevision(f.db, require('../src/security/crypto')));
 });
+
+test('Demo-Fälle bleiben außerhalb von Sicherungsstatus, Warteschlange und automatischen Fallabbildern', t => {
+  const f=fixture();t.after(()=>f.close());
+  const id=require('../src/modules/demo/data-identities').DEMO_CASES[0].id;
+  f.db.prepare('INSERT INTO cases(id,label,stammdaten_json) VALUES (?,?,?)').run(id,'Demo case','{}');
+  f.db.prepare("INSERT INTO doc_materializations(scope_type,scope_id,artifact_kind) VALUES ('case',?,'case-backup-json')").run(id);
+  assert.equal(f.service.status().items.length,0,'Even stale demo materializations are hidden');
+  assert.equal(f.service.markCaseDirty(id,0),false);
+  assert.deepEqual(f.service.pending().cases,[]);
+  assert.throws(()=>f.service.runCase(id),/Fall nicht gefunden/);
+  const scan=f.service.scan({startup:true});
+  assert.equal(scan.cases,1);
+  assert.deepEqual(f.service.pending().cases.map(row=>row.caseId),['case-1']);
+  assert.equal(f.db.prepare('SELECT count(*) n FROM cases').get().n,2,'Physical demo data is preserved');
+});

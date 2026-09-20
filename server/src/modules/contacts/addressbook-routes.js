@@ -57,7 +57,7 @@ router.post('/contact',requireEditCases,handle(r=>{
  if(next.people)next.people=next.people.map(p=>require('../../../frontend/addressbook-contact-tools').withWays(p));
  if(next.contactWays)Object.assign(next,require('../../../frontend/addressbook-contact-tools').withWays(next));
  const id=creationId||crypto.randomUUID();next.status=next.status||'Aktiv';next._category=next._category||'soziales';next.createdAt=new Date().toISOString();
- if(scope==='case'){if(!db.prepare('SELECT id FROM cases WHERE id=?').get(caseId))A.fail(404,'Fall nicht gefunden.');db.prepare('INSERT INTO case_contacts(id,case_id,data_json,updated_by) VALUES(?,?,?,?)').run(id,caseId,JSON.stringify(next),r.session.userId)}
+ if(scope==='case'){if(!db.prepare('SELECT id FROM live_cases WHERE id=?').get(caseId))A.fail(404,'Fall nicht gefunden.');db.prepare('INSERT INTO case_contacts(id,case_id,data_json,updated_by) VALUES(?,?,?,?)').run(id,caseId,JSON.stringify(next),r.session.userId)}
  else db.prepare('INSERT INTO office_contacts(id,data_json,updated_by) VALUES(?,?,?)').run(id,JSON.stringify(next),r.session.userId);
  A.record(scope,caseId,id,null,next,r.session);A.notify(scope,caseId,id,next);return A.details(scope,caseId,id,r.session);
 }));

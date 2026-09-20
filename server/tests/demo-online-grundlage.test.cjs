@@ -414,7 +414,7 @@ test('Feinschliff 30.08.: ausgegraute Schreibwege, offener Fall markiert, ehrlic
     'Das Entfernen der Kalenderverbindung baut den Seed wieder neu statt zu entfernen');
   assert.ok(HTML.includes("(window.__calDemoStore&&window.__calDemoStore.entfernt)?[]"),
     'Die Kontakt-Attrappe bietet das entfernte Konto weiter an - die Vorführung widerspricht sich');
-  assert.ok(HTML.includes("if(!window.__wieOnline()){calConnectionsCache=[];return calConnectionsCache}"),
+  assert.ok(HTML.includes("if(!window.__wieOnline()){calConnectionsCache=[];calSourcePreferences=calSourceDefaults();return calConnectionsCache}"),
     'Das Terminformular zeigt in der Vorführung wieder keinen Speicherort');
   /* Die DATENwege des Kalenders müssen an isOnline() bleiben (RAM statt 403). */
   assert.match(HTML, /async function calCreate\([\s\S]{0,400}?isOnline\(\)/,

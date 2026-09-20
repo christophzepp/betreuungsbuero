@@ -747,3 +747,25 @@ test('Befunde 1/3: im fremden Fall druckt BETREUER die Betreuer:in des Falls, ni
   o.__sigStore = { caregiverCached: () => ({ caseId: 'c1', caregiver: { userId: 5, name: 'Sabine Kraft-Cache' } }) };
   assert.equal(o.__briefkopfWert('BETREUER'), 'Sabine Kraft-Cache');
 });
+
+test('Briefkopf: Signaturzeile und Land-Schalter überleben Normalisierung und steuern die Ausgabe', () => {
+  const profile={...PROFIL,country:'Deutschland',formattedAddress:PROFIL.formattedAddress+', Deutschland'};
+  const w=kartenKontext(profile,{...OFF,address:profile.formattedAddress});
+  const card=w.__briefkopfNormalisieren({version:1,signatur:{an:true,text:'BETREUER · Fallvertretung'}});
+  assert.equal(card.landAnzeigen,false);
+  assert.equal(w.__briefkopfSignaturText({karte:card,betreuer:'Erika Test'}),'Erika Test · Fallvertretung');
+  assert.equal(w.__briefkopfWert('ANSCHRIFT',{karte:card}),PROFIL.formattedAddress);
+  assert.equal(w.__briefkopfWert('LAND',{karte:card,rueckfall:{LAND:'Deutschland'}}),'');
+  card.landAnzeigen=true;
+  assert.equal(w.__briefkopfWert('ANSCHRIFT',{karte:card}),profile.formattedAddress);
+  assert.equal(w.__briefkopfWert('LAND',{karte:card}),'Deutschland');
+  card.signatur.an=false;
+  assert.equal(w.__briefkopfSignaturText({karte:card}),'');
+  const reloaded=w.__briefkopfNormalisieren(JSON.parse(JSON.stringify(card)));
+  assert.equal(reloaded.landAnzeigen,true);
+  assert.equal(reloaded.signatur.text,'BETREUER · Fallvertretung');
+  assert.equal(reloaded.signatur.an,false);
+  // City names and countries in unrelated text are not removed by substring guessing.
+  const other=kartenKontext({...profile,formattedAddress:'Deutschlandstraße 4, 12345 Musterstadt'},OFF);
+  assert.equal(other.__briefkopfWert('ANSCHRIFT',{karte:{landAnzeigen:false}}),'Deutschlandstraße 4, 12345 Musterstadt');
+});

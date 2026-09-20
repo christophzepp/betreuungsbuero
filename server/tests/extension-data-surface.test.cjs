@@ -99,11 +99,11 @@ test('reale Datensicherung liefert Fall-, Berichts-, Doku- und deutsche Kontaktf
 
 test('Extension-Dokumentrouten verwenden zentrale Fallakte mit Berechtigung und Altbestands-Fallback', () => {
   const source = fs.readFileSync(path.join(root, 'server/src/integrations/extensions/routes.js'), 'utf8');
-  assert.match(source, /FROM doc_files/);
+  assert.match(source, /FROM live_doc_files/);
   assert.match(source, /area = 'case' AND case_id = \? AND deleted_at = ''/);
   assert.match(source, /requireExtDocumentView/);
   assert.match(source, /documentIntern\.findBlobPath/);
-  assert.match(source, /FROM case_documents/);
+  assert.match(source, /FROM live_case_documents/);
   assert.match(source, /source: 'central'/);
   assert.match(source, /source: 'legacy'/);
 });

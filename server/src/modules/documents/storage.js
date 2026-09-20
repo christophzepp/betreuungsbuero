@@ -1,5 +1,7 @@
 'use strict';
 
+const { isLiveCaseId } = require('../demo/data-identities');
+
 // Physische Pfadschicht des Dokumentenspeichers. Die Datei auf der Platte traegt ihren
 // Klarname; SQLite ist Index und Zuordnungsregister, nicht mehr der einzige Schluessel zum
 // Inhalt. Alle Pfade bleiben relativ zu genau einer Dokumentenspeicher-Wurzel.
@@ -200,7 +202,7 @@ function createDocumentStorage(options) {
   }
 
   function caseRows() {
-    return db.prepare('SELECT id, label, stammdaten_json, archived FROM cases ORDER BY id').all();
+    return db.prepare('SELECT id, label, stammdaten_json, archived FROM cases ORDER BY id').all().filter(row => isLiveCaseId(row.id));
   }
 
   const caseRootColumns = new Set(
@@ -325,7 +327,7 @@ function createDocumentStorage(options) {
 
   function caseRootInfo(caseId, ensure) {
     const row = db.prepare('SELECT id, label, stammdaten_json, archived FROM cases WHERE id = ?').get(String(caseId || ''));
-    if (!row) throw new Error('Fall nicht gefunden.');
+    if (!row || !isLiveCaseId(row.id)) throw new Error('Fall nicht gefunden.');
     const current = parseCase(row);
     const canonical = computedCaseRootInfo(current);
     const stored = caseRootRead.get(current.id);
@@ -338,7 +340,7 @@ function createDocumentStorage(options) {
 
   function syncCaseRoot(caseId) {
     const row = db.prepare('SELECT id, label, stammdaten_json, archived FROM cases WHERE id = ?').get(String(caseId || ''));
-    if (!row) throw new Error('Fall nicht gefunden.');
+    if (!row || !isLiveCaseId(row.id)) throw new Error('Fall nicht gefunden.');
     const current = parseCase(row);
     const previous = caseRootRead.get(current.id);
     const canonical = computedCaseRootInfo(current);

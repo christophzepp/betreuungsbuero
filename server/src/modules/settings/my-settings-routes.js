@@ -11,6 +11,7 @@ const cryptoHelper = require('../../security/crypto');
 const { requireAuth } = require('../../middleware/authentication');
 const mail = require('../mail/service');
 const userSettings = require('./user-settings');
+const sendCredentials = require('./send-credentials');
 
 const router = express.Router();
 router.use(requireAuth);
@@ -26,10 +27,7 @@ function adminAiConfigured() {
   return false;
 }
 function adminSendConfigured() {
-  for (const r of db.prepare('SELECT username, password_encrypted FROM office_send_credentials').all()) {
-    if (r.username || decryptSafe(r.password_encrypted)) return true;
-  }
-  return false;
+  return Object.values(sendCredentials.officeValues(db)).some(sendCredentials.configured);
 }
 function adminMailConfigured() { return mail.isConfigured(mail.getSmtpConfig()); }
 function adminMapsConfigured() {
@@ -52,6 +50,12 @@ function areaStatus(user, mode, area) {
   const canOverride = userSettings.userMayOverride(user, mode, area);
   const hasOwn = userSettings.hasOverride(user.id, area);
   const own = (canOverride && hasOwn) ? userSettings.getOverrideRaw(user.id, area) : null;
+  if (area === 'send') {
+    const resolved = sendCredentials.resolve(db, own);
+    return { source: Object.values(resolved.sources).includes('user') ? 'user' : 'admin',
+      canOverride, hasOwn, adminConfigured: adminSendConfigured(),
+      effectiveConfigured: Object.values(resolved.values).some(sendCredentials.configured), services: resolved.sources };
+  }
   const usingOwn = !!own;
   const effectiveConfigured = usingOwn ? overrideConfigured(area, own) : (ADMIN_CONFIGURED[area] ? ADMIN_CONFIGURED[area]() : false);
   return { source: usingOwn ? 'user' : 'admin', canOverride, hasOwn, adminConfigured: ADMIN_CONFIGURED[area] ? ADMIN_CONFIGURED[area]() : false, effectiveConfigured };

@@ -241,7 +241,16 @@ const beforeCounts = {
   folders: db.prepare('SELECT count(*) AS n FROM doc_folders').get().n,
   files: db.prepare('SELECT count(*) AS n FROM doc_files').get().n
 };
+const demoId=require('../src/modules/demo/data-identities').DEMO_CASES[0].id;
+const demoRel='Fallakten/A/Auerbach, Margarete';
+db.prepare('INSERT INTO cases(id,label) VALUES (?,?)').run(demoId,'Auerbach, Margarete');
+db.prepare('INSERT INTO doc_case_roots(case_id,area,letter,folder_name,storage_relpath) VALUES (?,?,?,?,?)').run(demoId,'Fallakten','A','Auerbach, Margarete',demoRel);
+fs.mkdirSync(path.join(root,demoRel,'00 - Eingang'),{recursive:true});
+fs.writeFileSync(path.join(root,demoRel,'.ablage-fall.json'),JSON.stringify({caseId:demoId}));
+fs.writeFileSync(path.join(root,demoRel,'00 - Eingang','Demo.txt'),'Demo only');
 const scanned = sync.scan();
+assert.ok(!JSON.stringify(scanned).includes(demoId),'Demo case is absent from Finder checks and counts');
+assert.ok(!JSON.stringify(scanned).includes('Auerbach'),'Demo directory is not reported as unknown or importable');
 assert.equal(db.prepare('SELECT count(*) AS n FROM doc_folders').get().n, beforeCounts.folders,
   'scan() darf keine Ordnerzeile schreiben');
 assert.equal(db.prepare('SELECT count(*) AS n FROM doc_files').get().n, beforeCounts.files,

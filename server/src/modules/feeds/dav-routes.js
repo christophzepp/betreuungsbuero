@@ -25,12 +25,12 @@ const touchTokenStmt = db.prepare("UPDATE feed_tokens SET last_used_at = datetim
 // Oeffentliche (bueroweite) Aufgaben: offen ODER kuerzlich erledigt (damit der Client den
 // Erledigt-Status noch abgleichen kann, bevor der Eintrag aus dem Feed faellt).
 const feedTodosStmt = db.prepare(`
-  SELECT * FROM todos
+  SELECT * FROM live_todos
    WHERE visibility != 'private'
      AND (done = 0 OR updated_at >= datetime('now', '-14 day'))
    ORDER BY (due_at = ''), due_at
 `);
-const feedTodoStmt = db.prepare("SELECT * FROM todos WHERE id = ? AND visibility != 'private'");
+const feedTodoStmt = db.prepare("SELECT * FROM live_todos WHERE id = ? AND visibility != 'private'");
 const markDoneStmt = db.prepare(`
   UPDATE todos SET done = @done, updated_at = datetime('now') WHERE id = @id
 `);

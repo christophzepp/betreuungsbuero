@@ -63,7 +63,7 @@ function createCaseDeletion({ db, dataRoot, storage }) {
     ]);
     // Shared attachments and documents referenced by retained follow-ups remain
     // usable in the office document area, including their version history.
-    for (const link of db.prepare('SELECT l.* FROM doc_links l JOIN doc_files f ON f.id=l.file_id WHERE f.case_id=?').all(id)) {
+    for (const link of db.prepare('SELECT l.* FROM doc_links l JOIN live_doc_files f ON f.id=l.file_id WHERE f.case_id=?').all(id)) {
       if (!deletedOwners.get(link.module)?.has(link.owner_id)) preserved.add(link.file_id);
     }
     for (const todo of keptTodos) {
@@ -81,15 +81,15 @@ function createCaseDeletion({ db, dataRoot, storage }) {
     };
     const addLegacy = (directory, key) => add(path.join(dataRoot, directory), path.join(dataRoot, directory, key));
     const root = storage.root();
-    const storedRoot = db.prepare('SELECT storage_relpath FROM doc_case_roots WHERE case_id=?').get(id);
+    const storedRoot = db.prepare('SELECT storage_relpath FROM live_doc_case_roots WHERE case_id=?').get(id);
     const roots = new Set([storage.caseRootInfo(id, false).storageRelpath, storedRoot?.storage_relpath].filter(Boolean));
     for (const relative of roots) {
       if (!/^Fallakten\/[^/]+\/[^/]+$|^Fallakten-Archiv\/[^/]+$/.test(relative)) throw new Error('Die Fallablage ist nicht eindeutig zugeordnet.');
       const candidate = safePath(root, joinRoot(root, relative));
-      for (const other of db.prepare('SELECT storage_relpath FROM doc_case_roots WHERE case_id<>?').all(id)) {
+      for (const other of db.prepare('SELECT storage_relpath FROM live_doc_case_roots WHERE case_id<>?').all(id)) {
         if (other.storage_relpath && inside(candidate, joinRoot(root, other.storage_relpath))) throw new Error('Die Fallablage wird von einem weiteren Fall verwendet.');
       }
-      for (const other of db.prepare("SELECT storage_relpath FROM doc_files WHERE case_id<>? AND storage_relpath<>''").all(id)) {
+      for (const other of db.prepare("SELECT storage_relpath FROM live_doc_files WHERE case_id<>? AND storage_relpath<>''").all(id)) {
         if (inside(candidate, joinRoot(root, other.storage_relpath))) throw new Error('Die Fallablage enthält Dateien eines anderen Bereichs.');
       }
       removals.add(candidate);
@@ -104,7 +104,7 @@ function createCaseDeletion({ db, dataRoot, storage }) {
       let primary = null;
       if (file.storage_relpath) {
         const direct = safePath(root, joinRoot(root, file.storage_relpath));
-        if (db.prepare('SELECT 1 FROM doc_files WHERE case_id<>? AND storage_relpath=?').get(id, file.storage_relpath)) {
+        if (db.prepare('SELECT 1 FROM live_doc_files WHERE case_id<>? AND storage_relpath=?').get(id, file.storage_relpath)) {
           throw new Error('Eine Datei wird von einem anderen Bereich verwendet.');
         }
         addFile(root, direct);
@@ -292,7 +292,7 @@ function createCaseDeletion({ db, dataRoot, storage }) {
           let person = {}; try { person = JSON.parse(row.stammdaten_json || '{}').person || {}; } catch (_error) { /* legacy */ }
           return [row.label, [person.firstName, person.lastName].filter(Boolean).join(' ')].filter(Boolean);
         };
-        const foreign = new Set(db.prepare('SELECT label,stammdaten_json FROM cases WHERE id<>?').all(caseId).flatMap(labels));
+        const foreign = new Set(db.prepare('SELECT label,stammdaten_json FROM live_cases WHERE id<>?').all(caseId).flatMap(labels));
         const unique = new Set(labels(caseRow).filter(label => !foreign.has(label)));
         value.chats = value.chats.filter(entry => entry?.caseId ? entry.caseId !== caseId : !unique.has(entry?.caseLabel));
       }

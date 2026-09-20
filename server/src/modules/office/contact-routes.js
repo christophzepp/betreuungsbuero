@@ -183,7 +183,7 @@ router.post('/export', requireEditCases, async (req, res) => {
     const caseId = source && source.caseId;
     if (!caseId) return res.status(400).json({ error: 'Fall-ID fehlt.' });
     if(!require('../cases/case-visibility').darfBearbeiten(req.session,caseId))return res.status(403).json({error:'Für diesen Fall fehlt die Bearbeitungsberechtigung.'});
-    rows = db.prepare('SELECT * FROM case_contacts WHERE case_id = ?').all(caseId);
+    rows = db.prepare('SELECT * FROM live_case_contacts WHERE case_id = ?').all(caseId);
     linkStmt = db.prepare("UPDATE case_contacts SET connection_id=?, external_uid=?, updated_at=datetime('now') WHERE id=?");
   } else {
     rows = db.prepare('SELECT * FROM office_contacts').all();

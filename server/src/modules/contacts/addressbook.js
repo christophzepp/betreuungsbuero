@@ -9,13 +9,13 @@ const FIELDS=[...SHARED,'role','status','fileNumber','processNumber','customerNu
 let realtime=null;
 const fail=(status,message)=>{const e=new Error(message);e.status=status;throw e};
 const table=scope=>scope==='office'?'office_contacts':'case_contacts';
-function get(scope,caseId,id){if(!['case','office'].includes(scope))fail(400,'Ungültiges Adressbuch.');return scope==='office'?db.prepare('SELECT * FROM office_contacts WHERE id=?').get(id):db.prepare('SELECT * FROM case_contacts WHERE id=? AND case_id=?').get(id,caseId)}
+function get(scope,caseId,id){if(!['case','office'].includes(scope))fail(400,'Ungültiges Adressbuch.');return scope==='office'?db.prepare('SELECT * FROM office_contacts WHERE id=?').get(id):db.prepare('SELECT * FROM live_case_contacts WHERE id=? AND case_id=?').get(id,caseId)}
 const data=row=>JSON.parse(row.data_json||'{}');
 const version=row=>crypto.createHash('sha256').update(row.data_json).digest('hex');
 function authorize(session,scope,caseId,write=false){if(scope==='case'&&!(write?darfBearbeiten:darfSehen)(session,caseId))fail(403,'Für diesen Fall fehlt die Berechtigung.');if(!['case','office'].includes(scope))fail(400,'Ungültiges Adressbuch.')}
-function rebuildLinks(){db.prepare(`INSERT OR IGNORE INTO addressbook_links(case_contact_id,office_contact_id) SELECT c.id,o.id FROM case_contacts c JOIN office_contacts o ON o.id=json_extract(CASE WHEN json_valid(c.data_json) THEN c.data_json ELSE '{}' END,'$.centralContactId')`).run()}
+function rebuildLinks(){db.prepare(`INSERT OR IGNORE INTO addressbook_links(case_contact_id,office_contact_id) SELECT c.id,o.id FROM live_case_contacts c JOIN office_contacts o ON o.id=json_extract(CASE WHEN json_valid(c.data_json) THEN c.data_json ELSE '{}' END,'$.centralContactId')`).run()}
 function centralId(scope,id){rebuildLinks();return scope==='office'?id:db.prepare('SELECT office_contact_id FROM addressbook_links WHERE case_contact_id=?').get(id)?.office_contact_id||''}
-function linked(id){rebuildLinks();return db.prepare('SELECT c.* FROM case_contacts c JOIN addressbook_links l ON l.case_contact_id=c.id WHERE l.office_contact_id=?').all(id)}
+function linked(id){rebuildLinks();return db.prepare('SELECT c.* FROM live_case_contacts c JOIN addressbook_links l ON l.case_contact_id=c.id WHERE l.office_contact_id=?').all(id)}
 function record(scope,caseId,id,before,after,session){
  const changes={};for(const k of [...FIELDS,'_standardRecipients','centralContactId'])if(JSON.stringify(before?.[k]??null)!==JSON.stringify(after?.[k]??null))changes[k]={before:before?.[k]??null,after:after?.[k]??null};
  if(Object.keys(changes).length)db.prepare('INSERT INTO addressbook_history VALUES(?,?,?,?,?,?,?)').run(crypto.randomUUID(),scope,caseId||'',id,new Date().toISOString(),String(session?.displayName||session?.username||session?.userId||'System'),JSON.stringify(changes));
@@ -73,7 +73,7 @@ function savePerson(input,session){
 function details(scope,caseId,id,session){
  authorize(session,scope,caseId);const row=get(scope,caseId,id);if(!row)fail(404,'Kontakt nicht gefunden.');
  const cid=centralId(scope,id),refs=(cid?linked(cid):scope==='case'?[row]:[]).filter(c=>darfSehen(session,c.case_id));
- const associations=refs.map(c=>({caseId:c.case_id,contactId:c.id,label:db.prepare('SELECT label FROM cases WHERE id=?').get(c.case_id)?.label||'',fileNumber:data(c).fileNumber||'',processNumber:data(c).processNumber||'',customerNumber:data(c).customerNumber||'',version:version(c),role:data(c).role||'',status:data(c).status||'',standards:data(c)._standardRecipients||{}}));
+ const associations=refs.map(c=>({caseId:c.case_id,contactId:c.id,label:db.prepare('SELECT label FROM live_cases WHERE id=?').get(c.case_id)?.label||'',fileNumber:data(c).fileNumber||'',processNumber:data(c).processNumber||'',customerNumber:data(c).customerNumber||'',version:version(c),role:data(c).role||'',status:data(c).status||'',standards:data(c)._standardRecipients||{}}));
  const history=historyPage(scope,caseId,id,session),communications=communicationPage(scope,caseId,id,session,undefined,refs,cid);
  return {contact:{...data(row),id},version:version(row),personVersions:Object.fromEntries((data(row).people||[]).map(p=>[p.id,personVersion(p)])),centralId:cid,associations,history:history.items,communications:communications.items,historyCursor:history.nextCursor,communicationCursor:communications.nextCursor};
 }
@@ -97,8 +97,8 @@ function communicationPage(scope,caseId,id,session,cursor,refs,cid){
 
 function assignmentContext(input,session){
  const {scope,caseId='',id,targetCaseId}=input;authorize(session,scope,caseId);authorize(session,'case',targetCaseId);
- const source=get(scope,caseId,id);if(!source)fail(404,'Kontakt nicht gefunden.');const target=db.prepare('SELECT label,file_number,stammdaten_json FROM cases WHERE id=?').get(targetCaseId);if(!target)fail(404,'Zielfall nicht gefunden.');
- const sd=JSON.parse(target.stammdaten_json||'{}');return {label:target.label,fileNumber:target.file_number,caseData:{care:{courtName:sd.care?.courtName,fileNumber:sd.care?.fileNumber},benefits:(sd.benefits||[]).map(b=>({provider:b.provider,fileNumber:b.fileNumber}))},contacts:require('../../../frontend/addressbook-assignment-data').matches(data(source),db.prepare('SELECT * FROM case_contacts WHERE case_id=?').all(targetCaseId).map(row=>({...data(row),id:row.id,version:version(row)})))};
+ const source=get(scope,caseId,id);if(!source)fail(404,'Kontakt nicht gefunden.');const target=db.prepare('SELECT label,file_number,stammdaten_json FROM live_cases WHERE id=?').get(targetCaseId);if(!target)fail(404,'Zielfall nicht gefunden.');
+ const sd=JSON.parse(target.stammdaten_json||'{}');return {label:target.label,fileNumber:target.file_number,caseData:{care:{courtName:sd.care?.courtName,fileNumber:sd.care?.fileNumber},benefits:(sd.benefits||[]).map(b=>({provider:b.provider,fileNumber:b.fileNumber}))},contacts:require('../../../frontend/addressbook-assignment-data').matches(data(source),db.prepare('SELECT * FROM live_case_contacts WHERE case_id=?').all(targetCaseId).map(row=>({...data(row),id:row.id,version:version(row)})))};
 }
 const assignmentStandards=require('../../../frontend/addressbook-assignment-data').standards;
 
@@ -106,7 +106,7 @@ function assign(input,session){
  const {scope,caseId='',id,targetCaseId}=input;authorize(session,scope,caseId,true);authorize(session,'case',targetCaseId,true);
  let cid,result;const effects=[];
  db.transaction(()=>{
-  const source=get(scope,caseId,id);if(!source)fail(404,'Kontakt nicht gefunden.');if(!db.prepare('SELECT id FROM cases WHERE id=?').get(targetCaseId))fail(404,'Zielfall nicht gefunden.');
+  const source=get(scope,caseId,id);if(!source)fail(404,'Kontakt nicht gefunden.');if(!db.prepare('SELECT id FROM live_cases WHERE id=?').get(targetCaseId))fail(404,'Zielfall nicht gefunden.');
   cid=centralId(scope,id);const s=data(source),already=cid&&linked(cid).find(c=>c.case_id===targetCaseId);
   const retry=already&&(input.assignmentId===already.id||input.targetContactId===already.id);
   if(input.sourceVersion&&!retry&&version(source)!==input.sourceVersion)fail(409,'Der Ausgangskontakt wurde geändert. Bitte die Verknüpfung erneut öffnen und die aktuellen Angaben prüfen.');
@@ -125,7 +125,7 @@ function assign(input,session){
    db.prepare("UPDATE addressbook_sync_bindings SET scope='office',case_id='',contact_id=?,version=version+1 WHERE scope='case' AND case_id=? AND contact_id=?").run(cid,targetCaseId,result);require('./addressbook-organizer').promote(targetCaseId,result,cid);return;
   }
   if(input.assignmentId&&(typeof input.assignmentId!=='string'||!/^[a-zA-Z0-9_-]{1,128}$/.test(input.assignmentId)))fail(400,'Ungültige Zuordnungs-ID.');
-  result=input.assignmentId||crypto.randomUUID();if(db.prepare('SELECT 1 FROM case_contacts WHERE id=?').get(result))fail(409,'Die Zuordnungs-ID ist bereits belegt. Bitte die Zuordnung neu öffnen.');const central=data(get('office','',cid)),assignment=validatePatch({role:String(input.role??s.role??''),fileNumber:String(input.fileNumber||''),processNumber:String(input.processNumber||''),customerNumber:String(input.customerNumber||'')});const next={...central,...assignment,status:'Aktiv',_category:s._category||'soziales',centralContactId:cid,_pendingWrite:true};
+  result=input.assignmentId||crypto.randomUUID();if(db.prepare('SELECT 1 FROM live_case_contacts WHERE id=?').get(result))fail(409,'Die Zuordnungs-ID ist bereits belegt. Bitte die Zuordnung neu öffnen.');const central=data(get('office','',cid)),assignment=validatePatch({role:String(input.role??s.role??''),fileNumber:String(input.fileNumber||''),processNumber:String(input.processNumber||''),customerNumber:String(input.customerNumber||'')});const next={...central,...assignment,status:'Aktiv',_category:s._category||'soziales',centralContactId:cid,_pendingWrite:true};
   delete next._standardRecipients;delete next.note;delete next.id;delete next.key;delete next._row;
   db.prepare('INSERT INTO case_contacts(id,case_id,data_json,updated_by) VALUES(?,?,?,?)').run(result,targetCaseId,JSON.stringify(next),session.userId);db.prepare('INSERT INTO addressbook_links VALUES(?,?)').run(result,cid);record('case',targetCaseId,result,null,next,session);
  })();for(const a of effects)notify(...a);notify(scope,caseId,id,data(get(scope,caseId,id)));notify('case',targetCaseId,result,data(get('case',targetCaseId,result)));return {...details(scope,caseId,id,session),assignment:{caseId:targetCaseId,contactId:result,version:version(get('case',targetCaseId,result))}};
@@ -135,7 +135,7 @@ function standard(input,session){
  if(!require('./addressbook-fields').validPurpose(purpose))fail(400,'Unbekannter Empfängerzweck.');
  const affected=[];db.transaction(()=>{
   const selected=get('case',caseId,id);if(!selected)fail(404,'Fallkontakt nicht gefunden.');const p=data(selected).people||[];if(personId&&!p.some(x=>x.id===personId))fail(400,'Ansprechpartner nicht gefunden.');
-  for(const row of db.prepare('SELECT * FROM case_contacts WHERE case_id=?').all(caseId)){
+  for(const row of db.prepare('SELECT * FROM live_case_contacts WHERE case_id=?').all(caseId)){
    const next=data(row),defaults={...(next._standardRecipients||{})};if(remove&&row.id!==id)continue;if(!Object.hasOwn(defaults,purpose)&&row.id!==id)continue;delete defaults[purpose];if(row.id===id&&!remove)defaults[purpose]=personId;next._standardRecipients=defaults;putRow('case',row,next,session);affected.push([row.id,next]);
   }
  })();for(const [contactId,next] of affected)notify('case',caseId,contactId,next);return details('case',caseId,id,session);

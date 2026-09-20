@@ -5,7 +5,7 @@ const key=(c,scope)=>(scope==='office'?['firstName','lastName','institution','em
 function importContacts(input,session){
  const {scope,caseId='',records}=input;A.authorize(session,scope,caseId,true);
  if(!Array.isArray(records)||!records.length||records.length>5000)A.fail(400,'Bitte eine gültige vCard-Datei auswählen.');
- if(scope==='case'&&!db.prepare('SELECT id FROM cases WHERE id=?').get(caseId))A.fail(404,'Fall nicht gefunden.');
+ if(scope==='case'&&!db.prepare('SELECT id FROM live_cases WHERE id=?').get(caseId))A.fail(404,'Fall nicht gefunden.');
  let clean;try{clean=records.map(rec=>{const data=codec.clean(rec);if(!data.firstName&&!data.lastName&&!data.institution&&!data.email)throw Error('Kontakt ohne Namen oder E-Mail.');if(rec._vcardSourceId!=null&&(typeof rec._vcardSourceId!=='string'||rec._vcardSourceId.length>128))throw Error('Ungültige Herkunftskennung.');data.status=data.status||'Aktiv';return {data,sourceId:rec._vcardSourceId||''}})}catch(e){A.fail(400,e.message)}
  const table=scope==='office'?'office_contacts':'case_contacts',load=()=>db.prepare('SELECT * FROM '+table+(scope==='case'?' WHERE case_id=?':'')).all(...(scope==='case'?[caseId]:[]));
  const added=[],warnings=new Set();let skipped=0;

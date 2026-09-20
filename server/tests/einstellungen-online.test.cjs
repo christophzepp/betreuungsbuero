@@ -809,9 +809,9 @@ test('Einbettung: das Menü räumt seine Wirte beim Schließen ab', () => {
 });
 
 test('Einbettung: eingebettete Erfolgspfade schließen nicht das ganze Menü', () => {
-  assert.ok(html.includes('if(!eingebettet)closeModal();'),
+  assert.ok(html.includes('if(!embedded)closeModal();'),
     'saveGlobalServiceSettings schließt eingebettet weiterhin das Menü');
-  assert.ok(html.includes("const eingebettet=!!document.getElementById('einSvcEinbettHost');"),
+  assert.ok(html.includes("const embedded=!!document.getElementById('einSvcEinbettHost');"),
     'Einbettungs-Erkennung in saveGlobalServiceSettings fehlt');
   const pw = html.indexOf("toast('Passwort erfolgreich geändert.');");
   assert.ok(pw > 0, 'Passwort-Erfolgspfad nicht gefunden');
@@ -1842,19 +1842,13 @@ test('Kalender: Anbieter gruppiert, Kartentitel eine Ebene unter dem Seitentitel
     'Die doppelte Einleitungskarte wird wieder unbedingt gezeichnet');
 });
 
-test('Versandwege: die Export-Karten sind online abgeschaltet – lokal bleiben sie', () => {
-  /* Zweiter Anlauf, diesmal mit Nutzerfreigabe nach Gegenprobe. Der erste Anlauf am 28.08. war
-     falsch: Verloren gingen damals nicht nur doppelte Schalter, sondern die BEISPIELE und die
-     Detailansicht - und der Katalogzeile fehlte die fünfte Möglichkeit ganz.
-     WER DAS WIEDER ANFASST: Die Abschaltung ist NUR zulässig, solange die Katalogzeile alles
-     trägt. Genau das prüfen die Zusicherungen unten Punkt für Punkt - sie sind die Bedingung,
-     unter der diese Löschung erlaubt ist, kein Beiwerk. */
-  assert.ok(html.includes("const exportKarten = wirt ? `<div class=\"set-wegweiser\">"),
-    'Die Export-Karten sind wieder bedingungslos da (oder der Wegweiser fehlt)');
-  assert.ok(html.includes("</div>` : `<div class=\"export-options-card\">"),
-    'Der Lokal-Zweig fehlt - dort ist dieser Dialog die EINZIGE Stelle für Dateiname und Speicherort');
-  assert.ok(html.includes(">dorthin &rarr;</button>") && html.includes("window.__einSpringe('dateinamen')"),
-    'Der Wegweiser führt nicht zu „Dateinamen & Betreff"');
+test('Versandwege enthalten nur Versanddaten; Dateiname und Speicherort bleiben im eigenen Bereich', () => {
+  const form=html.slice(html.indexOf('function showGlobalServiceSettings(){'),html.indexOf('function collectGlobalServiceSettings(){'));
+  assert.doesNotMatch(form,/globalFileNameStyle|globalDownloadTarget|exportKarten/);
+  assert.ok(!html.includes('id="einVsAdm"'));
+  assert.ok(!html.includes('id="einVsMs"'));
+  assert.ok(form.includes('Bürovorgabe für alle Nutzer'));
+  assert.ok(html.includes("await window.__loadSendSettings();"));
 
   /* BEDINGUNG 1 - Dateiname: drei Möglichkeiten und ein Beispiel, das beide Muster zeigt. */
   assert.ok(html.includes("werte:[['spaces','Mit Leerzeichen'],['underscore','Unterstriche statt Leerzeichen']]"),
@@ -1884,10 +1878,8 @@ test('Versandwege: die Export-Karten sind online abgeschaltet – lokal bleiben 
   assert.ok(html.includes("{id:'dateinamen',name:'Dateinamen & Betreff',lokal:true,datei:true},"),
     'Die Navigation für „Dateinamen & Betreff" hat ein Rechte-Gate bekommen - dann verlieren Nutzer die Einstellung');
 
-  /* Was NICHT betroffen ist: die Büro-Vorgabe im Admin-Panel (erscheint über beiden Zweigen,
-     auch lokal) und das Standard-Ausgangskonto (steht bei den Mail-Konten). */
-  assert.ok(html.includes("const fnVorgabeCard=(typeof window.__fileNameStyleAdminCardHTML==='function')"),
-    'Die Büro-Vorgabe-Karten sind mit abgeschaltet worden');
+  assert.ok(!html.includes('const fnVorgabeCard='),
+    'Auch die alte Lokal-Vorgabenansicht darf keine Dateinamen-Karte enthalten');
   assert.ok(html.includes("{id:'versand',name:'Versandwege',lokal:true,datei:true}"), 'Der Bereich heißt nicht mehr Versandwege');
   assert.ok(html.includes("einSeiteBereich('versand','Versandwege'"), 'Die Seitenüberschrift passt nicht zum Namen');
   assert.ok(html.includes("{key:'versand.standardkonto',bereich:'mail'"),
@@ -2473,9 +2465,8 @@ test('Systemversand: Wegweiser sehen nicht mehr aus wie Eingabefelder', () => {
   assert.ok(!html.includes('Standard-Ausgangskonto für neue E-Mails</label>'),
     'Das zweite Label ohne Bedienelement ist zurück');
   assert.ok(html.includes('<div class="set-wegweiser">'), 'Der Wegweiser-Block fehlt');
-  /* Zwei Wegweiser tragen inzwischen eine Liste: dieser hier im Systemversand und der auf
-     „Versandwege", der seit dem 28.08. abends die abgeschalteten Export-Karten ersetzt. */
-  assert.equal((html.match(/<div class="set-wegweiser-liste">/g) || []).length, 2,
+  /* Versandwege enthält jetzt ausschließlich Versanddaten; nur der Systemversand braucht den Wegweiser. */
+  assert.equal((html.match(/<div class="set-wegweiser-liste">/g) || []).length, 1,
     'Ein Wegweiser hat seine Liste verloren (oder es ist einer dazugekommen)');
   assert.ok(html.includes('<b>Standard-Versandkonto (büroweit)</b>')
          && html.includes('<b>Standard-Ausgangskonto für neue E-Mails</b>'),

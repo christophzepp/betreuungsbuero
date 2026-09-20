@@ -73,7 +73,7 @@ function writeDoku(row, data, session) {
     source: { module: 'mail', id: row.id, action: 'sent' }
   };
   const id = 'scheduled-mail-' + row.id;
-  if (!db.prepare('SELECT id FROM case_doku_entries WHERE id=?').get(id)) insertDokuStmt.run({ id, caseId: data.dokuCase, dataJson: JSON.stringify(entry), userId: row.owner_user_id });
+  if (!db.prepare('SELECT id FROM live_case_doku_entries WHERE id=?').get(id)) insertDokuStmt.run({ id, caseId: data.dokuCase, dataJson: JSON.stringify(entry), userId: row.owner_user_id });
   return { id, entry };
 }
 

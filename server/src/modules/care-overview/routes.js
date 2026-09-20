@@ -15,12 +15,12 @@ const { requireAuth, requireViewCases, requireEditCases } = require('../../middl
 const router = express.Router();
 router.use(requireAuth);
 
-const listCasesStmt = db.prepare('SELECT id, label, file_number, stammdaten_json, archived FROM cases ORDER BY label COLLATE NOCASE');
-const getEntryStmt = db.prepare('SELECT * FROM betreuung_overview_entries WHERE case_id = ? AND period_start = ?');
+const listCasesStmt = db.prepare('SELECT id, label, file_number, stammdaten_json, archived FROM live_cases ORDER BY label COLLATE NOCASE');
+const getEntryStmt = db.prepare('SELECT * FROM live_betreuung_overview_entries WHERE case_id = ? AND period_start = ?');
 const listHistoryStmt = db.prepare(`
   SELECT e.case_id, e.period_start, e.aenderungsart, e.uebergabe_an, e.updated_at, c.label
-  FROM betreuung_overview_entries e
-  JOIN cases c ON c.id = e.case_id
+  FROM live_betreuung_overview_entries e
+  JOIN live_cases c ON c.id = e.case_id
   WHERE TRIM(e.aenderungsart) <> '' OR TRIM(e.uebergabe_an) <> ''
   ORDER BY e.updated_at DESC, e.period_start DESC
 `);
@@ -100,7 +100,7 @@ router.put('/entries/:caseId', requireEditCases, (req, res) => {
   const { caseId } = req.params;
   const { periodStart, aenderungsart, uebergabeAn } = req.body || {};
   if (!periodStart) return res.status(400).json({ error: 'periodStart erforderlich (YYYY-MM-DD).' });
-  const caseRow = db.prepare('SELECT id FROM cases WHERE id = ?').get(caseId);
+  const caseRow = db.prepare('SELECT id FROM live_cases WHERE id = ?').get(caseId);
   if (!caseRow) return res.status(404).json({ error: 'Fall nicht gefunden.' });
   upsertEntryStmt.run({
     caseId, periodStart,

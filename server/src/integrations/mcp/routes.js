@@ -98,7 +98,7 @@ async function handleMessage(msg, auth) {
     if (m) {
       const p = db.prepare('SELECT * FROM mcp_proposals WHERE id=? OR id LIKE ?').get(m[1], m[1] + '%');
       if (p && p.user_id === auth.session.userId) {
-        const caseRow = p.case_id ? db.prepare('SELECT label FROM cases WHERE id=?').get(p.case_id) : null;
+        const caseRow = p.case_id ? db.prepare('SELECT label FROM live_cases WHERE id=?').get(p.case_id) : null;
         const { widgetProposalFor } = module.exports;
         const text = widgetProposalFor(Object.assign({}, p, { case_label: caseRow ? caseRow.label : '' }), JSON.parse(p.payload_json || '[]'));
         return { jsonrpc: '2.0', id, result: { contents: [{ uri, mimeType: 'text/html+skybridge', text }] } };

@@ -178,9 +178,9 @@ test('Client: EIN Menü „Personen“, Bürostammdaten online nur Ansicht', () 
   assert.ok(html.includes("{id:'nutzer',name:'Personen',admin:true}"), 'Der Menüpunkt heißt nicht „Personen“');
   assert.ok(html.includes("nutzer:{zahl:'personen',einheit:'aktive Person(en) im Verzeichnis.'"),
     'Der Zählpunkt zählt nicht das Personenverzeichnis');
-  assert.ok(html.includes("out.personen = zahl('SELECT COUNT(*) AS n FROM persons WHERE aktiv = 1');")
+  assert.ok(html.includes("out.personen = zahl('SELECT COUNT(*) AS n FROM live_persons WHERE aktiv = 1');")
     || fs.readFileSync(path.join(__dirname, '..', 'src', 'modules', 'settings', 'status-routes.js'), 'utf8')
-      .includes("out.personen = zahl('SELECT COUNT(*) AS n FROM persons WHERE aktiv = 1');"),
+      .includes("out.personen = zahl('SELECT COUNT(*) AS n FROM live_persons WHERE aktiv = 1');"),
     'Die Statusabfrage liefert keine Personenzahl');
 
   /* Die Liste links zeigt PERSONEN; die frühere Spiegelleiste ist ersatzlos raus

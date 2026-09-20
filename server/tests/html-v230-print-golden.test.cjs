@@ -123,6 +123,7 @@ ${spreadJs}
 const SCHEMAS={annual_assets:${schemaJs}};
 `, sandbox, { filename: 'stubs.js' });
   vm.runInContext(v230Js, sandbox, { filename: 'v230-block.js' });
+  vm.runInContext(html.match(/^function documentSignatureLabel.*$/m)[0], sandbox, { filename: 'signature-label.js' });
 
   vm.runInContext(`
 const langerText='Die Rentenzahlungen (gesetzliche Rente und Witwerrente) gehen auf dem Girokonto ein. '.repeat(14)+'Größere Verfügungen erfolgen nur mit gerichtlicher Genehmigung (§ 1849 BGB). Besonderheiten: Namen wie Nguyễn Thị Hồng, Łukasz Wróbel oder Дмитрий müssen korrekt erscheinen.';

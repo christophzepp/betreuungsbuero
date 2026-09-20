@@ -47,7 +47,7 @@ const upsertProfileStmt = db.prepare(`
 `);
 const setLogoStmt = db.prepare(`
   INSERT INTO office_profile (id, logo_filename, logo_mime_type) VALUES (1, @filename, @mimeType)
-  ON CONFLICT(id) DO UPDATE SET logo_filename = excluded.logo_filename, logo_mime_type = excluded.logo_mime_type, updated_at = datetime('now')
+  ON CONFLICT(id) DO UPDATE SET logo_filename = excluded.logo_filename, logo_mime_type = excluded.logo_mime_type, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ','now')
 `);
 
 function publicProfile(row) {

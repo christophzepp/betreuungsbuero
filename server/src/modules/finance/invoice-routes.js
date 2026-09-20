@@ -14,8 +14,8 @@ router.use(requireAuth);
 // Echtzeit (2026-07-19): erfolgreiche Schreiboperationen an alle Fenster/Nutzer melden.
 router.use(require('../office/events').middleware('invoices'));
 
-const listStmt = db.prepare('SELECT * FROM outgoing_invoices ORDER BY (re_datum = \'\'), re_datum DESC, created_at DESC');
-const getStmt = db.prepare('SELECT * FROM outgoing_invoices WHERE id = ?');
+const listStmt = db.prepare('SELECT * FROM live_outgoing_invoices ORDER BY (re_datum = \'\'), re_datum DESC, created_at DESC');
+const getStmt = db.prepare('SELECT * FROM live_outgoing_invoices WHERE id = ?');
 const insertStmt = db.prepare(`
   INSERT INTO outgoing_invoices (id, re_datum, re_nummer, empfaenger, verwendungszweck, case_label, rechnungszeitraum, summe, eingang_datum, eingangsbetrag,
                                  status, faellig_am, bewilligt_am, report_id, case_id, updated_by)
@@ -30,7 +30,7 @@ const updateStmt = db.prepare(`
   WHERE id=@id
 `);
 const deleteStmt = db.prepare('DELETE FROM outgoing_invoices WHERE id = ?');
-const caseExistsStmt = db.prepare('SELECT id FROM cases WHERE id = ?');
+const caseExistsStmt = db.prepare('SELECT id FROM live_cases WHERE id = ?');
 
 /* Fallkennung und Dokumentart (25.08.2026). Eine ANGEGEBENE Kennung muss stimmen - sonst
    entstuende ein Verweis ins Leere, der schlimmer waere als das Freitext-Label, das er ersetzt.

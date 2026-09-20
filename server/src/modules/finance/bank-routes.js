@@ -171,7 +171,7 @@ function ibanCaseEntries() {
   // Fallzahl ist klein, und ein stiller 60-Sekunden-Cache hat in dieser App schon einmal
   // "warum fehlt der Fall?"-Fehlersuchen gekostet.
   const out = new Map();
-  const rows = db.prepare('SELECT id, label, stammdaten_json FROM cases').all();
+  const rows = db.prepare('SELECT id, label, stammdaten_json FROM live_cases').all();
   for (const r of rows) {
     let banks = [];
     try { banks = (JSON.parse(r.stammdaten_json || '{}').banks) || []; } catch (_e) { /* defekter Blob */ }
@@ -199,7 +199,7 @@ function effectiveAccountCaseEntries() {
   const rows = db.prepare(`SELECT a.iban, a.case_assignment_mode, a.manual_case_id,
       c.label AS manual_case_label
     FROM bank_accounts_discovered a
-    LEFT JOIN cases c ON c.id=a.manual_case_id
+    LEFT JOIN live_cases c ON c.id=a.manual_case_id
     WHERE a.connection_id=?`).all(GATEWAY_ID);
   for (const row of rows) {
     const iban = normAccountIban(row.iban);
@@ -247,7 +247,7 @@ router.get('/accounts', requireView, (req, res) => {
   const rows = db.prepare(`SELECT a.*, c.label AS manual_case_label,
       u.display_name AS manual_case_updated_by_name
     FROM bank_accounts_discovered a
-    LEFT JOIN cases c ON c.id=a.manual_case_id
+    LEFT JOIN live_cases c ON c.id=a.manual_case_id
     LEFT JOIN users u ON u.id=a.manual_case_updated_by
     WHERE a.connection_id=? ORDER BY a.account_name`).all(GATEWAY_ID)
     .filter(r => allowed(r.iban))
@@ -279,7 +279,7 @@ router.get('/accounts', requireView, (req, res) => {
         transactionTo: stats.transaction_to || ''
       };
     });
-  const assignableCases = db.prepare(`SELECT id, label FROM cases
+  const assignableCases = db.prepare(`SELECT id, label FROM live_cases
       WHERE COALESCE(archived,0)=0 ORDER BY label COLLATE NOCASE`).all()
     .filter(c => darfBearbeiten(req.session, c.id))
     .map(c => ({ id: c.id, label: c.label }));
@@ -297,7 +297,7 @@ router.put('/accounts/:id', requireManage, (req, res) => {
 router.put('/accounts/:id/case', requireManage, (req, res) => {
   const account = db.prepare(`SELECT a.*, c.label AS manual_case_label
     FROM bank_accounts_discovered a
-    LEFT JOIN cases c ON c.id=a.manual_case_id
+    LEFT JOIN live_cases c ON c.id=a.manual_case_id
     WHERE a.id=? AND a.connection_id=?`).get(req.params.id, GATEWAY_ID);
   if (!account) return res.status(404).json({ error: 'Konto nicht gefunden.' });
 
@@ -311,7 +311,7 @@ router.put('/accounts/:id/case', requireManage, (req, res) => {
   if (mode === 'manual' && req.body && req.body.caseId) {
     caseId = String(req.body.caseId);
     const ziel = db.prepare(`SELECT id, label, COALESCE(archived,0) AS archived
-      FROM cases WHERE id=?`).get(caseId);
+      FROM live_cases WHERE id=?`).get(caseId);
     if (!ziel || ziel.archived) return res.status(404).json({ error: 'Der gewählte aktive Fall wurde nicht gefunden.' });
     if (!darfBearbeiten(req.session, caseId)) {
       return res.status(403).json({ error: 'Sie haben für den gewählten Fall kein Bearbeitungsrecht.' });

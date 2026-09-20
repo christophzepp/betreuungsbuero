@@ -9,11 +9,11 @@ const emails=c=>new Set([...profileEmails(c),...(c.people||[]).flatMap(profileEm
 const privateVisible=(r,s)=>r.visibility!=='private'||Number(r.owner_user_id)===Number(s.userId);
 function normalizedDate(value){const text=String(value||''),de=text.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);if(de)return de[3]+'-'+de[2].padStart(2,'0')+'-'+de[1].padStart(2,'0');if(/^\d{4}-\d{2}-\d{2}$/.test(text))return text;const time=Date.parse(text);return Number.isFinite(time)?new Date(time).toISOString():''}
 function page({scope,caseId,id,session,cursor,ids,contactRefs,contact}){
- const A=require('./addressbook'),cases=db.prepare('SELECT id,label,stammdaten_json FROM cases').all().filter(c=>darfSehen(session,c.id)),caseMap=new Map(cases.map(c=>[c.id,c])),items=[];
+ const A=require('./addressbook'),cases=db.prepare('SELECT id,label,stammdaten_json FROM live_cases').all().filter(c=>darfSehen(session,c.id)),caseMap=new Map(cases.map(c=>[c.id,c])),items=[];
  let after=null;if(cursor){try{after=JSON.parse(Buffer.from(cursor,'base64url').toString())}catch(_){}if(!Array.isArray(after)||after.length!==2||after.some(v=>typeof v!=='string'))A.fail(400,'Ungültige Fortsetzung.')}
  const refKey=(scope,caseId,id)=>JSON.stringify([scope,scope==='office'?'':caseId,id]);
  const linked=(l,cid)=>!!l&&contactRefs.has(refKey(l.scope||'case',l.caseId||cid,l.contactId));
- const allContacts=db.prepare('SELECT id,case_id,data_json FROM case_contacts').all().map(r=>({...parse(r.data_json),id:r.id,caseId:r.case_id,scope:'case'}));
+ const allContacts=db.prepare('SELECT id,case_id,data_json FROM live_case_contacts').all().map(r=>({...parse(r.data_json),id:r.id,caseId:r.case_id,scope:'case'}));
  const office=db.prepare('SELECT id,data_json FROM office_contacts').all().map(r=>({...parse(r.data_json),id:r.id,caseId:'',scope:'office'}));
  const candidates=[...allContacts,...office],target=emails(contact);
  const history=db.prepare('SELECT scope,contact_id,case_id,changes_json FROM addressbook_history WHERE contact_id IN (SELECT value FROM json_each(?))').all(JSON.stringify([...ids]));for(const h of history){if(!contactRefs.has(refKey(h.scope,h.case_id,h.contact_id)))continue;const ch=parse(h.changes_json),oldEmails=[ch.email?.before,ch.email?.after,...(ch.people?.before||[]).flatMap(profileEmails),...(ch.people?.after||[]).flatMap(profileEmails),...(ch.contactWays?.before||[]).filter(w=>w.type==='email').map(w=>w.value),...(ch.contactWays?.after||[]).filter(w=>w.type==='email').map(w=>w.value)].map(email).filter(Boolean);for(const e of oldEmails)target.add(e);if(oldEmails.length)candidates.push({id:h.contact_id,caseId:h.case_id,scope:h.scope,oldEmails})}
@@ -22,7 +22,7 @@ function page({scope,caseId,id,session,cursor,ids,contactRefs,contact}){
  function matches(addresses,cid){for(const addr of addresses){if(!target.has(addr))continue;const hits=cid?caseEmails.get(cid+'|'+addr):globalEmails.get(addr);if(hits?.size&&[...hits].every(key=>contactRefs.has(key)))return true}return false}
  const norm=v=>String(v||'').toLocaleLowerCase('de-DE').replace(/[,;–—]/g,' ').replace(/\s+/g,' ').trim();
  function matchesRecipient(value,cid){const v=norm(value);if(!v)return false;const hits=allContacts.filter(c=>c.caseId===cid).filter(c=>{const person=[c.title,c.firstName,c.lastName].filter(Boolean).join(' '),base=[c.institution,person].filter(Boolean),address=[[c.street,[c.house,c.houseLetter].filter(Boolean).join('')].filter(Boolean).join(' ')||(c.postbox?'Postfach '+c.postbox:''),[c.postal,c.city].filter(Boolean).join(' ')];return [base.join(' '),[...base,...address].filter(Boolean).join(' ')].some(s=>norm(s)===v)});return hits.length>0&&hits.every(c=>contactRefs.has(refKey(c.scope,c.caseId,c.id)))}
- const doku=db.prepare('SELECT * FROM case_doku_entries WHERE case_id IN (SELECT value FROM json_each(?))').all(JSON.stringify([...caseMap.keys()]));
+ const doku=db.prepare('SELECT * FROM live_case_doku_entries WHERE case_id IN (SELECT value FROM json_each(?))').all(JSON.stringify([...caseMap.keys()]));
  const documentedMail=new Map(),documentedTerms=new Set(),preferredMailLocations=new Set();
  const addDocumented=(key,item)=>{const entries=documentedMail.get(key)||[];entries.push(item);documentedMail.set(key,entries)};
  for(const r of doku){
@@ -37,7 +37,7 @@ function page({scope,caseId,id,session,cursor,ids,contactRefs,contact}){
  for(const c of cases){const state=parse(c.stammdaten_json);for(const h of state.exportHistory||state.ui?.exportHistory||[]){if(h.status!=='sent')continue;const addresses=new Set([email(h.recipientEmail)].filter(Boolean));if(!(h.contactLink?linked(h.contactLink,c.id):(matches(addresses,c.id)||matchesRecipient(h.recipient,c.id))))continue;items.push({id:'document:'+c.id+':'+h.id,sourceId:h.id,kind:'document',caseId:c.id,caseLabel:c.label,date:h.sentAt||h.updatedAt||h.createdAt||'',title:h.documentTitle||h.subject||'Versendetes Schreiben',text:h.note||h.subject||'',contactType:'Versendet · '+(h.channel||'Schreiben')})}}
  const exports=new Map();for(const c of cases)for(const h of parse(c.stammdaten_json).exportHistory||[])if(h.exportRef?.fileId)exports.set(c.id+'|'+h.exportRef.fileId,h);
  const docs=new Map(doku.map(r=>[r.id,{...parse(r.data_json),caseId:r.case_id}]));
- for(const t of db.prepare("SELECT * FROM todos WHERE item_type='followup'").all()){
+ for(const t of db.prepare("SELECT * FROM live_todos WHERE item_type='followup'").all()){
   if(!privateVisible(t,session)||!caseMap.has(t.case_id))continue;
   let link=parse(t.source_ref).contactLink;const d=docs.get(t.source_id);
   if(!link&&t.source_type==='contact')link={contactId:t.source_id,caseId:t.case_id};

@@ -1,5 +1,7 @@
 'use strict';
 
+const { isLiveCaseId } = require('../demo/data-identities');
+
 /*
  * Einseitiger Finder -> SQLite-Abgleich für den lesbaren Dokumentenspeicher.
  *
@@ -191,7 +193,7 @@ function createDocumentFinderSync(options) {
   }
 
   function caseMappings(findings) {
-    const cases = new Set(allOrEmpty('SELECT id FROM cases').map((row) => String(row.id)));
+    const cases = new Set(allOrEmpty('SELECT id FROM cases').filter(row => isLiveCaseId(row.id)).map((row) => String(row.id)));
     const roots = allOrEmpty('SELECT * FROM doc_case_roots');
     const byPath = new Map();
     for (const row of roots) {
@@ -219,6 +221,7 @@ function createDocumentFinderSync(options) {
     }
     if (sidecar && sidecar.caseId) {
       const caseId = String(sidecar.caseId);
+      if (!isLiveCaseId(caseId)) return null;
       if (mappings.cases.has(caseId)) return { caseId, source: 'sidecar' };
       finding(findings, 'unknown_case_root', relative, {
         reason: 'sidecar_case_unknown',
@@ -227,12 +230,12 @@ function createDocumentFinderSync(options) {
       return null;
     }
     const exact = mappings.byPath.get(key(relative));
-    if (exact) return { caseId: exact, source: 'doc_case_roots' };
+    if (exact) return isLiveCaseId(exact) ? { caseId: exact, source: 'doc_case_roots' } : null;
     const basenameKey = names.vergleichsschluessel(path.basename(relative));
     const candidates = mappings.roots.filter((row) =>
       names.vergleichsschluessel(row.folder_name || path.basename(row.storage_relpath || '')) === basenameKey
     );
-    if (candidates.length === 1) return { caseId: String(candidates[0].case_id), source: 'current_mapping' };
+    if (candidates.length === 1) return isLiveCaseId(candidates[0].case_id) ? { caseId: String(candidates[0].case_id), source: 'current_mapping' } : null;
     finding(findings, 'unknown_case_root', relative, {
       reason: candidates.length > 1 ? 'ambiguous_name' : 'no_identity',
       candidates: candidates.map((row) => row.case_id)
@@ -316,7 +319,7 @@ function createDocumentFinderSync(options) {
     let acknowledgedReferences = 0;
     const handledSidecars = new Set();
     const technicalFiles = new Set();
-    const indexedRows = allOrEmpty('SELECT * FROM doc_files');
+    const indexedRows = allOrEmpty('SELECT * FROM doc_files').filter(row => isLiveCaseId(row.case_id));
     const indexedPaths = new Set(indexedRows
       .filter((row) => !String(row.deleted_at || ''))
       .map((row) => String(row.storage_relpath || ''))
@@ -695,12 +698,12 @@ function createDocumentFinderSync(options) {
     }
     for (const scope of scopes) walk(scope, scope.baseAbs, '');
 
-    const dbFolders = allOrEmpty('SELECT * FROM doc_folders');
+    const dbFolders = allOrEmpty('SELECT * FROM doc_folders').filter(row => isLiveCaseId(row.case_id));
     // Die verschlüsselte/verwaltete Administration wird separat nur lesend
     // auditiert. Sie darf weder als normale Bürodatei erscheinen noch von
     // Finder-Automatik umgehängt werden.
     const dbFiles = allOrEmpty("SELECT * FROM doc_files WHERE deleted_at='' OR deleted_at IS NULL")
-      .filter((row) => String(row.area || '') !== 'management');
+      .filter((row) => isLiveCaseId(row.case_id) && String(row.area || '') !== 'management');
     const folderById = new Map(dbFolders.map((row) => [String(row.id), row]));
     const folderByPath = new Map();
     const folderByInode = new Map();

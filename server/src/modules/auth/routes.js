@@ -35,7 +35,6 @@ const getUserByUsername = db.prepare('SELECT * FROM users WHERE username = ?');
 const getUserById = db.prepare('SELECT * FROM users WHERE id = ?');
 const updatePasswordStmt = db.prepare('UPDATE users SET password_hash = ? WHERE id = ?');
 const listAiConfig = db.prepare('SELECT provider, api_key_encrypted, model, endpoint, allowed_models FROM office_ai_config');
-const listSendCredentials = db.prepare('SELECT service, username, password_encrypted, login_url, inbox_url, compose_url FROM office_send_credentials');
 
 // Effektive Rechte fuer EINEN Modus: Admin = alles erlaubt, sonst der Modus-Zweig der Matrix.
 function effectivePermissions(user, mode) {
@@ -56,6 +55,7 @@ function publicUser(user, mode) {
   const p = effectivePermissions(user, mode);
   const theme = themePrefs.getThemeSettings(user.id);
   return {
+    systemTime: require('../settings/system-time').get(db),
     id: user.id,
     username: user.username,
     displayName: user.display_name || user.username,
@@ -157,18 +157,6 @@ function officeAiConfig() {
   }
   return ai;
 }
-// Bueroweite Admin-Vorgabe fuer Versand-Zugangsdaten (aus office_send_credentials).
-function officeSendCredentials() {
-  const send = {};
-  for (const row of listSendCredentials.all()) {
-    send[row.service] = {
-      username: row.username, password: cryptoHelper.decrypt(row.password_encrypted),
-      loginUrl: row.login_url, inboxUrl: row.inbox_url, composeUrl: row.compose_url
-    };
-  }
-  return send;
-}
-
 // Liefert die fuer DIESEN Nutzer EFFEKTIVEN buerobezogenen Zugangsdaten: pro Bereich der eigene
 // Override (nur mit Recht + gesetzt), sonst die Admin-Vorgabe. `credentialSources` sagt je Bereich,
 // woraus die Werte gerade stammen ('user'|'admin') - fuers System-Status-Menue. Nur bei Online-Login
@@ -206,7 +194,8 @@ function decryptedOfficeConfig(user, mode) {
      entstand die Doppelmaske im Menue ("oben Keys, unten auch Keys"). */
   const ai = aiAllowed ? aiJeAnbieter(officeAiConfig(), aiOverride) : {};
   const sendOverride = (user && sendAllowed) ? userSettings.effectiveOverride(user, mode, 'send') : null;
-  const send = sendAllowed ? ((sendOverride && typeof sendOverride === 'object') ? sendOverride : officeSendCredentials()) : {};
+  const sendResolved = sendAllowed ? require('../settings/send-credentials').resolve(db, sendOverride) : { values: {}, sources: {} };
+  const send = sendResolved.values;
   // smtpConfigured: der Client zeigt den "Direkt per Mail senden"-Button nur bei moeglichem Versand.
   // Effektiv = eigener Mail-Override (falls konfiguriert) sonst die Admin-SMTP-Vorgabe.
   const mailOverride = user ? userSettings.effectiveOverride(user, mode, 'mail') : null;
@@ -223,11 +212,11 @@ function decryptedOfficeConfig(user, mode) {
     : [];
   const credentialSources = {
     ai: user ? userSettings.overrideSource(user, mode, 'ai') : 'admin',
-    send: user ? userSettings.overrideSource(user, mode, 'send') : 'admin',
+    send: Object.values(sendResolved.sources).includes('user') ? 'user' : 'admin',
     mail: user ? userSettings.overrideSource(user, mode, 'mail') : 'admin',
     maps: user ? userSettings.overrideSource(user, mode, 'maps') : 'admin'
   };
-  return { aiConfig: ai, aiBueroAnbieter, sendCredentials: send, smtpConfigured, credentialSources };
+  return { aiConfig: ai, aiBueroAnbieter, sendCredentials: send, sendSources: sendResolved.sources, smtpConfigured, credentialSources };
 }
 
 function safeDecryptedOfficeConfig(user, mode) {
@@ -417,7 +406,8 @@ router.post('/logout', (req, res) => {
   if (!req.session) return res.json({ ok: true });
   try{ if(req.session.userId) logAction(req, 'auth.logout', 'user', req.session.userId, {},
     { kategorie:'zugriff', zweck:'verwaltung' }); }catch(_e){}
-  req.session.destroy(() => {
+  req.session.destroy((error) => {
+    if (error) return res.status(500).json({ error: 'Abmeldung fehlgeschlagen. Bitte erneut versuchen.' });
     res.clearCookie('betreuungsbuero.sid');
     res.json({ ok: true });
   });
