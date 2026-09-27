@@ -1,0 +1,1654 @@
+{
+  "schemaVersion": 2,
+  "createdAt": "2026-09-21",
+  "status": "plan_only",
+  "baseline": {
+    "version": "0.7.12",
+    "commit": "edd361b70e2b75ccac013fa3789a8dfce7a0ae3e"
+  },
+  "capacity": {
+    "concurrentUsers": 10,
+    "cases": 2000,
+    "confirmedByUser": true,
+    "scope": "je eigenständiger Büroinstallation; kein gemeinsamer Mandantenbetrieb beschlossen"
+  },
+  "effort": {
+    "requiredPersonDays": {
+      "min": 259,
+      "max": 447
+    },
+    "reservePercent": 25,
+    "exclusions": [
+      "Erhöhter Ausfallschutz ist nun vorgesehen, aber als Aufwandserweiterung noch separat zu schätzen",
+      "zusätzliche Hardware/Hosting/Storegebühren",
+      "unbekannte fachliche Änderungen",
+      "langfristiger laufender Betrieb"
+    ],
+    "estimateStatus": "Historische Ausgangsschätzung; nach Entscheidungen und AP-03 neu schätzen. Kein vollständiges Budget für beide Betriebsprofile.",
+    "excludedPackages": [
+      "AP-34"
+    ]
+  },
+  "conditionalGates": [],
+  "packages": [
+    {
+      "id": "AP-00",
+      "title": "Bestand, Funktionsgleichheit und Schreibwege erfassen",
+      "phase": "A",
+      "dependencies": [],
+      "owner": "Architektur + Fachverantwortlicher",
+      "effort_person_days": {
+        "min": 3,
+        "max": 5
+      },
+      "scope": "Alle Desktop-, Mobil-, Außendienst- und Integrationswege gegen v0.7.12 erfassen. Für jedes Feld und jede Aktion maßgeblichen Speicher, Rechte, Nebenwirkungen und Export festhalten. Anonyme Volumenkennzahlen und Geräte erfassen.",
+      "deliverables": [
+        "Versionierter Funktions-/Schreibwegkatalog mit 32 Hauptbereichen und Querschnittsfunktionen",
+        "Datenlandkarte, globale Abhängigkeiten, Release-Baseline und offene Fragen mit Verantwortlichen",
+        "Anforderungs-IDs E-01 bis E-22 und U-01 bis U-33 mit Tickets, konkreten Nachweisen und Prüfern verknüpfen",
+        "Bestand je Büroinstallation sowie beschlossene Antworten Q-01 bis Q-12 mit noch offenen Detailentscheidungen erfassen"
+      ],
+      "acceptance": [
+        "Kein Hauptbereich ohne zuständigen Prüfer und Referenzablauf",
+        "Lebensunterhalt/Gesundheit, Offlineimport, Dokumentablage und separate Bürodatenspeicher durchgängig vom UI bis zur Ablage nachvollzogen",
+        "Keine Anforderung des Abgleichs ohne Paket-/Ticketzuständigkeit; Erwähnung im Plan wird nicht als erfüllte Produktanforderung ausgegeben"
+      ],
+      "rollback": "Rein lesende Erfassung; keine Produktivdaten verändern oder kopieren, soweit Kennzahlen genügen.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-01",
+        "E-03",
+        "E-12",
+        "E-20",
+        "E-21",
+        "U-01",
+        "U-03",
+        "U-04",
+        "U-05",
+        "U-11",
+        "U-18",
+        "U-25",
+        "U-28",
+        "U-32",
+        "U-33"
+      ],
+      "openDecisionIds": [
+        "D-02",
+        "D-07",
+        "D-08",
+        "D-12"
+      ],
+      "decisionIds": [
+        "D-02",
+        "D-07",
+        "D-08",
+        "D-12"
+      ]
+    },
+    {
+      "id": "AP-01",
+      "title": "Regressionstestbasis und frühe CI-Grenzen",
+      "phase": "A",
+      "dependencies": [
+        "AP-00"
+      ],
+      "owner": "QA + Entwicklung",
+      "effort_person_days": {
+        "min": 8,
+        "max": 12
+      },
+      "scope": "Bestehende Tests reproduzieren und synthetische kleine, große, historische sowie konfliktbehaftete Fälle aufbauen. Kritische Wege als Verhaltenstests sichern; bisherige Quelltextausschnitt-Tests zunächst erhalten.",
+      "deliverables": [
+        "Referenzdatensatz mit erlaubten Rechten, PDFs und erwarteten Fachwerten",
+        "Automatische Fach-/Persistenztests und reproduzierbarer Browser-Prüfstand; Protokoll bestehender Abweichungen"
+      ],
+      "acceptance": [
+        "Speicherfehler, Neuladen und falsche Erfolgsantwort lassen Tests nachweislich scheitern",
+        "Reale temporäre Datenbank und Dateiablage statt ausschließlich gemockter Speicherung; keine echten Kundendaten"
+      ],
+      "rollback": "Keine Tests löschen, um Grün zu erreichen; unklare Bestandsabweichungen vor Umbau dokumentieren.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-03",
+        "E-10",
+        "E-11",
+        "E-13",
+        "E-15",
+        "E-19",
+        "E-21",
+        "U-01",
+        "U-09",
+        "U-11"
+      ],
+      "openDecisionIds": [
+        "D-13"
+      ],
+      "decisionIds": [
+        "D-13"
+      ]
+    },
+    {
+      "id": "AP-02",
+      "title": "Bestandssicherung und Restore-Ausgangsnachweis",
+      "phase": "A",
+      "dependencies": [
+        "AP-00"
+      ],
+      "owner": "Betrieb + Serverentwicklung",
+      "effort_person_days": {
+        "min": 3,
+        "max": 5
+      },
+      "scope": "Bestehende Backup-, Schlüssel- und Dokumentmechanismen verstehen. Vollständige Wiederherstellung in isolierter Umgebung einschließlich Anwendung und Vorlagen proben.",
+      "deliverables": [
+        "Restore-Protokoll mit Laufzeit, Versionen, Dateien und Schlüsseln",
+        "Ausgangs-Runbook und dokumentierte fehlende Sicherungsbestandteile"
+      ],
+      "acceptance": [
+        "Wiederhergestellte synthetische Fälle, Rechte, Dokumente und PDF-Ausgaben entsprechen dem Ausgang",
+        "Beschädigte Sicherung und fehlender Schlüssel führen zu sicherem Abbruch ohne Änderung der laufenden Instanz"
+      ],
+      "rollback": "Nur isolierte Zielumgebung; Original und Sicherungen unverändert erhalten.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-20",
+        "E-21"
+      ],
+      "openDecisionIds": [],
+      "decisionIds": []
+    },
+    {
+      "id": "AP-03",
+      "title": "Technikversuche, Bedrohungsmodell und ADR-Freigabe",
+      "phase": "A",
+      "dependencies": [
+        "AP-00",
+        "AP-02"
+      ],
+      "owner": "Architektur + Mobile + Betrieb",
+      "effort_person_days": {
+        "min": 8,
+        "max": 12
+      },
+      "scope": "Je einen kleinen vollständigen React/SSR-Formularweg, PostgreSQL-Revisionskonflikt und verschlüsselten Offline-Schreib-/Neustartweg im Browser ohne Installationspflicht bauen. Auf den fünf Zielsystemen sowie realem iOS/Android prüfen. Bedrohungsmodell und Referenzaufbau beider Server-Betriebsprofile entwerfen.",
+      "deliverables": [
+        "ADRs zu Framework, Datenbank, Offlineweg, Schlüsseln und Betriebsprofil",
+        "Messprotokolle und aktualisierte Aufwandsschätzung für Auftraggeber plus KI, Browserpflicht und beide Betriebsprofile; AP-34 ist nicht eingeplant",
+        "Erste Supportmatrix für gepflegte OS-Versionen und aktuelle Browser auf allen fünf Plattformen; verbleibende Details D-01 bis D-06 mit überprüfbaren PoC-Fragen"
+      ],
+      "acceptance": [
+        "Kein Frameworkentscheid allein nach Geschmack; Alt-Editor, Formulare und Geräteanforderungen praktisch bewertet",
+        "Browserneustart, verweigerter Speicher und HTML-Dateistart zeigen ihre tatsächlichen Grenzen; keine falsche Speichergarantie",
+        "Offlineablauf besteht ohne App- oder verpflichtende PWA-Installation; bei Scheitern Befund und offene Anforderungsentscheidung statt automatischem Tauri-Wechsel"
+      ],
+      "rollback": "Versuche sind verwerfbar und außerhalb des Produktivpfads. Technische Empfehlungen dürfen begründet korrigiert werden; beschlossene Auftraggebervorgaben dürfen nur durch neue ausdrückliche Entscheidung geändert werden.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-16",
+        "E-20",
+        "E-21",
+        "U-04",
+        "U-06",
+        "U-07",
+        "U-12",
+        "U-19",
+        "U-28",
+        "U-30",
+        "U-31",
+        "U-32",
+        "U-33"
+      ],
+      "openDecisionIds": [
+        "D-01",
+        "D-02",
+        "D-03",
+        "D-05",
+        "D-06",
+        "D-12",
+        "D-13"
+      ],
+      "decisionIds": [
+        "D-01",
+        "D-02",
+        "D-03",
+        "D-04",
+        "D-05",
+        "D-06",
+        "D-12",
+        "D-13"
+      ]
+    },
+    {
+      "id": "AP-04",
+      "title": "Modulares Repository, TypeScript und reproduzierbarer Build",
+      "phase": "B",
+      "dependencies": [
+        "AP-01",
+        "AP-03"
+      ],
+      "owner": "Architektur + Build-Verantwortlicher",
+      "effort_person_days": {
+        "min": 5,
+        "max": 8
+      },
+      "scope": "Workspaces und Paketgrenzen gemäß Zielarchitektur einführen. TypeScript für neuen Code; Bestands-JavaScript schrittweise typisieren. Gesperrte Dependency-Versionen und nachvollziehbare Buildumgebung einrichten.",
+      "deliverables": [
+        "Struktur apps/packages/assets/tests/ops und Importregeln",
+        "Buildmanifest mit Commit, Lockfile, Ressourcen- und Artefakthashes",
+        "Reviewregel: höchstens 500 geänderte handgeschriebene Zeilen je fachlich geschlossener Einheit; Überschreitungsmarkierung und gesonderter Extraktionsnachweis"
+      ],
+      "acceptance": [
+        "Frischer Checkout baut ohne versteckte lokale Dateien oder Netzwerk-CDN-Abhängigkeiten zur Laufzeit",
+        "Zirkuläre Fachimporte und übergroße Einstiegspakete werden erkannt; Sicherheitsupdates bleiben möglich",
+        "Nach G1 liegt neuer Anwendungscode in Modulquellen; keine neuen Inline-Funktions-/Datenblöcke in der alten Haupt-HTML als primärer Quelle"
+      ],
+      "rollback": "Neuer Build parallel zum alten Release-Build; Umstellung erst nach Funktions-/Artefaktvergleich.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-02",
+        "E-03",
+        "E-04",
+        "E-05",
+        "E-09",
+        "E-11",
+        "E-17",
+        "E-19",
+        "E-21",
+        "E-22",
+        "U-02",
+        "U-03",
+        "U-05",
+        "U-06",
+        "U-14",
+        "U-15"
+      ],
+      "openDecisionIds": [
+        "D-01",
+        "D-11"
+      ],
+      "decisionIds": [
+        "D-01",
+        "D-11"
+      ]
+    },
+    {
+      "id": "AP-05",
+      "title": "CSS, Bibliotheken und eingebettete Ressourcen extrahieren",
+      "phase": "B",
+      "dependencies": [
+        "AP-04"
+      ],
+      "owner": "Frontend + Build",
+      "effort_person_days": {
+        "min": 4,
+        "max": 7
+      },
+      "scope": "Die HTML in überprüfbare Quellen und externe Ressourcen zerlegen. Zuerst mechanische Extraktion mit erhaltener Reihenfolge, danach fachliches Aufteilen. Slim-Delivery-Zerlegung zur Laufzeit ablösen.",
+      "deliverables": [
+        "Versionierter Ressourcenindex für PDFs, Schriften, OCR und Bibliotheken",
+        "Getrennte Assets, Hash-URLs, Provenienz-/Lizenzinventar und nachvollziehbarer Alt-/Neu-Vergleich"
+      ],
+      "acceptance": [
+        "Extraktdaten bytegleich; kein verloren gegangenes Formular oder Font",
+        "Migrierter Einstieg lädt weder die ursprüngliche Großdatei noch sämtliche Vorlagen; fehlende Ressource erzeugt sichtbaren Fehler"
+      ],
+      "rollback": "Vorheriges Artefakt/Manifest behalten; keine Git-Historie umschreiben oder Altdatei ohne Freigabe löschen.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-01",
+        "E-02",
+        "E-05",
+        "E-06",
+        "E-19",
+        "E-21",
+        "E-22",
+        "U-10",
+        "U-15",
+        "U-16",
+        "U-20",
+        "U-23",
+        "U-29"
+      ],
+      "openDecisionIds": [],
+      "decisionIds": []
+    },
+    {
+      "id": "AP-06",
+      "title": "Fachgrenzen, Anwendungsdienste und API-Verträge",
+      "phase": "B",
+      "dependencies": [
+        "AP-00",
+        "AP-04"
+      ],
+      "owner": "Serverarchitektur",
+      "effort_person_days": {
+        "min": 7,
+        "max": 12
+      },
+      "scope": "Bestehende Routen in HTTP-Adapter, Fachkommandos und Repositories zerlegen. Öffentliche Modulports, Laufzeitschemas, OpenAPI, Fehlercodes, IDs und Datums-/Geldregeln festlegen.",
+      "deliverables": [
+        "Versionierte Verträge und Datenwörterbuch einschließlich unbekannter Alt-Felder",
+        "Gemeinsame Anwendungsdienste mit zentraler Rechteprüfung; kompatible Alt-Adapter"
+      ],
+      "acceptance": [
+        "Kein neuer Schreibpfad mit eigener ungeprüfter Speicherlogik",
+        "Ungültige Nutzlasten, unberechtigte Fall-IDs und doppelte Definitionen desselben Fachwerts werden erkannt"
+      ],
+      "rollback": "Alt-Adapter zunächst weiter betreiben; keine stillen Feldumbenennungen oder neue Fachberechnung.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-09",
+        "E-10",
+        "E-11",
+        "E-12",
+        "E-13",
+        "E-17",
+        "E-19",
+        "E-21",
+        "U-03",
+        "U-05",
+        "U-06",
+        "U-07",
+        "U-15",
+        "U-21"
+      ],
+      "openDecisionIds": [],
+      "decisionIds": []
+    },
+    {
+      "id": "AP-07",
+      "title": "Revisionen und Konfliktschutz für alle Schreiber",
+      "phase": "B",
+      "dependencies": [
+        "AP-01",
+        "AP-06"
+      ],
+      "owner": "Persistenzentwicklung",
+      "effort_person_days": {
+        "min": 8,
+        "max": 14
+      },
+      "scope": "Pro fachlicher Einheit Revisionen und atomare bedingte Änderungen einführen. Alle erfassten Schreiber eines Bereichs aktualisieren; bestehende RAM-Sperren bleiben höchstens Bedienhinweise.",
+      "deliverables": [
+        "OCC-fähige Dienste/Repositories, Pflicht-Basisrevision und Konfliktantwort",
+        "Kompatibilitätsregeln für alte Browser, Imports und Integrationen"
+      ],
+      "acceptance": [
+        "F-05/F-06/F-07 bestehen mit zwei Nutzern und mehreren Serverprozessen",
+        "Ein alter Endpunkt kann Schutz nicht umgehen; Arrays werden über stabile Eintrags-IDs bearbeitet"
+      ],
+      "rollback": "Nur vollständig abgesicherte Datenbereiche aktivieren; kein Rückweg auf ungeschützte Writes bei weiterhin parallelen Clients.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-14",
+        "E-21",
+        "U-08",
+        "U-21"
+      ],
+      "openDecisionIds": [],
+      "decisionIds": []
+    },
+    {
+      "id": "AP-08",
+      "title": "Idempotenz, Commit-Quittungen und transaktionale Outbox",
+      "phase": "B",
+      "dependencies": [
+        "AP-07"
+      ],
+      "owner": "Persistenzentwicklung",
+      "effort_person_days": {
+        "min": 7,
+        "max": 12
+      },
+      "scope": "Mutations-ID, Payload-Hash, Ergebnisquittung und Folgeauftrag gemeinsam mit Fachdaten verbuchen. Statusauflösung bei verlorener Antwort und klare Erfolgs-/Folgezustände implementieren.",
+      "deliverables": [
+        "Quittungs- und Outboxschema, Statusendpunkt, Retentionsregeln",
+        "Gemeinsamer Retry-Vertrag einschließlich bereits quittierter alter Basisrevision"
+      ],
+      "acceptance": [
+        "F-03/F-04/F-09 bestehen; derselbe Schlüssel wirkt einmal, veränderter Payload wird abgewiesen",
+        "Fehler bei Ordnernachführung meldet bestätigte Fachdaten plus ausstehenden Job, keinen mehrdeutigen Gesamterfolg"
+      ],
+      "rollback": "Quittungen und neue Mutationen bei Rückschaltung erhalten; keine erneute fachliche Ausführung bereits bestätigter Aufträge.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-08",
+        "E-14",
+        "E-21",
+        "U-08",
+        "U-21"
+      ],
+      "openDecisionIds": [
+        "D-03"
+      ],
+      "decisionIds": [
+        "D-03"
+      ]
+    },
+    {
+      "id": "AP-09",
+      "title": "Dokumentablage, Streaming und Versionierung absichern",
+      "phase": "B",
+      "dependencies": [
+        "AP-05",
+        "AP-06",
+        "AP-08"
+      ],
+      "owner": "Dokument-/Serverentwicklung",
+      "effort_person_days": {
+        "min": 8,
+        "max": 14
+      },
+      "scope": "Bestehendes Streaming und Hashing weiterverwenden. Staged-Upload, haltbare Binärablage, transaktionale Referenzierung und Wiederanlaufabgleich vereinheitlichen. Fach-JSON-Limits je Route verkleinern, ohne erforderliche Dateiimporte zu verlieren.",
+      "deliverables": [
+        "Dokumentspeicher-Port, immutable Versionen und Upload-/Finalize-Protokoll",
+        "Orphan-/Integritätsprüfer, sichere Vorschau und Wiederherstellungsmanifest"
+      ],
+      "acceptance": [
+        "F-10/F-11 bestehen an jeder Absturzgrenze",
+        "Keine verfügbare Dokumentversion verweist auf fehlende Bytes; großer Upload puffert nicht mehrfach als Base64 im RAM"
+      ],
+      "rollback": "Alte Dokumentversionen und Manifeste erhalten; Garbage Collection bis nach Migrations-/Rollbackfenster sperren.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-07",
+        "E-08",
+        "E-14",
+        "E-21",
+        "U-08",
+        "U-17",
+        "U-18"
+      ],
+      "openDecisionIds": [
+        "D-02",
+        "D-03",
+        "D-09"
+      ],
+      "decisionIds": [
+        "D-02",
+        "D-03",
+        "D-09"
+      ]
+    },
+    {
+      "id": "AP-10",
+      "title": "PostgreSQL und deterministische Datenmigration vorbereiten",
+      "phase": "B",
+      "dependencies": [
+        "AP-02",
+        "AP-06",
+        "AP-07",
+        "AP-08"
+      ],
+      "owner": "Datenbankentwicklung + Betrieb",
+      "effort_person_days": {
+        "min": 10,
+        "max": 18
+      },
+      "scope": "Zielschema, SQL-Migrationen und asynchrone Repositories erstellen. Bestehende SQLite-IDs und Fachwerte bewahren. Importwerkzeug und unabhängigen Vergleich implementieren; nur isolierte Testumgebungen umstellen.",
+      "deliverables": [
+        "PostgreSQL-Adapter, Schema-/Datenmigrationswerkzeug und Detaillog ohne Geheimnisse",
+        "Feldweiser kanonischer Daten-/Referenzvergleich und geprüfte Durability-Konfiguration"
+      ],
+      "acceptance": [
+        "Jeder Fall, jedes Feld und jede Dokumentreferenz vollständig übertragen; unbekannte Werte stoppen Freigabe",
+        "Zweimalige Migration auf frische Ziele ergibt gleichwertige Daten; neuer Treiber besteht dieselben Vertragsprüfungen"
+      ],
+      "rollback": "Keine produktive Doppelpflege; finaler Cutover erst in AP-31. Quelle bleibt unverändert.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-07",
+        "E-14",
+        "E-21",
+        "U-06",
+        "U-08",
+        "U-17",
+        "U-18",
+        "U-21"
+      ],
+      "openDecisionIds": [
+        "D-01",
+        "D-03"
+      ],
+      "decisionIds": [
+        "D-01",
+        "D-03"
+      ]
+    },
+    {
+      "id": "AP-11",
+      "title": "Begrenzte Worker, Scheduler und nachholbare Echtzeit",
+      "phase": "B",
+      "dependencies": [
+        "AP-08",
+        "AP-09",
+        "AP-10"
+      ],
+      "owner": "Serverentwicklung",
+      "effort_person_days": {
+        "min": 8,
+        "max": 14
+      },
+      "scope": "PDF/OCR/Import und Providerjobs vom interaktiven Prozess trennen. Persistente Auftragszustände, Leases, Wirkungsschlüssel, Ressourcenlimits und Ereigniscursor einführen. Berechtigungskontrolle bei Events nachziehen.",
+      "deliverables": [
+        "Separater Workerstart, Jobverwaltung und sichere Wiederaufnahme",
+        "Commit-basierte Ereignisse, Lückenabgleich, nachvollziehbare Provider-Unklarzustände"
+      ],
+      "acceptance": [
+        "F-12/F-13 bestehen; alte Worker können nach Lease-Verlust keine Doppelwirkung abschließen",
+        "Schwerer Job blockiert kein normales Speichern; externer Ausfall bleibt auf betroffenen Dienst begrenzt"
+      ],
+      "rollback": "Jobs kontrolliert anhalten/drainen; bereits ausgeführte externe Wirkungen niemals per Wiederholung zurückrollen.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-06",
+        "E-08",
+        "U-06",
+        "U-17"
+      ],
+      "openDecisionIds": [],
+      "decisionIds": []
+    },
+    {
+      "id": "AP-12",
+      "title": "Neue HTML-first-Hülle, Routing und Designbasis",
+      "phase": "C",
+      "dependencies": [
+        "AP-03",
+        "AP-04",
+        "AP-05",
+        "AP-06"
+      ],
+      "owner": "Frontend + Mobile",
+      "effort_person_days": {
+        "min": 7,
+        "max": 12
+      },
+      "scope": "SSR-Routen, direkte URLs, gemeinsame HTML-Komponenten, Navigation, Fehlergrenzen und mobile Darstellungen aufbauen. Legacy befristet hinter klarer Route isolieren; keine doppelte DOM-Verantwortung.",
+      "deliverables": [
+        "Responsive Hülle, native Formulare, Theme-/Fokus-/Tastaturregeln",
+        "Lade-/Fehler-/Versionszustände und routeweise Codeaufteilung"
+      ],
+      "acceptance": [
+        "Deep Link, Reload, Zurück, abgelaufene Sitzung und fehlender Chunk funktionieren nachvollziehbar",
+        "Grundlegender Online-Formularweg vor JS-Hydrierung verwendbar; migrierte Route lädt keinen Legacy-Monolithen"
+      ],
+      "rollback": "Darstellungsroute über Schalter zurücknehmen, sofern offene Entwürfe und Schreibvertragskompatibilität gesichert sind.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-05",
+        "E-06",
+        "E-10",
+        "E-16",
+        "E-17",
+        "E-18",
+        "U-10",
+        "U-16",
+        "U-19",
+        "U-24"
+      ],
+      "openDecisionIds": [
+        "D-01",
+        "D-05"
+      ],
+      "decisionIds": [
+        "D-01",
+        "D-05"
+      ]
+    },
+    {
+      "id": "AP-13",
+      "title": "Gemeinsame Formularentwürfe und Speicherrückmeldung",
+      "phase": "C",
+      "dependencies": [
+        "AP-07",
+        "AP-08",
+        "AP-12"
+      ],
+      "owner": "Frontend + Persistenz",
+      "effort_person_days": {
+        "min": 7,
+        "max": 12
+      },
+      "scope": "Formularentwurf, Übertragungszustand und bestätigten Serverstand trennen. Eingaben unmittelbar erfassen, Versions-/Fallbindung und verschlüsselten Entwurfs-Rettungsweg auf freigegebenen Browsergeräten ohne Installationspflicht umsetzen.",
+      "deliverables": [
+        "Gemeinsamer Speicherdienst und Zustandsautomat für Desktop/Mobile",
+        "Konfliktansicht, erneute Anmeldung, Retry und klar benannte lokale/Serverbestätigung"
+      ],
+      "acceptance": [
+        "F-01/F-02/F-07/F-08/F-15 mit realem Speichervertrag bestehen",
+        "Späte Antwort löscht neueres Tippen nicht; Speichern/Schließen wartet auf korrekten Status"
+      ],
+      "rollback": "Entwürfe und Outbox zuerst sichern; keine Rückschaltung mit stillem Löschen lokaler Wiederherstellungsdaten.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-08",
+        "E-14",
+        "U-08",
+        "U-10",
+        "U-11",
+        "U-19",
+        "U-22",
+        "U-28"
+      ],
+      "openDecisionIds": [
+        "D-06"
+      ],
+      "decisionIds": [
+        "D-06"
+      ]
+    },
+    {
+      "id": "AP-14",
+      "title": "Fallzugriff, Übersicht und autorisierte Suche migrieren",
+      "phase": "C",
+      "dependencies": [
+        "AP-10",
+        "AP-12",
+        "AP-13"
+      ],
+      "owner": "Fachteam Fälle",
+      "effort_person_days": {
+        "min": 6,
+        "max": 10
+      },
+      "scope": "Fallanlage, Stammliste, Übersicht, Archiv und berechtigte Suche modular umsetzen. Rechte bereits im Query anwenden; stabile Cursor und getrennte Bereichslader statt voller Datenpakete.",
+      "deliverables": [
+        "Fallrouten und Lesemodelle mit Filter/Pagination",
+        "Alle bisherigen Schnellaktionen und Zugänge auf aktive/archivierte Fälle"
+      ],
+      "acceptance": [
+        "Alle 2.000 berechtigten Fälle sind auffindbar; Browser lädt nur angeforderte Ausschnitte",
+        "Zählung, Suche und Export verraten keine fremden/demo Fälle; großer Einzelfall bleibt bedienbar"
+      ],
+      "rollback": "Bestehende IDs/Archive unverändert; UI-Fallback verwendet denselben abgesicherten Datenzugriff.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-07",
+        "E-09",
+        "E-17",
+        "E-18",
+        "U-01",
+        "U-15",
+        "U-16",
+        "U-18",
+        "U-33"
+      ],
+      "openDecisionIds": [
+        "D-02"
+      ],
+      "decisionIds": [
+        "D-02"
+      ]
+    },
+    {
+      "id": "AP-15",
+      "title": "Stammdaten und Betreuungsbereiche vollständig migrieren",
+      "phase": "C",
+      "dependencies": [
+        "AP-11",
+        "AP-13",
+        "AP-14"
+      ],
+      "owner": "Fachteam Betreuung + Büro",
+      "effort_person_days": {
+        "min": 14,
+        "max": 24
+      },
+      "scope": "Stammdaten, Lebensunterhalt, Gesundheit, Wohnen, Falldokumentation, Fähigkeiten/Alltag, Wünsche/Bedarfe, Genehmigungen, Kontaktmonitor und Betreuungsübersicht übertragen. Untertickets je Bereich und Fachaktion; gemeinsame Ableitungen zentral halten.",
+      "deliverables": [
+        "Je Bereich Modul mit vollständigen Feldern, Rechten, Historie und Nebenwirkungen",
+        "Herkunft/manuelle Overrides für Vorbelegungen und fachlicher Gleichwertigkeitsbericht"
+      ],
+      "acceptance": [
+        "Alle betreffenden Zeilen der Funktionsmatrix bestanden; keine still entfallenen Felder",
+        "Frühere Gesundheits-/Lebensunterhalt-Verluste dauerhaft reproduzierbar verhindert; historische Werte nicht ungewollt überschrieben"
+      ],
+      "rollback": "Je Fachbereich zurückschaltbare Oberfläche; Schema erweitert kompatibel halten und keine neuen Datenfelder verwerfen.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-09",
+        "E-13",
+        "E-17",
+        "E-18",
+        "U-01",
+        "U-15"
+      ],
+      "openDecisionIds": [],
+      "decisionIds": []
+    },
+    {
+      "id": "AP-16",
+      "title": "Fallfinanzen, Vermögen, Kasse und Schulden migrieren",
+      "phase": "C",
+      "dependencies": [
+        "AP-09",
+        "AP-14",
+        "AP-15"
+      ],
+      "owner": "Fachteam Finanzen",
+      "effort_person_days": {
+        "min": 14,
+        "max": 24
+      },
+      "scope": "Bankkonten, Handkasse, Vermögen, Lebensunterhaltsberechnungen und Schulden modularisieren. Stichtage, exakte Beträge, Schnappschüsse und Zuordnungen bewahren. Providerzugriff hinter Port.",
+      "deliverables": [
+        "Finanzmodule mit exakten Geld-/Datumsregeln und versionierten Schnappschüssen",
+        "Vergleichsfälle für Summen, Rundung, historische Daten und gleichzeitige Änderungen"
+      ],
+      "acceptance": [
+        "Referenzsummen und Ausgaben stimmen feld-/betragsgenau überein",
+        "Wiederholung erzeugt keine doppelten Buchungen; unklare Bankwirkung wird nicht blind wiederholt"
+      ],
+      "rollback": "Keine irreversible Saldenbereinigung; Originalstände/Schnappschüsse und Buchungsidentitäten erhalten.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-09",
+        "E-13",
+        "E-17",
+        "E-18",
+        "U-01",
+        "U-15"
+      ],
+      "openDecisionIds": [],
+      "decisionIds": []
+    },
+    {
+      "id": "AP-17",
+      "title": "Kalender, Aufgaben, Fristen und Wiedervorlagen migrieren",
+      "phase": "C",
+      "dependencies": [
+        "AP-11",
+        "AP-13",
+        "AP-14"
+      ],
+      "owner": "Fachteam Organisation",
+      "effort_person_days": {
+        "min": 10,
+        "max": 18
+      },
+      "scope": "Quellen/Anbieter, lokale und externe Listen, Serien, Erinnerungen und Fachverknüpfungen als getrennte Objekte umsetzen. Deaktivierte lokale Quellen auch aus Speicherzielen entfernen; bestehende Einträge bleiben erhalten.",
+      "deliverables": [
+        "Gemeinsame Scheduling-Dienste mit getrennten Eintragsarten und Quellen",
+        "Desktop-/mobile Ansichten, Rechtefilter, Provideradapter und Datumsregeln"
+      ],
+      "acceptance": [
+        "Serienausnahme, Sommerzeit, ganztägiges Datum und Wiederholung korrekt",
+        "Gleiche Kontonamen verschiedener Anbieter eindeutig; Quelle deaktivieren löscht keine vorhandenen Daten"
+      ],
+      "rollback": "Externe Änderungen nur über protokollierte Kommandos; Routing rückschaltbar ohne Duplikatimport.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-09",
+        "E-13",
+        "E-17",
+        "E-18",
+        "U-01",
+        "U-11",
+        "U-15"
+      ],
+      "openDecisionIds": [],
+      "decisionIds": []
+    },
+    {
+      "id": "AP-18",
+      "title": "Kommunikation, Kontakte, Mail und Chats migrieren",
+      "phase": "C",
+      "dependencies": [
+        "AP-11",
+        "AP-13",
+        "AP-14"
+      ],
+      "owner": "Fachteam Kommunikation",
+      "effort_person_days": {
+        "min": 12,
+        "max": 22
+      },
+      "scope": "Adressbuch, E-Mail, Fall-/Bürochats, Entwürfe und Versandhistorie isolieren. Anhänge streamen, HTML-Inhalte sicher darstellen und Providerstatus fachlich sauber abbilden.",
+      "deliverables": [
+        "Kommunikationsmodule und kontrollierte Übernahmen in Fälle",
+        "Idempotente interne Entwürfe sowie Zustandsmodell für Versand/unklare Providerantworten"
+      ],
+      "acceptance": [
+        "Nach Timeout keine doppelte Mail/Fax-Wirkung; Entwurf überlebt Lade-/Sitzungsfehler",
+        "Anhänge, Adressbuchübernahme, persönliche/Bürorechte und mobile Eingabe entsprechen Referenz"
+      ],
+      "rollback": "Gesendete Nachrichten nicht zurückrollen; bestehende Provider-IDs/Cursor bei UI-Rückschaltung bewahren.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-09",
+        "E-13",
+        "E-17",
+        "E-18",
+        "U-01",
+        "U-15"
+      ],
+      "openDecisionIds": [],
+      "decisionIds": []
+    },
+    {
+      "id": "AP-19",
+      "title": "Dateien, Editor, Archiv und Posteingang modularisieren",
+      "phase": "C",
+      "dependencies": [
+        "AP-09",
+        "AP-12",
+        "AP-13"
+      ],
+      "owner": "Fachteam Dokumente",
+      "effort_person_days": {
+        "min": 10,
+        "max": 18
+      },
+      "scope": "Datei-Explorer, Dokumenteditor, archivierte Formulare, Posteingang und Dateihistorie über gemeinsame Dienste umsetzen. OCR/KI-Vorschläge bleiben von ausdrücklich ausgelösten Fachänderungen getrennt.",
+      "deliverables": [
+        "Dokument-/Editorrouten, Vorschau-/Anlagenmodule und vollständige Archivzugriffe",
+        "Übernahmekommandos mit Nachweis über Datei, Vorschlag, Akteur und Ergebnis"
+      ],
+      "acceptance": [
+        "Kein verlorener Upload beim Wechsel zurück aus OCR/Chat; keine doppelte Fachübernahme",
+        "Editor, Darkmode/weißes Papier und vorhandene Datei-/Archivaktionen entsprechen Referenz"
+      ],
+      "rollback": "Versionierte Dokumente und Entwürfe erhalten; neue Editorfassung überschreibt keine alten Exporte.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-09",
+        "E-13",
+        "E-17",
+        "E-18",
+        "U-01",
+        "U-15",
+        "U-18"
+      ],
+      "openDecisionIds": [],
+      "decisionIds": []
+    },
+    {
+      "id": "AP-20",
+      "title": "Vorlagen und PDF-Ausgaben reproduzierbar absichern",
+      "phase": "C",
+      "dependencies": [
+        "AP-05",
+        "AP-11",
+        "AP-16",
+        "AP-19"
+      ],
+      "owner": "PDF-Entwicklung + fachlicher Prüfer",
+      "effort_person_days": {
+        "min": 10,
+        "max": 18
+      },
+      "scope": "Vorlagenkatalog, Herkunft, Mapping, Font- und Rendererfassung trennen. Neue Daten, Überlaufseiten, Summen und Unterschriften für alle relevanten Ausgaben prüfen; Vermögensverzeichnis als kritische Referenz.",
+      "deliverables": [
+        "Versionierter Template-/Exportvertrag und Renderpipeline",
+        "Synthetischer PDF-Prüfkorpus mit langen Texten, vielen Konten, fehlenden Werten und Signaturvarianten"
+      ],
+      "acceptance": [
+        "Keine Überlagerung/Abschneidung in Referenzen; Inhalte/Summen vollständig, Unterschriften an vorgesehenen Stellen",
+        "Export aus Schnappschuss bleibt unabhängig von späteren Daten- und Vorlagenänderungen reproduzierbar nachvollziehbar"
+      ],
+      "rollback": "Alte Vorlagen/Renderer und fertige PDFs bewahren; neue Ausgabe erzeugt neue Version statt Überschreiben.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-09",
+        "E-13",
+        "E-17",
+        "E-18",
+        "U-01",
+        "U-11",
+        "U-13",
+        "U-15",
+        "U-20",
+        "U-29"
+      ],
+      "openDecisionIds": [],
+      "decisionIds": []
+    },
+    {
+      "id": "AP-21",
+      "title": "Bürofinanzen, Rechnungen, Fahrten und Qualifikationen migrieren",
+      "phase": "C",
+      "dependencies": [
+        "AP-13",
+        "AP-16"
+      ],
+      "owner": "Fachteam Büro",
+      "effort_person_days": {
+        "min": 10,
+        "max": 18
+      },
+      "scope": "Bürowerte, Ausgangsrechnungen, Fahrtkosten und Qualifikationen vom Fallzustand trennen. Fachliche Gültigkeitszeiträume und bestehende Vergütungsregeln bewahren.",
+      "deliverables": [
+        "Büromodule mit Rollen, Nachweisen, Nummernkreisen und Exporten",
+        "Vorbelegungsdienst mit Herkunft, Gültigkeit und manueller Korrektur"
+      ],
+      "acceptance": [
+        "Kein Nummern-/Betragsduplikat bei Retry; historische Rechnungen bleiben identisch",
+        "Qualifikationswechsel beeinflusst nur fachlich zulässige neue Vorbelegung, keine stille rückwirkende Änderung"
+      ],
+      "rollback": "Belegnummern und veröffentlichte Ausgaben nie neu vergeben; additive Datenmigration.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-09",
+        "E-13",
+        "E-17",
+        "E-18",
+        "U-01",
+        "U-11",
+        "U-15"
+      ],
+      "openDecisionIds": [],
+      "decisionIds": []
+    },
+    {
+      "id": "AP-22",
+      "title": "Anmeldung, Einstellungen, Rollen und Demo bereinigen",
+      "phase": "C",
+      "dependencies": [
+        "AP-07",
+        "AP-10",
+        "AP-12",
+        "AP-13"
+      ],
+      "owner": "Frontend + Identity/Server",
+      "effort_person_days": {
+        "min": 6,
+        "max": 10
+      },
+      "scope": "Serverlogin ohne lokalen Modus, übersichtliche Rollen-/Büroeinstellungen und gemeinsame Geheimnisspeicherung einführen. Modusfelder kontrolliert migrieren. Demo in getrennten Datenraum/Instanz überführen.",
+      "deliverables": [
+        "Neue Einstellungsstruktur und Migration der Rollen/Modusangaben",
+        "Logo-/Briefkopf-/Theme-/Zeitzonen-/API-Key-Abläufe mit Regressionen",
+        "Feldweise Einstellungs-/Kontenmigrationsmatrix: behalten, verschieben, entfernen; Entscheidungen D-07/D-08 dokumentiert",
+        "Je Büro konfigurierbare Offline-Dauer, Büro-/Privatgeräteregeln, Zusatzsicherung und getrennte Aufbewahrungsfristen; Anzeige des eingerichteten Betriebsprofils und Exportauswahl"
+      ],
+      "acceptance": [
+        "Blanker Server ohne Paketbau-Nutzer; Alt-Nutzer-IDs und Rechte bleiben erhalten",
+        "Kein Demo-Treffer im Produktivbetrieb; Logout beendet Sitzung; API-Key-Status und Test korrekt",
+        "Keine lokale-only-Berechtigung erhält bei Entfernung des Server-Lokalmodus still neue Serverrechte",
+        "Büroregeln werden nur berechtigt geändert; Grenzen, notwendige Nachweise und offene Synchronisierung bleiben sichtbar; Regelwechsel löscht keine unbestätigte Arbeit"
+      ],
+      "rollback": "Lokale-only-Konten nicht automatisch online berechtigen; Demo-/Produktivdaten nie zusammenführen.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-09",
+        "E-17",
+        "E-18",
+        "U-01",
+        "U-07",
+        "U-11",
+        "U-15",
+        "U-21",
+        "U-22",
+        "U-23",
+        "U-24",
+        "U-25",
+        "U-26"
+      ],
+      "openDecisionIds": [
+        "D-03",
+        "D-06",
+        "D-07",
+        "D-08",
+        "D-09"
+      ],
+      "decisionIds": [
+        "D-03",
+        "D-06",
+        "D-07",
+        "D-08",
+        "D-09",
+        "D-10"
+      ]
+    },
+    {
+      "id": "AP-23",
+      "title": "Alle Zusatzschnittstellen und Provider auf Verträge umstellen",
+      "phase": "C",
+      "dependencies": [
+        "AP-06",
+        "AP-08",
+        "AP-09",
+        "AP-11",
+        "AP-17",
+        "AP-18"
+      ],
+      "owner": "Integrationsteam",
+      "effort_person_days": {
+        "min": 8,
+        "max": 14
+      },
+      "scope": "Bestehende Browsererweiterung, SP-Plugin, MCP, WebDAV und eingesetzte Mail-/Kalender-/Bank-/KI-Anbindungen inventargemäß absichern. Gleiches Rechte-/Schreibmodell und Versionierungsregeln nutzen.",
+      "deliverables": [
+        "Adapterkatalog, kompatible Clients und dokumentierte API-/Paketversionen",
+        "Timeout-/Retry-/SSRF-/Scope-Regeln und Provider-Sandboxprüfungen"
+      ],
+      "acceptance": [
+        "Kein alternativer Schreibkanal umgeht Revisionen oder Fallrechte",
+        "Provider-Ausfall, abgelaufener Token und mehrdeutige Antwort führen zu kontrolliertem Ergebnis"
+      ],
+      "rollback": "Unterstützte Alt-Adapter über Dienste erhalten; nicht kompatible Clients sicher sperren statt Daten gefährden.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-09",
+        "E-17",
+        "U-01",
+        "U-07",
+        "U-15"
+      ],
+      "openDecisionIds": [],
+      "decisionIds": [
+        "D-10"
+      ]
+    },
+    {
+      "id": "AP-24",
+      "title": "Offlineformat, Outbox und Konfliktimport definieren",
+      "phase": "D",
+      "dependencies": [
+        "AP-07",
+        "AP-08",
+        "AP-09",
+        "AP-10",
+        "AP-20",
+        "AP-22"
+      ],
+      "owner": "Offline + Persistenz",
+      "effort_person_days": {
+        "min": 8,
+        "max": 14
+      },
+      "scope": "Versionierte Fall-/Vorlagenmanifeste, getrennte verschlüsselte Daten- und Änderungsdateien sowie Importprotokoll entwickeln. Rechte, Basisrevisionen, Duplikate, unbekannte Formate und Alt-Pakete behandeln.",
+      "deliverables": [
+        "Dokumentiertes portables Format und Reader/Writer mit Prüfsummen",
+        "Transaktionaler Import, Quittungen und dreiseitiger Konfliktvergleich",
+        "Vertrag für aktuelle und vorherige Formatfassung über 90 Tage, technische Fristberechnung und Rettungsimport danach; Abgleich mit je Büro gewählter Offline-Dauer"
+      ],
+      "acceptance": [
+        "F-16/F-17/F-20/F-21 bestehen; doppelter Import hat keine zweite Wirkung",
+        "Kein unbekanntes Feld verschwindet; Konflikte und abgewiesene Änderungen bleiben exportierbar",
+        "Abgelaufene Offlinefreigabe oder Formatunterstützung löscht weder Entwürfe noch Outbox; überlange Offline-Dauer wird vorab kenntlich gemacht und ein autorisierter Rettungsweg bleibt erhalten"
+      ],
+      "rollback": "Originalpakete unverändert behalten; Import zunächst prüfbar vorbereiten und erst dann fachlich verbuchen.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-14",
+        "U-07",
+        "U-08",
+        "U-13",
+        "U-14",
+        "U-18",
+        "U-20",
+        "U-21",
+        "U-22",
+        "U-28",
+        "U-29"
+      ],
+      "openDecisionIds": [
+        "D-06",
+        "D-09"
+      ],
+      "decisionIds": [
+        "D-04",
+        "D-06",
+        "D-09",
+        "D-10"
+      ]
+    },
+    {
+      "id": "AP-25",
+      "title": "Browser-Außendienst mit PWA-Techniken ohne Installationspflicht",
+      "phase": "D",
+      "dependencies": [
+        "AP-03",
+        "AP-12",
+        "AP-13",
+        "AP-24"
+      ],
+      "owner": "Mobile/Offline",
+      "effort_person_days": {
+        "min": 10,
+        "max": 18
+      },
+      "scope": "Leere Offline-Hülle, getrennte verschlüsselte Datenbank/Outbox, Vorbereitung, Foreground-Sync und kontrollierte Updates im Browser integrieren. App- und PWA-Installation dürfen keine Voraussetzung sein. Je Büro gewählte Offline-, Geräte- und Zusatzsicherungsregeln umsetzen.",
+      "deliverables": [
+        "Browseranwendung mit nachgewiesener Offlinebereitschaft, Speicherprüfung sowie Sync-/Sicherungsstand; optionaler PWA-Start ersetzt keinen Browsernachweis",
+        "Geräte-/Browsermatrix, Update-/Migrationstest und Wiederherstellungsweg"
+      ],
+      "acceptance": [
+        "Reale iOS-/Android-Tests plus drei Desktop-Systeme; F-02/F-15/F-18 bestanden im zugesagten Betriebsprofil",
+        "Kein Cache vertraulicher Server-HTML; kein Zwang zu Background Sync; Schlüssel-/Benutzerwechsel vermischt keine Daten",
+        "Vor G5 besteht der vollständige Browser-Außendienst ohne verpflichtende Installation auf Windows, macOS, Linux, iOS und Android; ein fehlendes System bleibt ein Freigabeblocker",
+        "Freiwilliger oder vom Büro vorgeschriebener verschlüsselter Sicherungsexport zeigt Stand und Grenzen; bloßes Herunterladen gilt nicht als Nachweis einer Kopie auf unabhängigem Speicher"
+      ],
+      "rollback": "Vor Aktivierung neuer Hülle lokale Entwürfe/Migrationssicherung erhalten; alte Assets erst nach sicherem Übergang entfernen.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "U-10",
+        "U-19",
+        "U-20",
+        "U-28",
+        "U-30",
+        "U-31"
+      ],
+      "openDecisionIds": [
+        "D-05",
+        "D-06"
+      ],
+      "decisionIds": [
+        "D-04",
+        "D-05",
+        "D-06",
+        "D-10"
+      ]
+    },
+    {
+      "id": "AP-26",
+      "title": "HTML-Download mit Blanko-/Einstellungsexport erhalten",
+      "phase": "D",
+      "dependencies": [
+        "AP-05",
+        "AP-15",
+        "AP-16",
+        "AP-17",
+        "AP-18",
+        "AP-19",
+        "AP-20",
+        "AP-22",
+        "AP-24"
+      ],
+      "owner": "Portable/Mobile",
+      "effort_person_days": {
+        "min": 7,
+        "max": 12
+      },
+      "scope": "Separates Downloadziel erzeugen, das Programm, Konfiguration, Daten und PDF-Vorlagen trennt. Blanko oder Auswahl einzelner Einstellungen aus sicherer Positivliste; keine DOM-Gesamtkopie. Plattformabhängige Dateiadapter und Rettungsexport.",
+      "deliverables": [
+        "Downloadpakete app.html/Manifest/optionale settings/separate Templates und Daten",
+        "Explizite Import-/Speicheroberfläche und dokumentierte unterstützte Startwege"
+      ],
+      "acceptance": [
+        "Blanko in frischem Profil ohne übernommene Einstellung; Erkennungswerte sämtlicher Geheimnisse in keiner Paketdatei",
+        "Dateistart/Dateiauswahl auf Zielsystemen praktisch geprüft; Alternativwege bleiben im Browser ohne Installationspflicht, kein Sicherheitsflag erforderlich",
+        "Die Positivliste nach D-07 ist feldweise freigegeben; Blanko, Einzel- und Teilauswahl übernehmen ausschließlich die gewählten zulässigen Einstellungen"
+      ],
+      "rollback": "Bestehende lokale Daten nur über konvertierenden Import; keine Überschreibung einer alten Datendatei ohne neue gesicherte Fassung.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "U-19",
+        "U-20",
+        "U-22",
+        "U-23",
+        "U-24",
+        "U-25",
+        "U-26",
+        "U-27",
+        "U-28",
+        "U-29",
+        "U-30",
+        "U-31"
+      ],
+      "openDecisionIds": [
+        "D-05",
+        "D-06",
+        "D-07"
+      ],
+      "decisionIds": [
+        "D-04",
+        "D-05",
+        "D-06",
+        "D-07",
+        "D-10"
+      ]
+    },
+    {
+      "id": "AP-27",
+      "title": "Sicherheitsabnahme und Datenschutztechnik",
+      "phase": "E",
+      "dependencies": [
+        "AP-07",
+        "AP-08",
+        "AP-09",
+        "AP-12",
+        "AP-22",
+        "AP-23",
+        "AP-24",
+        "AP-25",
+        "AP-26"
+      ],
+      "owner": "Security-Verantwortlicher + unabhängiger Reviewer",
+      "effort_person_days": {
+        "min": 8,
+        "max": 14
+      },
+      "scope": "Threat Model aus AP-03 aktualisieren und ASVS-5.0-Level-2-Prüfmatrix abarbeiten. Besondere Prüfung von Fallrechten, Dateien, Browsercache, Offline-Schlüsseln, KI-Werkzeugen, Import und Session/CSRF/CSP.",
+      "deliverables": [
+        "Prüfbericht mit Befunden, Nachtests und verbleibenden Grenzen",
+        "Geheimnis-/Lizenz-/Dependency-/SBOM-Prüfungen sowie Datenaufbewahrungs-/Löschkonzept"
+      ],
+      "acceptance": [
+        "Kein ungeklärter kritischer/hoher Befund an Daten- oder Berechtigungsgrenzen",
+        "Negative Tests für alle Zugänge inklusive Suchtreffer, Counts, WebSocket, Export und fremde Fall-IDs",
+        "Konfigurierbare Büroregeln umgehen keine Rechte- oder Verschlüsselungsgrenzen; Aufbewahrung, Schlüsselrettung und Regelablauf einschließlich offener Offlinearbeit sind geprüft"
+      ],
+      "rollback": "Bei Befund betroffenen Weg deaktivieren oder fixen; kein Release durch bloßes Akzeptieren von Datenzugriffsrisiken.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-03",
+        "U-07",
+        "U-09",
+        "U-26",
+        "U-27"
+      ],
+      "openDecisionIds": [
+        "D-06",
+        "D-07",
+        "D-09",
+        "D-12",
+        "D-13"
+      ],
+      "decisionIds": [
+        "D-06",
+        "D-07",
+        "D-09",
+        "D-12",
+        "D-13"
+      ]
+    },
+    {
+      "id": "AP-28",
+      "title": "Produktionsbetrieb, Backup, Restore und Alarmierung",
+      "phase": "E",
+      "dependencies": [
+        "AP-02",
+        "AP-09",
+        "AP-10",
+        "AP-11"
+      ],
+      "owner": "Betrieb/SRE + Server",
+      "effort_person_days": {
+        "min": 7,
+        "max": 12
+      },
+      "scope": "Beide beschlossenen Betriebsprofile als getrennte Referenzkonfigurationen ausarbeiten: Einzelserver mit externer Sicherung sowie optional je Büroinstallation redundanter Betrieb einschließlich Dokumentablage. Sicherungen, Schlüsselwiederherstellung, Monitoring und Runbooks implementieren; erhöhten Ausfallschutz als noch nicht geschätzten zusätzlichen Teilumfang konkretisieren.",
+      "deliverables": [
+        "Versionierte Betriebskonfiguration, Restore-Automatisierung, Metriken/Alarme",
+        "Rollen im Betrieb, Wartungsfenster und protokollierte RPO-/RTO-Proben",
+        "Auswahl und prüfbare Schutzanzeige beider Profile; getrennt geschätzte Teilaufgaben, Infrastrukturvoraussetzungen und Betreiberanleitung für das erhöhte Profil",
+        "Getrennt je Büro einstellbare Retention für Backups, Dokumentversionen, Änderungsprotokolle und Offlinekopien mit begründeten, noch festzulegenden Voreinstellungen"
+      ],
+      "acceptance": [
+        "Vollständiger Restore auf leerer Zielumgebung mit Dateien, Rechten und PDF-Ausgabe innerhalb des gewählten Ziels",
+        "Voller Datenträger, Backup-Lücke und fehlende Dokumentversion werden erkannt; keine PII in Telemetrie",
+        "D-03 benennt ausdrücklich genehmigte Ausfallgrenzen; das Grundprofil wird ohne diese Entscheidung nicht als Erfüllung absoluter Verlustfreiheit ausgegeben",
+        "Beide angebotenen Profile bestehen ihre eigenen Wiederherstellungs-/Ausfallprüfungen; erhöhtes Schutzniveau wird nur bei nachgewiesener Einrichtung angezeigt, nicht durch bloße Auswahl eines Schalters",
+        "Retention entfernt keine für gültige Sicherungen, Rollback oder ungeklärte Änderungen benötigten Daten; konkrete Fristen und fachliche Vorgaben sind dokumentiert"
+      ],
+      "rollback": "Alte Sicherungen und Schlüssel bis nach verifizierter Übergabe erhalten; kein Cleanup vor Retentionsfreigabe.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-10",
+        "E-14",
+        "E-15",
+        "U-07",
+        "U-08",
+        "U-12",
+        "U-13",
+        "U-17"
+      ],
+      "openDecisionIds": [
+        "D-03",
+        "D-09",
+        "D-12"
+      ],
+      "decisionIds": [
+        "D-03",
+        "D-09",
+        "D-12"
+      ]
+    },
+    {
+      "id": "AP-29",
+      "title": "Last, Langzeit und gezielte Ausfalltests",
+      "phase": "E",
+      "dependencies": [
+        "AP-14",
+        "AP-15",
+        "AP-16",
+        "AP-17",
+        "AP-18",
+        "AP-19",
+        "AP-20",
+        "AP-21",
+        "AP-22",
+        "AP-23",
+        "AP-25",
+        "AP-26",
+        "AP-27",
+        "AP-28"
+      ],
+      "owner": "QA + Performance/Server",
+      "effort_person_days": {
+        "min": 8,
+        "max": 14
+      },
+      "scope": "Leistungsbudgets auf dokumentierter Hardware prüfen. Alle F-01 bis F-24 testen, 72-Stunden-Mischlast und Stressreserve ausführen. Ressourcen und gefundene Engpässe gezielt optimieren.",
+      "deliverables": [
+        "Leistungs-/Fehlerbericht mit Datenbank-/Dateinachweisen und reproduzierbaren Profilen",
+        "Nachtests behobener Engpässe; festgelegte Betriebsgrenzen"
+      ],
+      "acceptance": [
+        "Keine ungeklärten Datenverluste, Doppelwirkungen, OOMs oder stillen Ladefehler",
+        "2.000-Fälle-/10-Nutzer-Profil und große Einzelfälle erfüllen bestätigte Budgets; Metadaten-/Binärtests klar getrennt",
+        "Vor G5 besteht mindestens ein vollständiger Browser-Außendienstweg ohne Installationspflicht je Windows, macOS, Linux, iOS und Android auf gepflegten OS-Versionen und aktuellen Browsern",
+        "Referenzkonfigurationen beider Betriebsprofile und die Grenzen konfigurierbarer Offline-/Sicherungs-/Aufbewahrungsregeln sind geprüft; Messungen gelten je Büroinstallation"
+      ],
+      "rollback": "Optimierung einzeln zurücknehmbar; keine Dauerhaftigkeit, Validierung oder Rechte für bessere Messwerte abschalten.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-06",
+        "E-07",
+        "E-08",
+        "E-11",
+        "E-14",
+        "E-15",
+        "U-03",
+        "U-08",
+        "U-09",
+        "U-10",
+        "U-11",
+        "U-12",
+        "U-16",
+        "U-17",
+        "U-31",
+        "U-33"
+      ],
+      "openDecisionIds": [
+        "D-02",
+        "D-03",
+        "D-05",
+        "D-06",
+        "D-09",
+        "D-13"
+      ],
+      "decisionIds": [
+        "D-02",
+        "D-03",
+        "D-05",
+        "D-06",
+        "D-09",
+        "D-13"
+      ]
+    },
+    {
+      "id": "AP-30",
+      "title": "Verbindliche Build-, Beta- und Stable-Promotion",
+      "phase": "E",
+      "dependencies": [
+        "AP-01",
+        "AP-04",
+        "AP-05",
+        "AP-28"
+      ],
+      "owner": "Build/Release + QA",
+      "effort_person_days": {
+        "min": 4,
+        "max": 7
+      },
+      "scope": "Neue CI-Kette, signier-/prüfbare Artefakte, Versions-/Migrationskontrolle und echte Containerprüfung aufbauen. Beta/Stable promovieren dieselben geprüften Artefakte.",
+      "deliverables": [
+        "Release-Gates und Revisionsbindung externer Geräte-/Last-/Restore-Nachweise",
+        "Upgrade-/Rollbackanleitung, SBOM, Checksummen, Vorlagen-/Schema-/Paketmanifest",
+        "GitHub-Auslieferung der Versionslinie 0.8 mit Installations-/Upgradeanleitung für getrennte Büroinstallationen und beiden Betriebsprofilen; Freigabe ohne festen Kalendertermin"
+      ],
+      "acceptance": [
+        "Absichtlich fehlerhafter Test oder fehlendes Asset verhindert Veröffentlichung",
+        "Frische Installation und Upgrade einer vorherigen Version mit echter Datenablage erfolgreich",
+        "Vor G6 lädt/führt die neue Serverauslieferung die alte Großdatei nicht mehr aus; portable HTML entsteht aus modularen Quellen",
+        "Auslieferungsartefakte enthalten keine Bürodaten, Geheimnisse oder vorkonfigurierten Paketbau-Nutzer; jede Neuinstallation erhält eigene Konfiguration und Identität"
+      ],
+      "rollback": "Vorheriges geprüftes Artefakt vorhalten; zurückrollen nur innerhalb dokumentierter Schema-/Clientkompatibilität.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-22",
+        "U-02",
+        "U-10",
+        "U-13",
+        "U-14",
+        "U-15"
+      ],
+      "openDecisionIds": [
+        "D-03",
+        "D-11"
+      ],
+      "decisionIds": [
+        "D-03",
+        "D-10",
+        "D-11"
+      ]
+    },
+    {
+      "id": "AP-31",
+      "title": "Generalprobe und kontrollierten Daten-Cutover vorbereiten",
+      "phase": "F",
+      "dependencies": [
+        "AP-10",
+        "AP-20",
+        "AP-23",
+        "AP-24",
+        "AP-27",
+        "AP-28",
+        "AP-29",
+        "AP-30"
+      ],
+      "owner": "Architektur + Betrieb + Büro",
+      "effort_person_days": {
+        "min": 6,
+        "max": 10
+      },
+      "scope": "Zwei vollständige Migrations-/Rollback-Generalproben. Finale Datenvergleichsberichte und abgestimmtes Wechselprotokoll erstellen. Produktiven Datenbankwechsel getrennt von der Aktivierung aller neuen Oberflächen planen.",
+      "deliverables": [
+        "Zeitplan mit Schreibbarriere, offenen Offlinepaketen und Zuständigkeiten",
+        "Null ungeklärte Abweichungen, geprüfter Rückweg vor/nach ersten neuen Schreibungen",
+        "Abgleich aller 55 Anforderungs-IDs mit Release-Nachweisen und ausdrücklich entschiedenen Grenzen; keine still umgedeuteten offenen Vorgaben"
+      ],
+      "acceptance": [
+        "Alle Gate-Nachweise für dieselbe Kandidatenrevision; vollständiger Datei-/Fach-/Rechteabgleich",
+        "Ein Schreiber zu jedem Zeitpunkt; alte Sicherung wird nach neuen Writes nicht als verlustfreier Rollback ausgegeben"
+      ],
+      "rollback": "Vor erster neuer Schreibung alte Instanz reaktivierbar; danach kompatibler Code oder geprüfte verlustfreie Rückübertragung, sonst Vorwärtskorrektur.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-15",
+        "E-21",
+        "U-02",
+        "U-18"
+      ],
+      "openDecisionIds": [
+        "D-03",
+        "D-08",
+        "D-11"
+      ],
+      "decisionIds": [
+        "D-03",
+        "D-08",
+        "D-10",
+        "D-11"
+      ]
+    },
+    {
+      "id": "AP-32",
+      "title": "Büropilot und gestufte Stable-Freigabe",
+      "phase": "F",
+      "dependencies": [
+        "AP-31"
+      ],
+      "owner": "Produktverantwortlicher + QA + Betrieb",
+      "effort_person_days": {
+        "min": 5,
+        "max": 8
+      },
+      "scope": "Mindestens zehn Büroarbeitstage mit ausgewählten Nutzern und anschließend stufenweiser Freigabe der Routen. Alle Fachbereiche gegen Matrix abzeichnen; ungeklärte Defekte zuerst bearbeiten.",
+      "deliverables": [
+        "Pilotprotokoll, fachliche Abnahme und Go/No-Go-Entscheidung",
+        "Freigabefähiger Stable-Kandidat mit Betriebs-/Supportzuständigkeit"
+      ],
+      "acceptance": [
+        "Keine Blocker aus Datenverlust, Rechtefehlern, PDF-Verlusten oder Restore; relevante Alltagswege praktisch bestätigt",
+        "Tatsächliche Nutzung und seltene Fachvorgänge durch Referenztests gemeinsam abgedeckt",
+        "Offene Restbefunde nur nach dokumentierter Entscheidung D-13; Daten-/Rechte-/Funktions-/Restoreblocker bleiben Freigabehindernisse"
+      ],
+      "rollback": "Betroffene neue Route zurückschalten, sofern Vertragskompatibilität besteht; Daten niemals auf alten Pilotstand zurücksetzen.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-15",
+        "E-21",
+        "U-01",
+        "U-02",
+        "U-09",
+        "U-12"
+      ],
+      "openDecisionIds": [
+        "D-11",
+        "D-12",
+        "D-13"
+      ],
+      "decisionIds": [
+        "D-11",
+        "D-12",
+        "D-13"
+      ]
+    },
+    {
+      "id": "AP-33",
+      "title": "Wartbarkeit und langfristige Betriebsübergabe",
+      "phase": "F",
+      "dependencies": [
+        "AP-32"
+      ],
+      "owner": "Technischer Eigentümer + Betrieb",
+      "effort_person_days": {
+        "min": 3,
+        "max": 5
+      },
+      "scope": "Runbooks, Architektur, API-/Daten-/Paketformate und Exportfähigkeit für eigenständige Betreiber und einen unabhängigen Übergabeprüfer dokumentieren. Umsetzung erfolgt hauptsächlich durch Auftraggeber und KI; Review- und Betriebsbesetzung bleibt in D-12 zu klären. Regelmäßige Updates, Sicherheitsreaktion und Restore-Übungen im Betrieb verankern.",
+      "deliverables": [
+        "Wartungskalender, Zuständigkeiten und Abhängigkeits-/Versionsinventar",
+        "Onboardingnachweis: unabhängige Person baut, stellt wieder her und ergänzt eine kleine isolierte Änderung"
+      ],
+      "acceptance": [
+        "Kein notwendiger Schritt hängt an einem privaten Rechner oder nur einer Person",
+        "Datenexport und Wiederherstellung bleiben ohne ursprünglichen KI-Chat verständlich"
+      ],
+      "rollback": "Dokumentation mit jeder Änderung pflegen; kein Entfernen alter Migrations-/Formatleser vor Ende ihrer Unterstützung.",
+      "kind": "pflicht",
+      "status": "geplant",
+      "requirementIds": [
+        "E-10",
+        "E-12",
+        "E-15",
+        "E-22",
+        "U-03",
+        "U-05",
+        "U-12",
+        "U-13",
+        "U-14"
+      ],
+      "openDecisionIds": [
+        "D-03",
+        "D-09",
+        "D-12"
+      ],
+      "decisionIds": [
+        "D-03",
+        "D-09",
+        "D-12"
+      ]
+    },
+    {
+      "id": "AP-34",
+      "title": "Installierter Tauri-Außendienstclient – nicht für 0.8 eingeplant",
+      "phase": "D",
+      "dependencies": [],
+      "owner": "Kein Umsetzungsverantwortlicher; historische Option",
+      "effort_person_days": {
+        "min": 0,
+        "max": 0
+      },
+      "scope": "Die frühere bedingte Tauri-Option entfällt aus dem aktiven Bauplan nach Q-03/D-04. Die ID bleibt zur Nachverfolgbarkeit erhalten. Ein gescheiterter Browsernachweis aktiviert dieses Paket nicht.",
+      "deliverables": [
+        "Kein nativer Build im aktuellen Umfang; historische Vergleichsbewertung bleibt dokumentiert"
+      ],
+      "acceptance": [
+        "Keine aktive Anforderung, Abhängigkeit oder Freigabe setzt AP-34 voraus; Browserpflicht bleibt bestehen"
+      ],
+      "rollback": "Eine spätere native Erweiterung benötigt einen eigenen Auftrag und ersetzt nicht die beschlossene Browserunterstützung.",
+      "kind": "ausgeschlossen",
+      "status": "nicht_eingeplant",
+      "requirementIds": [],
+      "openDecisionIds": [],
+      "decisionIds": []
+    }
+  ],
+  "requirementsFile": "anforderungsabgleich.json",
+  "requirementsDocument": "07-anforderungsabgleich.md",
+  "updatedAt": "2026-09-21",
+  "confirmedChoicesFile": "anforderungsabgleich.json",
+  "confirmedChoicesDocument": "08-beschlossene-entscheidungen.md",
+  "delivery": {
+    "versionLine": "0.8",
+    "channel": "GitHub",
+    "installationModel": "eigenständige Installation je Büro",
+    "mandatoryAppInstallation": false
+  },
+  "execution": {
+    "primaryImplementers": [
+      "Auftraggeber",
+      "KI"
+    ],
+    "fixedReleaseDate": null,
+    "releaseCriteria": [
+      "Funktionsgleichheit",
+      "bestandene Prüfungen"
+    ],
+    "independentReviewStaffing": "offen"
+  },
+  "releaseConstraints": [
+    "Vollständiger Browser-Außendienst ohne verpflichtende App- oder PWA-Installation auf allen fünf Plattformen; kein automatischer Tauri-Ersatz.",
+    "Beide angebotenen Betriebsprofile besitzen geprüfte Referenzkonfigurationen und ehrliche Schutzanzeigen; konkrete Ausfallgrenzen bleiben D-03.",
+    "Jede Installation erhält eigene Daten, Konfiguration und Betriebszuständigkeit; GitHub enthält keine Büro- oder Zugangsdaten."
+  ]
+}

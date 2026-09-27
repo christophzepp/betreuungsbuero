@@ -363,7 +363,7 @@ test('Import-Merge: alle fuenf Bestaende werden zurueckgespielt, gepflegte Arbei
 test('loadBueroLocal-Whitelist: die fuenf Bestaende ueberleben das Neuladen (ausgefuehrt)', () => {
   /* Die Whitelist baut window.bueroLocal komplett neu - was hier fehlt, ist nach jedem
      Reload weg und der naechste Export laese es leer. Genau dieser Verlustweg wird geprueft. */
-  const kern = schnipsel('function loadBueroLocal(){', 'function saveBueroLocal(){');
+  const kern = schnipsel('function loadBueroLocal(){', 'function saveBueroLocal(');
   const ctx = {
     console,
     BUERO_LOCAL_KEY: 'betreuungsbuero.bueroLocal.v1',

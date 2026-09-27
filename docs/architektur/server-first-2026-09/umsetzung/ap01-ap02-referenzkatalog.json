@@ -1,0 +1,163 @@
+{
+  "version": 1,
+  "syntheticOnly": true,
+  "date": "2026-09-27",
+  "profiles": [
+    {
+      "id": "SF-REF-001",
+      "kind": "small",
+      "fixture": "server/tests/fixtures/server-first/pilot-case.json",
+      "rights": [
+        "owner: read/write",
+        "reader: read only",
+        "foreign/anonymous: denied"
+      ],
+      "expected": {
+        "income": "1100.10",
+        "expenses": "725.35",
+        "birthDate": "1980-02-29",
+        "unknownValues": [
+          null,
+          "",
+          0,
+          false,
+          []
+        ]
+      }
+    },
+    {
+      "id": "SF-REF-002",
+      "kind": "large",
+      "fixture": "server/tests/fixtures/server-first/reference-cases.cjs",
+      "expected": {
+        "exportEntries": 500,
+        "diagnoses": 100,
+        "lastExportAmount": "4.99"
+      }
+    },
+    {
+      "id": "SF-REF-003",
+      "kind": "historical",
+      "fixture": "server/tests/fixtures/server-first/reference-cases.cjs",
+      "expected": {
+        "archiveVersion": 0,
+        "income": "0.00",
+        "obsoleteValues": [
+          "ÄÖÜ ß",
+          0,
+          false,
+          null
+        ]
+      }
+    },
+    {
+      "id": "SF-REF-004",
+      "kind": "conflict",
+      "fixture": "server/tests/server-first-pilot-persistence.test.cjs",
+      "expected": {
+        "differentPaths": "both retained",
+        "sameLegacyPath": "last-write-wins (documented deviation)",
+        "offlineReturn": "same-field conflict refused; other server changes retained"
+      }
+    }
+  ],
+  "criteria": [
+    {
+      "package": "AP-01",
+      "id": "reference-values",
+      "test": "server/tests/server-first-pilot-persistence.test.cjs",
+      "proof": "Real SQLite and HTTP; all four profiles, rights, unknown values and reports."
+    },
+    {
+      "package": "AP-01",
+      "id": "storage-failure",
+      "test": "server/tests/server-first-pilot-persistence.test.cjs",
+      "proof": "SQLite trigger aborts the actual UPDATE; HTTP 500, no ok:true, previous persisted values survive."
+    },
+    {
+      "package": "AP-01",
+      "id": "false-success",
+      "test": "tools/server-first/run_baseline.py",
+      "proof": "Mutation removes the actual UPDATE in a disposable archive; strict expected-data assertion must fail."
+    },
+    {
+      "package": "AP-01",
+      "id": "reload",
+      "test": "server/tests/server-first-pilot-persistence.test.cjs",
+      "proof": "Independent process opens real SQLite; full browser reload verifies all persisted fixture values."
+    },
+    {
+      "package": "AP-01",
+      "id": "offline-conflicts",
+      "test": "server/tests/server-first-offline-return.test.cjs",
+      "proof": "Real legacy return functions and routes; conflicts, partial rights, storage errors and source-slice tests retained."
+    },
+    {
+      "package": "AP-01",
+      "id": "browser",
+      "test": "server/tests/helpers/server-first-browser.cjs",
+      "proof": "Real login, navigation, case/report reload, actual renderer, health UI edit and independent SQLite confirmation after restore."
+    },
+    {
+      "package": "AP-01",
+      "id": "ci",
+      "test": ".github/workflows/server-first-ci.yml",
+      "proof": "Node 22/24 on Ubuntu; fresh dependency installation, full suite, browser restore and expected failing mutation; evidence artifacts."
+    },
+    {
+      "package": "AP-02",
+      "id": "backup-restore-equality",
+      "test": "server/tests/server-first-restore-rehearsal.test.cjs",
+      "proof": "Real backup/restore CLIs, SQLite integrity, cases/reports/users/rights, nine files, HTML/templates and source isolation."
+    },
+    {
+      "package": "AP-02",
+      "id": "unsafe-backup",
+      "test": "server/tests/server-first-restore-rehearsal.test.cjs",
+      "proof": "Corrupt snapshot fails before target mutation; dry-run also preserves target."
+    },
+    {
+      "package": "AP-02",
+      "id": "keys-and-startup",
+      "test": "server/tests/helpers/server-first-recovery-startup.cjs",
+      "proof": "Missing/wrong key and premature release refused; quarantine and protected DB state retained; correct pair rekeyed, released and restarted."
+    },
+    {
+      "package": "AP-02",
+      "id": "pdf-output",
+      "test": "server/tests/helpers/server-first-browser.cjs",
+      "proof": "Actual application regenerates a stored synthetic report before and after restore with a fixed PDF timestamp; SHA-256 equality and one-page parsing."
+    }
+  ],
+  "knownDeviations": [
+    {
+      "id": "LEGACY-REVISION",
+      "observed": "The legacy stammdaten PATCH endpoint has no revision precondition for concurrent edits of the same field.",
+      "followUp": "AP-07",
+      "acceptanceImpact": "Recorded baseline behavior, not an accepted new concurrency contract."
+    },
+    {
+      "id": "LEGACY-READER-AUTOSAVE",
+      "observed": "Opening a read-only case triggers automatic normalization/report writes which the real server denies with 403; the UI may show a save warning.",
+      "followUp": "AP-07/AP-12",
+      "acceptanceImpact": "Server rights and original case values are preserved. No claim of a clean read-only UX."
+    },
+    {
+      "id": "LEGACY-DERIVED-STATE",
+      "observed": "Browser initialization adds derived/default values and relocates exportHistory and archives out of caseData.",
+      "followUp": "AP-00/AP-04",
+      "acceptanceImpact": "Browser proof compares every stored reference value via the real client mapping; generated defaults are not mistaken for lost persisted data."
+    }
+  ],
+  "boundaries": [
+    "Baseline packages only; full PDF catalog AP-20, production backup/HA AP-28, platform/load acceptance AP-29, release enforcement AP-30.",
+    "Independent human review and higher-level gates are recorded separately from technical package completion."
+  ],
+  "referencePdf": {
+    "file": "server/tests/fixtures/server-first/reference-report.pdf",
+    "sha256": "bedea6f62a797cdd84372fd33eb708f6b283447f3a5dea026d9dd9605e957aae",
+    "pages": 1,
+    "fixedTime": "2026-09-21T12:00:00Z",
+    "visualCheck": "2026-09-27; rendered with Poppler; title, synthetic case name, reference id and both amounts readable, no clipping"
+  }
+}

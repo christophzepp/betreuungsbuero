@@ -177,7 +177,7 @@ test('Import: Registry und Karten-Einstellungen NUR bei Leerstand', () => {
 /* ═══════════ 4. Vorbefund: die Whitelist verschluckt die Exportfelder nicht mehr ═══════════ */
 
 test('loadBueroLocal: aiChats, caseOuttakes und fileNameStyle ueberleben das Neuladen', () => {
-  const kern = schnipsel('function loadBueroLocal(){', 'function saveBueroLocal(){');
+  const kern = schnipsel('function loadBueroLocal(){', 'function saveBueroLocal(');
   const gespeichert = JSON.stringify({
     aiChats: [{ id: 'chat-1' }],
     caseOuttakes: [{ id: 'out-1' }],

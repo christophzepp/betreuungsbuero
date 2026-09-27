@@ -17,7 +17,8 @@ test('Ungültige oder fehlende Daten werden als ohne Termin behandelt',()=>{cons
 test('Mobile Oberfläche nutzt Originalformular und Speicherlogik, keine zweite Aufgaben-Datenbank',()=>{
  const pilot=html.slice(html.indexOf('/* ===== Aufgaben-Pilot:'),html.indexOf('/* ===== Vollständige Aufgabenliste'));
  assert.match(pilot,/root.dataset.mobileModule='tasks'/);assert.match(html,/if\(todoWorkActive\(\)\|\|todoMobileActive\(\)\)todoMobileAdoptForm\(t,formLabel\)/);
- assert.match(pilot,/await todoUpdate\(todoFormEditId,payload\)/);assert.match(pilot,/await todoCreate\(payload\)/);assert.match(pilot,/todoFormPendingFiles=failed/);
+ const shared=html.slice(html.indexOf('const planFormSaves='),html.indexOf('async function calEventsRaw('));
+ assert.match(pilot,/return planFormSave\('todo',payload,linkedMeta/);assert.match(shared,/todoUpdate\(record.id,payload\)/);assert.match(shared,/todoCreate\(payload\)/);assert.match(pilot,/pending:\(\)=>todoFormPendingFiles/);
  assert.match(pilot,/todoMobileRefreshAttachments/);assert.match(pilot,/mobileBeforeNavigate/);
  const css=html.slice(html.indexOf('/* Aufgaben-Pilot: Dokumentationsstil'),html.indexOf('html.mobile-online-active.mobile-keyboard-open .mobile-ui-nav'));
  assert.match(css,/@media \(max-width: 1024px\)/);for(const line of css.split('\n').filter(l=>l.includes('{')&&!l.startsWith('@')&&!l.startsWith('/*')))assert.ok(line.startsWith('html.mobile-online-active'),line);

@@ -217,9 +217,9 @@ const insertDocumentStmt = db.prepare(`
 `);
 const deleteDocumentStmt = db.prepare('DELETE FROM case_documents WHERE id = ? AND case_id = ?');
 const getFieldAttachmentImportStmt = db.prepare(`
-  SELECT i.file_id,f.sha256,f.name,f.mime_type,f.size
+  SELECT i.file_id,f.sha256,f.name,f.mime_type,f.size,f.area,f.case_id
     FROM doc_module_import i
-    LEFT JOIN live_doc_files f ON f.id=i.file_id
+    LEFT JOIN live_doc_files f ON f.id=i.file_id AND f.deleted_at=''
    WHERE i.quelle='aussendienst-anlage' AND i.quell_id=?
 `);
 const rememberFieldAttachmentImportStmt = db.prepare(`
@@ -667,7 +667,23 @@ router.post('/:id/doku-entries/:entryId/photos', requireEditCases, (req, res) =>
       error: 'Außendienstanlagen benötigen Snapshot-, Änderungs- und Anlagenkennung vollständig.'
     });
   }
-  const importKey = fieldImport ? JSON.stringify(importParts) : '';
+  let importKey = fieldImport ? JSON.stringify([id, ...importParts]) : '';
+  let remembered = fieldImport ? getFieldAttachmentImportStmt.get(importKey) : null;
+  if (fieldImport && !remembered) {
+    const legacyKey = JSON.stringify(importParts);
+    const legacy = getFieldAttachmentImportStmt.get(legacyKey);
+    // Alte Kennungen nur mit nachgewiesener Fallzuordnung weiterverwenden.
+    if (legacy && (legacy.area !== 'case' || !legacy.case_id)) {
+      return res.status(409).json({ error: 'Die frühere Außendienstanlage kann keinem aktiven Fallbestand zugeordnet werden.' });
+    }
+    if (legacy && legacy.case_id === id) {
+      importKey = legacyKey;
+      remembered = legacy;
+    }
+  }
+  if (remembered && (remembered.area !== 'case' || remembered.case_id !== id)) {
+    return res.status(409).json({ error: 'Die Außendienst-Anlagenkennung gehört nicht zu diesem Fallbestand.' });
+  }
   const deterministic = fieldImport
     ? crypto.createHash('sha256').update(importKey).digest('hex').slice(0, 32)
     : '';
@@ -677,7 +693,6 @@ router.post('/:id/doku-entries/:entryId/photos', requireEditCases, (req, res) =>
   const data = JSON.parse(row.data_json);
   data.photos = Array.isArray(data.photos) ? data.photos.map(safePhotoMeta).filter((p) => p.id) : [];
   if (fieldImport) {
-    const remembered = getFieldAttachmentImportStmt.get(importKey);
     if (remembered) {
       if (!remembered.file_id || String(remembered.sha256 || '').toLowerCase() !== actualSha256) {
         return res.status(409).json({

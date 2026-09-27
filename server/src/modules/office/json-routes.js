@@ -13,6 +13,7 @@ const { requireAuth, requireViewCases, requireEditCases } = require('../../middl
 
 const router = express.Router();
 const intakeOcr = require('../cases/intake-ocr').createIntakeOcrStore(db);
+const kontaktmonitor = require('./kontaktmonitor-store');
 router.use(requireAuth);
 // Echtzeit (2026-07-19): erfolgreiche Schreiboperationen an alle Fenster/Nutzer melden.
 router.use(require('./events').middleware('officeJson'));
@@ -405,6 +406,14 @@ router.get('/:key', darfSchluesselLesen, (req, res) => {
   if (!KEYS.has(req.params.key)) return res.status(404).json({ error: 'Unbekannter Speicher-Schlüssel.' });
   if (!checkKeyPermission(req, res)) return;
   const row = getStmt.get(req.params.key);
+  if (req.params.key === 'kontaktmonitor') {
+    try {
+      return res.json({ data: kontaktmonitor.visible(kontaktmonitor.read(row?.data_json), req.session),
+        updatedAt: row ? row.updated_at : null });
+    } catch (error) {
+      return res.status(error.status || 500).json({ error: error.message });
+    }
+  }
   /* Fallbezogene Sichtbarkeit (2026-07-26): fallbezogene Eintraege fremder Faelle entfernen. */
   const roh = row ? fallEintraegeFiltern(req.params.key, row.data_json || '{}', req.session) : '{}';
   let data = JSON.parse(roh || '{}');
@@ -437,6 +446,13 @@ router.put('/:key', darfSchluesselSchreiben, (req, res) => {
     return res.status(403).json({ error: 'Keine Berechtigung, büroweite Oberflächen-Vorgaben zu ändern.' });
   }
   let data = (req.body && req.body.data) !== undefined ? req.body.data : {};
+  if (req.params.key === 'kontaktmonitor') {
+    try {
+      data = kontaktmonitor.merge(data, kontaktmonitor.read(getStmt.get('kontaktmonitor')?.data_json), req.session);
+    } catch (error) {
+      return res.status(error.status || 500).json({ error: error.message });
+    }
+  }
   if (req.params.key === 'qualifikationen'
       && !(req.session.isAdmin || req.session.canViewAllQualifications)) {
     data = mergeQualifikationen(data, req.session);

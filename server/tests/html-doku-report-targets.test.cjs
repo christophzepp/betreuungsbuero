@@ -25,8 +25,12 @@ test('Berichtsfreigabe verwendet den vorhandenen Inhalt (Vorgangstext) ohne zwei
   assert.match(html, /<label>(?:Vorgangstext|Inhalt)(?:<span class="pflicht">\*<\/span>)?<\/label>\s*<textarea id="dokuFreeDetail"/); // Wording „Inhalt“ beschlossen am 05.09.2026; alte Beschriftung bleibt bis zum Umbau zulässig
   assert.ok(!html.includes('Geprüfte Berichtszusammenfassung'));
   assert.ok(!html.includes('id="dokuReportSummaryV255"'));
-  assert.match(html, /reportText=t\(document\.getElementById\('dokuFreeDetail'\)\?\.value\)/);
-  assert.match(html, /entry\.reportSummary=reportRelevant\?reportText:''/,
+  const saveStart = html.indexOf('  window.saveDokuEntry=async function(');
+  const saveEnd = html.indexOf('  /* Ein Schreibweg fuer Dokumentation, Anlage und Transkript', saveStart);
+  assert.ok(saveStart >= 0 && saveEnd > saveStart, 'Dokumentationsschreiber nicht gefunden');
+  const save = html.slice(saveStart, saveEnd);
+  assert.match(save, /freeDetail:val\('dokuFreeDetail'\)/);
+  assert.match(save, /rec\.reportSummary=rec\.reportRelevant\?rec\.freeDetail:''/,
     'Die intern kompatible Berichtsfassung muss automatisch aus dem Vorgangstext entstehen.');
   assert.match(html, /KI- und Regelnotizen bleiben intern\./);
 });

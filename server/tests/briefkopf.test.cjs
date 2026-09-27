@@ -244,7 +244,7 @@ test('Nacharbeit P3: Seite fuer alle, readOnly = weder Admin noch Buerostammdate
 });
 
 test('Sicherungswege: Whitelist + lokaler Export + Import + Online-Export tragen briefkopf', () => {
-  const wl = schnipsel('function loadBueroLocal(){', 'function saveBueroLocal(){');
+  const wl = schnipsel('function loadBueroLocal(){', 'function saveBueroLocal(');
   assert.ok(wl.includes('briefkopf:(parsed.briefkopf&&'), 'briefkopf fehlt in der loadBueroLocal-Whitelist');
   assert.ok(wl.includes('briefkopfEigen:(parsed.briefkopfEigen&&'), 'briefkopfEigen fehlt in der loadBueroLocal-Whitelist');
   assert.ok(wl.includes('datenschutz:null,briefkopf:null,briefkopfEigen:null}'), 'Leerstand fehlt');

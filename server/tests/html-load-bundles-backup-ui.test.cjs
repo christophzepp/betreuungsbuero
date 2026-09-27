@@ -29,7 +29,7 @@ function response(status, body) {
 }
 
 const caseFunction = region(
-  '  async function fetchCaseState(caseId){',
+  '  async function fetchCaseState(',
   '\n\n  // "Reinladen/Rausladen/Archivieren"-Logik'
 );
 const officeFunction = region(

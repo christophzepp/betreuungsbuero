@@ -44,7 +44,8 @@ test('Rescheduling rejects past dates and persists future ISO timestamp',async()
 
 test('Local creation and deletion propagate storage failure instead of claiming success',async()=>{
  const from=html.indexOf('async function todoCreate(t)'),to=html.indexOf('window.__gdpTodoGet=',from),context={window:{},isOnline:()=>false,normalizeTodoRecord:x=>x,loadLocal:()=>[{id:'one'}],uid:()=> 'new',TODO_STORAGE_KEY:'todos',autoDokuTodoV168:async()=>{},saveLocal:(key,list,strict)=>{if(strict)throw Error('Speicher voll')}};
- vm.runInNewContext(html.slice(from,to)+';this.create=todoCreate;this.remove=todoRemove;',context);
+ const helpers=html.slice(html.indexOf('function planRecordLocal('),html.indexOf('async function calEventsRaw('));context.planRecordList=x=>x;
+ vm.runInNewContext(helpers+html.slice(from,to)+';this.create=todoCreate;this.remove=todoRemove;',context);
  await assert.rejects(context.create({title:'Wiedervorlage: Prüfen',itemType:'followup'}),/Speicher voll/);
  await assert.rejects(context.remove('one'),/Speicher voll/);
 });

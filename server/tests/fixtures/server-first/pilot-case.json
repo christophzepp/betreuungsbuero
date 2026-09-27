@@ -1,0 +1,23 @@
+{
+  "fixtureVersion": 1,
+  "synthetic": true,
+  "referenceId": "SF-REF-001",
+  "caseId": "sf-pilot-a",
+  "stammdaten": {
+    "person": {"firstName": "Synthetisch", "lastName": "Referenzfall", "birthDate": "1980-02-29"},
+    "care": {"taskAreas": ["Gesundheitssorge", "Vermögenssorge"]},
+    "healthInfo": {
+      "notes": "Synthetischer Ausgangsstand",
+      "diagnoses": [{"id": "diagnosis-1", "text": "Synthetischer Prüfeintrag", "since": "2026-01-01"}],
+      "unknownLegacyFlag": false
+    },
+    "livelihood": {
+      "income": [{"id": "income-1", "description": "Synthetische Einnahme", "monthly": "1100.10"}],
+      "expenses": [{"id": "expense-1", "description": "Synthetische Wohnkosten", "monthly": "725.35"}]
+    },
+    "exportHistory": [{"id": "export-1", "note": "Synthetische historische Ausgabe"}],
+    "archives": [{"id": "archive-1", "version": 1}],
+    "unknownLegacyField": {"nullValue": null, "emptyValue": "", "zeroValue": 0, "falseValue": false, "list": []}
+  },
+  "report": {"fields": {"note": {"value": "Synthetischer Bericht"}, "free_reference": {"value": "SF-REF-001"}, "free_text": {"value": "Synthetischer Bericht: 1100,10 EUR Einnahmen; 725,35 EUR Ausgaben. Historischer Wert bleibt erhalten."}}, "meta": {"reference": "SF-REF-001"}}
+}

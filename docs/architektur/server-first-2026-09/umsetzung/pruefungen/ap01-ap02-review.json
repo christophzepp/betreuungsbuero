@@ -1,0 +1,129 @@
+{
+  "baseCommit": "edd361b70e2b75ccac013fa3789a8dfce7a0ae3e",
+  "base": "Verified snapshot of the pre-turn AP-01/AP-02 working tree",
+  "independentReview": "pending; no reviewer assigned",
+  "units": {
+    "64": {
+      "purpose": "Synthetische Referenzprofile und echte Persistenz-/Schreibfehlerprüfungen",
+      "addedLines": 77,
+      "removedLines": 2,
+      "files": [
+        {
+          "path": "server/tests/server-first-pilot-persistence.test.cjs",
+          "beforeSha256": "a9af6897e044bea7d5aaa8d3db55381e8273b8388bf814304ce7805a9e9dc77c",
+          "afterSha256": "603c93b307e7021230c045200c76ae92190a7c1b0e0bc2bea1835556b44b948e",
+          "addedLines": 52,
+          "removedLines": 1
+        },
+        {
+          "path": "server/tests/fixtures/server-first/pilot-case.json",
+          "beforeSha256": "617989215e72cabc24b5c93e02799f552c1d02ca56f27416d5d1bef8ea1c90ad",
+          "afterSha256": "b8f2db7d59200d3213a5db88eb132585be795ca86d8cf0b86af60918a37aaaa6",
+          "addedLines": 1,
+          "removedLines": 1
+        },
+        {
+          "path": "server/tests/fixtures/server-first/reference-cases.cjs",
+          "beforeSha256": null,
+          "afterSha256": "b5c99062d28ba266681264c78d9a5f423100210d024b62a6e8696c18df1f495e",
+          "addedLines": 24,
+          "removedLines": 0
+        }
+      ]
+    },
+    "65": {
+      "purpose": "Vollständiger Browser- und PDF-Nachweis vor/nach Restore einschließlich UI-Schreiben",
+      "addedLines": 212,
+      "removedLines": 38,
+      "files": [
+        {
+          "path": "server/tests/helpers/server-first-app-harness.cjs",
+          "beforeSha256": null,
+          "afterSha256": "639e8e5040b1f4a8ff80b3581b31451b64ff953a392d0259cd47914a9b85f136",
+          "addedLines": 42,
+          "removedLines": 0
+        },
+        {
+          "path": "server/tests/helpers/server-first-browser.cjs",
+          "beforeSha256": null,
+          "afterSha256": "6e1eeca76440bc3c096d08de4798fa7e5657f729d56dd47f37a81895aeb218c3",
+          "addedLines": 129,
+          "removedLines": 0
+        },
+        {
+          "path": "server/tests/helpers/server-first-recovery-startup.cjs",
+          "beforeSha256": "7a62e0a2ceaab85478b065875a90bd06ecc348676c69f7a129b7f3ab6081b90c",
+          "afterSha256": "03edc1e774d2a97425a47a0e1c87abe63f0cf72d54a8ef2facd92b097e114602",
+          "addedLines": 20,
+          "removedLines": 36
+        },
+        {
+          "path": "server/tests/server-first-restore-rehearsal.test.cjs",
+          "beforeSha256": "926c5249983c1639ac85865e798dcb88c72ed1ba5a5311bda2430b2bb45273f6",
+          "afterSha256": "00026a1c67db7f66d93a75fa798b99c40295c69ef33bd42a6dcd30f8f3fca15f",
+          "addedLines": 21,
+          "removedLines": 2
+        }
+      ]
+    },
+    "66": {
+      "purpose": "Isolierter Browserstarter, festes Testwerkzeug und frühe CI-Integration",
+      "addedLines": 41,
+      "removedLines": 2,
+      "files": [
+        {
+          "path": "tools/server-first/run_baseline.py",
+          "beforeSha256": "d8af00bc67f60548c4148b8c9c09e612c49567b1f0ef94abd6a36b2a5a61555d",
+          "afterSha256": "5536664b4199773709b3c4ed2e79fee85c2787fb393624820d215c4a0efeb267",
+          "addedLines": 18,
+          "removedLines": 0
+        },
+        {
+          "path": "tools/server-first/inventory.py",
+          "beforeSha256": "64de8f3db0fdaa2df646d4feff65f49e70108b75dfaa729e8a2765475b588abe",
+          "afterSha256": "f3b21394d9890d3fb9b76fa55dcb45a4d7a8e47828360db101f506bdff5749e4",
+          "addedLines": 1,
+          "removedLines": 0
+        },
+        {
+          "path": "tools/server-first/inventory-inputs.json",
+          "beforeSha256": "3db5d2cfd8043aac4a490988f65c07169ccf084075a6f0448e577be44a3300f7",
+          "afterSha256": "63c8b197569df3d2fd3b807ecf42d653a136b1f79ef7db272a84023bc2d4f529",
+          "addedLines": 7,
+          "removedLines": 1
+        },
+        {
+          "path": "tools/server-first/browser/package.json",
+          "beforeSha256": null,
+          "afterSha256": "ad72a7713cde3de56d8c0e618dadb6fc0446435ccd815e280b4fe0166a6e0295",
+          "addedLines": 7,
+          "removedLines": 0
+        },
+        {
+          "path": ".github/workflows/server-first-ci.yml",
+          "beforeSha256": "4193c6566a72ec99c154a6af066097eff30565b1b30f9872e4c2c0f8b09fb7dd",
+          "afterSha256": "f3e8d15a29e75edb000057b349f59067e9036c0fb00ac01e4d9021bbecadb202",
+          "addedLines": 8,
+          "removedLines": 1
+        }
+      ]
+    }
+  },
+  "generatedFiles": [
+    {
+      "path": "tools/server-first/browser/package-lock.json",
+      "sha256": "eabc6219e230e35d4f874b20f075cad5b3557745c1cd64be043933ce3f7f0542",
+      "bytes": 1722
+    },
+    {
+      "path": "server/tests/fixtures/server-first/reference-report.pdf",
+      "sha256": "bedea6f62a797cdd84372fd33eb708f6b283447f3a5dea026d9dd9605e957aae",
+      "bytes": 2068
+    },
+    {
+      "path": "docs/architektur/server-first-2026-09/umsetzung/quellinventar.json",
+      "sha256": "4e3f454c9fa7b756517c65023199c22c2f85620815414b61da4d086ad013a351",
+      "bytes": 899244
+    }
+  ]
+}

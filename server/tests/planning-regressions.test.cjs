@@ -25,7 +25,7 @@ function fixture(todos = [], calendar = []) {
     promptTodosCache: [], uid: () => 'new-id',
   };
   vm.createContext(context);
-  vm.runInContext(['loadLocal', 'saveLocal', 'isOnline', 'calCreate', 'calUpdate', 'calRemove', 'autoDokuCalendarV168', 'todoItemType', 'normalizeTodoRecord', 'todoItems', 'todoUpdate', 'autoDokuTodoV168', 'parseRecurrenceRule', 'addByFreq', 'dateToLocalIso', 'nextTodoOccurrence', 'todoSetDone'].map(source).join('\n'), context);
+  vm.runInContext(['planRecordList', 'planRecordMode', 'planRecordLocal', 'planRecordDocument', 'loadLocal', 'saveLocal', 'isOnline', 'calCreate', 'calUpdate', 'calRemove', 'autoDokuCalendarV168', 'todoItemType', 'normalizeTodoRecord', 'todoItems', 'todoUpdate', 'autoDokuTodoV168', 'parseRecurrenceRule', 'addByFreq', 'dateToLocalIso', 'nextTodoOccurrence', 'todoSetDone'].map(source).join('\n'), context);
   return { c: context, values, log, todo: () => JSON.parse(values.get('todos'))[0] };
 }
 test('Kalender: fehlgeschlagene lokale Neuanlage und Löschung melden Fehler', async () => {

@@ -19,6 +19,7 @@ const {
   fallZuordnung, darfZuordnungSehen
 } = require('../../modules/cases/case-visibility');
 const pfadSicher = require('../../shared/safe-path');
+const kontaktmonitor = require('../../modules/office/kontaktmonitor-store');
 const bankApi = require('../../modules/finance/bank-routes')._api;
 
 const nowIso = () => new Date().toISOString();
@@ -225,7 +226,9 @@ function pruefePrivatenEintrag(row, session, bezeichnung) {
 /* Buero-weiter JSON-Store: lesen, veraendern, zurueckschreiben (Spalte heisst data_json!). */
 function officeJsonMerge(key, fn) {
   const row = db.prepare('SELECT data_json FROM office_json WHERE key=?').get(key);
-  let obj = {}; try { obj = JSON.parse((row || {}).data_json || '{}') || {}; } catch (_e) { obj = {}; }
+  let obj;
+  if (key === 'kontaktmonitor') obj = kontaktmonitor.read(row?.data_json);
+  else { try { obj = JSON.parse((row || {}).data_json || '{}') || {}; } catch (_e) { obj = {}; } }
   const neu = fn(obj) || obj;
   db.prepare('INSERT INTO office_json (key, data_json) VALUES (?,?) ON CONFLICT(key) DO UPDATE SET data_json=excluded.data_json')
     .run(key, JSON.stringify(neu));
@@ -1074,9 +1077,9 @@ tool('bb_betreuungsuebersicht', 'bb.read', 'Betreuungsübersicht-Einträge (für
   return { fall: c.label, eintraege: db.prepare('SELECT period_start, aenderungsart, uebergabe_an, updated_at FROM live_betreuung_overview_entries WHERE case_id=? ORDER BY period_start DESC LIMIT 60').all(String(c.id)) };
 });
 tool('bb_kontaktmonitor', 'bb.read', 'Kontaktmonitor (§ 1863 BGB): büroweiter Stand der Kontaktpflicht.', {}, [], (s) => {
+  verlangeRecht(s, 'canViewCases', 'Keine Berechtigung, den Kontaktmonitor einzusehen.');
   const row = db.prepare("SELECT data_json FROM office_json WHERE key='kontaktmonitor'").get();
-  let v = {};
-  try { v = JSON.parse((row || {}).data_json || '{}'); } catch (_e) {}
+  const v = kontaktmonitor.visible(kontaktmonitor.read(row?.data_json), s);
   return { hinweis: 'Rohdaten des Kontaktmonitor-Moduls (Struktur wird von der App gepflegt).', stand: v };
 });
 tool('bb_fall_verlauf', 'bb.read', 'Fallverlauf/Historie eines Falls (Beginn, Wechsel, Ereignisse).', { ...P_FALL, ...P_UMFANG }, ['fall'], (s, a) =>

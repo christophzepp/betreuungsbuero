@@ -11,6 +11,22 @@ const backup = require('../src/modules/backup/document-backup');
 const barrier = require('../src/middleware/application-write-barrier');
 const coordinator = require('../src/modules/documents/operation-coordinator');
 
+async function withTestDeadline(operation) {
+  let deadline;
+  try {
+    // Unref'ed Produktions-Timer halten keinen isolierten Testprozess offen.
+    // Diese Testfrist hält ihn offen und lässt einen echten Hänger scheitern.
+    return await Promise.race([
+      operation,
+      new Promise((resolve, reject) => {
+        deadline = setTimeout(() => reject(new Error('Testfrist überschritten; Operation nicht beendet.')), 1000);
+      })
+    ]);
+  } finally {
+    clearTimeout(deadline);
+  }
+}
+
 function fixture() {
   const db = new Database(':memory:');
   db.exec(`
@@ -820,7 +836,7 @@ test('Health-Watchdog ist single-flight und eine hängende Warnmail endet an eig
     const first = backup._test.healthWatchdog();
     const second = await backup._test.healthWatchdog();
     assert.deepEqual(second, { skipped: true, reason: 'health_busy' });
-    const result = await first;
+    const result = await withTestDeadline(first);
     assert.equal(result.skipped, false);
     const state = f.db.prepare('SELECT * FROM doc_backup_scheduler_state WHERE id=1').get();
     assert.match(state.last_mail_error, /Zeitgrenze/);
@@ -1361,12 +1377,12 @@ test('Mount-Lauf besitzt eine Gesamtfrist und ein auslaufender Provideraufruf ve
   }];
   try {
     await assert.rejects(
-      backup._test.laufMount(
+      withTestDeadline(backup._test.laufMount(
         { mountId: 'mount-a', unterordner: '' },
         liste,
         '',
         { timeoutMs: 25 }
-      ),
+      )),
       /Gesamtzeitgrenze/
     );
     assert.equal(backup._test.outstandingMountOperations(), 1);

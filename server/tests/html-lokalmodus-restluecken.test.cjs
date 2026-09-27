@@ -50,7 +50,7 @@ function speicherStub(anfang) {
 /* ═══════════ 1. Whitelist: die fuenf ui_prefs-Bestaende ueberleben das Neuladen ═══════════ */
 
 test('loadBueroLocal: Vorlagen, Speicherort und KI-Prompts ueberleben das Neuladen (ausgefuehrt)', () => {
-  const kern = schnipsel('function loadBueroLocal(){', 'function saveBueroLocal(){');
+  const kern = schnipsel('function loadBueroLocal(){', 'function saveBueroLocal(');
   const gespeichert = JSON.stringify({
     fileNameTemplates: { rechnung: '<datum> Rechnung' },
     subjectTemplates: { anschreiben: 'Betreff <fall>' },

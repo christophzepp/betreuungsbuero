@@ -1,0 +1,79 @@
+name: Server-first regression
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: server-first-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  regression:
+    name: Regression / Node ${{ matrix.node }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['22', '24']
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Check out source
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: ${{ matrix.node }}
+          package-manager-cache: false
+
+      - name: Install SQLite CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends sqlite3
+
+      - name: Verify inventory and evidence tooling
+        run: |
+          python3 -m unittest discover -s tools/server-first -p 'test_*.py' -v
+          python3 tools/server-first/inventory.py --check
+
+      - name: Install pinned browser harness
+        working-directory: tools/server-first/browser
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund
+          npx playwright install --with-deps chromium
+
+      - name: Run regression and complete restore rehearsal
+        run: >-
+          python3 tools/server-first/run_baseline.py
+          --include-restore --install-dependencies --browser
+          --evidence-dir "$RUNNER_TEMP/server-first-evidence"
+          --evidence-label regression
+
+      - name: Prove detection of a missing database write
+        run: >-
+          python3 tools/server-first/run_baseline.py
+          --probe-missing-write --install-dependencies
+          --evidence-dir "$RUNNER_TEMP/server-first-evidence"
+          --evidence-label missing-write
+
+      - name: Retain test evidence
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: server-first-node-${{ matrix.node }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/server-first-evidence/*.json
+            ${{ runner.temp }}/server-first-evidence/*.tap
+            ${{ runner.temp }}/server-first-evidence/*-install.log
+            ${{ runner.temp }}/server-first-evidence/*-browser/**
+          if-no-files-found: warn
+          retention-days: 14

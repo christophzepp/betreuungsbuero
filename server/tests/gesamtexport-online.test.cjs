@@ -62,7 +62,7 @@ const blockQuelle = (() => {
    benutzte fetchState-Quelle (window.__onlineCaseSync.fetchState=fetchCaseState) und liest
    GET /api/cases/:id/load. Er wird hier mit derselben fetch-Attrappe betrieben. */
 const fetchStateQuelle = schnipsel(
-  '  async function fetchCaseState(caseId){',
+  '  async function fetchCaseState(',
   '\n\n  // "Reinladen/Rausladen/Archivieren"-Logik'
 );
 
