@@ -365,6 +365,7 @@ test('entprellt markierte Änderungen und veröffentlicht erst nach Fälligkeit'
 });
 
 test('Vollbackup erkennt gleich lange Änderungen derselben SQLite-Sekunde und überspringt danach unveränderte Generatoren', (t) => {
+  t.mock.timers.enable({ apis: ['Date'], now: new Date('2026-09-27T12:00:00Z') });
   const f = fixture(); t.after(f.close);
   const previous = process.env.DOCUMENT_RECOVERY_KEY;
   t.after(() => {
@@ -439,6 +440,9 @@ test('Vollbackup erkennt gleich lange Änderungen derselben SQLite-Sekunde und �
     'Testfixture hat die verwaltete Datei nicht wirklich beschädigt'
   );
 
+  // The generated filename contains the minute. Cross that boundary deliberately:
+  // the repaired materialization may have a new file ID and retire its predecessor.
+  t.mock.timers.tick(61000);
   const healed = f.service.prepareTotalBackup();
   assert.ok(
     healed.cases['case-1'].some((entry) =>
@@ -446,7 +450,10 @@ test('Vollbackup erkennt gleich lange Änderungen derselben SQLite-Sekunde und �
     ),
     'Vollbackup muss physisch beschädigte verwaltete Abbilder atomar regenerieren'
   );
-  const healedFile = f.db.prepare('SELECT * FROM doc_files WHERE id=?').get(managed.id);
+  const healedFile = f.db.prepare(`SELECT f.* FROM doc_files f JOIN doc_materializations m
+    ON m.file_id=f.id WHERE m.scope_type='case' AND m.scope_id='case-1'
+    AND m.artifact_kind='case-backup-json'`).get();
+  assert.notEqual(healedFile.id, managed.id, 'Minute rollover publishes a new current filename.');
   const healedBytes = fs.readFileSync(f.documents.documentStorage.findBlobPath(healedFile));
   assert.equal(
     crypto.createHash('sha256').update(healedBytes).digest('hex'),

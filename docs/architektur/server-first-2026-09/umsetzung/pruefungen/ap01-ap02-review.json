@@ -68,14 +68,14 @@
     },
     "66": {
       "purpose": "Isolierter Browserstarter, festes Testwerkzeug und frühe CI-Integration",
-      "addedLines": 114,
+      "addedLines": 115,
       "removedLines": 6,
       "files": [
         {
           "path": "tools/server-first/run_baseline.py",
           "beforeSha256": "d8af00bc67f60548c4148b8c9c09e612c49567b1f0ef94abd6a36b2a5a61555d",
-          "afterSha256": "700a35a11b38e6ca17aaa16f5ec6470dfe80fe509f76545dfa26dfb11322380a",
-          "addedLines": 46,
+          "afterSha256": "277c4090de01015f5b469160381e690d557931c93e37534bfbc98cd03f8a9c32",
+          "addedLines": 47,
           "removedLines": 2
         },
         {
@@ -149,6 +149,20 @@
       ],
       "addedLines": 60,
       "removedLines": 7
+    },
+    "68": {
+      "purpose": "Bestehende Reparaturprüfung deterministisch über einen Minutenwechsel ausführen und das tatsächlich aktuelle Sicherungsabbild prüfen",
+      "files": [
+        {
+          "path": "server/tests/document-materializations.test.js",
+          "beforeSha256": "7a47d99ce48068256233b30879976d8b52afe7c42a24e293f323e695a1a26ee1",
+          "afterSha256": "f73f77252601852b08cc3a722a049ffacb5ea4b8384f7b707169ea9535e436e4",
+          "addedLines": 8,
+          "removedLines": 1
+        }
+      ],
+      "addedLines": 8,
+      "removedLines": 1
     }
   },
   "generatedFiles": [
@@ -164,7 +178,7 @@
     },
     {
       "path": "docs/architektur/server-first-2026-09/umsetzung/quellinventar.json",
-      "sha256": "8d86c400ffaf8a9f317ec51298c6f08c72f8f8a041b7f328cf31a527ac847378",
+      "sha256": "31e63cbb871a4aa8f92b00007e273fe9e724d15868bc1ee298ed6e6f02c9fda4",
       "bytes": 899487
     }
   ]

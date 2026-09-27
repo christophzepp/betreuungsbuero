@@ -29107,8 +29107,8 @@
     },
     {
       "path": "server/tests/document-materializations.test.js",
-      "bytes": 25330,
-      "sha256": "7a47d99ce48068256233b30879976d8b52afe7c42a24e293f323e695a1a26ee1"
+      "bytes": 25835,
+      "sha256": "f73f77252601852b08cc3a722a049ffacb5ea4b8384f7b707169ea9535e436e4"
     },
     {
       "path": "server/tests/document-migration.test.js",
@@ -30311,8 +30311,8 @@
     },
     {
       "path": "tools/server-first/run_baseline.py",
-      "bytes": 18229,
-      "sha256": "700a35a11b38e6ca17aaa16f5ec6470dfe80fe509f76545dfa26dfb11322380a"
+      "bytes": 18296,
+      "sha256": "277c4090de01015f5b469160381e690d557931c93e37534bfbc98cd03f8a9c32"
     },
     {
       "path": "tools/server-first/test_baseline_runner.py",
