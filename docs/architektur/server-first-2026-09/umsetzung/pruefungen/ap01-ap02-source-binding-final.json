@@ -1,0 +1,38 @@
+{
+  "publishedSourceCommit": "525f67dfb2338969cf30c2f850d09ce59a75a36b",
+  "branch": "codex/ap01-ap02-abschluss",
+  "localRuns": [
+    {
+      "file": "ap01-ap02-final-v3-node22.json",
+      "sha256": "54cd7873fdb236fc0047f02b1c89d1a294a2649dc1bae6538bfc6f2d183139e6",
+      "verifiedOverlays": 70,
+      "runnerMatches": true,
+      "lockfilesMatch": true,
+      "totals": {
+        "tests": 1977,
+        "pass": 1977,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "file": "ap01-ap02-final-v3-node24.json",
+      "sha256": "d1a2d8b92560d8c0886b466c6dbfa52ce79d6bee9de14641bbd05156b0323ed2",
+      "verifiedOverlays": 70,
+      "runnerMatches": true,
+      "lockfilesMatch": true,
+      "totals": {
+        "tests": 1977,
+        "pass": 1977,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    }
+  ],
+  "allReviewHashesVerified": true,
+  "independentReview": "pending"
+}

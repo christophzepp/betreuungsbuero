@@ -1,0 +1,22 @@
+TAP version 13
+# Subtest: Overlay-Probe-Renderings entsprechen den abgenommenen Golden-Referenzen
+ok 1 - Overlay-Probe-Renderings entsprechen den abgenommenen Golden-Referenzen
+  ---
+  duration_ms: 9347.285584
+  type: 'test'
+  ...
+# Subtest: v230-Druck des Vermögensverzeichnisses entspricht den Golden-Referenzen
+ok 2 - v230-Druck des Vermögensverzeichnisses entspricht den Golden-Referenzen
+  ---
+  duration_ms: 7276.803
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 9410.371667

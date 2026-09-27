@@ -102,13 +102,13 @@
       "package": "AP-01",
       "id": "ci",
       "test": ".github/workflows/server-first-ci.yml",
-      "proof": "Node 22/24 on Ubuntu; fresh dependency installation, full suite, browser restore and expected failing mutation; evidence artifacts."
+      "proof": "Pinned Node 22.23.2/24.18.0 on Ubuntu, fresh install, all portable tests, browser restore and expected failing mutation; both unchanged sips golden tests required in a separate macOS job. The partitions cover every test once per applicable platform; skips remain failures."
     },
     {
       "package": "AP-02",
       "id": "backup-restore-equality",
       "test": "server/tests/server-first-restore-rehearsal.test.cjs",
-      "proof": "Real backup/restore CLIs, SQLite integrity, cases/reports/users/rights, nine files, HTML/templates and source isolation."
+      "proof": "Real backup/restore CLIs, SQLite integrity, cases/reports/users/rights, nine files, HTML/templates and source isolation. Stable device identification on BSD/GNU stat; partial failed command output is discarded and mode/device values must be numeric."
     },
     {
       "package": "AP-02",
@@ -147,6 +147,18 @@
       "observed": "Browser initialization adds derived/default values and relocates exportHistory and archives out of caseData.",
       "followUp": "AP-00/AP-04",
       "acceptanceImpact": "Browser proof compares every stored reference value via the real client mapping; generated defaults are not mistaken for lost persisted data."
+    },
+    {
+      "id": "LEGACY-NODE24-NATIVE",
+      "observed": "First Linux CI run with floating Node 24 selected 24.21.0 and crashed in native better-sqlite3 cleanup; reference matrix pins locally verified 24.18.0.",
+      "followUp": "AP-04/AP-30",
+      "acceptanceImpact": "Reproducible legacy baseline only; no compatibility claim for arbitrary newer Node 24 patches."
+    },
+    {
+      "id": "GOLDEN-PLATFORM",
+      "observed": "Two existing golden-image tests depend on macOS sips.",
+      "followUp": "AP-20",
+      "acceptanceImpact": "Kept unchanged and required in a dedicated macOS CI job; Linux suite explicitly partitions them, without permitting skipped tests."
     }
   ],
   "boundaries": [

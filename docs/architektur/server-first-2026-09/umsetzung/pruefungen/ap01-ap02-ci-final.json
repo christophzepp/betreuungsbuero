@@ -1,0 +1,355 @@
+{
+  "runId": 36320080346,
+  "url": "https://github.com/christophzepp/betreuungsbuero/actions/runs/36320080346",
+  "headSha": "525f67dfb2338969cf30c2f850d09ce59a75a36b",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "id": 108622151997,
+      "name": "Regression / Node 22.23.2",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-09-27T12:46:22Z",
+      "completed_at": "2026-09-27T12:50:35Z",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-09-27T12:46:23Z",
+          "completed_at": "2026-09-27T12:46:24Z"
+        },
+        {
+          "name": "Check out source",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-09-27T12:46:24Z",
+          "completed_at": "2026-09-27T12:46:31Z"
+        },
+        {
+          "name": "Set up Node",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-09-27T12:46:31Z",
+          "completed_at": "2026-09-27T12:46:32Z"
+        },
+        {
+          "name": "Install SQLite CLI",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-09-27T12:46:32Z",
+          "completed_at": "2026-09-27T12:46:39Z"
+        },
+        {
+          "name": "Verify inventory and evidence tooling",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-09-27T12:46:39Z",
+          "completed_at": "2026-09-27T12:46:44Z"
+        },
+        {
+          "name": "Install pinned browser harness",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-09-27T12:46:44Z",
+          "completed_at": "2026-09-27T12:47:03Z"
+        },
+        {
+          "name": "Run regression and complete restore rehearsal",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-09-27T12:47:03Z",
+          "completed_at": "2026-09-27T12:50:24Z"
+        },
+        {
+          "name": "Prove detection of a missing database write",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-09-27T12:50:24Z",
+          "completed_at": "2026-09-27T12:50:30Z"
+        },
+        {
+          "name": "Retain test evidence",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-09-27T12:50:30Z",
+          "completed_at": "2026-09-27T12:50:32Z"
+        },
+        {
+          "name": "Post Set up Node",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-09-27T12:50:32Z",
+          "completed_at": "2026-09-27T12:50:32Z"
+        },
+        {
+          "name": "Post Check out source",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-09-27T12:50:32Z",
+          "completed_at": "2026-09-27T12:50:33Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-09-27T12:50:33Z",
+          "completed_at": "2026-09-27T12:50:33Z"
+        }
+      ]
+    },
+    {
+      "id": 108622152067,
+      "name": "Golden PDFs / macOS",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-09-27T12:46:26Z",
+      "completed_at": "2026-09-27T12:47:06Z",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-09-27T12:46:26Z",
+          "completed_at": "2026-09-27T12:46:27Z"
+        },
+        {
+          "name": "Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-09-27T12:46:27Z",
+          "completed_at": "2026-09-27T12:46:38Z"
+        },
+        {
+          "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-09-27T12:46:38Z",
+          "completed_at": "2026-09-27T12:46:39Z"
+        },
+        {
+          "name": "Prepare existing macOS rendering prerequisites",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-09-27T12:46:39Z",
+          "completed_at": "2026-09-27T12:46:45Z"
+        },
+        {
+          "name": "Run both unchanged visual golden tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-09-27T12:46:45Z",
+          "completed_at": "2026-09-27T12:47:02Z"
+        },
+        {
+          "name": "Retain golden evidence",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-09-27T12:47:02Z",
+          "completed_at": "2026-09-27T12:47:03Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-09-27T12:47:03Z",
+          "completed_at": "2026-09-27T12:47:03Z"
+        },
+        {
+          "name": "Post Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-09-27T12:47:03Z",
+          "completed_at": "2026-09-27T12:47:04Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-09-27T12:47:04Z",
+          "completed_at": "2026-09-27T12:47:05Z"
+        }
+      ]
+    },
+    {
+      "id": 108622152084,
+      "name": "Regression / Node 24.18.0",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-09-27T12:46:20Z",
+      "completed_at": "2026-09-27T12:53:11Z",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-09-27T12:46:21Z",
+          "completed_at": "2026-09-27T12:46:22Z"
+        },
+        {
+          "name": "Check out source",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-09-27T12:46:22Z",
+          "completed_at": "2026-09-27T12:46:29Z"
+        },
+        {
+          "name": "Set up Node",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-09-27T12:46:29Z",
+          "completed_at": "2026-09-27T12:46:35Z"
+        },
+        {
+          "name": "Install SQLite CLI",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-09-27T12:46:35Z",
+          "completed_at": "2026-09-27T12:46:42Z"
+        },
+        {
+          "name": "Verify inventory and evidence tooling",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-09-27T12:46:42Z",
+          "completed_at": "2026-09-27T12:46:47Z"
+        },
+        {
+          "name": "Install pinned browser harness",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-09-27T12:46:47Z",
+          "completed_at": "2026-09-27T12:47:05Z"
+        },
+        {
+          "name": "Run regression and complete restore rehearsal",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-09-27T12:47:05Z",
+          "completed_at": "2026-09-27T12:51:43Z"
+        },
+        {
+          "name": "Prove detection of a missing database write",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-09-27T12:51:43Z",
+          "completed_at": "2026-09-27T12:53:08Z"
+        },
+        {
+          "name": "Retain test evidence",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-09-27T12:53:08Z",
+          "completed_at": "2026-09-27T12:53:09Z"
+        },
+        {
+          "name": "Post Set up Node",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-09-27T12:53:09Z",
+          "completed_at": "2026-09-27T12:53:09Z"
+        },
+        {
+          "name": "Post Check out source",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-09-27T12:53:09Z",
+          "completed_at": "2026-09-27T12:53:09Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-09-27T12:53:09Z",
+          "completed_at": "2026-09-27T12:53:09Z"
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "artifact": "server-first-node-22.23.2-1",
+      "artifactSha256": "85d2047d3d043a9f32cbbca3b64d757019e64fe1007040d2349b03f4a250374c",
+      "evidence": "ap01-ap02-ci-final-node22",
+      "node": "v22.23.2",
+      "platform": "Linux",
+      "totals": {
+        "tests": 1975,
+        "pass": 1975,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "durationSeconds": 195.69,
+      "allOverlayHashesMatchLocalFinal": true
+    },
+    {
+      "artifact": "server-first-node-24.18.0-1",
+      "artifactSha256": "ed4a2025f5abfbd2842a622a708dbeafc426453da9788351e25f0bc8c5ae7c20",
+      "evidence": "ap01-ap02-ci-final-node24",
+      "node": "v24.18.0",
+      "platform": "Linux",
+      "totals": {
+        "tests": 1975,
+        "pass": 1975,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "durationSeconds": 193.01,
+      "allOverlayHashesMatchLocalFinal": true
+    },
+    {
+      "artifact": "server-first-macos-golden-1",
+      "artifactSha256": "e163c6ce526cf34e7e5cc48403ba36d18201bb7f879aee3374da178e579523d9",
+      "evidence": "ap01-ap02-ci-final-macos-golden",
+      "node": "v22.23.2",
+      "platform": "Darwin",
+      "totals": {
+        "tests": 2,
+        "pass": 2,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "durationSeconds": 9.47,
+      "allOverlayHashesMatchLocalFinal": true
+    }
+  ]
+}

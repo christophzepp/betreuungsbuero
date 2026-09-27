@@ -1,0 +1,72 @@
+{
+  "phase": "after",
+  "engine": "chromium",
+  "version": "153.0.8010.12",
+  "pdfHashes": {
+    "report": "bedea6f62a797cdd84372fd33eb708f6b283447f3a5dea026d9dd9605e957aae"
+  },
+  "pages": 1,
+  "bytes": 2068,
+  "elapsedSeconds": 23.149992835,
+  "checks": [
+    "real-ui-login",
+    "case-and-report-loaded",
+    "browser-reload",
+    "application-pdf-renderer"
+  ],
+  "pageErrors": [],
+  "failedHttpRequests": [
+    {
+      "path": "/api/me",
+      "status": 401
+    },
+    {
+      "path": "/api/office-json/custom_forms",
+      "status": 401
+    },
+    {
+      "path": "/api/signatures/case/sf-pilot-a",
+      "status": 403
+    },
+    {
+      "path": "/api/cases/sf-pilot-a/reports/care_application_person",
+      "status": 403
+    },
+    {
+      "path": "/api/cases/sf-pilot-a/reports/care_change_person",
+      "status": 403
+    },
+    {
+      "path": "/api/cases/sf-pilot-a/reports/care_change_zepp",
+      "status": 403
+    },
+    {
+      "path": "/api/cases/sf-pilot-a/stammdaten",
+      "status": 403
+    },
+    {
+      "path": "/api/cases/sf-pilot-a/stammdaten",
+      "status": 403
+    },
+    {
+      "path": "/api/signatures/case/sf-pilot-a",
+      "status": 403
+    },
+    {
+      "path": "/api/cases/sf-pilot-a/reports/care_application_person",
+      "status": 403
+    },
+    {
+      "path": "/api/cases/sf-pilot-a/reports/care_change_person",
+      "status": 403
+    },
+    {
+      "path": "/api/cases/sf-pilot-a/stammdaten",
+      "status": 403
+    },
+    {
+      "path": "/api/cases/sf-pilot-a/reports/care_change_zepp",
+      "status": 403
+    }
+  ]
+}

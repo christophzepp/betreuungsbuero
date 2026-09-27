@@ -1,0 +1,45 @@
+{
+  "referenceCommit": "525f67dfb2338969cf30c2f850d09ce59a75a36b",
+  "overlay": {
+    "server/tests/server-first-pilot-persistence.test.cjs": "603c93b307e7021230c045200c76ae92190a7c1b0e0bc2bea1835556b44b948e",
+    "server/tests/fixtures/server-first/reference-cases.cjs": "b5c99062d28ba266681264c78d9a5f423100210d024b62a6e8696c18df1f495e",
+    "server/tests/fixtures/server-first/reference-report.pdf": "bedea6f62a797cdd84372fd33eb708f6b283447f3a5dea026d9dd9605e957aae",
+    "server/tests/fixtures/server-first/pilot-case.json": "b8f2db7d59200d3213a5db88eb132585be795ca86d8cf0b86af60918a37aaaa6"
+  },
+  "runnerSha256": "277c4090de01015f5b469160381e690d557931c93e37534bfbc98cd03f8a9c32",
+  "node": "v22.23.2",
+  "platform": "Linux",
+  "architecture": "x86_64",
+  "lockfileSha256": "17ff591e137d4d4a276184722ad0c59d7260a26ba0d1fa16e8c8055327bd2909",
+  "browser": {
+    "required": false,
+    "lockfileSha256": null
+  },
+  "dependencySource": "Fresh npm ci from the archived package-lock.json; isolated npm configuration and cache.",
+  "totalsError": null,
+  "testFiles": 1,
+  "exitCode": 1,
+  "selection": "default",
+  "separateMacosFiles": [],
+  "durationSeconds": 0.81,
+  "totals": {
+    "tests": 11,
+    "pass": 3,
+    "fail": 8,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "mutation": {
+    "file": "server/src/modules/cases/routes.js",
+    "beforeSha256": "ffffd77416dbb305d7bc8a7bd5c400ec943c80842e587903eec4396015d87171",
+    "afterSha256": "1dc9ee4dccea07b52524ef548b839608610e3c762dc2254e9390a35c54c2f1f4",
+    "fault": "Successful HTTP response without the case database write."
+  },
+  "expectedFaultDetected": true,
+  "limits": [
+    "Synthetic isolated tests; not a production restore, device test or load test.",
+    "Application environment overrides are not inherited."
+  ],
+  "log": "missing-write.tap"
+}

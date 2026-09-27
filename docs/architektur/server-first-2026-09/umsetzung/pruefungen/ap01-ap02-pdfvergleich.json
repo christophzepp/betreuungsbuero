@@ -1,0 +1,36 @@
+{
+  "date": "2026-09-27",
+  "files": [
+    {
+      "file": "server/tests/fixtures/server-first/reference-report.pdf",
+      "sha256": "bedea6f62a797cdd84372fd33eb708f6b283447f3a5dea026d9dd9605e957aae",
+      "pages": 1,
+      "text": "Synthetischer Referenzbericht\nBetreuung: Synthetisch Referenzfall\nTexteditor\nBetreff des Schreibens\nSF-REF-001\nDokumenttext\nSynthetischer Bericht: 1100,10 EUR Einnahmen; 725,35 EUR Ausgaben. Historischer Wert bleibt erhalten.\n"
+    },
+    {
+      "file": "docs/architektur/server-first-2026-09/umsetzung/pruefungen/ap01-ap02-final-node22-browser/before-report.pdf",
+      "sha256": "bedea6f62a797cdd84372fd33eb708f6b283447f3a5dea026d9dd9605e957aae",
+      "pages": 1,
+      "text": "Synthetischer Referenzbericht\nBetreuung: Synthetisch Referenzfall\nTexteditor\nBetreff des Schreibens\nSF-REF-001\nDokumenttext\nSynthetischer Bericht: 1100,10 EUR Einnahmen; 725,35 EUR Ausgaben. Historischer Wert bleibt erhalten.\n"
+    },
+    {
+      "file": "docs/architektur/server-first-2026-09/umsetzung/pruefungen/ap01-ap02-final-node22-browser/after-report.pdf",
+      "sha256": "bedea6f62a797cdd84372fd33eb708f6b283447f3a5dea026d9dd9605e957aae",
+      "pages": 1,
+      "text": "Synthetischer Referenzbericht\nBetreuung: Synthetisch Referenzfall\nTexteditor\nBetreff des Schreibens\nSF-REF-001\nDokumenttext\nSynthetischer Bericht: 1100,10 EUR Einnahmen; 725,35 EUR Ausgaben. Historischer Wert bleibt erhalten.\n"
+    },
+    {
+      "file": "docs/architektur/server-first-2026-09/umsetzung/pruefungen/ap01-ap02-final-node24-browser/before-report.pdf",
+      "sha256": "bedea6f62a797cdd84372fd33eb708f6b283447f3a5dea026d9dd9605e957aae",
+      "pages": 1,
+      "text": "Synthetischer Referenzbericht\nBetreuung: Synthetisch Referenzfall\nTexteditor\nBetreff des Schreibens\nSF-REF-001\nDokumenttext\nSynthetischer Bericht: 1100,10 EUR Einnahmen; 725,35 EUR Ausgaben. Historischer Wert bleibt erhalten.\n"
+    },
+    {
+      "file": "docs/architektur/server-first-2026-09/umsetzung/pruefungen/ap01-ap02-final-node24-browser/after-report.pdf",
+      "sha256": "bedea6f62a797cdd84372fd33eb708f6b283447f3a5dea026d9dd9605e957aae",
+      "pages": 1,
+      "text": "Synthetischer Referenzbericht\nBetreuung: Synthetisch Referenzfall\nTexteditor\nBetreff des Schreibens\nSF-REF-001\nDokumenttext\nSynthetischer Bericht: 1100,10 EUR Einnahmen; 725,35 EUR Ausgaben. Historischer Wert bleibt erhalten.\n"
+    }
+  ],
+  "visualReview": "Golden reference rendered with Poppler, visually inspected; no clipping or overlap; all five PDFs byte-identical."
+}

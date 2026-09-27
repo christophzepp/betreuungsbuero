@@ -1,0 +1,26 @@
+{
+  "runId": 36319281096,
+  "url": "https://github.com/christophzepp/betreuungsbuero/actions/runs/36319281096",
+  "commit": "39c20b2bdac242cd60bc764b76c62bce8ce0998e",
+  "result": "failure",
+  "artifacts": [
+    {
+      "name": "server-first-node-22-1.zip",
+      "githubDigest": "56cc45032088df50ef7b604b0021529ebe5d236feb5af9d93c1e0a2e3f762308",
+      "verified": true,
+      "localEvidence": "ap01-ap02-ci-erster-lauf-node22/regression.json"
+    },
+    {
+      "name": "server-first-node-24-1.zip",
+      "githubDigest": "1acc2772f400be7027faf41f3d260d8312bd6eb135115f821f061a67806ffa8a",
+      "verified": true,
+      "localEvidence": "ap01-ap02-ci-erster-lauf-node24/regression.json"
+    }
+  ],
+  "findings": [
+    "Hardcoded /private/tmp in two legacy handover test files.",
+    "GNU stat emitted filesystem text before the failing BSD-format call; concatenated fallback output made the device comparison change with free-space counts.",
+    "Node 24.21.0 crashes in native better-sqlite3 cleanup; matrix now pins the locally verified baseline 24.18.0.",
+    "Two existing sips visual tests are macOS-specific; unchanged tests now required in a separate macOS job, not silently accepted as skipped."
+  ]
+}

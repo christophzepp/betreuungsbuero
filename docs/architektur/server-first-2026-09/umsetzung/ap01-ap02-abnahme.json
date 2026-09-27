@@ -1,0 +1,118 @@
+{
+  "date": "2026-09-27",
+  "packages": {
+    "AP-01": {
+      "technicalStatus": "complete",
+      "independentReview": "pending"
+    },
+    "AP-02": {
+      "technicalStatus": "complete",
+      "independentReview": "pending"
+    }
+  },
+  "criteriaCatalog": "ap01-ap02-referenzkatalog.json",
+  "criteria": [
+    {
+      "id": "reference-values",
+      "package": "AP-01",
+      "technicalStatus": "passed",
+      "test": "server/tests/server-first-pilot-persistence.test.cjs"
+    },
+    {
+      "id": "storage-failure",
+      "package": "AP-01",
+      "technicalStatus": "passed",
+      "test": "server/tests/server-first-pilot-persistence.test.cjs"
+    },
+    {
+      "id": "false-success",
+      "package": "AP-01",
+      "technicalStatus": "passed",
+      "test": "tools/server-first/run_baseline.py"
+    },
+    {
+      "id": "reload",
+      "package": "AP-01",
+      "technicalStatus": "passed",
+      "test": "server/tests/server-first-pilot-persistence.test.cjs"
+    },
+    {
+      "id": "offline-conflicts",
+      "package": "AP-01",
+      "technicalStatus": "passed",
+      "test": "server/tests/server-first-offline-return.test.cjs"
+    },
+    {
+      "id": "browser",
+      "package": "AP-01",
+      "technicalStatus": "passed",
+      "test": "server/tests/helpers/server-first-browser.cjs"
+    },
+    {
+      "id": "ci",
+      "package": "AP-01",
+      "technicalStatus": "passed",
+      "test": ".github/workflows/server-first-ci.yml"
+    },
+    {
+      "id": "backup-restore-equality",
+      "package": "AP-02",
+      "technicalStatus": "passed",
+      "test": "server/tests/server-first-restore-rehearsal.test.cjs"
+    },
+    {
+      "id": "unsafe-backup",
+      "package": "AP-02",
+      "technicalStatus": "passed",
+      "test": "server/tests/server-first-restore-rehearsal.test.cjs"
+    },
+    {
+      "id": "keys-and-startup",
+      "package": "AP-02",
+      "technicalStatus": "passed",
+      "test": "server/tests/helpers/server-first-recovery-startup.cjs"
+    },
+    {
+      "id": "pdf-output",
+      "package": "AP-02",
+      "technicalStatus": "passed",
+      "test": "server/tests/helpers/server-first-browser.cjs"
+    }
+  ],
+  "evidence": [
+    {
+      "file": "pruefungen/ap01-ap02-final-v3-node22.json",
+      "sha256": "54cd7873fdb236fc0047f02b1c89d1a294a2649dc1bae6538bfc6f2d183139e6"
+    },
+    {
+      "file": "pruefungen/ap01-ap02-final-v3-node24.json",
+      "sha256": "d1a2d8b92560d8c0886b466c6dbfa52ce79d6bee9de14641bbd05156b0323ed2"
+    },
+    {
+      "file": "pruefungen/ap01-ap02-ci-final.json",
+      "sha256": "757286ca4949798da53fea43d98c43430d4370531ad87deb3820fd0cf364206e"
+    },
+    {
+      "file": "pruefungen/ap01-ap02-pdfvergleich-final.json",
+      "sha256": "bce0aefabad664cb511cf3dcff96717390b26a0d36e8b3e2f342da2644a16911"
+    },
+    {
+      "file": "pruefungen/ap01-ap02-review.json",
+      "sha256": "cddca13b28a89af8d1057f2eb4d3eec55be70ccf3996b8ee22af172d3a01e717"
+    },
+    {
+      "file": "pruefungen/ap01-ap02-source-binding-final.json",
+      "sha256": "ff6d2c493af939a09d0f50351d6c0d6c2e535f1726f3fa8fe7a5a55792b53511"
+    }
+  ],
+  "ci": {
+    "headSha": "525f67dfb2338969cf30c2f850d09ce59a75a36b",
+    "runId": 36320080346,
+    "url": "https://github.com/christophzepp/betreuungsbuero/actions/runs/36320080346",
+    "status": "completed",
+    "conclusion": "success",
+    "explicitPublicationApproval": true
+  },
+  "releaseApproved": false,
+  "scope": "Technical completion of the original AP-01/AP-02 baseline packages; independent human review and higher-level gates remain separate and open."
+}
