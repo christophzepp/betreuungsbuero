@@ -68,15 +68,15 @@
     },
     "66": {
       "purpose": "Isolierter Browserstarter, festes Testwerkzeug und frühe CI-Integration",
-      "addedLines": 41,
-      "removedLines": 2,
+      "addedLines": 114,
+      "removedLines": 6,
       "files": [
         {
           "path": "tools/server-first/run_baseline.py",
           "beforeSha256": "d8af00bc67f60548c4148b8c9c09e612c49567b1f0ef94abd6a36b2a5a61555d",
-          "afterSha256": "5536664b4199773709b3c4ed2e79fee85c2787fb393624820d215c4a0efeb267",
-          "addedLines": 18,
-          "removedLines": 0
+          "afterSha256": "700a35a11b38e6ca17aaa16f5ec6470dfe80fe509f76545dfa26dfb11322380a",
+          "addedLines": 46,
+          "removedLines": 2
         },
         {
           "path": "tools/server-first/inventory.py",
@@ -88,8 +88,8 @@
         {
           "path": "tools/server-first/inventory-inputs.json",
           "beforeSha256": "3db5d2cfd8043aac4a490988f65c07169ccf084075a6f0448e577be44a3300f7",
-          "afterSha256": "63c8b197569df3d2fd3b807ecf42d653a136b1f79ef7db272a84023bc2d4f529",
-          "addedLines": 7,
+          "afterSha256": "37d03cccf16db3d3930c97c8b246f8c8833140bf93f663dd8bcdd3abc6caeea0",
+          "addedLines": 8,
           "removedLines": 1
         },
         {
@@ -102,11 +102,53 @@
         {
           "path": ".github/workflows/server-first-ci.yml",
           "beforeSha256": "4193c6566a72ec99c154a6af066097eff30565b1b30f9872e4c2c0f8b09fb7dd",
-          "afterSha256": "f3e8d15a29e75edb000057b349f59067e9036c0fb00ac01e4d9021bbecadb202",
-          "addedLines": 8,
+          "afterSha256": "2c22c092dea6e949bae646c7c045369b68380376559ac70fe99574d870530805",
+          "addedLines": 39,
+          "removedLines": 2
+        },
+        {
+          "path": "tools/server-first/test_baseline_runner.py",
+          "beforeSha256": "7498aaca0c65708ee7bf3e3bc78abe1f2e1e29d026129e90082a14000349234f",
+          "afterSha256": "a67a0a73a4d9eec44ce076d7b7a208a9d47f5e44800397de7169608894d7b9f6",
+          "addedLines": 13,
           "removedLines": 1
         }
       ]
+    },
+    "67": {
+      "purpose": "Linuxfähige Backup-Kennzahlen und plattformneutrale temporäre Übergabeprüfungen",
+      "files": [
+        {
+          "path": "server/tools/gesamt-backup.sh",
+          "beforeSha256": "0ecc0557807b6c64fc1889fcca950e36a960c1cfb0bb3705a35898f2fc48e7d4",
+          "afterSha256": "99e3d18d81f5b642d2cf6e00ee31baecb21752a2bb19496f5fd70bb1eacf8ea8",
+          "addedLines": 15,
+          "removedLines": 3
+        },
+        {
+          "path": "server/tests/server-first-backup-platform.test.cjs",
+          "beforeSha256": null,
+          "afterSha256": "bbb3023af39c18aef8c97521936855b577a9323f934715ab78be7c01ae128a54",
+          "addedLines": 39,
+          "removedLines": 0
+        },
+        {
+          "path": "server/tests/handover-endpoint.test.js",
+          "beforeSha256": "dc5cbc749901920a92f519c7040cac157d74c7f35892d702c70bc9345d5f2bd8",
+          "afterSha256": "0ecb0a7d16b42053c4bcca9af7971950792ef6e845e7b4f0d43344ad3ef92644",
+          "addedLines": 3,
+          "removedLines": 2
+        },
+        {
+          "path": "server/tests/handover-package.test.js",
+          "beforeSha256": "8e578b24eea67290b7f57368c097ab6fd8f40154cef68fed9036ff3ba9e5307f",
+          "afterSha256": "6c57b4ec698ac0fa2f10ff12882dc1fee40198bd43eb295464302905d9511ee4",
+          "addedLines": 3,
+          "removedLines": 2
+        }
+      ],
+      "addedLines": 60,
+      "removedLines": 7
     }
   },
   "generatedFiles": [
@@ -122,8 +164,8 @@
     },
     {
       "path": "docs/architektur/server-first-2026-09/umsetzung/quellinventar.json",
-      "sha256": "4e3f454c9fa7b756517c65023199c22c2f85620815414b61da4d086ad013a351",
-      "bytes": 899244
+      "sha256": "8d86c400ffaf8a9f317ec51298c6f08c72f8f8a041b7f328cf31a527ac847378",
+      "bytes": 899487
     }
   ]
 }

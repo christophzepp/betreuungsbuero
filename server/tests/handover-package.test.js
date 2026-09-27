@@ -4,6 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const childProcess = require('node:child_process');
 const fs = require('node:fs');
+const os = require('node:os');
 const path = require('node:path');
 const handover = require('../src/modules/cases/handover-package');
 const { zipSchreiben } = require('../src/modules/backup/document-backup');
@@ -138,7 +139,7 @@ test('WinAnsi-Ausgabe erhält die deutschen Pflichtzeichen einschließlich §', 
 });
 
 test('ZIP-Writer verwirft eine zwischen Hashlauf und ZIP-Lesen veränderte Quelle', () => {
-  const temp = fs.mkdtempSync('/private/tmp/handover-zip-race-test-');
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'handover-zip-race-test-'));
   const source = path.join(temp, 'Quelle.txt');
   const target = path.join(temp, 'Paket.zip');
   try {
@@ -161,7 +162,7 @@ test('ZIP-Writer verwirft eine zwischen Hashlauf und ZIP-Lesen veränderte Quell
 });
 
 test('ZIP-Writer erzeugt strombasiert ein standardlesbares ZIP64-Paket', () => {
-  const temp = fs.mkdtempSync('/private/tmp/handover-zip64-test-');
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'handover-zip64-test-'));
   const source = path.join(temp, 'Quelle.bin');
   const target = path.join(temp, 'Paket.zip');
   try {

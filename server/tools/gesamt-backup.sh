@@ -411,6 +411,19 @@ if [[ -n $ERWARTETER_RECOVERY_FP && ! $ERWARTETER_RECOVERY_FP =~ ^[0-9a-fA-F]{24
 fi
 [[ $OFFSITE_MODE == none || $OFFSITE_MODE == restic ]] ||
   fehler "--offsite-mode unterstuetzt nur 'restic'."
+stat_kennzahl() {
+  local wert
+  # GNU stat -f kann trotz Fehler bereits Dateisystemtext ausgeben. Erst einen
+  # vollständig erfolgreichen, numerischen Einzelwert nach außen übernehmen.
+  if wert=$(stat -f "$1" "$3" 2>/dev/null) && [[ $wert =~ ^[0-9]+$ ]]; then
+    printf '%s\n' "$wert"
+    return 0
+  fi
+  wert=$(stat -c "$2" "$3" 2>/dev/null) || return 1
+  [[ $wert =~ ^[0-9]+$ ]] || return 1
+  printf '%s\n' "$wert"
+}
+
 if [[ $OFFSITE_MODE == restic ]]; then
   [[ -n $OFFSITE_REPOSITORY ]] || fehler "Aktives restic-Offsiteprofil braucht --offsite-repository."
   [[ -n $OFFSITE_PASSWORD_FILE ]] || fehler "Aktives restic-Offsiteprofil braucht --offsite-password-file."
@@ -502,8 +515,7 @@ if [[ $OFFSITE_MODE == restic ]]; then
   [[ -f $OFFSITE_PASSWORD_FILE && ! -L $OFFSITE_PASSWORD_FILE ]] ||
     fehler "restic-Passwortdatei ist keine regulaere Datei: $OFFSITE_PASSWORD_FILE"
   if [[ $(uname -s 2>/dev/null || true) != *MINGW* ]]; then
-    OFFSITE_MODUS=$(stat -f '%Lp' "$OFFSITE_PASSWORD_FILE" 2>/dev/null ||
-      stat -c '%a' "$OFFSITE_PASSWORD_FILE" 2>/dev/null || printf '777')
+    OFFSITE_MODUS=$(stat_kennzahl '%Lp' '%a' "$OFFSITE_PASSWORD_FILE" || printf '777')
     [[ $OFFSITE_MODUS == 600 || $OFFSITE_MODUS == 0600 ]] ||
       fehler "restic-Passwortdatei muss exakt mit Modus 0600 geschuetzt sein."
   fi
@@ -550,7 +562,7 @@ kanon_ordner() {
 }
 
 dateisystem_id() {
-  stat -f '%d' "$1" 2>/dev/null || stat -c '%d' "$1" 2>/dev/null || return 1
+  stat_kennzahl '%d' '%d' "$1"
 }
 
 ZIEL_BASIS=$(kanon_ordner "$ZIEL_BASIS")

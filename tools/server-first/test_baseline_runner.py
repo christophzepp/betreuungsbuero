@@ -3,7 +3,7 @@ import os
 import unittest
 from unittest.mock import patch
 
-from run_baseline import clean_environment, missing_write_detected, tap_totals
+from run_baseline import clean_environment, missing_write_detected, tap_totals, platform_selection, GOLDEN_TESTS
 
 
 def report(tests=6, passed=6, failed=0, cancelled=0, skipped=0, todo=0):
@@ -12,6 +12,18 @@ def report(tests=6, passed=6, failed=0, cancelled=0, skipped=0, todo=0):
 
 
 class BaselineRunnerTests(unittest.TestCase):
+    def test_platform_partitions_cover_every_file_once_and_reject_missing_golden_tests(self):
+        files = ['tests/domain.test.cjs', *GOLDEN_TESTS]
+        portable = platform_selection(files, portable=True)
+        golden = platform_selection(files, golden_only=True)
+        self.assertEqual(portable, ['tests/domain.test.cjs'])
+        self.assertEqual(golden, GOLDEN_TESTS)
+        self.assertEqual(sorted(portable + golden), sorted(files))
+        with self.assertRaises(ValueError):
+            platform_selection(files, portable=True, golden_only=True)
+        with self.assertRaises(ValueError):
+            platform_selection(files[:-1], portable=True)
+
     def test_accepts_complete_success_and_explicit_fault_counts(self):
         self.assertEqual(tap_totals(report())['pass'], 6)
         self.assertEqual(tap_totals(report(passed=3, failed=3))['fail'], 3)

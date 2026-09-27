@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['22', '24']
+        node: ['22.23.2', '24.18.0']
     env:
       PYTHONDONTWRITEBYTECODE: '1'
     steps:
@@ -54,7 +54,7 @@ jobs:
       - name: Run regression and complete restore rehearsal
         run: >-
           python3 tools/server-first/run_baseline.py
-          --include-restore --install-dependencies --browser
+          --include-restore --install-dependencies --browser --portable
           --evidence-dir "$RUNNER_TEMP/server-first-evidence"
           --evidence-label regression
 
@@ -75,5 +75,35 @@ jobs:
             ${{ runner.temp }}/server-first-evidence/*.tap
             ${{ runner.temp }}/server-first-evidence/*-install.log
             ${{ runner.temp }}/server-first-evidence/*-browser/**
+          if-no-files-found: warn
+          retention-days: 14
+
+  macos-golden:
+    name: Golden PDFs / macOS
+    runs-on: macos-14
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22.23.2'
+          package-manager-cache: false
+      - name: Prepare existing macOS rendering prerequisites
+        run: |
+          /usr/bin/python3 -m venv "$RUNNER_TEMP/golden-python"
+          "$RUNNER_TEMP/golden-python/bin/python3" -m pip install Pillow==11.0.0
+          echo "$RUNNER_TEMP/golden-python/bin" >> "$GITHUB_PATH"
+      - name: Run both unchanged visual golden tests
+        run: >-
+          python3 tools/server-first/run_baseline.py --golden-only --install-dependencies
+          --evidence-dir "$RUNNER_TEMP/server-first-evidence" --evidence-label macos-golden
+      - name: Retain golden evidence
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: server-first-macos-golden-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/server-first-evidence/*
           if-no-files-found: warn
           retention-days: 14

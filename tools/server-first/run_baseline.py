@@ -18,11 +18,15 @@ PILOT = ['server/tests/server-first-pilot-persistence.test.cjs',
          'server/tests/fixtures/server-first/reference-report.pdf',
          'server/tests/fixtures/server-first/pilot-case.json']
 RESTORE = ['server/tests/server-first-restore-rehearsal.test.cjs',
+           'server/tests/server-first-backup-platform.test.cjs',
+           'server/tools/gesamt-backup.sh',
            'server/tests/helpers/server-first-app-harness.cjs',
            'server/tests/helpers/server-first-browser.cjs',
            'server/tests/helpers/server-first-recovery-startup.cjs',
            'server/tests/helpers/server-first-app-process.cjs']
 COMPATIBILITY = ['server/tests/html-mobile-tasks.test.cjs',
+                 'server/tests/handover-endpoint.test.js',
+                 'server/tests/handover-package.test.js',
                  'server/tests/planning-regressions.test.cjs',
                  'server/tests/followup-workspace.test.cjs',
                  'server/tests/doc-backup-scheduler.test.js',
@@ -84,6 +88,19 @@ def digest(file):
     return hashlib.sha256(file.read_bytes()).hexdigest()
 
 
+GOLDEN_TESTS = ['tests/html-overlay-golden.test.cjs', 'tests/html-v230-print-golden.test.cjs']
+
+
+def platform_selection(files, portable=False, golden_only=False):
+    if portable and golden_only:
+        raise ValueError('Portable and golden-only selections are mutually exclusive.')
+    if portable or golden_only:
+        if not set(GOLDEN_TESTS).issubset(files):
+            raise ValueError('A required macOS golden test is missing from the source archive.')
+        return [name for name in files if (name in GOLDEN_TESTS) == golden_only]
+    return files
+
+
 def clean_environment():
     return {key: os.environ[key] for key in ('PATH', 'HOME', 'TMPDIR', 'LANG', 'LC_ALL', 'SYSTEMROOT') if key in os.environ}
 
@@ -120,12 +137,18 @@ def main():
     parser.add_argument('--install-dependencies', action='store_true', help='Run npm ci in the disposable archive instead of copying installed dependencies.')
     parser.add_argument('--browser', action='store_true', help='Require real Chromium login, reload and regenerated PDFs before and after restore.')
     parser.add_argument('--browser-path', type=Path, help='Explicit Playwright browser installation directory (no inherited application environment).')
+    parser.add_argument('--portable', action='store_true', help='Run all except the two sips golden tests, which CI requires in its separate macOS job.')
+    parser.add_argument('--golden-only', action='store_true', help='Run the two unchanged sips golden tests; missing prerequisites still fail strict TAP validation.')
     args = parser.parse_args()
-    if sum([args.restore_only, args.offline_only, args.probe_missing_write]) > 1:
+    if sum([args.restore_only, args.offline_only, args.probe_missing_write, args.golden_only]) > 1:
         parser.error('Choose only one focused test mode.')
+    if args.portable and (args.restore_only or args.offline_only or args.probe_missing_write or args.golden_only):
+        parser.error('--portable is only valid for the full regression selection.')
+    if args.golden_only and args.browser:
+        parser.error('--golden-only does not execute the browser restore.')
     if args.probe_missing_write and args.include_restore:
         parser.error('The persistence fault probe and restore rehearsal are separate runs.')
-    if args.restore_only or args.offline_only:
+    if args.restore_only or args.offline_only or args.golden_only:
         args.include_restore = True
     if args.include_restore:
         args.include_pilot = True
@@ -211,6 +234,7 @@ def main():
         files = sorted(p.relative_to(checkout / 'server').as_posix()
                        for p in (checkout / 'server/tests').iterdir()
                        if p.name.endswith(('.test.js', '.test.cjs')))
+        files = platform_selection(files, args.portable, args.golden_only)
         if args.probe_missing_write:
             files = ['tests/server-first-pilot-persistence.test.cjs']
         elif args.restore_only:
@@ -249,6 +273,8 @@ def main():
                                'lockfileSha256': digest(ROOT / 'tools/server-first/browser/package-lock.json') if args.browser else None},
                    'dependencySource': dependency_source, 'totalsError': totals_error,
                    'testFiles': len(files), 'exitCode': result.returncode,
+                   'selection': 'macos-golden' if args.golden_only else 'portable-with-separate-macos-golden-job' if args.portable else 'default',
+                   'separateMacosFiles': GOLDEN_TESTS if args.portable else [],
                    'durationSeconds': round(time.monotonic() - started, 2), 'totals': totals,
                    'mutation': mutation, 'expectedFaultDetected': detected if mutation else None,
                    'limits': ['Synthetic isolated tests; not a production restore, device test or load test.',

@@ -54,6 +54,7 @@
     "server/tests/helpers/server-first-plan-ui.cjs",
     "server/tests/helpers/server-first-recovery-startup.cjs",
     "server/tests/helpers/server-first-report-sync.cjs",
+    "server/tests/server-first-backup-platform.test.cjs",
     "server/tests/server-first-offline-return.test.cjs",
     "server/tests/server-first-pilot-persistence.test.cjs",
     "server/tests/server-first-restore-rehearsal.test.cjs",
@@ -77,7 +78,7 @@
   ],
   "counts": {
     "sources": 206,
-    "testFiles": 226,
+    "testFiles": 227,
     "apiReferences": 1150,
     "browserStorageCandidates": 262,
     "fileWriteCandidates": 206,
@@ -28198,8 +28199,8 @@
     },
     {
       "path": "server/tools/gesamt-backup.sh",
-      "bytes": 156630,
-      "sha256": "0ecc0557807b6c64fc1889fcca950e36a960c1cfb0bb3705a35898f2fc48e7d4",
+      "bytes": 156951,
+      "sha256": "99e3d18d81f5b642d2cf6e00ee31baecb21752a2bb19496f5fd70bb1eacf8ea8",
       "signals": {
         "routeCandidates": [],
         "sqlWriteCandidates": [],
@@ -28209,11 +28210,11 @@
         "fileWriteCandidates": [
           {
             "method": "rename",
-            "line": 757
+            "line": 769
           },
           {
             "method": "writeFileSync",
-            "line": 1342
+            "line": 1354
           }
         ],
         "globalReferences": {}
@@ -29236,13 +29237,13 @@
     },
     {
       "path": "server/tests/handover-endpoint.test.js",
-      "bytes": 13065,
-      "sha256": "dc5cbc749901920a92f519c7040cac157d74c7f35892d702c70bc9345d5f2bd8"
+      "bytes": 13119,
+      "sha256": "0ecb0a7d16b42053c4bcca9af7971950792ef6e845e7b4f0d43344ad3ef92644"
     },
     {
       "path": "server/tests/handover-package.test.js",
-      "bytes": 7437,
-      "sha256": "8e578b24eea67290b7f57368c097ab6fd8f40154cef68fed9036ff3ba9e5307f"
+      "bytes": 7490,
+      "sha256": "6c57b4ec698ac0fa2f10ff12882dc1fee40198bd43eb295464302905d9511ee4"
     },
     {
       "path": "server/tests/hibiscus.test.js",
@@ -29895,6 +29896,11 @@
       "sha256": "9d1080f6ead2398864d6d58c1faf1bda9b7dc42b8669618fd901ae999e2a9357"
     },
     {
+      "path": "server/tests/server-first-backup-platform.test.cjs",
+      "bytes": 2216,
+      "sha256": "bbb3023af39c18aef8c97521936855b577a9323f934715ab78be7c01ae128a54"
+    },
+    {
       "path": "server/tests/server-first-offline-return.test.cjs",
       "bytes": 15743,
       "sha256": "603f10acc2fbdd66b22d2aa1102d78c010123b5b7148508a110c7f9f78093fce"
@@ -30023,8 +30029,8 @@
     },
     {
       "path": ".github/workflows/server-first-ci.yml",
-      "bytes": 2561,
-      "sha256": "f3e8d15a29e75edb000057b349f59067e9036c0fb00ac01e4d9021bbecadb202"
+      "bytes": 3864,
+      "sha256": "2c22c092dea6e949bae646c7c045369b68380376559ac70fe99574d870530805"
     },
     {
       "path": "Dockerfile",
@@ -30295,8 +30301,8 @@
     },
     {
       "path": "tools/server-first/inventory-inputs.json",
-      "bytes": 3426,
-      "sha256": "63c8b197569df3d2fd3b807ecf42d653a136b1f79ef7db272a84023bc2d4f529"
+      "bytes": 3484,
+      "sha256": "37d03cccf16db3d3930c97c8b246f8c8833140bf93f663dd8bcdd3abc6caeea0"
     },
     {
       "path": "tools/server-first/inventory.py",
@@ -30305,13 +30311,13 @@
     },
     {
       "path": "tools/server-first/run_baseline.py",
-      "bytes": 16462,
-      "sha256": "5536664b4199773709b3c4ed2e79fee85c2787fb393624820d215c4a0efeb267"
+      "bytes": 18229,
+      "sha256": "700a35a11b38e6ca17aaa16f5ec6470dfe80fe509f76545dfa26dfb11322380a"
     },
     {
       "path": "tools/server-first/test_baseline_runner.py",
-      "bytes": 2836,
-      "sha256": "7498aaca0c65708ee7bf3e3bc78abe1f2e1e29d026129e90082a14000349234f"
+      "bytes": 3536,
+      "sha256": "a67a0a73a4d9eec44ce076d7b7a208a9d47f5e44800397de7169608894d7b9f6"
     },
     {
       "path": "tools/server-first/test_inventory.py",

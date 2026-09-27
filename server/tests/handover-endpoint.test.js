@@ -1,7 +1,7 @@
 'use strict';
 
 /*
- * Isolierter HTTP-Vertragstest. Er benutzt ausschließlich /private/tmp, eine
+ * Isolierter HTTP-Vertragstest. Er benutzt ausschließlich temporäre Verzeichnisse, eine
  * eigene SQLite-Datenbank und listen(0); Produktivdaten und Produktivports
  * werden weder gelesen noch verändert.
  */
@@ -9,6 +9,7 @@
 const assert = require('node:assert/strict');
 const crypto = require('node:crypto');
 const fs = require('node:fs');
+const os = require('node:os');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
 const express = require('express');
@@ -38,7 +39,7 @@ function storedZipEntries(bytes) {
 }
 
 async function main() {
-  const temp = fs.mkdtempSync('/private/tmp/handover-endpoint-test-');
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'handover-endpoint-test-'));
   const dbPath = path.join(temp, 'fixture.sqlite3');
   const dataRoot = path.join(temp, 'data');
   const storageRoot = path.join(temp, 'Dokumentenspeicher');

@@ -1,6 +1,6 @@
 # AP-01 und AP-02: technischer Abschluss
 
-Stand: 27.09.2026. Der Abschluss bezieht sich auf die ursprünglichen Basispakete aus Kapitel 04. Er ersetzt weder G0 noch die spätere Produktfreigabe. Ausführungsergebnisse werden nach den abschließenden lokalen und CI-Läufen ergänzt.
+Stand: 27.09.2026. Der Abschluss bezieht sich auf die ursprünglichen Basispakete aus Kapitel 04. Er ersetzt weder G0 noch die spätere Produktfreigabe. Die lokale technische Abnahme ist bestanden; die freigegebene Linux-CI läuft auf dem separaten Prüfzweig.
 
 ## AP-01: Referenz- und Regressionstestbasis
 
@@ -28,6 +28,19 @@ Der [bestehende Ausgangsablauf](restore-ausgangsnachweis.md) ist um Browserbedie
 9. Die ursprünglichen Quelldateien, Schlüssel und der Snapshot müssen unverändert bleiben.
 
 Die Programmquelle kommt aus einem separaten Git-Archiv mit ausdrücklich gehashten Ergänzungen. Die finalen Läufe installieren die Serverabhängigkeiten mit `npm ci` aus der Lockdatei neu. Das Restoreziel erhält diese Programme und die gesicherten HTML-/Vorlagenartefakte. Dies ist ein ausgeführter Ausgangsnachweis für den Bestand, keine zugesagte Wiederanlaufzeit eines produktiven Büros.
+
+
+## Ausgeführte Nachweise
+
+| Umgebung / Prüfung | Ergebnis | Nachweis |
+|---|---|---|
+| macOS/arm64, Node 22.23.2, frische Installation | 1.975/1.975 Tests bestanden, einschließlich Browser und kompletter Restorekette | [Manifest](pruefungen/ap01-ap02-final-node22.json), [TAP](pruefungen/ap01-ap02-final-node22.tap) |
+| macOS/arm64, Node 24.18.0, frische Installation | 1.975/1.975 Tests bestanden, einschließlich Browser und kompletter Restorekette | [Manifest](pruefungen/ap01-ap02-final-node24.json), [TAP](pruefungen/ap01-ap02-final-node24.tap) |
+| Absichtlich falsche Erfolgsantwort ohne SQL-Schreiben | unter beiden Node-Versionen erkannt; Wrapper erfolgreich nur wegen der erwarteten roten Datenprüfung | [Node 22](pruefungen/ap01-ap02-final-mutation-node22.json), [Node 24](pruefungen/ap01-ap02-final-mutation-node24.json) |
+| Golden-PDF plus Vorher/Nachher beider Laufzeiten | fünf bytegleiche PDFs; eine Seite und sechs erwartete Textbestandteile; Sollseite visuell geprüft | [PDF-Abgleich](pruefungen/ap01-ap02-pdfvergleich.json) |
+| Prüfwerkzeuge / Quellinventur | 12/12 Werkzeugtests bestanden; Inventur aktuell; Laufmanifeste gegen den finalen Quellstand abgeglichen | [Quell- und Reviewnachweis](pruefungen/ap01-ap02-review.json) |
+
+Der [freigegebene Prüfzweig](https://github.com/christophzepp/betreuungsbuero/tree/codex/ap01-ap02-abschluss) enthält den isolierten Bestandsprüfstand; [Linux-CI-Lauf](https://github.com/christophzepp/betreuungsbuero/actions/runs/36319281096). Die öffentliche Übertragung wurde am 27.09.2026 ausdrücklich genehmigt. Kein Release, kein Merge und keine Änderung einer produktiven Installation.
 
 ## Wiederholen
 

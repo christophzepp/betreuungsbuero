@@ -58,6 +58,7 @@
     "server/tests/helpers/server-first-browser.cjs",
     "tools/server-first/browser/package.json",
     "tools/server-first/browser/package-lock.json",
-    "server/tests/fixtures/server-first/reference-report.pdf"
+    "server/tests/fixtures/server-first/reference-report.pdf",
+    "server/tests/server-first-backup-platform.test.cjs"
   ]
 }
